@@ -18,7 +18,9 @@ import { NotificationSettings } from "@/components/NotificationSettings";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { createClient, API_BASE } from "@/lib/supabase/client";
 
-const supabase = createClient();
+function getSupabase() {
+  return createClient();
+}
 
 export default function Home() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -76,7 +78,7 @@ export default function Home() {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
+    } = getSupabase().auth.onAuthStateChange(async (event, session) => {
       if (event === "SIGNED_IN" && session) {
         setAccessToken(session.access_token);
         setUserId(session.user.id);
@@ -98,7 +100,7 @@ export default function Home() {
       const {
         data: { session },
         error,
-      } = await supabase.auth.getSession();
+      } = await getSupabase().auth.getSession();
 
       if (!error && session?.access_token && session?.user?.id) {
         setAccessToken(session.access_token);
@@ -121,14 +123,14 @@ export default function Home() {
   const loadGoalData = async (token: string, goalId: string) => {
     try {
       const { data: sessionData, error: sessionError } =
-        await supabase.auth.getSession();
+        await getSupabase().auth.getSession();
 
       if (sessionError || !sessionData?.session?.access_token) {
         if (sessionData?.session?.refresh_token) {
           const {
             data: { session: refreshedSession },
             error: refreshError,
-          } = await supabase.auth.refreshSession();
+          } = await getSupabase().auth.refreshSession();
           if (refreshError || !refreshedSession?.access_token) {
             toast.error("Session expired. Please log in again.");
             handleLogout();
@@ -200,7 +202,7 @@ export default function Home() {
       setProgress({});
       setIsLoadingUser(false);
       window.history.pushState({}, "", "/");
-      await supabase.auth.signOut();
+      await getSupabase().auth.signOut();
       toast.success("Logged out successfully");
     } catch {
       toast.error("Failed to logout");
@@ -249,7 +251,7 @@ export default function Home() {
 
     try {
       const { data: sessionData, error: sessionError } =
-        await supabase.auth.getSession();
+        await getSupabase().auth.getSession();
 
       if (sessionError || !sessionData?.session?.access_token) {
         toast.error(
@@ -317,7 +319,7 @@ export default function Home() {
   ) => {
     try {
       const { data: sessionData, error: sessionError } =
-        await supabase.auth.getSession();
+        await getSupabase().auth.getSession();
 
       if (sessionError || !sessionData?.session?.access_token) {
         toast.error(
@@ -371,7 +373,7 @@ export default function Home() {
 
     try {
       const { data: sessionData, error: sessionError } =
-        await supabase.auth.getSession();
+        await getSupabase().auth.getSession();
       if (sessionError || !sessionData?.session?.access_token) return;
 
       const freshToken = sessionData.session.access_token;
@@ -429,7 +431,7 @@ export default function Home() {
 
     try {
       const { data: sessionData, error: sessionError } =
-        await supabase.auth.getSession();
+        await getSupabase().auth.getSession();
       if (sessionError || !sessionData?.session?.access_token) {
         toast.error("Authentication error. Please refresh the page.");
         return;
@@ -471,7 +473,7 @@ export default function Home() {
     await loadGoalData(accessToken, goalId);
 
     try {
-      const { data: sessionData } = await supabase.auth.getSession();
+      const { data: sessionData } = await getSupabase().auth.getSession();
       if (!sessionData?.session?.access_token) return;
 
       const response = await fetch(`${API_BASE}/api/goals/${goalId}`, {
@@ -527,7 +529,7 @@ export default function Home() {
 
     try {
       const { data: sessionData, error: sessionError } =
-        await supabase.auth.getSession();
+        await getSupabase().auth.getSession();
       if (sessionError || !sessionData?.session?.access_token) {
         toast.error("Session expired. Please log in again.");
         handleLogout();
