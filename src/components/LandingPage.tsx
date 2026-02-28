@@ -1152,6 +1152,16 @@ export function LandingPage({ onGetStarted, onPrivacyPolicy, onTermsOfService, o
                     Terms of Service
                   </a>
                 </li>
+                <li>
+                  <a
+                    href="https://straydesign.co"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-600 hover:text-teal-600 transition-colors text-sm"
+                  >
+                    Portfolio
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
@@ -1175,6 +1185,16 @@ export function LandingPage({ onGetStarted, onPrivacyPolicy, onTermsOfService, o
                   className="text-gray-600 hover:text-teal-600 transition-colors text-sm block py-1"
                 >
                   Terms of Service
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://straydesign.co"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-600 hover:text-teal-600 transition-colors text-sm block py-1"
+                >
+                  Portfolio
                 </a>
               </li>
             </ul>

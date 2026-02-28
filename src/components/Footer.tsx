@@ -8,12 +8,12 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-gray-600 text-sm">
-            © {currentYear} Day One. All rights reserved. // <a href="https://straydesign.co" target="_blank" rel="noopener noreferrer" className="hover:text-coral-600 transition-smooth">https://straydesign.co</a>
+            &copy; {currentYear} First Day. All rights reserved.
           </p>
           <div className="flex flex-wrap gap-4 md:gap-6 justify-center">
             <Link href="/privacy" className="text-gray-600 hover:text-coral-600 text-sm transition-smooth hover:scale-105">Privacy Policy</Link>
             <Link href="/terms" className="text-gray-600 hover:text-coral-600 text-sm transition-smooth hover:scale-105">Terms of Service</Link>
-            <a href="https://straydesign.co" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-coral-600 text-sm transition-smooth hover:scale-105">straydesign.co</a>
+            <a href="https://straydesign.co" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-coral-600 text-sm transition-smooth hover:scale-105">Portfolio</a>
           </div>
         </div>
       </div>
