@@ -7,7 +7,6 @@ interface WeekCalendarProps {
   progress?: Record<number, { completed?: boolean }>;
   onDayClick?: (day: any) => void;
   planData?: any;
-  compact?: boolean;
   startDate?: string;
 }
 
@@ -49,11 +48,11 @@ export function WeekCalendar({ weekNumber, days, progress = {}, onDayClick, plan
                 : 'border-teal-200 hover:border-teal-400 hover:bg-teal-50 hover:shadow-md active:scale-95 md:hover:scale-105'
               }`}>
               {!isBeforeStart && (<>
-                <div className={`text-xs md:text-sm leading-none font-medium mb-1 ${isCompleted && isPast ? 'text-green-600' : day.isToday && !isCompleted ? 'text-blue-900' : isPast && !isCompleted ? 'text-coral-600' : isFuture ? 'text-blue-900' : 'text-coral-600'}`}>{dayNames[day.dayOfWeek]}</div>
+                <div className={`text-xs md:text-sm leading-none font-medium mb-1 ${isCompleted && isPast ? 'text-lime-600' : day.isToday && !isCompleted ? 'text-blue-900' : isPast && !isCompleted ? 'text-coral-600' : isFuture ? 'text-blue-900' : 'text-coral-600'}`}>{dayNames[day.dayOfWeek]}</div>
                 <div className="mt-0.5 md:mt-1">
                   {isCompleted ? <CheckCircle2 className="w-3 h-3 md:w-4 md:h-4 text-lime-500" /> : <Circle className={`w-3 h-3 md:w-4 md:h-4 ${day.isToday ? 'text-blue-600' : isPast ? 'text-coral-600' : 'text-teal-400'}`} />}
                 </div>
-                {day.isToday && <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 md:w-2 md:h-2 bg-coral-500 rounded-full animate-pulse" />}
+                {day.isToday && <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 md:w-2 md:h-2 bg-teal-500 rounded-full animate-pulse" />}
               </>)}
             </button>
           );

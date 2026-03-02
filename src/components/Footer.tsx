@@ -1,7 +1,11 @@
 "use client";
-import Link from "next/link";
 
-export function Footer() {
+interface FooterProps {
+  onPrivacyClick?: () => void;
+  onTermsClick?: () => void;
+}
+
+export function Footer({ onPrivacyClick, onTermsClick }: FooterProps) {
   const currentYear = new Date().getFullYear();
   return (
     <footer className="bg-white/80 backdrop-blur border-t border-gray-200 py-6 mt-auto">
@@ -11,9 +15,17 @@ export function Footer() {
             &copy; {currentYear} First Day. All rights reserved.
           </p>
           <div className="flex flex-wrap gap-4 md:gap-6 justify-center">
-            <Link href="/privacy" className="text-gray-600 hover:text-coral-600 text-sm transition-smooth hover:scale-105">Privacy Policy</Link>
-            <Link href="/terms" className="text-gray-600 hover:text-coral-600 text-sm transition-smooth hover:scale-105">Terms of Service</Link>
-            <a href="https://straydesign.co" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-coral-600 text-sm transition-smooth hover:scale-105">Portfolio</a>
+            {onPrivacyClick ? (
+              <button onClick={onPrivacyClick} className="text-gray-600 hover:text-teal-700 underline text-sm transition-smooth hover:scale-105">Privacy Policy</button>
+            ) : (
+              <a href="/privacy" className="text-gray-600 hover:text-teal-700 underline text-sm transition-smooth hover:scale-105">Privacy Policy</a>
+            )}
+            {onTermsClick ? (
+              <button onClick={onTermsClick} className="text-gray-600 hover:text-teal-700 underline text-sm transition-smooth hover:scale-105">Terms of Service</button>
+            ) : (
+              <a href="/terms" className="text-gray-600 hover:text-teal-700 underline text-sm transition-smooth hover:scale-105">Terms of Service</a>
+            )}
+            <a href="https://straydesign.co" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-teal-700 underline text-sm transition-smooth hover:scale-105">Portfolio</a>
           </div>
         </div>
       </div>

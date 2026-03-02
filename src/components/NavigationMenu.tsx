@@ -9,7 +9,6 @@ interface NavigationMenuProps {
   onNavigateToCalendar?: () => void;
   onShowNotifications?: () => void;
   onLogout: () => void;
-  showCalendarOption?: boolean;
 }
 
 export function NavigationMenu({
@@ -39,7 +38,7 @@ export function NavigationMenu({
               onClick={item.onClick}
               variant={isActive ? "default" : "outline"}
               size="sm"
-              className={`transition-smooth hover:scale-105 ${isActive ? "bg-teal-600 hover:bg-teal-700 text-white border-teal-600" : "bg-transparent border-2 border-coral-600 text-coral-600 hover:bg-coral-50"}`}
+              className={`transition-smooth hover:scale-105 ${isActive ? "" : "bg-transparent border-2 border-teal-600 text-teal-600 hover:bg-teal-50"}`}
             >
               <Icon className="w-4 h-4 mr-2" />
               {item.label}
@@ -47,7 +46,7 @@ export function NavigationMenu({
           );
         })}
       </div>
-      <Button onClick={onLogout} variant="outline" size="sm" className="bg-transparent border-2 border-coral-600 text-coral-600 hover:bg-coral-50 transition-smooth hover:scale-105">
+      <Button onClick={onLogout} variant="outline" size="sm" className="bg-transparent border-2 border-slate-300 text-slate-600 hover:bg-slate-50 transition-smooth hover:scale-105">
         <LogOut className="w-4 h-4 mr-2" />
         Logout
       </Button>

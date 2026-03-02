@@ -5,9 +5,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { createClient, API_BASE } from '@/lib/supabase/client';
+import { Checkbox } from '@/components/ui/checkbox';
 import { DayOneLogo } from './DayOneLogo';
 import { ForgotPasswordModal } from './ForgotPasswordModal';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { validatePassword } from '@/lib/validation';
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -37,20 +39,9 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms }: Logi
       toast.error('Passwords do not match');
       return;
     }
-    if (password.length < 6) {
-      toast.error('Password must be at least 6 characters');
-      return;
-    }
-    if (!/[A-Z]/.test(password)) {
-      toast.error('Password must contain at least one capital letter');
-      return;
-    }
-    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-      toast.error('Password must contain at least one symbol');
-      return;
-    }
-    if ((password.match(/\d/g) || []).length < 2) {
-      toast.error('Password must contain at least two numbers');
+    const passwordError = validatePassword(password);
+    if (passwordError) {
+      toast.error(passwordError);
       return;
     }
     if (!agreeToTerms) {
@@ -169,14 +160,14 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms }: Logi
           )}
           {!isLogin && (
             <div className="flex items-start gap-2">
-              <input id="terms" type="checkbox" checked={agreeToTerms} onChange={(e) => setAgreeToTerms(e.target.checked)} className="mt-1 flex-shrink-0" />
+              <Checkbox id="terms" checked={agreeToTerms} onCheckedChange={(checked) => setAgreeToTerms(checked === true)} className="mt-1 flex-shrink-0" />
               <div className="flex flex-col text-gray-700 text-sm">
                 <span>I agree to the</span>
-                <a href="#" className="text-teal-600 hover:underline" onClick={onShowTerms}>terms and conditions</a>
+                <button type="button" className="text-teal-600 hover:underline text-left" onClick={onShowTerms}>terms and conditions</button>
               </div>
             </div>
           )}
-          <Button type="submit" className={`w-full transition-smooth hover:scale-105 disabled:hover:scale-100 ${isLogin ? 'bg-teal-600 hover:bg-teal-700 text-white' : 'bg-transparent border-2 border-coral-600 text-coral-600 hover:bg-coral-50'}`} disabled={loading}>
+          <Button type="submit" className="w-full transition-smooth hover:scale-105 disabled:hover:scale-100" disabled={loading}>
             {loading ? 'Please wait...' : isLogin ? 'Log In' : 'Sign Up'}
           </Button>
         </form>

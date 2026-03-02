@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import Aurora from "./Aurora";
+import { AURORA_COLORS } from "@/constants";
 import { Target, Plus, Trash2, Calendar, CheckCircle, Menu, Bell, Settings as SettingsIcon, LogOut, Youtube, BookOpen, ExternalLink, Sparkles } from "lucide-react";
 import { createClient, API_BASE } from "@/lib/supabase/client";
 import { BouncingButton } from "./BouncingButton";
@@ -120,11 +121,11 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
   if (loading) {
     return (
       <div className="min-h-screen relative bg-black flex items-center justify-center">
-        <div className="fixed inset-0 z-0 w-full h-full"><Aurora colorStops={["#7cff67","#00c7fc","#5227FF"]} /></div>
+        <div className="fixed inset-0 z-0 w-full h-full"><Aurora colorStops={[...AURORA_COLORS]} /></div>
         <div className="relative z-10 w-full bg-white flex items-center justify-center py-4">
           <div className="flex items-center gap-3">
             <p className="text-lg text-gray-700 font-medium">Loading your goals...</p>
-            <div className="w-6 h-6 border-3 border-gray-200 border-t-gray-600 rounded-full animate-spin"></div>
+            <div className="w-6 h-6 border-2 border-gray-200 border-t-gray-600 rounded-full animate-spin"></div>
           </div>
         </div>
       </div>
@@ -136,11 +137,11 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
       <div className="sticky top-0 z-50 flex justify-end px-4 py-2">
         <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
           <SheetTrigger asChild>
-            <Button variant="outline" size="sm" className="bg-transparent border-2 border-coral-600 text-coral-600 hover:bg-coral-50 shadow-md px-4 py-2 rounded-full" aria-label="Menu">
+            <Button variant="outline" size="sm" className="bg-transparent border-2 border-teal-600 text-teal-600 hover:bg-teal-50 shadow-md px-4 py-2 rounded-lg" aria-label="Menu">
               <Menu className="w-4 h-4 mr-2" />Menu
             </Button>
           </SheetTrigger>
-          <SheetContent side="right" className="w-[168px] bg-white/95 backdrop-blur-xl border-l-2 border-coral-200 pt-12">
+          <SheetContent side="right" className="w-[168px] bg-white/95 backdrop-blur-xl border-l-2 border-teal-200 pt-12">
             <SheetTitle className="text-lg font-bold text-gray-900 mb-4 pt-8 text-center">Menu</SheetTitle>
             <SheetDescription className="sr-only">Navigation options for your goals</SheetDescription>
             <nav className="flex flex-col gap-2 px-3">
@@ -154,17 +155,17 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
           </SheetContent>
         </Sheet>
       </div>
-      <div className="fixed inset-0 z-0 w-full h-full"><Aurora colorStops={["#7cff67","#00c7fc","#5227FF"]} /></div>
-      <div className="relative z-10 w-full pt-8 pb-8">
+      <div className="fixed inset-0 z-0 w-full h-full"><Aurora colorStops={[...AURORA_COLORS]} /></div>
+      <div className="relative z-10 w-full pt-8 pb-8 px-4">
         {goals.length > 0 ? (
           <>
             <div className="text-center mb-8 px-4">
-              <h1 className="text-5xl mb-4 text-slate-800">Today&apos;s Activities</h1>
-              <p className="text-xl text-cyan-700">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</p>
+              <h1 className="text-4xl md:text-5xl font-bold mb-4 text-slate-800">Today&apos;s Activities</h1>
+              <p className="text-xl text-teal-700">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</p>
             </div>
             <div className="animate-fadeIn space-y-4">
               {goals.map(goal => (
-                <Card key={goal.id} className="bg-white/90 backdrop-blur border-0 shadow-xl rounded-lg">
+                <Card key={goal.id} className="bg-white/90 backdrop-blur-sm border border-gray-200 shadow-lg rounded-xl">
                   <CardHeader className="border-b border-gray-200">
                     <div className="mb-4 flex items-start justify-between">
                       <div className="flex-1">
@@ -175,17 +176,17 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                         <Trash2 className="w-5 h-5" />
                       </Button>
                     </div>
-                    <Button size="lg" onClick={() => onSelectGoal(goal.id)} className="w-full bg-transparent border-2 border-coral-600 text-coral-600 hover:bg-coral-50 mb-3">
+                    <Button size="lg" onClick={() => onSelectGoal(goal.id)} variant="outline" className="w-full bg-transparent border-2 border-teal-600 text-teal-600 hover:bg-teal-50 transition-smooth hover:scale-105 mb-3">
                       <Calendar className="w-5 h-5 mr-2" />View 30 Day Plan
                     </Button>
-                    <Button variant="outline" size="lg" className="w-full bg-teal-600 hover:bg-teal-700 text-white transition-smooth" onClick={(e) => { e.stopPropagation(); if (onViewTodayActivities) onViewTodayActivities(goal.id); else onSelectGoal(goal.id); }}>
+                    <Button size="lg" className="w-full transition-smooth hover:scale-105" onClick={(e) => { e.stopPropagation(); if (onViewTodayActivities) onViewTodayActivities(goal.id); else onSelectGoal(goal.id); }}>
                       <CheckCircle className="w-5 h-5 mr-2" />View Today&apos;s Activities
                     </Button>
                   </CardHeader>
                 </Card>
               ))}
               <div className="pt-4 pb-8 px-4">
-                <Button onClick={onCreateGoal} size="lg" variant="outline" className="w-full bg-transparent border-2 border-coral-600 text-coral-600 hover:bg-coral-50 shadow-lg hover:shadow-xl transition-smooth text-lg py-6 rounded-lg">
+                <Button onClick={onCreateGoal} size="lg" variant="outline" className="w-full bg-transparent border-2 border-teal-600 text-teal-600 hover:bg-teal-50 shadow-lg hover:shadow-xl transition-smooth hover:scale-105 text-lg py-6 rounded-xl">
                   <Plus className="w-6 h-6 mr-2" />Add New Goal
                 </Button>
               </div>
@@ -194,8 +195,8 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
         ) : (
           <>
             <div className="text-center mb-8 px-4">
-              <h1 className="text-5xl mb-4 text-slate-800">My Goal</h1>
-              <p className="text-xl text-cyan-700">Your 30-day journey to success</p>
+              <h1 className="text-4xl md:text-5xl font-bold mb-4 text-slate-800">My Goal</h1>
+              <p className="text-xl text-teal-700">Your 30-day journey to success</p>
             </div>
             <BouncingButton onClick={onCreateGoal} />
           </>

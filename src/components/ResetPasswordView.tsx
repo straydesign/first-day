@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { API_BASE } from '@/lib/supabase/client';
+import { validatePassword } from '@/lib/validation';
 import { DayOneLogo } from './DayOneLogo';
 
 interface ResetPasswordViewProps {
@@ -25,8 +26,9 @@ export function ResetPasswordView({ token, onSuccess }: ResetPasswordViewProps) 
       toast.error('Passwords do not match');
       return;
     }
-    if (password.length < 6) {
-      toast.error('Password must be at least 6 characters');
+    const passwordError = validatePassword(password);
+    if (passwordError) {
+      toast.error(passwordError);
       return;
     }
 
@@ -60,7 +62,7 @@ export function ResetPasswordView({ token, onSuccess }: ResetPasswordViewProps) 
       <div className="max-w-md w-full space-y-6">
         <div className="text-center">
           <DayOneLogo width={200} height={100} />
-          <h2 className="text-2xl font-bold text-gray-900 mt-4">Reset Your Password</h2>
+          <h2 className="text-2xl font-bold text-slate-800 mt-4">Reset Your Password</h2>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -71,7 +73,7 @@ export function ResetPasswordView({ token, onSuccess }: ResetPasswordViewProps) 
             <Label htmlFor="confirm-new-password" className="text-gray-700">Confirm Password</Label>
             <Input id="confirm-new-password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} disabled={loading} className="bg-white border-gray-300" />
           </div>
-          <Button type="submit" className="w-full bg-teal-600 hover:bg-teal-700 text-white" disabled={loading}>
+          <Button type="submit" className="w-full transition-smooth hover:scale-105 disabled:hover:scale-100" disabled={loading}>
             {loading ? 'Resetting...' : 'Reset Password'}
           </Button>
         </form>

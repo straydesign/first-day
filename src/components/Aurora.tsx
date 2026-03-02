@@ -3,8 +3,6 @@ import { useEffect, useState } from 'react';
 
 interface AuroraProps {
   colorStops?: string[];
-  amplitude?: number;
-  blend?: number;
 }
 
 export default function Aurora({ colorStops = ['#7cff67', '#00c7fc', '#5227FF'] }: AuroraProps) {

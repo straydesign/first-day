@@ -1,22 +1,25 @@
 "use client";
 import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { toast } from "sonner";
 import { LandingPage } from "@/components/LandingPage";
-import { CalendarView } from "@/components/CalendarView";
-import { DayView } from "@/components/DayView";
-import { GoalsManagement } from "@/components/GoalsManagement";
-import { Settings } from "@/components/Settings";
-import { LoginModal } from "@/components/LoginModal";
-import { NavigationMenu } from "@/components/NavigationMenu";
-import { PrivacyPolicy } from "@/components/PrivacyPolicy";
-import { TermsOfService } from "@/components/TermsOfService";
 import Aurora from "@/components/Aurora";
-import { ResetPasswordView } from "@/components/ResetPasswordView";
-import { SimpleGoalCreation } from "@/components/SimpleGoalCreation";
-import { CongratsView } from "@/components/CongratsView";
-import { NotificationSettings } from "@/components/NotificationSettings";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { createClient, API_BASE } from "@/lib/supabase/client";
+import { AURORA_COLORS } from "@/constants";
+
+const CalendarView = dynamic(() => import("@/components/CalendarView").then(m => ({ default: m.CalendarView })));
+const DayView = dynamic(() => import("@/components/DayView").then(m => ({ default: m.DayView })));
+const GoalsManagement = dynamic(() => import("@/components/GoalsManagement").then(m => ({ default: m.GoalsManagement })));
+const Settings = dynamic(() => import("@/components/Settings").then(m => ({ default: m.Settings })));
+const LoginModal = dynamic(() => import("@/components/LoginModal").then(m => ({ default: m.LoginModal })));
+const NavigationMenu = dynamic(() => import("@/components/NavigationMenu").then(m => ({ default: m.NavigationMenu })));
+const PrivacyPolicy = dynamic(() => import("@/components/PrivacyPolicy").then(m => ({ default: m.PrivacyPolicy })));
+const TermsOfService = dynamic(() => import("@/components/TermsOfService").then(m => ({ default: m.TermsOfService })));
+const ResetPasswordView = dynamic(() => import("@/components/ResetPasswordView").then(m => ({ default: m.ResetPasswordView })));
+const SimpleGoalCreation = dynamic(() => import("@/components/SimpleGoalCreation").then(m => ({ default: m.SimpleGoalCreation })));
+const CongratsView = dynamic(() => import("@/components/CongratsView").then(m => ({ default: m.CongratsView })));
+const NotificationSettings = dynamic(() => import("@/components/NotificationSettings").then(m => ({ default: m.NotificationSettings })));
 
 function getSupabase() {
   return createClient();
@@ -40,7 +43,6 @@ export default function Home() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [resetToken, setResetToken] = useState<string | null>(null);
   const [editingGoalData, setEditingGoalData] = useState<any>(null);
-  const [forceShowCalendar, setForceShowCalendar] = useState(false);
   const [showFullScreenLoading, setShowFullScreenLoading] = useState(false);
 
   // Scroll to top whenever the view changes
@@ -413,7 +415,6 @@ export default function Home() {
   };
 
   const handleViewCalendar = () => {
-    setForceShowCalendar(true);
     setCurrentView("calendar");
   };
 
@@ -604,7 +605,6 @@ export default function Home() {
     return (
       <PrivacyPolicy
         onBack={handleBackToLanding}
-        onGetStarted={handleGetStarted}
         onNavigate={(page) => {
           if (page === "terms") handleShowTermsOfService();
         }}
@@ -616,7 +616,6 @@ export default function Home() {
     return (
       <TermsOfService
         onBack={handleBackToLanding}
-        onGetStarted={handleGetStarted}
         onNavigate={(page) => {
           if (page === "privacy") handleShowPrivacyPolicy();
         }}
@@ -632,7 +631,6 @@ export default function Home() {
           onGetStarted={handleGetStarted}
           onPrivacyPolicy={handleShowPrivacyPolicy}
           onTermsOfService={handleShowTermsOfService}
-          onStyleGuide={() => {}}
         />
         <LoginModal
           isOpen={showLoginModal}
@@ -648,7 +646,7 @@ export default function Home() {
   return (
     <div className="min-h-screen relative bg-white">
       <div className="fixed inset-0 z-0 w-full h-full">
-        <Aurora colorStops={["#7cff67", "#00c7fc", "#5227FF"]} amplitude={1} blend={0.5} />
+        <Aurora colorStops={[...AURORA_COLORS]} />
       </div>
 
       <div className="relative z-10">
@@ -667,7 +665,6 @@ export default function Home() {
                 }
                 onShowNotifications={() => setShowNotificationSettings(true)}
                 onLogout={handleLogout}
-                showCalendarOption={!!currentGoalId}
               />
             </div>
           )}
@@ -743,6 +740,7 @@ export default function Home() {
           <LoadingScreen
             title="Creating your personalized 30-day plan..."
             subtitle="This may take a moment"
+            showProgress={true}
           />
         )}
       </div>

@@ -64,12 +64,12 @@ export function ForgotPasswordModal({ isOpen, onClose }: ForgotPasswordModalProp
               <Label htmlFor="reset-email" className="text-gray-700">Email</Label>
               <Input id="reset-email" type="email" placeholder="your@email.com" value={email} onChange={(e) => setEmail(e.target.value)} disabled={loading} className="bg-white border-gray-300" />
             </div>
-            <Button type="submit" className="w-full bg-teal-600 hover:bg-teal-700 text-white" disabled={loading}>
+            <Button type="submit" className="w-full transition-smooth hover:scale-105 disabled:hover:scale-100" disabled={loading}>
               {loading ? 'Sending...' : 'Send Reset Link'}
             </Button>
           </form>
         ) : (
-          <Button onClick={onClose} className="w-full mt-4 bg-teal-600 hover:bg-teal-700 text-white">Done</Button>
+          <Button onClick={onClose} className="w-full mt-4 transition-smooth hover:scale-105">Done</Button>
         )}
       </DialogContent>
     </Dialog>

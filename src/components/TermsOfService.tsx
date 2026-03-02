@@ -1,20 +1,17 @@
 "use client";
-import { ArrowLeft } from "lucide-react";
+import { BackButton } from "@/components/ui/back-button";
 import { Footer } from "./Footer";
 
 interface TermsOfServiceProps {
   onBack: () => void;
-  onGetStarted: () => void;
   onNavigate?: (page: string) => void;
 }
 
-export function TermsOfService({ onBack, onGetStarted, onNavigate }: TermsOfServiceProps) {
+export function TermsOfService({ onBack, onNavigate }: TermsOfServiceProps) {
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <div className="max-w-4xl mx-auto px-4 py-12 flex-1">
-        <button onClick={onBack} className="mb-8 flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-coral-600 text-coral-600 hover:bg-coral-50 transition-all font-medium">
-          <ArrowLeft className="w-5 h-5" /><span>Back</span>
-        </button>
+        <BackButton onClick={onBack} />
         <h1 className="text-4xl font-bold text-gray-900 mb-8">Terms of Service</h1>
         <div className="prose prose-gray max-w-none space-y-6">
           <p className="text-gray-600">Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
@@ -32,7 +29,7 @@ export function TermsOfService({ onBack, onGetStarted, onNavigate }: TermsOfServ
           <p className="text-gray-700">For questions about these terms, please visit <a href="https://straydesign.co" target="_blank" rel="noopener noreferrer" className="text-teal-600 hover:underline">straydesign.co</a>.</p>
         </div>
       </div>
-      <Footer />
+      <Footer onPrivacyClick={() => onNavigate?.("privacy")} onTermsClick={() => {}} />
     </div>
   );
 }
