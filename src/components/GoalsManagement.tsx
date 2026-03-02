@@ -193,8 +193,8 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
         ) : (
           <>
             <div className="text-center mb-4 md:mb-8 px-4">
-              <h1 className="text-3xl md:text-5xl font-bold mb-2 md:mb-4 text-slate-800">My Goal</h1>
-              <p className="text-xl text-teal-700">Your 30-day journey to success</p>
+              <h1 className="text-3xl md:text-5xl font-bold mb-2 md:mb-4 text-slate-800">Set Your First Goal</h1>
+              <p className="text-xl text-teal-700">Pick any goal and get a personalized 30-day plan</p>
             </div>
             <BouncingButton onClick={onCreateGoal} />
           </>

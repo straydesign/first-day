@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
-import { Sparkles, ArrowRight, Loader2, AlertCircle } from 'lucide-react';
+import { Sparkles, ArrowRight, Loader2, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { BackButton } from '@/components/ui/back-button';
 import { GOAL_CATEGORY_MAP, GOAL_CATEGORY_COLORS, GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3 } from '@/constants';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -20,12 +20,13 @@ export function SimpleGoalCreation({ onComplete, onCancel }: SimpleGoalCreationP
   const [priorExperience, setPriorExperience] = useState('');
   const [preferredTactics, setPreferredTactics] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
+  const [showOptional, setShowOptional] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isPaused, setIsPaused] = useState(false);
   const [dragStartPos, setDragStartPos] = useState<{ x: number; y: number } | null>(null);
 
   const getGoalColorClasses = (g: string) => {
-    const goalType = GOAL_CATEGORY_MAP[g] || 'meditation';
+    const goalType = GOAL_CATEGORY_MAP[g] || 'lifestyle';
     return GOAL_CATEGORY_COLORS[goalType];
   };
 
@@ -104,12 +105,22 @@ export function SimpleGoalCreation({ onComplete, onCancel }: SimpleGoalCreationP
               </div>
             </div>
             <div className="mb-4 md:mb-8">
-              <label className="block text-sm font-semibold text-gray-700 mb-2 md:mb-3">What have you tried before?</label>
-              <Input type="text" value={priorExperience} onChange={(e) => setPriorExperience(e.target.value)} placeholder="e.g., Took an online course, read a book..." className="px-5 py-4 bg-white/50 border-2 border-gray-200 rounded-xl text-lg focus:border-teal-400 focus:ring-4 focus:ring-teal-100 transition-all" disabled={isGenerating} />
-            </div>
-            <div className="mb-4 md:mb-8">
-              <label className="block text-sm font-semibold text-gray-700 mb-2 md:mb-3">How do you like to learn?</label>
-              <Input type="text" value={preferredTactics} onChange={(e) => setPreferredTactics(e.target.value)} placeholder="e.g., Videos, hands-on practice, reading..." className="px-5 py-4 bg-white/50 border-2 border-gray-200 rounded-xl text-lg focus:border-teal-400 focus:ring-4 focus:ring-teal-100 transition-all" disabled={isGenerating} />
+              <button type="button" onClick={() => setShowOptional(!showOptional)} className="flex items-center gap-2 text-sm font-medium text-teal-600 hover:text-teal-700 transition-colors" disabled={isGenerating}>
+                {showOptional ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                Tell us more (optional)
+              </button>
+              {showOptional && (
+                <div className="mt-4 space-y-4 md:space-y-6">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2 md:mb-3">What have you tried before?</label>
+                    <Input type="text" value={priorExperience} onChange={(e) => setPriorExperience(e.target.value)} placeholder="e.g., Took an online course, read a book..." className="px-5 py-4 bg-white/50 border-2 border-gray-200 rounded-xl text-lg focus:border-teal-400 focus:ring-4 focus:ring-teal-100 transition-all" disabled={isGenerating} />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2 md:mb-3">How do you like to learn?</label>
+                    <Input type="text" value={preferredTactics} onChange={(e) => setPreferredTactics(e.target.value)} placeholder="e.g., Videos, hands-on practice, reading..." className="px-5 py-4 bg-white/50 border-2 border-gray-200 rounded-xl text-lg focus:border-teal-400 focus:ring-4 focus:ring-teal-100 transition-all" disabled={isGenerating} />
+                  </div>
+                </div>
+              )}
             </div>
             <div className="flex flex-col gap-3">
               <Button size="lg" onClick={handleGenerate} disabled={isGenerating || !goal.trim()} className="w-full shadow-lg transition-smooth hover:scale-105 disabled:hover:scale-100">

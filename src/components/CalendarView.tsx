@@ -128,10 +128,11 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
           </div>
           <div className="mt-4 md:mt-8 bg-white/90 backdrop-blur-sm border border-gray-200 rounded-xl p-4 md:p-6 shadow-lg">
             <p className="text-base text-gray-700 font-medium mb-4 text-center">Click on any day to see your activities</p>
-            <div className="flex justify-center gap-3 text-sm">
-              <div className="flex items-center gap-2"><div className="w-5 h-5 border-2 border-coral-300 bg-coral-50 rounded"></div><span className="text-gray-700 font-medium">Missed</span></div>
+            <div className="flex justify-center gap-3 text-sm flex-wrap">
+              <div className="flex items-center gap-2"><div className="w-5 h-5 border-2 border-red-300 bg-red-50 rounded"></div><span className="text-gray-700 font-medium">Missed</span></div>
               <div className="flex items-center gap-2"><div className="w-5 h-5 border-2 border-lime-400 bg-lime-50 rounded"></div><span className="text-gray-700 font-medium">Completed</span></div>
-              <div className="flex items-center gap-2"><div className="w-5 h-5 border-2 border-blue-400 bg-blue-50 rounded"></div><span className="text-gray-700 font-medium">Future</span></div>
+              <div className="flex items-center gap-2"><div className="w-5 h-5 border-2 border-teal-400 bg-teal-50 rounded"></div><span className="text-gray-700 font-medium">Today</span></div>
+              <div className="flex items-center gap-2"><div className="w-5 h-5 border-2 border-gray-300 bg-gray-50 rounded"></div><span className="text-gray-700 font-medium">Upcoming</span></div>
             </div>
           </div>
         </div>

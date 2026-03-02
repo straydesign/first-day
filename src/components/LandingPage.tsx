@@ -21,7 +21,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
   const [isPausedRow3, setIsPausedRow3] = useState(false);
 
   const getGoalColorClasses = (goal: string) => {
-    const goalType = GOAL_CATEGORY_MAP[goal] || "meditation";
+    const goalType = GOAL_CATEGORY_MAP[goal] || "lifestyle";
     return GOAL_CATEGORY_COLORS[goalType];
   };
 
