@@ -119,7 +119,7 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms }: Logi
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="w-screen h-screen max-w-none m-0 p-8 bg-white border-0 rounded-none animate-scaleIn shadow-none overflow-y-auto">
+      <DialogContent className="w-screen h-screen max-w-none m-0 p-4 md:p-8 bg-white border-0 rounded-none animate-scaleIn shadow-none overflow-y-auto">
         <DialogTitle className="sr-only">{isLogin ? 'Log in to Day One' : 'Sign up for Day One'}</DialogTitle>
         <DialogDescription className="sr-only">{isLogin ? 'Enter your email and password' : 'Create an account'}</DialogDescription>
 

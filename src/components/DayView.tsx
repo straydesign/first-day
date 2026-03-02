@@ -40,24 +40,24 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
   return (
     <div className="min-h-screen bg-white relative">
       <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50"></div>
-      {onBack && <BackButton onClick={onBack} variant="fixed" />}
-      <div className="relative z-10 max-w-3xl mx-auto p-4 md:p-8 pt-20">
+      <div className="relative z-10 max-w-3xl mx-auto p-4 md:p-8 pt-4 md:pt-8">
+        {onBack && <BackButton onClick={onBack} />}
         {isCompleted && (
-          <div className="mb-6 p-4 bg-lime-600 text-white rounded-xl text-center shadow-lg animate-slideInUp">
+          <div className="mb-4 md:mb-6 p-4 bg-lime-600 text-white rounded-xl text-center shadow-lg animate-slideInUp">
             <div className="flex items-center justify-center gap-2">
               <CheckCircle2 className="w-6 h-6" />
               <span className="text-lg">Day Completed on {savedProgress?.completedAt ? new Date(savedProgress.completedAt).toLocaleDateString() : 'Previously'}</span>
             </div>
           </div>
         )}
-        <div className="text-center mb-8 animate-fadeIn">
+        <div className="text-center mb-4 md:mb-8 animate-fadeIn">
           <div className="inline-flex items-center justify-center gap-2">
             <Calendar className="w-8 h-8 text-teal-500" />
             <h1 className="text-4xl font-bold text-slate-800">{isToday ? `Today (Day ${day.number})` : `Day ${day.number}`}</h1>
             {day.dateDisplay && <span className="text-xl text-teal-500 ml-2">• {day.dateDisplay}</span>}
           </div>
         </div>
-        <Card className="mb-6 shadow-lg border border-gray-200 rounded-xl animate-slideInUp bg-white/90 backdrop-blur-sm">
+        <Card className="mb-4 md:mb-6 shadow-lg border border-gray-200 rounded-xl animate-slideInUp bg-white/90 backdrop-blur-sm">
           <CardHeader><CardTitle className="text-2xl text-slate-800">Your Activities</CardTitle></CardHeader>
           <CardContent className="space-y-4">
             {activities.map((activity: any, index: number) => {
@@ -95,7 +95,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
             })}
           </CardContent>
         </Card>
-        <Card className="mb-6 shadow-lg border border-gray-200 rounded-xl animate-slideInUp bg-white/90 backdrop-blur-sm" style={{ animationDelay: '0.1s' }}>
+        <Card className="mb-4 md:mb-6 shadow-lg border border-gray-200 rounded-xl animate-slideInUp bg-white/90 backdrop-blur-sm" style={{ animationDelay: '0.1s' }}>
           <CardHeader><CardTitle className="text-2xl text-slate-800">How did today go?</CardTitle></CardHeader>
           <CardContent>
             <Textarea value={feedback} onChange={(e) => !isCompleted && setFeedback(e.target.value)} placeholder="Share your thoughts, challenges, or wins from today..." className="min-h-32 text-lg border-gray-300 focus:border-teal-500 bg-white text-gray-900 placeholder:text-gray-500" disabled={isCompleted} />

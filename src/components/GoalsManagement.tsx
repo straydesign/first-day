@@ -156,11 +156,11 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
         </Sheet>
       </div>
       <div className="fixed inset-0 z-0 w-full h-full"><Aurora colorStops={[...AURORA_COLORS]} /></div>
-      <div className="relative z-10 w-full pt-8 pb-8 px-4">
+      <div className="relative z-10 w-full pt-4 md:pt-8 pb-4 md:pb-8 px-4">
         {goals.length > 0 ? (
           <>
-            <div className="text-center mb-8 px-4">
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 text-slate-800">Today&apos;s Activities</h1>
+            <div className="text-center mb-4 md:mb-8 px-4">
+              <h1 className="text-3xl md:text-5xl font-bold mb-2 md:mb-4 text-slate-800">Today&apos;s Activities</h1>
               <p className="text-xl text-teal-700">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</p>
             </div>
             <div className="animate-fadeIn space-y-4">
@@ -185,8 +185,8 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                   </CardHeader>
                 </Card>
               ))}
-              <div className="pt-4 pb-8 px-4">
-                <Button onClick={onCreateGoal} size="lg" variant="outline" className="w-full bg-transparent border-2 border-teal-600 text-teal-600 hover:bg-teal-50 shadow-lg hover:shadow-xl transition-smooth hover:scale-105 text-lg py-6 rounded-xl">
+              <div className="pt-2 md:pt-4 pb-4 md:pb-8 px-4">
+                <Button onClick={onCreateGoal} size="lg" variant="outline" className="w-full bg-transparent border-2 border-teal-600 text-teal-600 hover:bg-teal-50 shadow-lg hover:shadow-xl transition-smooth hover:scale-105 text-lg py-4 md:py-6 rounded-xl">
                   <Plus className="w-6 h-6 mr-2" />Add New Goal
                 </Button>
               </div>
@@ -194,8 +194,8 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
           </>
         ) : (
           <>
-            <div className="text-center mb-8 px-4">
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 text-slate-800">My Goal</h1>
+            <div className="text-center mb-4 md:mb-8 px-4">
+              <h1 className="text-3xl md:text-5xl font-bold mb-2 md:mb-4 text-slate-800">My Goal</h1>
               <p className="text-xl text-teal-700">Your 30-day journey to success</p>
             </div>
             <BouncingButton onClick={onCreateGoal} />

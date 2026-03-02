@@ -125,16 +125,16 @@ export function LandingPage({ onGetStarted, onPrivacyPolicy, onTermsOfService }:
         </section>
 
         {/* How It Works */}
-        <section id="how-it-works" className="w-full py-16 px-0 md:px-4">
+        <section id="how-it-works" className="w-full py-8 md:py-16 px-0 md:px-4">
           <div className="bg-white/80 backdrop-blur-xl rounded-none md:rounded-2xl border-y md:border border-white/50 shadow-2xl overflow-hidden">
-            <div className="px-6 md:px-10 pt-10 pb-4 text-center">
-              <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-2">How It Works</h2>
+            <div className="px-6 md:px-10 pt-6 md:pt-10 pb-4 text-center">
+              <h2 className="text-2xl md:text-4xl font-bold text-slate-800 mb-2">How It Works</h2>
               <p className="text-teal-700">Three simple steps to your best month</p>
             </div>
 
             <div className="divide-y divide-gray-200">
               {/* Step 1: Answer */}
-              <div className="px-6 md:px-10 py-8">
+              <div className="px-6 md:px-10 py-5 md:py-8">
                 <div className="flex gap-5 items-start">
                   <div className="w-12 h-12 rounded-full bg-teal-600 text-white flex items-center justify-center shadow-md text-xl font-bold flex-shrink-0">
                     1
@@ -152,7 +152,7 @@ export function LandingPage({ onGetStarted, onPrivacyPolicy, onTermsOfService }:
               </div>
 
               {/* Step 2: Get Plan */}
-              <div className="px-6 md:px-10 py-8">
+              <div className="px-6 md:px-10 py-5 md:py-8">
                 <div className="flex gap-5 items-start">
                   <div className="w-12 h-12 rounded-full bg-purple-600 text-white flex items-center justify-center shadow-md text-xl font-bold flex-shrink-0">
                     2
@@ -171,7 +171,7 @@ export function LandingPage({ onGetStarted, onPrivacyPolicy, onTermsOfService }:
               </div>
 
               {/* Step 3: Stay Consistent */}
-              <div className="px-6 md:px-10 py-8">
+              <div className="px-6 md:px-10 py-5 md:py-8">
                 <div className="flex gap-5 items-start">
                   <div className="w-12 h-12 rounded-full bg-lime-500 text-white flex items-center justify-center shadow-md text-xl font-bold flex-shrink-0">
                     3

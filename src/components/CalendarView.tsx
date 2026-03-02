@@ -61,9 +61,9 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
   return (
     <div className="min-h-screen relative bg-black">
       <div className="fixed inset-0 z-0 w-full h-full"><Aurora colorStops={[...AURORA_COLORS]} /></div>
-      <div className="relative z-10 p-4 md:p-8 pt-6">
-        <div className="max-w-7xl mx-auto space-y-8">
-          <div className="mb-8 animate-fadeIn">
+      <div className="relative z-10 p-4 md:p-8 pt-4 md:pt-6">
+        <div className="max-w-7xl mx-auto space-y-4 md:space-y-8">
+          <div className="mb-4 md:mb-8 animate-fadeIn">
             {onBack && <BackButton onClick={onBack} />}
             {goalTitle && (<div className="text-center">
               <h1 className="text-3xl md:text-5xl font-bold text-slate-800 mb-2 px-4">{goalTitle}</h1>
@@ -80,7 +80,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
               )}
             </div>)}
           </div>
-          <div className="space-y-6">
+          <div className="space-y-4 md:space-y-6">
             {weeks.map((week: any, weekIndex: number) => (
               <div key={week.weekNumber} className="relative">
                 <div className="mb-3 flex items-center justify-between">
@@ -116,7 +116,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
                       <div className="flex-1"><WeekCalendar weekNumber={week.weekNumber} days={week.days} progress={progress} onDayClick={onDayClick} planData={planData} startDate={planData?.startDate} /></div>
                     </div>
                   ) : (
-                    <div className="text-center py-12">
+                    <div className="text-center py-6 md:py-12">
                       <div className="inline-flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-purple-100"><BookOpen className="w-8 h-8 text-purple-600" /></div>
                       <h4 className="text-lg font-semibold text-gray-700 mb-2">Week {week.weekNumber} Coming Soon!</h4>
                       <p className="text-sm text-gray-600 max-w-md mx-auto mb-3">Complete Week {week.weekNumber - 1} to unlock this week.</p>
@@ -126,7 +126,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
               </div>
             ))}
           </div>
-          <div className="mt-8 bg-white/90 backdrop-blur-sm border border-gray-200 rounded-xl p-6 shadow-lg">
+          <div className="mt-4 md:mt-8 bg-white/90 backdrop-blur-sm border border-gray-200 rounded-xl p-4 md:p-6 shadow-lg">
             <p className="text-base text-gray-700 font-medium mb-4 text-center">Click on any day to see your activities</p>
             <div className="flex justify-center gap-3 text-sm">
               <div className="flex items-center gap-2"><div className="w-5 h-5 border-2 border-coral-300 bg-coral-50 rounded"></div><span className="text-gray-700 font-medium">Missed</span></div>

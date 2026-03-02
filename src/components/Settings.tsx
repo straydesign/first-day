@@ -54,13 +54,13 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
   return (
     <div className="min-h-screen bg-white relative overflow-hidden">
       <div className="fixed inset-0 z-0 w-full h-full"><Aurora colorStops={[...AURORA_COLORS]} /></div>
-      <div className="relative z-10 max-w-4xl mx-auto px-4 py-12">
+      <div className="relative z-10 max-w-4xl mx-auto px-4 py-6 md:py-12">
         <BackButton onClick={onBack} />
-        <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-800 mb-2">Account Settings</h1>
+        <div className="mb-4 md:mb-8">
+          <h1 className="text-2xl md:text-4xl font-bold text-slate-800 mb-2">Account Settings</h1>
           <p className="text-teal-700">Manage your account and data preferences</p>
         </div>
-        <div className="bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl p-6 mb-6 shadow-lg">
+        <div className="bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl p-4 md:p-6 mb-4 md:mb-6 shadow-lg">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-full bg-teal-100 border border-teal-300 flex items-center justify-center"><User className="w-5 h-5 text-teal-600" /></div>
             <h2 className="text-xl font-semibold text-slate-800">Account Information</h2>
@@ -70,7 +70,7 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
             <div className="flex items-center gap-3 text-gray-700"><Shield className="w-4 h-4 text-gray-500" /><span className="text-sm">User ID:</span><span className="text-sm font-mono text-xs">{userId}</span></div>
           </div>
         </div>
-        <div className="bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl p-6 mb-6 shadow-lg">
+        <div className="bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl p-4 md:p-6 mb-4 md:mb-6 shadow-lg">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-full bg-teal-100 border border-teal-300 flex items-center justify-center"><Shield className="w-5 h-5 text-teal-600" /></div>
             <h2 className="text-xl font-semibold text-slate-800">Privacy & Data</h2>
@@ -81,7 +81,7 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
             <p>You have full control over your data</p>
           </div>
         </div>
-        <div className="bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl p-6 mb-6 shadow-lg">
+        <div className="bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl p-4 md:p-6 mb-4 md:mb-6 shadow-lg">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-full bg-blue-100 border border-blue-300 flex items-center justify-center"><Bell className="w-5 h-5 text-blue-600" /></div>
             <h2 className="text-xl font-semibold text-slate-800">Email Notifications</h2>
@@ -93,7 +93,7 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
             <Bell className="w-4 h-4 mr-2" />{isSendingTestEmail ? "Sending..." : "Send Test Email"}
           </Button>
         </div>
-        <div className="bg-red-50 backdrop-blur-sm border border-red-200 rounded-xl p-6 shadow-lg">
+        <div className="bg-red-50 backdrop-blur-sm border border-red-200 rounded-xl p-4 md:p-6 shadow-lg">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-full bg-red-100 border border-red-300 flex items-center justify-center"><Trash2 className="w-5 h-5 text-red-600" /></div>
             <h2 className="text-xl font-semibold text-slate-800">Danger Zone</h2>

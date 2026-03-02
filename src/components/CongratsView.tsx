@@ -10,13 +10,13 @@ export function CongratsView({ onViewCalendar, onDoMore }: { onViewCalendar: () 
       <div className="fixed inset-0 z-0 w-full h-full">
         <Aurora colorStops={[...AURORA_COLORS]} />
       </div>
-      <div className="relative z-10 min-h-screen flex items-center justify-center p-6 pt-20">
+      <div className="relative z-10 flex items-center justify-center p-6 pt-12 md:pt-20 min-h-[80vh] md:min-h-screen">
         <div className="max-w-2xl w-full text-center">
-          <div className="inline-flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full bg-lime-500 mb-6 shadow-lg animate-bounce">
+          <div className="inline-flex items-center justify-center w-16 h-16 md:w-24 md:h-24 rounded-full bg-lime-500 mb-4 md:mb-6 shadow-lg animate-bounce">
             <PartyPopper className="w-10 h-10 md:w-12 md:h-12 text-white" />
           </div>
           <h1 className="text-3xl md:text-5xl font-bold mb-4 text-slate-800 animate-fadeIn">Congratulations!</h1>
-          <p className="text-base md:text-xl text-teal-700 mb-8 md:mb-12 animate-slideInUp max-w-lg mx-auto px-4">
+          <p className="text-base md:text-xl text-teal-700 mb-6 md:mb-12 animate-slideInUp max-w-lg mx-auto px-4">
             You&apos;ve completed today&apos;s activities. Every step forward is progress toward your best self.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center px-4">

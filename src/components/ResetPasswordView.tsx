@@ -58,7 +58,7 @@ export function ResetPasswordView({ token, onSuccess }: ResetPasswordViewProps) 
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white p-8">
+    <div className="min-h-screen flex items-center justify-center bg-white p-4 md:p-8">
       <div className="max-w-md w-full space-y-6">
         <div className="text-center">
           <DayOneLogo width={200} height={100} />
