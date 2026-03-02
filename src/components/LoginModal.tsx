@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { createClient, API_BASE } from '@/lib/supabase/client';
 import { Checkbox } from '@/components/ui/checkbox';
-import { DayOneLogo } from './DayOneLogo';
+import { FirstDayLogo } from './FirstDayLogo';
 import { ForgotPasswordModal } from './ForgotPasswordModal';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { validatePassword } from '@/lib/validation';
@@ -16,10 +16,11 @@ interface LoginModalProps {
   onClose: () => void;
   onAuthSuccess: (accessToken: string, userId: string) => void;
   onShowTerms?: () => void;
+  defaultMode?: "login" | "signup";
 }
 
-export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms }: LoginModalProps) {
-  const [isLogin, setIsLogin] = useState(true);
+export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaultMode = "login" }: LoginModalProps) {
+  const [isLogin, setIsLogin] = useState(defaultMode === "login");
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -120,12 +121,12 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms }: Logi
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="w-screen h-screen max-w-none m-0 p-4 md:p-8 bg-white border-0 rounded-none animate-scaleIn shadow-none overflow-y-auto">
-        <DialogTitle className="sr-only">{isLogin ? 'Log in to Day One' : 'Sign up for Day One'}</DialogTitle>
+        <DialogTitle className="sr-only">{isLogin ? 'Log in to First Day' : 'Sign up for First Day'}</DialogTitle>
         <DialogDescription className="sr-only">{isLogin ? 'Enter your email and password' : 'Create an account'}</DialogDescription>
 
         <div className="mb-4 sm:mb-6 text-center">
           <div className="mb-2 flex justify-center animate-fadeIn">
-            <DayOneLogo width={200} height={100} className="text-gray-900 max-w-full" />
+            <FirstDayLogo width={200} height={100} className="text-gray-900 max-w-full" />
           </div>
           <p className="text-gray-600 mt-2 text-sm sm:text-base animate-slideInUp" style={{ animationDelay: '0.1s' }}>
             {isLogin ? 'Welcome back!' : 'Start your journey today'}

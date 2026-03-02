@@ -104,12 +104,12 @@ export function SimpleGoalCreation({ onComplete, onCancel }: SimpleGoalCreationP
               </div>
             </div>
             <div className="mb-4 md:mb-8">
-              <label className="block text-sm font-semibold text-gray-700 mb-2 md:mb-3">Prior Experience</label>
-              <Input type="text" value={priorExperience} onChange={(e) => setPriorExperience(e.target.value)} placeholder="e.g., I have some basic knowledge..." className="px-5 py-4 bg-white/50 border-2 border-gray-200 rounded-xl text-lg focus:border-teal-400 focus:ring-4 focus:ring-teal-100 transition-all" disabled={isGenerating} />
+              <label className="block text-sm font-semibold text-gray-700 mb-2 md:mb-3">What have you tried before?</label>
+              <Input type="text" value={priorExperience} onChange={(e) => setPriorExperience(e.target.value)} placeholder="e.g., Took an online course, read a book..." className="px-5 py-4 bg-white/50 border-2 border-gray-200 rounded-xl text-lg focus:border-teal-400 focus:ring-4 focus:ring-teal-100 transition-all" disabled={isGenerating} />
             </div>
             <div className="mb-4 md:mb-8">
-              <label className="block text-sm font-semibold text-gray-700 mb-2 md:mb-3">Preferred Tactics</label>
-              <Input type="text" value={preferredTactics} onChange={(e) => setPreferredTactics(e.target.value)} placeholder="e.g., I prefer visual learning..." className="px-5 py-4 bg-white/50 border-2 border-gray-200 rounded-xl text-lg focus:border-teal-400 focus:ring-4 focus:ring-teal-100 transition-all" disabled={isGenerating} />
+              <label className="block text-sm font-semibold text-gray-700 mb-2 md:mb-3">How do you like to learn?</label>
+              <Input type="text" value={preferredTactics} onChange={(e) => setPreferredTactics(e.target.value)} placeholder="e.g., Videos, hands-on practice, reading..." className="px-5 py-4 bg-white/50 border-2 border-gray-200 rounded-xl text-lg focus:border-teal-400 focus:ring-4 focus:ring-teal-100 transition-all" disabled={isGenerating} />
             </div>
             <div className="flex flex-col gap-3">
               <Button size="lg" onClick={handleGenerate} disabled={isGenerating || !goal.trim()} className="w-full shadow-lg transition-smooth hover:scale-105 disabled:hover:scale-100">

@@ -60,7 +60,7 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
           <h1 className="text-2xl md:text-4xl font-bold text-slate-800 mb-2">Account Settings</h1>
           <p className="text-teal-700">Manage your account and data preferences</p>
         </div>
-        <div className="bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl p-4 md:p-6 mb-4 md:mb-6 shadow-lg">
+        <div className="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-xl p-4 md:p-6 mb-4 md:mb-6 shadow-lg">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-full bg-teal-100 border border-teal-300 flex items-center justify-center"><User className="w-5 h-5 text-teal-600" /></div>
             <h2 className="text-xl font-semibold text-slate-800">Account Information</h2>
@@ -70,10 +70,10 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
             <div className="flex items-center gap-3 text-gray-700"><Shield className="w-4 h-4 text-gray-500" /><span className="text-sm">User ID:</span><span className="text-sm font-mono text-xs">{userId}</span></div>
           </div>
         </div>
-        <div className="bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl p-4 md:p-6 mb-4 md:mb-6 shadow-lg">
+        <div className="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-xl p-4 md:p-6 mb-4 md:mb-6 shadow-lg">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-full bg-teal-100 border border-teal-300 flex items-center justify-center"><Shield className="w-5 h-5 text-teal-600" /></div>
-            <h2 className="text-xl font-semibold text-slate-800">Privacy & Data</h2>
+            <h2 className="text-xl font-semibold text-slate-800">Privacy</h2>
           </div>
           <div className="text-gray-700 text-sm space-y-2 mb-4">
             <p>Your data is encrypted and stored securely</p>
@@ -81,7 +81,7 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
             <p>You have full control over your data</p>
           </div>
         </div>
-        <div className="bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl p-4 md:p-6 mb-4 md:mb-6 shadow-lg">
+        <div className="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-xl p-4 md:p-6 mb-4 md:mb-6 shadow-lg">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-full bg-blue-100 border border-blue-300 flex items-center justify-center"><Bell className="w-5 h-5 text-blue-600" /></div>
             <h2 className="text-xl font-semibold text-slate-800">Email Notifications</h2>

@@ -4,55 +4,55 @@
 export const AURORA_COLORS = ["#7cff67", "#00c7fc", "#5227FF"] as const;
 
 /** Goal category type for color mapping. */
-export type GoalCategory = "running" | "language" | "coding" | "meditation";
+export type GoalCategory = "fitness" | "creative" | "professional" | "lifestyle";
 
 /** Maps goal suggestion strings to categories for color-coding. */
 export const GOAL_CATEGORY_MAP: Record<string, GoalCategory> = {
   // Fitness / health (green)
-  "Get in shape": "running",
-  "Build a morning routine": "running",
-  "Do 50 pushups a day": "running",
-  "Walk 10,000 steps daily": "running",
-  "Stretch for 15 min daily": "running",
-  "Drink more water daily": "running",
+  "Get in shape": "fitness",
+  "Build a morning routine": "fitness",
+  "Do 50 pushups a day": "fitness",
+  "Walk 10,000 steps daily": "fitness",
+  "Stretch for 15 min daily": "fitness",
+  "Drink more water daily": "fitness",
 
-  // Mindfulness / lifestyle (coral)
-  "Start a meditation practice": "meditation",
-  "Cook a new recipe every week": "meditation",
-  "Journal every morning": "meditation",
-  "Read for 30 min before bed": "meditation",
-  "Declutter one room a week": "meditation",
-  "Practice gratitude daily": "meditation",
-  "Sleep by 10pm every night": "meditation",
-  "Spend less time on my phone": "meditation",
+  // Lifestyle / mindfulness (coral)
+  "Start a meditation practice": "lifestyle",
+  "Cook a new recipe every week": "lifestyle",
+  "Journal every morning": "lifestyle",
+  "Read for 30 min before bed": "lifestyle",
+  "Declutter one room a week": "lifestyle",
+  "Practice gratitude daily": "lifestyle",
+  "Sleep by 10pm every night": "lifestyle",
+  "Spend less time on my phone": "lifestyle",
 
   // Creative / learning (blue)
-  "Learn Spanish basics": "language",
-  "Learn to play guitar": "language",
-  "Write a short story": "language",
-  "Learn photography basics": "language",
-  "Read 10 books this month": "language",
-  "Draw something every day": "language",
-  "Start a daily writing habit": "language",
-  "Learn sign language basics": "language",
+  "Learn Spanish basics": "creative",
+  "Learn to play guitar": "creative",
+  "Write a short story": "creative",
+  "Learn photography basics": "creative",
+  "Read a book a week": "creative",
+  "Draw something every day": "creative",
+  "Start a daily writing habit": "creative",
+  "Learn sign language basics": "creative",
 
   // Professional / technical (purple)
-  "Learn to code": "coding",
-  "Start a side project": "coding",
-  "Build a personal website": "coding",
-  "Learn video editing": "coding",
-  "Master public speaking": "coding",
-  "Start a YouTube channel": "coding",
-  "Launch a newsletter": "coding",
-  "Learn graphic design basics": "coding",
+  "Learn to code": "professional",
+  "Start a side project": "professional",
+  "Build a personal website": "professional",
+  "Learn video editing": "professional",
+  "Master public speaking": "professional",
+  "Start a YouTube channel": "professional",
+  "Launch a newsletter": "professional",
+  "Learn graphic design basics": "professional",
 };
 
 /** Tailwind class sets for each goal category — uses Aurora accent colors. */
 export const GOAL_CATEGORY_COLORS: Record<GoalCategory, string> = {
-  running: "border-[#7cff67] bg-[#7cff67]/10 hover:bg-[#7cff67]/20 hover:border-[#7cff67]",
-  language: "border-[#00c7fc] bg-[#00c7fc]/10 hover:bg-[#00c7fc]/20 hover:border-[#00c7fc]",
-  coding: "border-[#5227FF] bg-[#5227FF]/10 hover:bg-[#5227FF]/20 hover:border-[#5227FF]",
-  meditation: "border-[#ff6b6b] bg-[#ff6b6b]/10 hover:bg-[#ff6b6b]/20 hover:border-[#ff6b6b]",
+  fitness: "border-[#7cff67] bg-[#7cff67]/10 hover:bg-[#7cff67]/20 hover:border-[#7cff67]",
+  creative: "border-[#00c7fc] bg-[#00c7fc]/10 hover:bg-[#00c7fc]/20 hover:border-[#00c7fc]",
+  professional: "border-[#5227FF] bg-[#5227FF]/10 hover:bg-[#5227FF]/20 hover:border-[#5227FF]",
+  lifestyle: "border-[#ff6b6b] bg-[#ff6b6b]/10 hover:bg-[#ff6b6b]/20 hover:border-[#ff6b6b]",
 };
 
 /** Scrolling goal suggestion rows for SimpleGoalCreation and LandingPage. */
@@ -69,7 +69,7 @@ export const GOAL_SUGGESTIONS_ROW_2 = [
 ];
 
 export const GOAL_SUGGESTIONS_ROW_3 = [
-  "Read 10 books this month", "Draw something every day", "Declutter one room a week",
+  "Read a book a week", "Draw something every day", "Declutter one room a week",
   "Learn graphic design basics", "Start a daily writing habit", "Practice gratitude daily",
   "Walk 10,000 steps daily", "Sleep by 10pm every night",
 ];

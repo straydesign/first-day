@@ -1,19 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { Sparkles, Calendar, Mail } from "lucide-react";
+import { Sparkles, Calendar, Mail, BookOpen, CheckSquare } from "lucide-react";
 import Aurora from "./Aurora";
-import { DayOneLogo } from "./DayOneLogo";
+import { FirstDayLogo } from "./FirstDayLogo";
+import { Footer } from "./Footer";
 import { Button } from "@/components/ui/button";
 import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, GOAL_CATEGORY_MAP, GOAL_CATEGORY_COLORS } from "@/constants";
 
 interface LandingPageProps {
   onGetStarted: () => void;
+  onLogin?: () => void;
   onPrivacyPolicy: () => void;
   onTermsOfService: () => void;
 }
 
-export function LandingPage({ onGetStarted, onPrivacyPolicy, onTermsOfService }: LandingPageProps) {
+export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfService }: LandingPageProps) {
   const [isPausedRow1, setIsPausedRow1] = useState(false);
   const [isPausedRow2, setIsPausedRow2] = useState(false);
   const [isPausedRow3, setIsPausedRow3] = useState(false);
@@ -60,17 +62,17 @@ export function LandingPage({ onGetStarted, onPrivacyPolicy, onTermsOfService }:
             {/* Top bar: Log In + Get Started */}
             <div className="absolute top-11 left-0 right-0 flex items-center justify-between px-4 z-50">
               <Button
-                onClick={onGetStarted}
+                onClick={onLogin || onGetStarted}
+                variant="outline"
                 size="sm"
-                className="shadow-md hover:shadow-lg transition-smooth px-4 py-2 rounded-full"
+                className="bg-transparent border-2 border-teal-600 text-teal-600 hover:bg-teal-50 shadow-md px-4 py-2 rounded-full"
               >
                 Log In
               </Button>
               <Button
                 onClick={onGetStarted}
-                variant="outline"
                 size="sm"
-                className="bg-transparent border-2 border-teal-600 text-teal-600 hover:bg-teal-50 shadow-md px-4 py-2 rounded-full"
+                className="shadow-md hover:shadow-lg transition-smooth px-4 py-2 rounded-full"
               >
                 Get Started
               </Button>
@@ -83,7 +85,7 @@ export function LandingPage({ onGetStarted, onPrivacyPolicy, onTermsOfService }:
                 className="inline-block cursor-pointer hover:scale-105 transition-transform duration-300"
                 aria-label="First Day - Home"
               >
-                <DayOneLogo
+                <FirstDayLogo
                   width={280}
                   height={112}
                   showTagline={true}
@@ -105,7 +107,7 @@ export function LandingPage({ onGetStarted, onPrivacyPolicy, onTermsOfService }:
             {/* Scrolling Goal Pills */}
             <div className="bg-white/80 backdrop-blur-xl rounded-none md:rounded-2xl border-y md:border border-white/50 shadow-2xl overflow-hidden w-full md:max-w-7xl md:mx-auto">
               <div className="py-4 overflow-hidden space-y-1.5">
-                <p className="text-gray-700 text-sm font-medium mb-3 text-center px-4">Popular goals our users are achieving:</p>
+                <p className="text-gray-700 text-sm font-medium mb-3 text-center px-4">Goals you can achieve in 30 days:</p>
                 {renderScrollRow(GOAL_SUGGESTIONS_ROW_1, "left", isPausedRow1, setIsPausedRow1)}
                 {renderScrollRow(GOAL_SUGGESTIONS_ROW_2, "right", isPausedRow2, setIsPausedRow2)}
                 {renderScrollRow(GOAL_SUGGESTIONS_ROW_3, "left", isPausedRow3, setIsPausedRow3)}
@@ -140,12 +142,12 @@ export function LandingPage({ onGetStarted, onPrivacyPolicy, onTermsOfService }:
                     1
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Answer</h3>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Set Your Goal</h3>
                     <p className="text-gray-700 text-lg mb-4">
-                      Tell us what you want to achieve and answer a few quick questions about your experience level. Takes less than 2 minutes.
+                      Pick any goal and answer a few quick questions about your experience and what motivates you. Takes less than 2 minutes.
                     </p>
                     <p className="text-gray-500 text-sm">
-                      <strong className="text-gray-700">Example goals:</strong> Learn Spanish basics, Build a meditation habit, Write a short story, Run a 5K
+                      <strong className="text-gray-700">Examples:</strong> Learn Spanish basics, Build a meditation habit, Write a short story, Run a 5K
                     </p>
                   </div>
                 </div>
@@ -160,11 +162,17 @@ export function LandingPage({ onGetStarted, onPrivacyPolicy, onTermsOfService }:
                   <div className="flex-1">
                     <h3 className="text-2xl font-bold text-gray-900 mb-2">Get Your Plan</h3>
                     <p className="text-gray-700 text-lg mb-3">
-                      AI builds a personalized 30-day plan unique to you.
+                      AI generates a structured 30-day plan with daily activities, curated resources, and weekly book recommendations tailored to you.
                     </p>
-                    <div className="flex items-start gap-2 text-gray-500 text-sm">
-                      <Sparkles className="w-4 h-4 text-purple-500 flex-shrink-0 mt-0.5" />
-                      <span>Considers your goal, motivation, experience level, and preferred learning style</span>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3">
+                      <div className="flex items-start gap-2 text-gray-500 text-sm">
+                        <CheckSquare className="w-4 h-4 text-purple-500 flex-shrink-0 mt-0.5" />
+                        <span>Daily activities with video and article resources</span>
+                      </div>
+                      <div className="flex items-start gap-2 text-gray-500 text-sm">
+                        <BookOpen className="w-4 h-4 text-purple-500 flex-shrink-0 mt-0.5" />
+                        <span>Weekly book recommendations to deepen your learning</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -177,18 +185,18 @@ export function LandingPage({ onGetStarted, onPrivacyPolicy, onTermsOfService }:
                     3
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Stay Consistent</h3>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Show Up Daily</h3>
                     <p className="text-gray-700 text-lg mb-4">
-                      Follow your daily activities and track progress on your visual calendar.
+                      Check off activities, reflect on your progress, and watch your calendar fill up with completed days.
                     </p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div className="flex items-center gap-2 text-gray-500 text-sm">
-                        <Mail className="w-4 h-4 text-lime-600 flex-shrink-0" />
-                        <span>Daily email reminders at your preferred time</span>
-                      </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       <div className="flex items-center gap-2 text-gray-500 text-sm">
                         <Calendar className="w-4 h-4 text-lime-600 flex-shrink-0" />
                         <span>Visual 30-day calendar with progress tracking</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-gray-500 text-sm">
+                        <Mail className="w-4 h-4 text-lime-600 flex-shrink-0" />
+                        <span>Daily email reminders to keep you on track</span>
                       </div>
                     </div>
                   </div>
@@ -198,50 +206,7 @@ export function LandingPage({ onGetStarted, onPrivacyPolicy, onTermsOfService }:
           </div>
         </section>
 
-        {/* Footer */}
-        <footer className="bg-gray-100 text-gray-700 py-6 border-t border-gray-300">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="mb-6">
-              <ul className="flex flex-wrap gap-4 justify-center">
-                <li>
-                  <a
-                    href="/privacy"
-                    onClick={(e) => { e.preventDefault(); onPrivacyPolicy(); }}
-                    className="text-gray-600 hover:text-teal-700 underline transition-colors text-sm"
-                  >
-                    Privacy &amp; Data
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/terms"
-                    onClick={(e) => { e.preventDefault(); onTermsOfService(); }}
-                    className="text-gray-600 hover:text-teal-700 underline transition-colors text-sm"
-                  >
-                    Terms of Service
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://straydesign.co"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-gray-600 hover:text-teal-700 underline transition-colors text-sm"
-                  >
-                    Portfolio
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div className="border-t border-gray-300 pt-6 text-center text-gray-600 text-xs">
-              <p>&copy; {new Date().getFullYear()} Day One. All rights reserved. // <a href="https://straydesign.co" target="_blank" rel="noopener noreferrer" className="text-teal-700 underline hover:text-teal-800">https://straydesign.co</a></p>
-              <p className="mt-0.5">
-                Contact: <a href="mailto:support@firstday.life" className="text-teal-700 underline hover:text-teal-800">support@firstday.life</a>
-              </p>
-            </div>
-          </div>
-        </footer>
+        <Footer onPrivacyClick={onPrivacyPolicy} onTermsClick={onTermsOfService} />
       </div>
     </div>
   );

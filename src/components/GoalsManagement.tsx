@@ -5,7 +5,7 @@ import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/com
 import { Textarea } from "@/components/ui/textarea";
 import Aurora from "./Aurora";
 import { AURORA_COLORS } from "@/constants";
-import { Target, Plus, Trash2, Calendar, CheckCircle, Menu, Bell, Settings as SettingsIcon, LogOut, Youtube, BookOpen, ExternalLink, Sparkles } from "lucide-react";
+import { Target, Plus, Trash2, Calendar, CheckCircle, Menu, LogOut } from "lucide-react";
 import { createClient, API_BASE } from "@/lib/supabase/client";
 import { BouncingButton } from "./BouncingButton";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
@@ -137,8 +137,8 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
       <div className="sticky top-0 z-50 flex justify-end px-4 py-2">
         <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
           <SheetTrigger asChild>
-            <Button variant="outline" size="sm" className="bg-transparent border-2 border-teal-600 text-teal-600 hover:bg-teal-50 shadow-md px-4 py-2 rounded-lg" aria-label="Menu">
-              <Menu className="w-4 h-4 mr-2" />Menu
+            <Button variant="outline" size="sm" className="bg-transparent border-2 border-teal-600 text-teal-600 hover:bg-teal-50 shadow-md px-3 py-2 rounded-lg" aria-label="Menu">
+              <Menu className="w-5 h-5" />
             </Button>
           </SheetTrigger>
           <SheetContent side="right" className="w-[168px] bg-white/95 backdrop-blur-xl border-l-2 border-teal-200 pt-12">
@@ -147,8 +147,6 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
             <nav className="flex flex-col gap-2 px-3">
               <Button onClick={() => setMobileMenuOpen(false)} variant="outline" size="sm" className="justify-start bg-blue-50 hover:bg-blue-100 text-blue-900 border-blue-300 text-sm py-2"><Target className="w-4 h-4 mr-2" />My Goals</Button>
               <Button onClick={() => { setMobileMenuOpen(false); if (goals[0]) onSelectGoal(goals[0].id); }} variant="outline" size="sm" className="justify-start hover:bg-gray-50 text-sm py-2"><Calendar className="w-4 h-4 mr-2" />30 Day Plan</Button>
-              <Button onClick={() => { setMobileMenuOpen(false); toast.info("Reminders feature coming soon!"); }} variant="outline" size="sm" className="justify-start hover:bg-gray-50 text-sm py-2"><Bell className="w-4 h-4 mr-2" />Reminders</Button>
-              <Button onClick={() => { setMobileMenuOpen(false); toast.info("Settings feature coming soon!"); }} variant="outline" size="sm" className="justify-start hover:bg-gray-50 text-sm py-2"><SettingsIcon className="w-4 h-4 mr-2" />Settings</Button>
               <div className="border-t border-gray-200 my-2" />
               <Button onClick={onLogout} variant="outline" size="sm" className="justify-start hover:bg-red-50 text-red-600 border-red-200 text-sm py-2"><LogOut className="w-4 h-4 mr-2" />Logout</Button>
             </nav>

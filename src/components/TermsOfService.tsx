@@ -14,7 +14,7 @@ export function TermsOfService({ onBack, onNavigate }: TermsOfServiceProps) {
         <BackButton onClick={onBack} />
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 md:mb-8">Terms of Service</h1>
         <div className="prose prose-gray max-w-none space-y-6">
-          <p className="text-gray-600">Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+          <p className="text-gray-600">Last updated: March 1, 2026</p>
           <h2 className="text-2xl font-semibold text-gray-900">1. Acceptance of Terms</h2>
           <p className="text-gray-700">By using First Day, you agree to these terms. If you do not agree, please do not use the service.</p>
           <h2 className="text-2xl font-semibold text-gray-900">2. Description of Service</h2>
@@ -26,10 +26,10 @@ export function TermsOfService({ onBack, onNavigate }: TermsOfServiceProps) {
           <h2 className="text-2xl font-semibold text-gray-900">5. Limitation of Liability</h2>
           <p className="text-gray-700">First Day is provided &quot;as is&quot; without warranties. We are not liable for any damages arising from your use of the service.</p>
           <h2 className="text-2xl font-semibold text-gray-900">6. Contact</h2>
-          <p className="text-gray-700">For questions about these terms, please visit <a href="https://straydesign.co" target="_blank" rel="noopener noreferrer" className="text-teal-600 hover:underline">straydesign.co</a>.</p>
+          <p className="text-gray-700">For questions about these terms, contact us at <a href="mailto:support@firstday.life" className="text-teal-600 hover:underline">support@firstday.life</a>.</p>
         </div>
       </div>
-      <Footer onPrivacyClick={() => onNavigate?.("privacy")} onTermsClick={() => {}} />
+      <Footer onPrivacyClick={() => onNavigate?.("privacy")} />
     </div>
   );
 }

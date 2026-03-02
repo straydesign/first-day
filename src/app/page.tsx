@@ -41,6 +41,7 @@ export default function Home() {
   const [showNotificationSettings, setShowNotificationSettings] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [loginModalMode, setLoginModalMode] = useState<"login" | "signup">("login");
   const [resetToken, setResetToken] = useState<string | null>(null);
   const [editingGoalData, setEditingGoalData] = useState<any>(null);
   const [showFullScreenLoading, setShowFullScreenLoading] = useState(false);
@@ -213,6 +214,7 @@ export default function Home() {
 
   const handleGetStarted = () => {
     if (!isAuthenticated) {
+      setLoginModalMode("signup");
       if (currentView === "privacy" || currentView === "terms") {
         window.history.pushState({}, "", "/");
         setCurrentView("landing");
@@ -223,6 +225,11 @@ export default function Home() {
     } else {
       setCurrentView("onboarding");
     }
+  };
+
+  const handleOpenLogin = () => {
+    setLoginModalMode("login");
+    setShowLoginModal(true);
   };
 
   const handleBackToLanding = () => {
@@ -629,6 +636,7 @@ export default function Home() {
       <>
         <LandingPage
           onGetStarted={handleGetStarted}
+          onLogin={handleOpenLogin}
           onPrivacyPolicy={handleShowPrivacyPolicy}
           onTermsOfService={handleShowTermsOfService}
         />
@@ -637,6 +645,7 @@ export default function Home() {
           onClose={() => setShowLoginModal(false)}
           onAuthSuccess={handleAuthSuccess}
           onShowTerms={handleShowTermsOfService}
+          defaultMode={loginModalMode}
         />
       </>
     );
@@ -724,7 +733,9 @@ export default function Home() {
         {currentView === "congrats" && (
           <CongratsView
             onViewCalendar={handleViewCalendar}
-            onDoMore={handleDoMore}
+            onDoMore={handleBackToGoals}
+            goalTitle={planData?.cleanedGoal || goalData?.goal}
+            dayNumber={selectedDay?.number}
           />
         )}
 

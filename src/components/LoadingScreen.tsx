@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import Aurora from "./Aurora";
 import { AURORA_COLORS } from "@/constants";
-import { DayOneLogo } from "./DayOneLogo";
+import { FirstDayLogo } from "./FirstDayLogo";
 import { Progress } from "@/components/ui/progress";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, BookOpen, Calendar, Lightbulb, Sparkles } from "lucide-react";
@@ -54,7 +54,7 @@ export function LoadingScreen({ title = "Loading your goals...", subtitle, showP
         <Aurora colorStops={[...AURORA_COLORS]} />
       </div>
       <div className="absolute inset-0 z-[105] flex flex-col items-center justify-center gap-8 px-6">
-        <DayOneLogo width={300} height={150} showTagline={true} />
+        <FirstDayLogo width={300} height={150} showTagline={true} />
 
         {showProgress && (
           <div className="w-full max-w-md space-y-4 animate-fadeIn">
