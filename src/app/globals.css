@@ -306,4 +306,23 @@ html {
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+
+  @keyframes floatUp {
+    0% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-40px); }
+  }
+
+  @keyframes countUp {
+    0% { opacity: 0; transform: scale(0.5); }
+    50% { opacity: 1; transform: scale(1.2); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  .animate-floatUp {
+    animation: floatUp 1.5s ease-out forwards;
+  }
+
+  .animate-countUp {
+    animation: countUp 0.5s ease-out;
+  }
 }

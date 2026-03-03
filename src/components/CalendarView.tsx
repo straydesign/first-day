@@ -1,5 +1,5 @@
 "use client";
-import { Calendar as CalendarIcon, BookOpen, Edit2, ChevronUp } from "lucide-react";
+import { Calendar as CalendarIcon, BookOpen, Edit2, ChevronUp, ChevronDown, AlertTriangle } from "lucide-react";
 import { BackButton } from "@/components/ui/back-button";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,8 +7,10 @@ import { WeekCalendar } from "./WeekCalendar";
 import Aurora from "./Aurora";
 import { AURORA_COLORS } from "@/constants";
 import { useState } from "react";
+import { StreakBadge } from "./StreakBadge";
+import type { EngagementState } from "@/types";
 
-export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRegeneratePlan, progress = {}, onBack }: any) {
+export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRegeneratePlan, progress = {}, onBack, engagement }: any & { engagement?: EngagementState | null }) {
   const [expandedWeeks, setExpandedWeeks] = useState(new Set<number>());
 
   const toggleWeekBook = (weekNumber: number) => {
@@ -66,11 +68,22 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
           <div className="mb-4 md:mb-8 animate-fadeIn">
             {onBack && <BackButton onClick={onBack} />}
             {goalTitle && (<div className="text-center">
-              <h1 className="text-3xl md:text-5xl font-bold text-slate-800 mb-2 px-4">{goalTitle}</h1>
+              <div className="flex items-center justify-center gap-3 mb-2">
+                <h1 className="text-3xl md:text-5xl font-bold text-slate-800 px-4">{goalTitle}</h1>
+                {engagement && (engagement.currentStreak > 0 || engagement.isAtRisk) && (
+                  <StreakBadge streak={engagement.currentStreak} isAtRisk={engagement.isAtRisk} />
+                )}
+              </div>
               <div className="inline-flex items-center justify-center gap-2 mb-4">
                 <CalendarIcon className="w-5 h-5 text-teal-600" />
                 <h2 className="text-lg md:text-xl text-teal-700">Your 30-Day Plan</h2>
               </div>
+              {engagement?.isAtRisk && (
+                <div className="mb-3 mx-auto max-w-md bg-coral-50 border border-coral-300 rounded-lg px-4 py-2 flex items-center gap-2 animate-pulse">
+                  <AlertTriangle className="w-4 h-4 text-coral-600 flex-shrink-0" />
+                  <p className="text-sm text-coral-700 font-medium">Your {engagement.currentStreak}-day streak is at risk! Complete today to keep it alive.</p>
+                </div>
+              )}
               {onEditGoal && (
                 <div className="flex justify-center mb-3">
                   <Button onClick={onEditGoal} variant="outline" size="sm" className="border-2 border-teal-600 text-teal-600 hover:bg-teal-50 transition-smooth hover:scale-105">

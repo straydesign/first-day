@@ -88,3 +88,51 @@ export interface SelectedDay {
   activities: (string | Activity)[];
   tip?: string;
 }
+
+// --- Engagement System Types ---
+
+export type LevelName = "Beginner" | "Committed" | "Dedicated" | "Unstoppable" | "Master";
+
+export interface Level {
+  name: LevelName;
+  threshold: number;
+  nextThreshold: number | null;
+}
+
+export interface XPBreakdown {
+  base: number;
+  activities: number;
+  reflection: number;
+  streakBonus: number;
+  total: number;
+}
+
+export type MilestoneIntensity = "normal" | "big" | "epic";
+
+export interface Milestone {
+  type: "day" | "streak";
+  icon: string;
+  title: string;
+  message: string;
+  intensity: MilestoneIntensity;
+}
+
+export interface Achievement {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  unlocked: boolean;
+}
+
+export interface EngagementState {
+  currentStreak: number;
+  longestStreak: number;
+  isAtRisk: boolean;
+  totalXP: number;
+  level: Level;
+  levelProgress: number;
+  achievements: Achievement[];
+  completionRate: number;
+  totalDaysCompleted: number;
+}

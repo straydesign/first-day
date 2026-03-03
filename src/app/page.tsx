@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import dynamic from "next/dynamic";
 import { toast } from "sonner";
 import { LandingPage } from "@/components/LandingPage";
@@ -7,6 +7,8 @@ import Aurora from "@/components/Aurora";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { createClient, API_BASE } from "@/lib/supabase/client";
 import { AURORA_COLORS } from "@/constants";
+import { computeEngagementState, getMilestone, getLatestDayXP, calculateStreaks } from "@/lib/engagement";
+import type { EngagementState, Milestone, XPBreakdown, Achievement } from "@/types";
 
 const CalendarView = dynamic(() => import("@/components/CalendarView").then(m => ({ default: m.CalendarView })));
 const DayView = dynamic(() => import("@/components/DayView").then(m => ({ default: m.DayView })));
@@ -20,6 +22,7 @@ const ResetPasswordView = dynamic(() => import("@/components/ResetPasswordView")
 const SimpleGoalCreation = dynamic(() => import("@/components/SimpleGoalCreation").then(m => ({ default: m.SimpleGoalCreation })));
 const CongratsView = dynamic(() => import("@/components/CongratsView").then(m => ({ default: m.CongratsView })));
 const NotificationSettings = dynamic(() => import("@/components/NotificationSettings").then(m => ({ default: m.NotificationSettings })));
+const XPAnimation = dynamic(() => import("@/components/XPAnimation").then(m => ({ default: m.XPAnimation })));
 
 function getSupabase() {
   return createClient();
@@ -45,6 +48,33 @@ export default function Home() {
   const [resetToken, setResetToken] = useState<string | null>(null);
   const [editingGoalData, setEditingGoalData] = useState<any>(null);
   const [showFullScreenLoading, setShowFullScreenLoading] = useState(false);
+  const [showXPAnimation, setShowXPAnimation] = useState(false);
+  const [latestDayXP, setLatestDayXP] = useState<XPBreakdown | null>(null);
+  const [latestMilestone, setLatestMilestone] = useState<Milestone | null>(null);
+  const [newAchievements, setNewAchievements] = useState<Achievement[]>([]);
+  const prevAchievementsRef = useRef<Set<string>>(new Set());
+
+  // Compute engagement state from progress + plan start date
+  const engagement: EngagementState | null = useMemo(() => {
+    if (!planData?.startDate || !progress) return null;
+    return computeEngagementState(progress, planData.startDate);
+  }, [progress, planData?.startDate]);
+
+  // Track achievement unlocks for reveal animations
+  useEffect(() => {
+    if (!engagement) return;
+    const currentUnlocked = new Set(
+      engagement.achievements.filter((a) => a.unlocked).map((a) => a.id)
+    );
+    const prev = prevAchievementsRef.current;
+    if (prev.size > 0) {
+      const fresh = engagement.achievements.filter(
+        (a) => a.unlocked && !prev.has(a.id)
+      );
+      if (fresh.length > 0) setNewAchievements(fresh);
+    }
+    prevAchievementsRef.current = currentUnlocked;
+  }, [engagement]);
 
   // Scroll to top whenever the view changes
   useEffect(() => {
@@ -405,7 +435,7 @@ export default function Home() {
   };
 
   const handleDayComplete = (dayData: any) => {
-    if (!selectedDay) return;
+    if (!selectedDay || !planData?.startDate) return;
 
     const dayKey = selectedDay.number;
     const updatedProgress = {
@@ -418,6 +448,19 @@ export default function Home() {
     };
     setProgress(updatedProgress);
     saveProgress(updatedProgress);
+
+    // Compute XP and milestone for the completed day
+    const xp = getLatestDayXP(updatedProgress, dayKey);
+    setLatestDayXP(xp);
+    setShowXPAnimation(true);
+
+    const streaks = calculateStreaks(updatedProgress, planData.startDate);
+    const milestone = getMilestone(dayKey, streaks.current);
+    setLatestMilestone(milestone);
+
+    // Auto-dismiss XP animation after 2.5 seconds
+    setTimeout(() => setShowXPAnimation(false), 2500);
+
     setCurrentView("congrats");
   };
 
@@ -686,6 +729,7 @@ export default function Home() {
             onEditGoal={handleEditGoal}
             onViewTodayActivities={handleViewTodayActivities}
             onLogout={handleLogout}
+            engagement={engagement}
           />
         )}
 
@@ -717,6 +761,7 @@ export default function Home() {
             onRegeneratePlan={handleRegeneratePlan}
             progress={progress}
             onBack={handleBackToGoals}
+            engagement={engagement}
           />
         )}
 
@@ -727,6 +772,7 @@ export default function Home() {
             isCompleted={progress[selectedDay.number]?.completed || false}
             savedProgress={progress[selectedDay.number] || null}
             onBack={() => setCurrentView("calendar")}
+            currentStreak={engagement?.currentStreak ?? 0}
           />
         )}
 
@@ -736,6 +782,9 @@ export default function Home() {
             onDoMore={handleBackToGoals}
             goalTitle={planData?.cleanedGoal || goalData?.goal}
             dayNumber={selectedDay?.number}
+            milestone={latestMilestone}
+            xp={latestDayXP}
+            newAchievements={newAchievements}
           />
         )}
 
@@ -753,6 +802,10 @@ export default function Home() {
             subtitle="This may take a moment"
             showProgress={true}
           />
+        )}
+
+        {latestDayXP && (
+          <XPAnimation xp={latestDayXP} show={showXPAnimation} />
         )}
       </div>
     </div>

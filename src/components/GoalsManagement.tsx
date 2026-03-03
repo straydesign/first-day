@@ -10,6 +10,10 @@ import { createClient, API_BASE } from "@/lib/supabase/client";
 import { BouncingButton } from "./BouncingButton";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { toast } from "sonner";
+import { StreakBadge } from "./StreakBadge";
+import { StatsCard } from "./StatsCard";
+import { AchievementsSheet } from "./AchievementsSheet";
+import type { EngagementState } from "@/types";
 
 interface Goal {
   id: string;
@@ -36,9 +40,10 @@ interface GoalsManagementProps {
   onEditGoal: (goalId: string) => void;
   onViewTodayActivities?: (goalId: string) => void;
   onLogout: () => void;
+  engagement?: EngagementState | null;
 }
 
-export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEditGoal, onViewTodayActivities, onLogout }: GoalsManagementProps) {
+export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEditGoal, onViewTodayActivities, onLogout, engagement }: GoalsManagementProps) {
   const [goals, setGoals] = useState<Goal[]>([]);
   const [expandedGoalId, setExpandedGoalId] = useState<string | null>(null);
   const [goalActivities, setGoalActivities] = useState<Record<string, DayActivity>>({});
@@ -167,7 +172,12 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                   <CardHeader className="border-b border-gray-200">
                     <div className="mb-4 flex items-start justify-between">
                       <div className="flex-1">
-                        <CardTitle className="text-2xl text-teal-900 mb-1">{goal.title}</CardTitle>
+                        <div className="flex items-center gap-2 mb-1">
+                          <CardTitle className="text-2xl text-teal-900">{goal.title}</CardTitle>
+                          {engagement && (engagement.currentStreak > 0 || engagement.isAtRisk) && (
+                            <StreakBadge streak={engagement.currentStreak} isAtRisk={engagement.isAtRisk} size="sm" />
+                          )}
+                        </div>
                         <CardDescription className="text-teal-600">Day {goalCurrentDays[goal.id] || 0} of 30</CardDescription>
                       </div>
                       <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); handleDeleteGoal(goal.id, goal.title); }} className="text-red-500 hover:text-red-700 hover:bg-red-50" aria-label="Delete goal">
@@ -183,6 +193,15 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                   </CardHeader>
                 </Card>
               ))}
+              {/* Stats & Achievements */}
+              {engagement && (
+                <div className="space-y-4 px-4">
+                  <StatsCard engagement={engagement} />
+                  <div className="flex justify-center">
+                    <AchievementsSheet achievements={engagement.achievements} />
+                  </div>
+                </div>
+              )}
               <div className="pt-2 md:pt-4 pb-4 md:pb-8 px-4">
                 <Button onClick={onCreateGoal} size="lg" variant="outline" className="w-full bg-transparent border-2 border-teal-600 text-teal-600 hover:bg-teal-50 shadow-lg hover:shadow-xl transition-smooth hover:scale-105 text-lg py-4 md:py-6 rounded-xl">
                   <Plus className="w-6 h-6 mr-2" />Add New Goal

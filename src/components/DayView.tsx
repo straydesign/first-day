@@ -1,13 +1,14 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { CheckCircle2, Calendar, Youtube, ExternalLink } from "lucide-react";
+import { CheckCircle2, Calendar, Youtube, ExternalLink, Zap } from "lucide-react";
 import { BackButton } from "@/components/ui/back-button";
+import { previewDayXP } from "@/lib/engagement";
 
-export function DayView({ day, onComplete, isCompleted = false, savedProgress = null, onBack }: any) {
+export function DayView({ day, onComplete, isCompleted = false, savedProgress = null, onBack, currentStreak = 0 }: any) {
   const [completedActivities, setCompletedActivities] = useState<Record<number, boolean>>({});
   const [feedback, setFeedback] = useState("");
 
@@ -33,6 +34,12 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
   const hasFeedback = feedback.trim().length > 0;
   const canSubmit = hasAnyActivity || hasFeedback;
   const isToday = day.isToday || false;
+
+  const checkedCount = Object.values(completedActivities).filter(Boolean).length;
+  const xpPreview = useMemo(
+    () => previewDayXP(checkedCount, hasFeedback, currentStreak),
+    [checkedCount, hasFeedback, currentStreak]
+  );
 
   return (
     <div className="min-h-screen bg-white relative">
@@ -114,6 +121,12 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
             <div className="flex justify-center">
               <Button onClick={handleSubmit} disabled={!canSubmit} className="px-6 py-5 md:px-8 md:py-6 text-base md:text-lg shadow-lg hover:shadow-xl disabled:opacity-50 transition-smooth hover:scale-105 disabled:hover:scale-100">Complete Day</Button>
             </div>
+            {canSubmit && (
+              <div className="flex items-center justify-center gap-2 mt-3 text-sm text-teal-700 animate-fadeIn">
+                <Zap className="w-4 h-4 text-yellow-500" />
+                <span>You&apos;ll earn ~<strong>{xpPreview.total} XP</strong></span>
+              </div>
+            )}
             {!canSubmit && <p className="text-center text-sm text-teal-600 mt-4">Check at least one activity or add a reflection to continue</p>}
           </>
         )}
