@@ -1,5 +1,5 @@
 "use client";
-import { Calendar as CalendarIcon, BookOpen, Edit2, ChevronDown, ChevronUp } from "lucide-react";
+import { Calendar as CalendarIcon, BookOpen, Edit2, ChevronUp } from "lucide-react";
 import { BackButton } from "@/components/ui/back-button";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
