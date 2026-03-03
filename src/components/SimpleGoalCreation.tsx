@@ -5,8 +5,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Sparkles, ArrowRight, Loader2, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { BackButton } from '@/components/ui/back-button';
-import { GOAL_CATEGORY_MAP, GOAL_CATEGORY_COLORS, GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3 } from '@/constants';
+import { GOAL_CATEGORY_MAP, GOAL_CATEGORY_COLORS, GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, AURORA_COLORS } from '@/constants';
 import { motion, AnimatePresence } from 'framer-motion';
+import Aurora from './Aurora';
 
 interface SimpleGoalCreationProps {
   onComplete: (goalData: any) => void;
@@ -55,13 +56,15 @@ export function SimpleGoalCreation({ onComplete, onCancel }: SimpleGoalCreationP
   );
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen relative bg-black">
+      <div className="fixed inset-0 z-0 w-full h-full"><Aurora colorStops={[...AURORA_COLORS]} /></div>
+      <div className="relative z-10">
       <div className="pt-2 pl-6">
         <BackButton onClick={onCancel} disabled={isGenerating} />
       </div>
       <div className="flex items-center justify-center">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-4xl mx-auto">
-          <div className="bg-white p-4 md:p-12">
+          <div className="p-4 md:p-12">
             <div className="text-center mb-6 md:mb-10">
               <h1 className="text-3xl md:text-4xl font-bold text-slate-800 mb-2 md:mb-3">Let&apos;s Create Your Goal</h1>
               <p className="text-lg text-teal-700">Tell us what you want to achieve</p>
@@ -81,14 +84,14 @@ export function SimpleGoalCreation({ onComplete, onCancel }: SimpleGoalCreationP
           </div>
         </motion.div>
       </div>
-      <div className="w-full space-y-0 mb-4 md:mb-8 bg-white py-3 md:py-6">
+      <div className="w-full space-y-0 mb-4 md:mb-8 py-3 md:py-6">
         {renderScrollRow(GOAL_SUGGESTIONS_ROW_1, 'left')}
         {renderScrollRow(GOAL_SUGGESTIONS_ROW_2, 'right')}
         {renderScrollRow(GOAL_SUGGESTIONS_ROW_3, 'left')}
       </div>
       <div className="flex items-center justify-center">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-4xl mx-auto">
-          <div className="bg-white p-4 md:p-12">
+          <div className="p-4 md:p-12">
             <div className="mb-4 md:mb-8">
               <label className="block text-sm font-semibold text-gray-700 mb-2 md:mb-3">Why do you want to achieve this?</label>
               <Textarea value={why} onChange={(e) => setWhy(e.target.value)} placeholder="Tell us what motivates you..." className="px-5 py-4 bg-white/50 border-2 border-gray-200 rounded-xl text-lg focus:border-teal-400 focus:ring-4 focus:ring-teal-100 transition-all resize-none min-h-[80px] md:min-h-[120px]" disabled={isGenerating} rows={3} />
@@ -133,6 +136,7 @@ export function SimpleGoalCreation({ onComplete, onCancel }: SimpleGoalCreationP
             </div>
           </div>
         </motion.div>
+      </div>
       </div>
     </div>
   );

@@ -127,11 +127,11 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
     return (
       <div className="min-h-screen relative bg-black flex items-center justify-center">
         <div className="fixed inset-0 z-0 w-full h-full"><Aurora colorStops={[...AURORA_COLORS]} /></div>
-        <div className="relative z-10 w-full bg-white flex items-center justify-center py-4">
-          <div className="flex items-center gap-3">
-            <p className="text-lg text-gray-700 font-medium">Loading your goals...</p>
-            <div className="w-6 h-6 border-2 border-gray-200 border-t-gray-600 rounded-full animate-spin"></div>
-          </div>
+        <div className="fixed top-0 left-0 right-0 z-20 h-1">
+          <div className="h-full bg-teal-400 rounded-r-full animate-shimmer" style={{ width: '60%', animation: 'loadingBar 1.5s ease-in-out infinite' }} />
+        </div>
+        <div className="relative z-10">
+          <p className="text-lg text-slate-700 font-medium">Loading your goals...</p>
         </div>
       </div>
     );
