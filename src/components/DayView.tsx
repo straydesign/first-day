@@ -51,7 +51,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
         <div className="text-center mb-4 md:mb-8 animate-fadeIn">
           <div className="inline-flex items-center justify-center gap-2">
             <Calendar className="w-8 h-8 text-teal-500" />
-            <h1 className="text-4xl font-bold text-slate-800">{isToday ? `Today (Day ${day.number})` : `Day ${day.number}`}</h1>
+            <h1 className="text-3xl md:text-4xl font-bold text-slate-800">{isToday ? `Today (Day ${day.number})` : `Day ${day.number}`}</h1>
             {day.dateDisplay && <span className="text-xl text-teal-500 ml-2">• {day.dateDisplay}</span>}
           </div>
         </div>
@@ -112,7 +112,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
         {!isCompleted && (
           <>
             <div className="flex justify-center">
-              <Button onClick={handleSubmit} disabled={!canSubmit} className="px-8 py-6 text-lg shadow-lg hover:shadow-xl disabled:opacity-50 transition-smooth hover:scale-105 disabled:hover:scale-100">Complete Day</Button>
+              <Button onClick={handleSubmit} disabled={!canSubmit} className="px-6 py-5 md:px-8 md:py-6 text-base md:text-lg shadow-lg hover:shadow-xl disabled:opacity-50 transition-smooth hover:scale-105 disabled:hover:scale-100">Complete Day</Button>
             </div>
             {!canSubmit && <p className="text-center text-sm text-teal-600 mt-4">Check at least one activity or add a reflection to continue</p>}
           </>

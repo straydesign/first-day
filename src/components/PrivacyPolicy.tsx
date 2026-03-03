@@ -15,16 +15,62 @@ export function PrivacyPolicy({ onBack, onNavigate }: PrivacyPolicyProps) {
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 md:mb-8">Privacy Policy</h1>
         <div className="prose prose-gray max-w-none space-y-6">
           <p className="text-gray-600">Last updated: March 1, 2026</p>
+
           <h2 className="text-2xl font-semibold text-gray-900">1. Information We Collect</h2>
-          <p className="text-gray-700">We collect information you provide directly: email address, name, and goal-related data you enter into the app. We also collect usage data to improve our service.</p>
+          <p className="text-gray-700">We collect information you provide directly when you create an account and use First Day:</p>
+          <ul className="list-disc pl-6 text-gray-700 space-y-1">
+            <li><strong>Account information:</strong> Email address and authentication credentials</li>
+            <li><strong>Goal data:</strong> Goals you create, your experience level, motivations, and preferences</li>
+            <li><strong>Progress data:</strong> Activity completions, daily reflections, and streak information</li>
+            <li><strong>Usage data:</strong> Pages visited, features used, and general interaction patterns to improve the service</li>
+          </ul>
+
           <h2 className="text-2xl font-semibold text-gray-900">2. How We Use Your Information</h2>
-          <p className="text-gray-700">Your information is used to provide and improve our service, generate personalized goal plans, and communicate with you about your account.</p>
-          <h2 className="text-2xl font-semibold text-gray-900">3. Data Storage</h2>
-          <p className="text-gray-700">Your data is stored securely using Supabase infrastructure with encryption at rest and in transit. We do not sell your personal information to third parties.</p>
-          <h2 className="text-2xl font-semibold text-gray-900">4. Your Rights</h2>
-          <p className="text-gray-700">You can delete your account and all associated data at any time through the Settings page. You can also request a copy of your data by contacting us.</p>
-          <h2 className="text-2xl font-semibold text-gray-900">5. Contact</h2>
-          <p className="text-gray-700">For questions about this privacy policy, contact us at <a href="mailto:support@firstday.life" className="text-teal-600 hover:underline">support@firstday.life</a>.</p>
+          <p className="text-gray-700">Your information is used to:</p>
+          <ul className="list-disc pl-6 text-gray-700 space-y-1">
+            <li>Create and manage your account</li>
+            <li>Generate personalized 30-day plans using AI (see Section 4)</li>
+            <li>Track your progress and provide daily activities</li>
+            <li>Send daily email reminders if you have notifications enabled</li>
+            <li>Improve and maintain the service</li>
+          </ul>
+
+          <h2 className="text-2xl font-semibold text-gray-900">3. Data Storage and Security</h2>
+          <p className="text-gray-700">Your data is stored securely using Supabase infrastructure with encryption at rest and in transit. We implement industry-standard security measures to protect your personal information. We do not sell, rent, or share your personal information with third parties for marketing purposes.</p>
+
+          <h2 className="text-2xl font-semibold text-gray-900">4. AI Processing</h2>
+          <p className="text-gray-700">First Day uses AI (powered by Anthropic&apos;s Claude API) to generate your personalized 30-day plans. When you create a goal, the following data is sent to the AI service for plan generation:</p>
+          <ul className="list-disc pl-6 text-gray-700 space-y-1">
+            <li>Your goal description and motivation</li>
+            <li>Your experience level and learning preferences</li>
+          </ul>
+          <p className="text-gray-700">This data is used solely to generate your plan and is not stored by the AI provider beyond the request. We do not use your data to train AI models.</p>
+
+          <h2 className="text-2xl font-semibold text-gray-900">5. Cookies and Analytics</h2>
+          <p className="text-gray-700">First Day uses essential cookies required for authentication and session management. We do not use third-party advertising cookies or tracking pixels. We may use privacy-respecting analytics to understand general usage patterns and improve the service.</p>
+
+          <h2 className="text-2xl font-semibold text-gray-900">6. Data Retention</h2>
+          <p className="text-gray-700">We retain your data for as long as your account is active. If you delete your account, all associated data — including goals, plans, and progress — is permanently removed from our systems within 30 days. Backups containing your data are purged within 90 days of account deletion.</p>
+
+          <h2 className="text-2xl font-semibold text-gray-900">7. Your Rights</h2>
+          <p className="text-gray-700">You have the right to:</p>
+          <ul className="list-disc pl-6 text-gray-700 space-y-1">
+            <li><strong>Access:</strong> Request a copy of your personal data at any time</li>
+            <li><strong>Delete:</strong> Delete your account and all associated data through the Settings page</li>
+            <li><strong>Correct:</strong> Update your account information</li>
+            <li><strong>Portability:</strong> Request your data in a machine-readable format</li>
+            <li><strong>Opt out:</strong> Disable email notifications at any time</li>
+          </ul>
+          <p className="text-gray-700">If you are located in the EU/EEA (GDPR) or California (CCPA), you may have additional rights including the right to restrict processing and the right to object to processing. To exercise any of these rights, contact us at the address below.</p>
+
+          <h2 className="text-2xl font-semibold text-gray-900">8. Children&apos;s Privacy</h2>
+          <p className="text-gray-700">First Day is not directed at children under 13. We do not knowingly collect personal information from children under 13. If you believe we have collected such data, please contact us immediately.</p>
+
+          <h2 className="text-2xl font-semibold text-gray-900">9. Changes to This Policy</h2>
+          <p className="text-gray-700">We may update this privacy policy from time to time. We will notify you of any material changes by posting the new policy on this page and updating the &quot;Last updated&quot; date.</p>
+
+          <h2 className="text-2xl font-semibold text-gray-900">10. Contact</h2>
+          <p className="text-gray-700">For questions about this privacy policy or to exercise your data rights, contact us at <a href="mailto:support@firstday.life" className="text-teal-600 hover:underline">support@firstday.life</a>.</p>
         </div>
       </div>
       <Footer onTermsClick={() => onNavigate?.("terms")} />

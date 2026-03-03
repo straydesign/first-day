@@ -57,7 +57,7 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
       <div className="relative z-10 max-w-4xl mx-auto px-4 py-6 md:py-12">
         <BackButton onClick={onBack} />
         <div className="mb-4 md:mb-8">
-          <h1 className="text-2xl md:text-4xl font-bold text-slate-800 mb-2">Account Settings</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-slate-800 mb-2">Account Settings</h1>
           <p className="text-teal-700">Manage your account and data preferences</p>
         </div>
         <div className="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-xl p-4 md:p-6 mb-4 md:mb-6 shadow-lg">
