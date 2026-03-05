@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { Sparkles, Calendar, Mail, BookOpen, CheckSquare, CheckCircle2, Youtube, ExternalLink } from "lucide-react";
+import { useState, useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import { Sparkles, Calendar, Mail, BookOpen, CheckSquare, CheckCircle2, Youtube, Flame, Zap, Trophy, Target } from "lucide-react";
 import Aurora from "./Aurora";
 import { FirstDayLogo } from "./FirstDayLogo";
 import { Footer } from "./Footer";
@@ -13,6 +14,24 @@ interface LandingPageProps {
   onLogin?: () => void;
   onPrivacyPolicy: () => void;
   onTermsOfService: () => void;
+}
+
+// Reusable scroll-triggered section wrapper
+function AnimatedSection({ children, className, delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-60px" });
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 32 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
+      transition={{ duration: 0.5, delay, ease: "easeOut" }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
 }
 
 export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfService }: LandingPageProps) {
@@ -34,7 +53,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
       onTouchStart={() => setIsPaused(true)}
       onTouchEnd={() => setIsPaused(false)}
     >
-      <div className={`flex whitespace-nowrap ${isPaused ? "" : direction === "left" ? "animate-scroll-left" : "animate-scroll-right"}`}>
+      <div className={`flex whitespace-nowrap ${isPaused ? "" : direction === "left" ? "motion-safe:animate-scroll-left" : "motion-safe:animate-scroll-right"}`}>
         {[...goals, ...goals, ...goals, ...goals, ...goals, ...goals, ...goals, ...goals].map((goal, index) => (
           <div
             key={index}
@@ -79,17 +98,27 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
             </div>
 
             {/* Value Proposition */}
-            <div className="text-center px-4 mb-4 animate-fadeIn">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="text-center px-4 mb-4"
+            >
               <h1 className="text-4xl md:text-5xl font-bold text-slate-800 mb-3">
                 Achieve any goal in 30 days
               </h1>
               <p className="text-lg md:text-xl text-teal-700 max-w-2xl mx-auto">
                 AI creates your personalized daily plan. You just show up.
               </p>
-            </div>
+            </motion.div>
 
             {/* Logo */}
-            <div className="text-center pb-4 animate-fadeIn flex items-center justify-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
+              className="text-center pb-4 flex items-center justify-center"
+            >
               <button
                 onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                 className="inline-block cursor-pointer hover:scale-105 transition-transform duration-300"
@@ -102,10 +131,15 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                   className="text-teal-600"
                 />
               </button>
-            </div>
+            </motion.div>
 
             {/* Scrolling Goal Pills */}
-            <div className="bg-white/80 backdrop-blur-xl rounded-none md:rounded-2xl border-y md:border border-white/50 shadow-2xl overflow-hidden w-full md:max-w-7xl md:mx-auto">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="overflow-hidden w-full"
+            >
               <div className="py-4 overflow-hidden space-y-1.5">
                 <p className="text-gray-700 text-sm font-medium mb-3 text-center px-4">Goals you can achieve in 30 days:</p>
                 {renderScrollRow(GOAL_SUGGESTIONS_ROW_1, "left", isPausedRow1, setIsPausedRow1)}
@@ -113,187 +147,299 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                 {renderScrollRow(GOAL_SUGGESTIONS_ROW_3, "left", isPausedRow3, setIsPausedRow3)}
 
                 {/* CTA */}
-                <div className="text-center pt-6">
+                <motion.div
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.7 }}
+                  className="text-center pt-6"
+                >
                   <Button
                     onClick={onGetStarted}
                     className="shadow-lg hover:shadow-xl transition-smooth hover:scale-105 px-6 py-5 md:px-8 md:py-6 text-base md:text-lg"
                   >
                     Start Your Own Journey
                   </Button>
-                </div>
+                </motion.div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </section>
 
         {/* How It Works */}
-        <section id="how-it-works" className="w-full py-8 md:py-16 px-0 md:px-4">
-          <div className="bg-white/80 backdrop-blur-xl rounded-none md:rounded-2xl border-y md:border border-white/50 shadow-2xl overflow-hidden">
-            <div className="px-6 md:px-10 pt-6 md:pt-10 pb-4 text-center">
-              <h2 className="text-2xl md:text-4xl font-bold text-slate-800 mb-2">How It Works</h2>
-              <p className="text-teal-700">Three simple steps to your best month</p>
-            </div>
-
-            <div className="divide-y divide-gray-200">
-              {/* Step 1: Answer */}
-              <div className="px-6 md:px-10 py-5 md:py-8">
-                <div className="flex gap-5 items-start">
-                  <div className="w-12 h-12 rounded-full bg-teal-600 text-white flex items-center justify-center shadow-md text-xl font-bold flex-shrink-0">
-                    1
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Set Your Goal</h3>
-                    <p className="text-gray-700 text-lg mb-4">
-                      Pick any goal and answer a few quick questions about your experience and what motivates you. Takes less than 2 minutes.
-                    </p>
-                    <p className="text-gray-500 text-sm">
-                      <strong className="text-gray-700">Examples:</strong> Learn Spanish basics, Build a meditation habit, Write a short story, Run a 5K
-                    </p>
-                  </div>
-                </div>
+        <AnimatedSection>
+          <section id="how-it-works" className="w-full py-8 md:py-16 px-0 md:px-4">
+            <div className="bg-white/80 backdrop-blur-xl rounded-none md:rounded-2xl border-y md:border border-white/50 shadow-2xl overflow-hidden">
+              <div className="px-6 md:px-10 pt-6 md:pt-10 pb-4 text-center">
+                <h2 className="text-2xl md:text-4xl font-bold text-slate-800 mb-2">How It Works</h2>
+                <p className="text-teal-700">Three simple steps to your best month</p>
               </div>
 
-              {/* Step 2: Get Plan */}
-              <div className="px-6 md:px-10 py-5 md:py-8">
-                <div className="flex gap-5 items-start">
-                  <div className="w-12 h-12 rounded-full bg-purple-600 text-white flex items-center justify-center shadow-md text-xl font-bold flex-shrink-0">
-                    2
+              <div className="divide-y divide-gray-200">
+                {/* Step 1 */}
+                <div className="px-6 md:px-10 py-5 md:py-8">
+                  <div className="flex gap-5 items-start">
+                    <div className="w-12 h-12 rounded-full bg-teal-600 text-white flex items-center justify-center shadow-md text-xl font-bold flex-shrink-0">
+                      1
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-2xl font-bold text-gray-900 mb-2">Set Your Goal</h3>
+                      <p className="text-gray-700 text-lg mb-4">
+                        Pick any goal and answer a few quick questions about your experience and what motivates you. Takes less than 2 minutes.
+                      </p>
+                      <p className="text-gray-500 text-sm">
+                        <strong className="text-gray-700">Examples:</strong> Learn Spanish basics, Build a meditation habit, Write a short story, Run a 5K
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Get Your Plan</h3>
-                    <p className="text-gray-700 text-lg mb-3">
-                      AI generates a structured 30-day plan with daily activities, curated resources, and weekly book recommendations tailored to you.
-                    </p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3">
-                      <div className="flex items-start gap-2 text-gray-500 text-sm">
-                        <CheckSquare className="w-4 h-4 text-purple-500 flex-shrink-0 mt-0.5" />
-                        <span>Daily activities with video and article resources</span>
+                </div>
+
+                {/* Step 2 */}
+                <div className="px-6 md:px-10 py-5 md:py-8">
+                  <div className="flex gap-5 items-start">
+                    <div className="w-12 h-12 rounded-full bg-purple-600 text-white flex items-center justify-center shadow-md text-xl font-bold flex-shrink-0">
+                      2
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-2xl font-bold text-gray-900 mb-2">Get Your Plan</h3>
+                      <p className="text-gray-700 text-lg mb-3">
+                        AI generates a structured 30-day plan with daily activities, curated resources, and weekly book recommendations tailored to you.
+                      </p>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3">
+                        <div className="flex items-start gap-2 text-gray-500 text-sm">
+                          <CheckSquare className="w-4 h-4 text-purple-500 flex-shrink-0 mt-0.5" />
+                          <span>Daily activities with video and article resources</span>
+                        </div>
+                        <div className="flex items-start gap-2 text-gray-500 text-sm">
+                          <BookOpen className="w-4 h-4 text-purple-500 flex-shrink-0 mt-0.5" />
+                          <span>Weekly book recommendations to deepen your learning</span>
+                        </div>
                       </div>
-                      <div className="flex items-start gap-2 text-gray-500 text-sm">
-                        <BookOpen className="w-4 h-4 text-purple-500 flex-shrink-0 mt-0.5" />
-                        <span>Weekly book recommendations to deepen your learning</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Step 3 */}
+                <div className="px-6 md:px-10 py-5 md:py-8">
+                  <div className="flex gap-5 items-start">
+                    <div className="w-12 h-12 rounded-full bg-lime-500 text-white flex items-center justify-center shadow-md text-xl font-bold flex-shrink-0">
+                      3
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-2xl font-bold text-gray-900 mb-2">Show Up Daily</h3>
+                      <p className="text-gray-700 text-lg mb-4">
+                        Check off activities, reflect on your progress, and watch your calendar fill up with completed days.
+                      </p>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <div className="flex items-center gap-2 text-gray-500 text-sm">
+                          <Calendar className="w-4 h-4 text-lime-600 flex-shrink-0" />
+                          <span>Visual 30-day calendar with progress tracking</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-gray-500 text-sm">
+                          <Mail className="w-4 h-4 text-lime-600 flex-shrink-0" />
+                          <span>Daily email reminders to keep you on track</span>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
+          </section>
+        </AnimatedSection>
 
-              {/* Step 3: Stay Consistent */}
-              <div className="px-6 md:px-10 py-5 md:py-8">
-                <div className="flex gap-5 items-start">
-                  <div className="w-12 h-12 rounded-full bg-lime-500 text-white flex items-center justify-center shadow-md text-xl font-bold flex-shrink-0">
-                    3
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Show Up Daily</h3>
-                    <p className="text-gray-700 text-lg mb-4">
-                      Check off activities, reflect on your progress, and watch your calendar fill up with completed days.
-                    </p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      <div className="flex items-center gap-2 text-gray-500 text-sm">
-                        <Calendar className="w-4 h-4 text-lime-600 flex-shrink-0" />
-                        <span>Visual 30-day calendar with progress tracking</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-gray-500 text-sm">
-                        <Mail className="w-4 h-4 text-lime-600 flex-shrink-0" />
-                        <span>Daily email reminders to keep you on track</span>
-                      </div>
+        {/* Stay Motivated — Gamification Preview */}
+        <AnimatedSection>
+          <section className="w-full py-8 md:py-16 px-0 md:px-4">
+            <div className="bg-white/80 backdrop-blur-xl rounded-none md:rounded-2xl border-y md:border border-white/50 shadow-2xl overflow-hidden">
+              <div className="px-6 md:px-10 pt-6 md:pt-10 pb-4 text-center">
+                <h2 className="text-2xl md:text-4xl font-bold text-slate-800 mb-2">Stay Motivated</h2>
+                <p className="text-teal-700">Built-in streaks, XP, and achievements keep you coming back</p>
+              </div>
+
+              <div className="px-6 md:px-10 pb-6 md:pb-10">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                  {/* Streaks */}
+                  <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl border-2 border-orange-200 p-5 text-center">
+                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-orange-100 mb-3">
+                      <Flame className="w-7 h-7 text-orange-500" />
                     </div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-1">Daily Streaks</h3>
+                    <p className="text-gray-600 text-sm mb-4">Keep your streak alive by showing up every day. The longer you go, the more bonus XP you earn.</p>
+                    <div className="inline-flex items-center gap-1.5 bg-orange-100 text-orange-700 rounded-full px-4 py-1.5 font-bold text-lg">
+                      <Flame className="w-5 h-5" />
+                      <span>12</span>
+                    </div>
+                    <p className="text-xs text-orange-600 mt-1 font-medium">12-day streak</p>
+                  </div>
+
+                  {/* XP & Levels */}
+                  <div className="bg-gradient-to-br from-yellow-50 to-amber-50 rounded-xl border-2 border-yellow-200 p-5 text-center">
+                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-yellow-100 mb-3">
+                      <Zap className="w-7 h-7 text-yellow-500" />
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-1">Earn XP</h3>
+                    <p className="text-gray-600 text-sm mb-4">Earn points for every activity you complete, every reflection you write, and every streak day.</p>
+                    <div className="space-y-2 max-w-[180px] mx-auto">
+                      <div className="flex justify-between text-sm">
+                        <span className="font-semibold text-gray-700">Dedicated</span>
+                        <span className="text-yellow-600 font-bold">1,450 XP</span>
+                      </div>
+                      <div className="w-full h-2.5 bg-gray-200 rounded-full overflow-hidden">
+                        <div className="h-full bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-full" style={{ width: "62%" }} />
+                      </div>
+                      <p className="text-xs text-gray-500">750 XP to Unstoppable</p>
+                    </div>
+                  </div>
+
+                  {/* Achievements */}
+                  <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl border-2 border-purple-200 p-5 text-center">
+                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-purple-100 mb-3">
+                      <Trophy className="w-7 h-7 text-purple-500" />
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-1">Unlock Badges</h3>
+                    <p className="text-gray-600 text-sm mb-4">Hit milestones and earn achievements. Can you collect them all before day 30?</p>
+                    <div className="flex justify-center gap-2">
+                      {[
+                        { icon: "🚀", label: "First Step" },
+                        { icon: "🔥", label: "On Fire" },
+                        { icon: "⭐", label: "Perfect Week" },
+                        { icon: "🏆", label: "???" },
+                      ].map((badge) => (
+                        <div
+                          key={badge.label}
+                          className={`w-10 h-10 rounded-lg flex items-center justify-center text-lg ${
+                            badge.label === "???"
+                              ? "bg-gray-100 border-2 border-dashed border-gray-300 grayscale opacity-50"
+                              : "bg-white border-2 border-purple-200 shadow-sm"
+                          }`}
+                          title={badge.label}
+                        >
+                          {badge.icon}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Stat bar */}
+                <div className="mt-6 grid grid-cols-3 gap-3 max-w-lg mx-auto">
+                  <div className="text-center bg-white/60 rounded-lg py-3 px-2 border border-gray-200">
+                    <div className="flex items-center justify-center gap-1 mb-0.5">
+                      <Target className="w-3.5 h-3.5 text-teal-600" />
+                      <span className="text-xs text-gray-500 font-medium">Rate</span>
+                    </div>
+                    <p className="text-xl font-bold text-slate-800">87%</p>
+                  </div>
+                  <div className="text-center bg-white/60 rounded-lg py-3 px-2 border border-gray-200">
+                    <div className="flex items-center justify-center gap-1 mb-0.5">
+                      <Flame className="w-3.5 h-3.5 text-orange-500" />
+                      <span className="text-xs text-gray-500 font-medium">Streak</span>
+                    </div>
+                    <p className="text-xl font-bold text-slate-800">12</p>
+                  </div>
+                  <div className="text-center bg-white/60 rounded-lg py-3 px-2 border border-gray-200">
+                    <div className="flex items-center justify-center gap-1 mb-0.5">
+                      <Trophy className="w-3.5 h-3.5 text-purple-500" />
+                      <span className="text-xs text-gray-500 font-medium">Badges</span>
+                    </div>
+                    <p className="text-xl font-bold text-slate-800">5/8</p>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </AnimatedSection>
 
         {/* What Your Plan Looks Like */}
-        <section className="w-full py-8 md:py-16 px-0 md:px-4">
-          <div className="bg-white/80 backdrop-blur-xl rounded-none md:rounded-2xl border-y md:border border-white/50 shadow-2xl overflow-hidden">
-            <div className="px-6 md:px-10 pt-6 md:pt-10 pb-4 text-center">
-              <h2 className="text-2xl md:text-4xl font-bold text-slate-800 mb-2">What Your Plan Looks Like</h2>
-              <p className="text-teal-700">A real example from &quot;Learn to play guitar&quot;</p>
-            </div>
-
-            <div className="px-6 md:px-10 pb-6 md:pb-10">
-              {/* Mini Calendar Preview */}
-              <div className="mb-6">
-                <div className="flex items-center gap-2 mb-3">
-                  <Calendar className="w-5 h-5 text-teal-600" />
-                  <h3 className="text-lg font-semibold text-gray-900">Week 1: Getting Started</h3>
-                </div>
-                <div className="grid grid-cols-7 gap-1.5 md:gap-2">
-                  {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day, i) => (
-                    <div key={day} className="text-center">
-                      <div className="text-xs text-gray-500 mb-1 hidden md:block">{day}</div>
-                      <div className={`aspect-square rounded-lg border-2 flex items-center justify-center text-sm font-semibold ${
-                        i < 4 ? "border-lime-400 bg-lime-50 text-lime-700" :
-                        i === 4 ? "border-teal-400 bg-teal-50 text-teal-700" :
-                        "border-gray-200 bg-gray-50 text-gray-400"
-                      }`}>
-                        {i < 4 && <CheckCircle2 className="w-4 h-4 md:w-5 md:h-5 text-lime-500" />}
-                        {i === 4 && <span className="text-xs md:text-sm">Today</span>}
-                        {i > 4 && <span>{i + 1}</span>}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+        <AnimatedSection>
+          <section className="w-full py-8 md:py-16 px-0 md:px-4">
+            <div className="bg-white/80 backdrop-blur-xl rounded-none md:rounded-2xl border-y md:border border-white/50 shadow-2xl overflow-hidden">
+              <div className="px-6 md:px-10 pt-6 md:pt-10 pb-4 text-center">
+                <h2 className="text-2xl md:text-4xl font-bold text-slate-800 mb-2">What Your Plan Looks Like</h2>
+                <p className="text-teal-700">A real example from &quot;Learn to play guitar&quot;</p>
               </div>
 
-              {/* Sample Day Activities */}
-              <div className="bg-gray-50 rounded-xl border border-gray-200 p-4 md:p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="w-8 h-8 rounded-full bg-teal-100 border border-teal-300 flex items-center justify-center">
-                    <span className="text-sm font-bold text-teal-700">5</span>
+              <div className="px-6 md:px-10 pb-6 md:pb-10">
+                {/* Mini Calendar Preview */}
+                <div className="mb-6">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Calendar className="w-5 h-5 text-teal-600" />
+                    <h3 className="text-lg font-semibold text-gray-900">Week 1: Getting Started</h3>
                   </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900">Day 5: Your First Song</h4>
-                    <p className="text-sm text-teal-600">Today&apos;s activities</p>
+                  <div className="grid grid-cols-7 gap-1.5 md:gap-2">
+                    {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day, i) => (
+                      <div key={day} className="text-center">
+                        <div className="text-xs text-gray-500 mb-1 hidden md:block">{day}</div>
+                        <div className={`aspect-square rounded-lg border-2 flex items-center justify-center text-sm font-semibold ${
+                          i < 4 ? "border-lime-400 bg-lime-50 text-lime-700" :
+                          i === 4 ? "border-teal-400 bg-teal-50 text-teal-700" :
+                          "border-gray-200 bg-gray-50 text-gray-400"
+                        }`}>
+                          {i < 4 && <CheckCircle2 className="w-4 h-4 md:w-5 md:h-5 text-lime-500" />}
+                          {i === 4 && <span className="text-xs md:text-sm">Today</span>}
+                          {i > 4 && <span>{i + 1}</span>}
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
-                <div className="space-y-3">
-                  {[
-                    { text: "Practice the Am, C, and G chord shapes for 10 minutes", checked: true },
-                    { text: "Learn to play \"Horse With No Name\" — it only uses 2 chords!", checked: true, resource: { type: "youtube", label: "Search: Horse With No Name guitar tutorial beginner" } },
-                    { text: "Record yourself playing and listen back for timing", checked: false },
-                  ].map((activity, i) => (
-                    <div key={i} className={`flex items-start gap-3 p-3 rounded-lg border-2 ${activity.checked ? "border-lime-400 bg-white" : "border-gray-200 bg-white"}`}>
-                      <div className={`w-5 h-5 rounded border-2 flex-shrink-0 mt-0.5 flex items-center justify-center ${activity.checked ? "border-lime-500 bg-lime-500" : "border-gray-300"}`}>
-                        {activity.checked && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className={`text-sm md:text-base ${activity.checked ? "text-gray-700" : "text-gray-600"}`}>{activity.text}</p>
-                        {activity.resource && (
-                          <div className="mt-2 flex items-center gap-1.5 text-xs text-red-600">
-                            <Youtube className="w-3.5 h-3.5" />
-                            <span>{activity.resource.label}</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-4 pt-4 border-t border-gray-200">
-                  <p className="text-sm text-gray-500 italic">&quot;Managed to get through the whole song! Chord changes are still slow but getting smoother.&quot;</p>
-                  <p className="text-xs text-gray-400 mt-1">Daily reflection</p>
-                </div>
-              </div>
 
-              {/* CTA */}
-              <div className="text-center mt-6 md:mt-8">
-                <Button
-                  onClick={onGetStarted}
-                  className="shadow-lg hover:shadow-xl transition-smooth hover:scale-105 px-6 py-5 md:px-8 md:py-6 text-base md:text-lg"
-                >
-                  Create Your Plan
-                </Button>
-                <p className="text-sm text-gray-500 mt-3">
-                  <Sparkles className="w-4 h-4 inline-block mr-1 text-purple-500" />
-                  Every plan is unique — personalized to your goal and experience
-                </p>
+                {/* Sample Day Activities */}
+                <div className="bg-gray-50 rounded-xl border border-gray-200 p-4 md:p-6">
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="w-8 h-8 rounded-full bg-teal-100 border border-teal-300 flex items-center justify-center">
+                      <span className="text-sm font-bold text-teal-700">5</span>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-900">Day 5: Your First Song</h4>
+                      <p className="text-sm text-teal-600">Today&apos;s activities</p>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    {[
+                      { text: "Practice the Am, C, and G chord shapes for 10 minutes", checked: true },
+                      { text: "Learn to play \"Horse With No Name\" \u2014 it only uses 2 chords!", checked: true, resource: { type: "youtube", label: "Search: Horse With No Name guitar tutorial beginner" } },
+                      { text: "Record yourself playing and listen back for timing", checked: false },
+                    ].map((activity, i) => (
+                      <div key={i} className={`flex items-start gap-3 p-3 rounded-lg border-2 ${activity.checked ? "border-lime-400 bg-white" : "border-gray-200 bg-white"}`}>
+                        <div className={`w-5 h-5 rounded border-2 flex-shrink-0 mt-0.5 flex items-center justify-center ${activity.checked ? "border-lime-500 bg-lime-500" : "border-gray-300"}`}>
+                          {activity.checked && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className={`text-sm md:text-base ${activity.checked ? "text-gray-700" : "text-gray-600"}`}>{activity.text}</p>
+                          {activity.resource && (
+                            <div className="mt-2 flex items-center gap-1.5 text-xs text-red-600">
+                              <Youtube className="w-3.5 h-3.5" />
+                              <span>{activity.resource.label}</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-4 pt-4 border-t border-gray-200">
+                    <p className="text-sm text-gray-500 italic">&quot;Managed to get through the whole song! Chord changes are still slow but getting smoother.&quot;</p>
+                    <p className="text-xs text-gray-400 mt-1">Daily reflection</p>
+                  </div>
+                </div>
+
+                {/* CTA */}
+                <div className="text-center mt-6 md:mt-8">
+                  <Button
+                    onClick={onGetStarted}
+                    className="shadow-lg hover:shadow-xl transition-smooth hover:scale-105 px-6 py-5 md:px-8 md:py-6 text-base md:text-lg"
+                  >
+                    Create Your Plan
+                  </Button>
+                  <p className="text-sm text-gray-500 mt-3">
+                    <Sparkles className="w-4 h-4 inline-block mr-1 text-purple-500" />
+                    Every plan is unique — personalized to your goal and experience
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </AnimatedSection>
 
         <Footer onPrivacyClick={onPrivacyPolicy} onTermsClick={onTermsOfService} />
       </div>
