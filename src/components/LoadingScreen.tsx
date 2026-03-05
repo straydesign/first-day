@@ -60,7 +60,7 @@ export function LoadingScreen({ title = "Loading your goals...", subtitle, showP
           <div className="w-full max-w-md space-y-4 animate-fadeIn">
             <Progress
               value={progress}
-              className="h-2 bg-white/20 [&>[data-slot=progress-indicator]]:bg-teal-400"
+              className="h-2 bg-slate-800/20 [&>[data-slot=progress-indicator]]:bg-teal-600"
             />
             <AnimatePresence mode="wait">
               <motion.div
@@ -69,7 +69,7 @@ export function LoadingScreen({ title = "Loading your goals...", subtitle, showP
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.3 }}
-                className="flex items-center justify-center gap-2 text-white/90"
+                className="flex items-center justify-center gap-2 text-slate-800"
               >
                 {(() => {
                   const Icon = PROGRESS_STEPS[currentStep].icon;
@@ -80,7 +80,7 @@ export function LoadingScreen({ title = "Loading your goals...", subtitle, showP
                 </span>
               </motion.div>
             </AnimatePresence>
-            <p className="text-center text-xs text-white/50">
+            <p className="text-center text-xs text-slate-600">
               {Math.round(progress)}%
             </p>
           </div>

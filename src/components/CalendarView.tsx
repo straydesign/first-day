@@ -104,29 +104,23 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
                 </div>
                 <Card className={`p-3 md:p-6 shadow-lg border border-gray-200 rounded-xl animate-slideInUp transition-smooth ${week.isUnlocked ? 'bg-white/90 backdrop-blur-sm hover:shadow-xl' : 'bg-gray-100 opacity-60 cursor-not-allowed'}`} style={{ animationDelay: `${weekIndex * 0.1}s` }}>
                   {week.isUnlocked ? (
-                    <div className="flex flex-col md:flex-row gap-3 md:gap-6">
-                      <div className="w-full md:w-64 md:flex-shrink-0">
-                        {week.weeklyBook ? (
-                          <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-lg border-2 border-yellow-200 h-full overflow-hidden">
-                            <button onClick={() => toggleWeekBook(week.weekNumber)} className="w-full p-3 md:p-4 flex items-center justify-between hover:bg-yellow-100/50 transition-colors">
-                              <div className="flex items-center gap-2"><BookOpen className="w-4 h-4 md:w-5 md:h-5 text-yellow-600" /><h3 className="text-xs md:text-sm text-yellow-900 font-medium">Week {week.weekNumber} Reading</h3></div>
-                              {expandedWeeks.has(week.weekNumber) ? <ChevronUp className="w-4 h-4 text-yellow-600" /> : <ChevronDown className="w-4 h-4 text-yellow-600" />}
-                            </button>
-                            {expandedWeeks.has(week.weekNumber) && (
-                              <div className="px-3 md:px-4 pb-3 md:pb-4 space-y-1 md:space-y-2">
-                                <p className="text-sm md:text-base text-yellow-900 font-semibold">{week.weeklyBook.title}</p>
-                                <p className="text-xs md:text-sm text-yellow-600">by {week.weeklyBook.author}</p>
-                                <p className="text-xs text-yellow-700 italic mt-1 md:mt-2">{week.weeklyBook.description || week.weeklyBook.reason}</p>
-                              </div>
-                            )}
-                          </div>
-                        ) : (
-                          <div className="bg-gray-50/30 p-3 md:p-4 rounded-lg border-2 border-gray-100 h-full flex items-center justify-center">
-                            <p className="text-xs md:text-sm text-gray-400 text-center">No book recommendation this week</p>
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex-1"><WeekCalendar weekNumber={week.weekNumber} days={week.days} progress={progress} onDayClick={onDayClick} planData={planData} startDate={planData?.startDate} /></div>
+                    <div className="space-y-3 md:space-y-4">
+                      {week.weeklyBook && (
+                        <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-lg border-2 border-yellow-200 overflow-hidden">
+                          <button onClick={() => toggleWeekBook(week.weekNumber)} className="w-full p-3 md:p-4 flex items-center justify-between hover:bg-yellow-100/50 transition-colors">
+                            <div className="flex items-center gap-2"><BookOpen className="w-4 h-4 md:w-5 md:h-5 text-yellow-600" /><h3 className="text-xs md:text-sm text-yellow-900 font-medium">Week {week.weekNumber} Reading</h3></div>
+                            {expandedWeeks.has(week.weekNumber) ? <ChevronUp className="w-4 h-4 text-yellow-600" /> : <ChevronDown className="w-4 h-4 text-yellow-600" />}
+                          </button>
+                          {expandedWeeks.has(week.weekNumber) && (
+                            <div className="px-3 md:px-4 pb-3 md:pb-4 space-y-1 md:space-y-2">
+                              <p className="text-sm md:text-base text-yellow-900 font-semibold">{week.weeklyBook.title}</p>
+                              <p className="text-xs md:text-sm text-yellow-600">by {week.weeklyBook.author}</p>
+                              <p className="text-xs text-yellow-700 italic mt-1 md:mt-2">{week.weeklyBook.description || week.weeklyBook.reason}</p>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      <WeekCalendar weekNumber={week.weekNumber} days={week.days} progress={progress} onDayClick={onDayClick} planData={planData} startDate={planData?.startDate} />
                     </div>
                   ) : (
                     <div className="text-center py-6 md:py-12">
@@ -138,15 +132,6 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
                 </Card>
               </div>
             ))}
-          </div>
-          <div className="mt-4 md:mt-8 bg-white/90 backdrop-blur-sm border border-gray-200 rounded-xl p-4 md:p-6 shadow-lg">
-            <p className="text-base text-gray-700 font-medium mb-4 text-center">Click on any day to see your activities</p>
-            <div className="flex justify-center gap-3 text-sm flex-wrap">
-              <div className="flex items-center gap-2"><div className="w-5 h-5 border-2 border-red-300 bg-red-50 rounded"></div><span className="text-gray-700 font-medium">Missed</span></div>
-              <div className="flex items-center gap-2"><div className="w-5 h-5 border-2 border-lime-400 bg-lime-50 rounded"></div><span className="text-gray-700 font-medium">Completed</span></div>
-              <div className="flex items-center gap-2"><div className="w-5 h-5 border-2 border-teal-400 bg-teal-50 rounded"></div><span className="text-gray-700 font-medium">Today</span></div>
-              <div className="flex items-center gap-2"><div className="w-5 h-5 border-2 border-gray-300 bg-gray-50 rounded"></div><span className="text-gray-700 font-medium">Upcoming</span></div>
-            </div>
           </div>
         </div>
       </div>

@@ -80,12 +80,12 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
                             {resources.map((resource: any, rIndex: number) => (
                               <div key={rIndex} onClick={(e) => e.preventDefault()}>
                                 {resource.type === 'youtube' && (
-                                  <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent(resource.query)}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-red-600 hover:text-red-500 hover:underline" onClick={(e) => e.stopPropagation()}>
+                                  <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent(resource.query)}`} target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-2 text-sm hover:underline ${completedActivities[index] ? 'text-lime-600 hover:text-lime-500' : 'text-teal-600 hover:text-teal-500'}`} onClick={(e) => e.stopPropagation()}>
                                     <Youtube className="w-4 h-4" />Search YouTube: {resource.query}
                                   </a>
                                 )}
                                 {resource.type === 'link' && (
-                                  <a href={resource.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-teal-600 hover:text-teal-500 hover:underline" onClick={(e) => e.stopPropagation()}>
+                                  <a href={resource.url} target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-2 text-sm hover:underline ${completedActivities[index] ? 'text-lime-600 hover:text-lime-500' : 'text-teal-600 hover:text-teal-500'}`} onClick={(e) => e.stopPropagation()}>
                                     <ExternalLink className="w-4 h-4" />{resource.title || resource.url}
                                   </a>
                                 )}
