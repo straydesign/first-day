@@ -798,8 +798,6 @@ export default function Home() {
 
         {showFullScreenLoading && (
           <LoadingScreen
-            title="Creating your personalized 30-day plan..."
-            subtitle="This may take a moment"
             showProgress={true}
           />
         )}

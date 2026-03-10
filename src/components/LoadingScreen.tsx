@@ -8,8 +8,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Search, BookOpen, Calendar, Lightbulb, Sparkles } from "lucide-react";
 
 interface LoadingScreenProps {
-  title?: string;
-  subtitle?: string;
   showProgress?: boolean;
   estimatedDuration?: number;
 }
@@ -22,7 +20,7 @@ const PROGRESS_STEPS = [
   { message: "Finalizing your plan...", icon: Sparkles },
 ];
 
-export function LoadingScreen({ title = "Loading your goals...", subtitle, showProgress = false, estimatedDuration = 15000 }: LoadingScreenProps) {
+export function LoadingScreen({ showProgress = false, estimatedDuration = 15000 }: LoadingScreenProps) {
   const [progress, setProgress] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
 
@@ -60,7 +58,7 @@ export function LoadingScreen({ title = "Loading your goals...", subtitle, showP
           <div className="w-full max-w-md space-y-4 animate-fadeIn">
             <Progress
               value={progress}
-              className="h-2 bg-slate-800/20 [&>[data-slot=progress-indicator]]:bg-teal-600"
+              className="h-2 bg-slate-800/20 [&>[data-slot=progress-indicator]]:bg-teal-600 [&>[data-slot=progress-indicator]]:shadow-[0_0_12px_rgba(13,148,136,0.5)] [&>[data-slot=progress-indicator]]:transition-all"
             />
             <AnimatePresence mode="wait">
               <motion.div

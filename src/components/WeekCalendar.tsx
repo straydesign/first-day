@@ -1,12 +1,13 @@
 "use client";
 import { CheckCircle2, Circle } from "lucide-react";
+import type { Plan, ProgressMap, SelectedDay } from "@/types";
 
 interface WeekCalendarProps {
   weekNumber: number;
   days: Array<{ dayNumber: number; date: Date; dayOfWeek: number; isToday: boolean }>;
-  progress?: Record<number, { completed?: boolean }>;
-  onDayClick?: (day: any) => void;
-  planData?: any;
+  progress?: ProgressMap;
+  onDayClick?: (day: SelectedDay) => void;
+  planData?: Plan | null;
   startDate?: string;
 }
 

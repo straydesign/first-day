@@ -8,9 +8,10 @@ import { BackButton } from '@/components/ui/back-button';
 import { GOAL_CATEGORY_MAP, GOAL_CATEGORY_COLORS, GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, AURORA_COLORS } from '@/constants';
 import { motion, AnimatePresence } from 'framer-motion';
 import Aurora from './Aurora';
+import type { GoalFormData } from '@/types';
 
 interface SimpleGoalCreationProps {
-  onComplete: (goalData: any) => void;
+  onComplete: (goalData: GoalFormData) => void;
   onCancel: () => void;
 }
 
@@ -47,7 +48,7 @@ export function SimpleGoalCreation({ onComplete, onCancel }: SimpleGoalCreationP
     <div className="overflow-x-scroll py-0.5 scrollbar-hide cursor-grab active:cursor-grabbing" onMouseDown={handleMouseDown} onMouseUp={handleMouseUp} onMouseLeave={() => setIsPaused(false)} onTouchStart={handleMouseDown} onTouchEnd={handleMouseUp}>
       <div className={`flex whitespace-nowrap ${isPaused ? '' : direction === 'left' ? 'animate-scroll-left' : 'animate-scroll-right'}`}>
         {[...goals, ...goals, ...goals, ...goals, ...goals, ...goals, ...goals, ...goals].map((suggestion, index) => (
-          <button key={index} onClick={(e) => handleButtonClick(e, suggestion)} disabled={isGenerating} className={`inline-block px-5 py-2.5 text-sm border-2 rounded-full transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed mx-1 ${getGoalColorClasses(suggestion)}`}>
+          <button key={index} onClick={(e) => handleButtonClick(e, suggestion)} disabled={isGenerating} className={`inline-block px-5 py-2.5 text-sm border-2 rounded-full transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed mx-1 ${getGoalColorClasses(suggestion)} ${goal === suggestion ? 'scale-105 ring-2 ring-teal-400 shadow-md' : ''}`}>
             {suggestion}
           </button>
         ))}

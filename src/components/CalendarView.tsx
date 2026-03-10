@@ -8,9 +8,40 @@ import Aurora from "./Aurora";
 import { AURORA_COLORS } from "@/constants";
 import { useState } from "react";
 import { StreakBadge } from "./StreakBadge";
-import type { EngagementState } from "@/types";
+import { motion } from "framer-motion";
+import type { Plan, ProgressMap, EngagementState, SelectedDay } from "@/types";
 
-export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRegeneratePlan, progress = {}, onBack, engagement }: any & { engagement?: EngagementState | null }) {
+interface CalendarViewProps {
+  planData: Plan | null;
+  goalTitle?: string;
+  onDayClick: (day: SelectedDay) => void;
+  onEditGoal?: () => void;
+  onRegeneratePlan?: () => void;
+  progress?: ProgressMap;
+  onBack?: () => void;
+  engagement?: EngagementState | null;
+}
+
+interface WeekDay {
+  dayNumber: number;
+  date: Date;
+  dateNum: number;
+  month: number;
+  year: number;
+  dayOfWeek: number;
+  monthName: string;
+  isToday: boolean;
+}
+
+interface WeekData {
+  weekNumber: number;
+  days: WeekDay[];
+  weeklyBook: { title: string; author: string; description?: string; reason?: string } | null;
+  isUnlocked: boolean;
+  label: string;
+}
+
+export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRegeneratePlan, progress = {}, onBack, engagement }: CalendarViewProps) {
   const [expandedWeeks, setExpandedWeeks] = useState(new Set<number>());
 
   const toggleWeekBook = (weekNumber: number) => {
@@ -43,14 +74,14 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
     return ['Getting Started', 'Building Momentum', 'Hitting Your Stride', 'Mastering It'][weekNumber - 1];
   };
 
-  const thirtyDays = Array.from({ length: 30 }, (_, i) => {
+  const thirtyDays: WeekDay[] = Array.from({ length: 30 }, (_, i) => {
     const date = new Date(planStartDate);
     date.setDate(planStartDate.getDate() + i);
     date.setHours(0, 0, 0, 0);
     return { dayNumber: i + 1, date, dateNum: date.getDate(), month: date.getMonth(), year: date.getFullYear(), dayOfWeek: date.getDay(), monthName: date.toLocaleDateString('en-US', { month: 'long' }), isToday: date.getTime() === today.getTime() };
   });
 
-  const weeks: any[] = [];
+  const weeks: WeekData[] = [];
   for (let i = 0; i < 30; i += 7) {
     const weekDays = thirtyDays.slice(i, i + 7);
     const weekNumber = Math.floor(i / 7) + 1;
@@ -65,7 +96,12 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
       <div className="fixed inset-0 z-0 w-full h-full"><Aurora colorStops={[...AURORA_COLORS]} /></div>
       <div className="relative z-10 p-4 md:p-8 pt-4 md:pt-6">
         <div className="max-w-7xl mx-auto space-y-4 md:space-y-8">
-          <div className="mb-4 md:mb-8 animate-fadeIn">
+          <motion.div
+            className="mb-4 md:mb-8"
+            initial={{ opacity: 0, y: 16, filter: "blur(4px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+          >
             {onBack && <BackButton onClick={onBack} />}
             {goalTitle && (<div className="text-center">
               <div className="flex items-center justify-center gap-3 mb-2">
@@ -92,17 +128,23 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
                 </div>
               )}
             </div>)}
-          </div>
+          </motion.div>
           <div className="space-y-4 md:space-y-6">
-            {weeks.map((week: any, weekIndex: number) => (
-              <div key={week.weekNumber} className="relative">
+            {weeks.map((week: WeekData, weekIndex: number) => (
+              <motion.div
+                key={week.weekNumber}
+                className="relative"
+                initial={{ opacity: 0, y: 24, filter: "blur(4px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                transition={{ duration: 0.5, delay: weekIndex * 0.12, ease: "easeOut" }}
+              >
                 <div className="mb-3 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <h3 className="text-lg md:text-xl font-bold text-teal-800">Week {week.weekNumber}: {week.label}</h3>
                     {!week.isUnlocked && <span className="text-xs md:text-sm text-purple-600 bg-purple-100 px-3 py-1 rounded-full font-medium">Locked</span>}
                   </div>
                 </div>
-                <Card className={`p-3 md:p-6 shadow-lg border border-gray-200 rounded-xl animate-slideInUp transition-smooth ${week.isUnlocked ? 'bg-white/90 backdrop-blur-sm hover:shadow-xl' : 'bg-gray-100 opacity-60 cursor-not-allowed'}`} style={{ animationDelay: `${weekIndex * 0.1}s` }}>
+                <Card className={`p-3 md:p-6 shadow-lg border border-gray-200 rounded-xl transition-smooth ${week.isUnlocked ? 'bg-white/90 backdrop-blur-sm hover:shadow-xl' : 'bg-gray-100 opacity-60 cursor-not-allowed'}`}>
                   {week.isUnlocked ? (
                     <div className="space-y-3 md:space-y-4">
                       {week.weeklyBook && (
@@ -130,7 +172,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
                     </div>
                   )}
                 </Card>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
