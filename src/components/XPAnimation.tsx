@@ -66,7 +66,7 @@ export function XPAnimation({ xp, show }: XPAnimationProps) {
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="border-t border-white/20 pt-3"
+              className="pt-3"
             >
               <div className="flex items-center justify-center gap-2">
                 <Zap className="w-6 h-6 text-yellow-400" />

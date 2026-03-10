@@ -8,7 +8,7 @@ interface FooterProps {
 export function Footer({ onPrivacyClick, onTermsClick }: FooterProps) {
   const currentYear = new Date().getFullYear();
   return (
-    <footer className="bg-gray-100 border-t border-gray-300 py-6 mt-auto">
+    <footer className="bg-gray-100 py-6 mt-auto">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex flex-wrap gap-4 justify-center mb-4">
           {onPrivacyClick ? (
@@ -22,7 +22,7 @@ export function Footer({ onPrivacyClick, onTermsClick }: FooterProps) {
             <a href="/terms" className="text-gray-600 hover:text-teal-700 underline text-sm transition-colors">Terms of Service</a>
           )}
         </div>
-        <div className="border-t border-gray-300 pt-4 text-center text-gray-600 text-xs">
+        <div className="pt-4 text-center text-gray-600 text-xs">
           <p>&copy; {currentYear} First Day. All rights reserved.</p>
           <p className="mt-0.5">
             Contact: <a href="mailto:support@firstday.life" className="text-teal-700 underline hover:text-teal-800">support@firstday.life</a>

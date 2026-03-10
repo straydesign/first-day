@@ -152,7 +152,7 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
             <nav className="flex flex-col gap-2 px-3">
               <Button onClick={() => setMobileMenuOpen(false)} variant="outline" size="sm" className="justify-start bg-blue-50 hover:bg-blue-100 text-blue-900 border-blue-300 text-sm py-2"><Target className="w-4 h-4 mr-2" />My Goals</Button>
               <Button onClick={() => { setMobileMenuOpen(false); if (goals[0]) onSelectGoal(goals[0].id); }} variant="outline" size="sm" className="justify-start hover:bg-gray-50 text-sm py-2"><Calendar className="w-4 h-4 mr-2" />30 Day Plan</Button>
-              <div className="border-t border-gray-200 my-2" />
+              <div className="my-2" />
               <Button onClick={onLogout} variant="outline" size="sm" className="justify-start hover:bg-red-50 text-red-600 border-red-200 text-sm py-2"><LogOut className="w-4 h-4 mr-2" />Logout</Button>
             </nav>
           </SheetContent>
@@ -169,7 +169,7 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
             <div className="animate-fadeIn space-y-4">
               {goals.map(goal => (
                 <Card key={goal.id} className="bg-white/90 backdrop-blur-sm border border-gray-200 shadow-lg rounded-xl">
-                  <CardHeader className="border-b border-gray-200">
+                  <CardHeader>
                     <div className="mb-4 flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
