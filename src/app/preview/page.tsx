@@ -10,11 +10,11 @@ import { CongratsView } from "@/components/CongratsView";
 import type { Plan, SelectedDay, EngagementState, Achievement, Milestone, XPBreakdown } from "@/types";
 
 /**
- * Preview route — renders all 5 app screens stacked with mock data.
- * No auth required. Used for Playwright screenshots at 375×812.
+ * Preview / Demo route.
+ * Default view: CalendarView with mock data (instant load, no phone frames).
+ * ?screen=N: Individual screen for Playwright screenshots.
  */
 
-// Mock plan data starting from a fixed date
 const MOCK_START_DATE = "2026-03-01";
 
 const MOCK_PLAN: Plan = {
@@ -61,7 +61,6 @@ const MOCK_PLAN: Plan = {
   ),
 };
 
-// Progress: days 1-4 completed, day 5 partial
 const MOCK_PROGRESS = {
   1: { completed: { 0: true, 1: true, 2: true }, feedback: "Great first day!", completedAt: "2026-03-01T20:00:00Z" },
   2: { completed: { 0: true, 1: true, 2: true }, feedback: "Getting the hang of it.", completedAt: "2026-03-02T19:30:00Z" },
@@ -133,7 +132,7 @@ const NEW_ACHIEVEMENTS: Achievement[] = [
   { id: "on-fire", name: "On Fire", description: "Maintain a 3-day streak", icon: "🔥", unlocked: true },
 ];
 
-// Phone frame wrapper
+// Phone frame wrapper — only used for ?screen=N screenshots
 function PhoneFrame({ children, label }: { children: React.ReactNode; label: string }) {
   return (
     <div className="flex flex-col items-center gap-4 py-12">
@@ -142,7 +141,6 @@ function PhoneFrame({ children, label }: { children: React.ReactNode; label: str
         className="relative rounded-[2.5rem] border-[8px] border-gray-800 bg-black overflow-hidden shadow-2xl"
         style={{ width: 375, height: 812 }}
       >
-        {/* Status bar notch */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120px] h-[28px] bg-black rounded-b-2xl z-50" />
         <div className="w-full h-full overflow-y-auto">
           {children}
@@ -152,7 +150,6 @@ function PhoneFrame({ children, label }: { children: React.ReactNode; label: str
   );
 }
 
-// Individual screen components for ?screen=N screenshots
 const SCREENS = [
   { id: "goal-creation", Component: ({ noop }: { noop: () => void }) => <SimpleGoalCreation onComplete={noop} onCancel={noop} /> },
   { id: "loading-screen", Component: () => <LoadingScreen showProgress estimatedDuration={999999} /> },
@@ -178,29 +175,43 @@ function PreviewContent() {
   const noop = () => {};
   const searchParams = useSearchParams();
   const screenParam = searchParams.get("screen");
+  const allParam = searchParams.get("all");
 
-  // Single screen mode: render just the screen content, no chrome (for Playwright screenshots)
+  // Single screen mode for Playwright screenshots
   if (screenParam !== null) {
     return <ScreenContent screenIndex={parseInt(screenParam, 10)} />;
   }
 
-  return (
-    <div className="min-h-screen bg-gray-950 flex flex-col items-center px-4">
-      <h1 className="text-4xl font-bold text-white pt-12 pb-4">First Day — Screen Preview</h1>
-      <p className="text-gray-400 mb-8">All 5 app screens rendered with mock data for screenshots.</p>
+  // ?all=1 shows all screens in phone frames (old behavior for screenshots)
+  if (allParam !== null) {
+    return (
+      <div className="min-h-screen bg-gray-950 flex flex-col items-center px-4">
+        <h1 className="text-4xl font-bold text-white pt-12 pb-4">First Day — Screen Preview</h1>
+        <p className="text-gray-400 mb-8">All 5 app screens rendered with mock data for screenshots.</p>
+        {SCREENS.map((screen, i) => (
+          <PhoneFrame key={screen.id} label={`${i + 1}. ${screen.id.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase())}`}>
+            <screen.Component noop={noop} />
+          </PhoneFrame>
+        ))}
+      </div>
+    );
+  }
 
-      {SCREENS.map((screen, i) => (
-        <PhoneFrame key={screen.id} label={`${i + 1}. ${screen.id.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase())}`}>
-          <screen.Component noop={noop} />
-        </PhoneFrame>
-      ))}
-    </div>
+  // Default: show CalendarView directly as a demo dashboard
+  return (
+    <CalendarView
+      planData={MOCK_PLAN}
+      goalTitle="Learn to play guitar"
+      onDayClick={noop}
+      progress={MOCK_PROGRESS}
+      engagement={MOCK_ENGAGEMENT}
+    />
   );
 }
 
 export default function PreviewPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-gray-950" />}>
+    <Suspense fallback={<div className="min-h-screen bg-black" />}>
       <PreviewContent />
     </Suspense>
   );

@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import Image from "next/image";
-import { Sparkles, Flame, Zap, Trophy, Target } from "lucide-react";
+import { Flame, Zap, Trophy, Target } from "lucide-react";
 import Aurora from "./Aurora";
 import { FirstDayLogo } from "./FirstDayLogo";
 import { Footer } from "./Footer";
@@ -383,7 +383,6 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                     Create Your Plan
                   </button>
                   <p className="text-sm text-white/70 mt-3">
-                    <Sparkles className="w-4 h-4 inline-block mr-1 text-blue-400" />
                     Every plan is unique — personalized to your goal and experience
                   </p>
                 </div>
