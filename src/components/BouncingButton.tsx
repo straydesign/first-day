@@ -11,7 +11,7 @@ export function BouncingButton({ onClick }: BouncingButtonProps) {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const positionRef = useRef({ x: 200, y: 200 });
   const velocityRef = useRef({ x: 1.5, y: 1.5 });
-  const [bgColor, setBgColor] = useState(HERO_PALETTE[23]);
+  const [bgColor, setBgColor] = useState<string>(HERO_PALETTE[23]);
   const [position, setPosition] = useState({ x: 200, y: 200 });
 
   useEffect(() => {
