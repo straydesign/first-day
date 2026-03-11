@@ -127,7 +127,8 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
           <DialogTitle className="sr-only">{isLogin ? 'Log in to First Day' : 'Sign up for First Day'}</DialogTitle>
           <DialogDescription className="sr-only">{isLogin ? 'Enter your email and password' : 'Create an account'}</DialogDescription>
 
-          <div className="mb-6 sm:mb-8 animate-fadeIn">
+          <div className="flex-1 flex flex-col items-center justify-center">
+          <div className="mb-6 sm:mb-8 animate-fadeIn w-full">
             <div
               className="w-full bg-black py-3 flex items-center justify-center"
               style={{ clipPath: "polygon(1% 0%, 99% 4%, 100% 96%, 0% 100%)" }}
@@ -136,7 +137,7 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto">
+          <form onSubmit={handleSubmit} className="space-y-4 max-w-md w-full">
             {!isLogin && (
               <div className="bg-black overflow-hidden" style={{ clipPath: "polygon(1% 0%, 100% 2%, 99% 100%, 0% 97%)" }}>
                 <Label htmlFor="name" className="block px-4 pt-3 pb-1 text-white/60 text-xs font-bold uppercase tracking-wider">Name</Label>
@@ -184,8 +185,9 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
               {loading ? 'Please wait...' : isLogin ? 'Log In' : 'Sign Up'}
             </button>
           </form>
+          </div>
 
-          <div className="mt-auto pt-8 pb-4 flex flex-col items-center gap-3 max-w-md mx-auto">
+          <div className="pt-8 pb-4 flex flex-col items-center gap-3 max-w-md mx-auto">
             <button
               onClick={() => { setIsLogin(!isLogin); setName(''); setEmail(''); setPassword(''); setConfirmPassword(''); }}
               disabled={loading}
