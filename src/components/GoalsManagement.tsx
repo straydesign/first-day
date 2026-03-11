@@ -167,7 +167,7 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
         {goals.length > 0 ? (
           <div className="animate-fadeIn">
             {goals.map(goal => (
-              <MosaicCard key={goal.id} seed={goals.indexOf(goal)} className="backdrop-blur-sm min-h-screen pt-0 px-6 pb-6 md:px-10 md:pb-10">
+              <MosaicCard key={goal.id} seed={goals.indexOf(goal)} className="backdrop-blur-sm min-h-screen pt-0 px-6 pb-6 md:px-10 md:pb-10 flex flex-col">
                 <div className="text-center mb-6 md:mb-8 pt-4">
                   <div
                     className="inline-block bg-black px-6 py-2"
@@ -176,7 +176,7 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                     <p className="text-xl text-white font-bold">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</p>
                   </div>
                 </div>
-                <div className="max-w-2xl mx-auto">
+                <div className="max-w-2xl mx-auto flex-1 flex flex-col justify-center w-full">
                   <div className="mb-6 flex items-start justify-between">
                     <div className="flex-1">
                       <div
