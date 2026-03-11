@@ -20,10 +20,17 @@ const SHARD_OFFSETS = [
   { top: "-4px", left: "1px",  right: "-3px", bottom: "0px" },
 ] as const;
 
+const SIZE_CLASSES = {
+  sm: "h-10 px-6 text-sm",
+  default: "h-12 px-8 text-base",
+  lg: "h-14 px-10 text-lg",
+} as const;
+
 interface ShardButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   shardCount?: 3 | 4;
   seed?: number;
+  size?: "sm" | "default" | "lg";
 }
 
 export function ShardButton({
@@ -31,12 +38,14 @@ export function ShardButton({
   className,
   shardCount = 4,
   seed = 0,
+  size = "default",
   ...props
 }: ShardButtonProps) {
   return (
     <button
       className={cn(
-        "relative inline-flex items-center justify-center px-8 py-3 font-bold text-white transition-all group outline-none disabled:pointer-events-none disabled:opacity-50",
+        "relative inline-flex items-center justify-center font-bold text-white transition-all group outline-none disabled:pointer-events-none disabled:opacity-50",
+        SIZE_CLASSES[size],
         className
       )}
       {...props}
@@ -70,7 +79,6 @@ export function ShardButton({
               palette={palette}
               className="absolute inset-0 w-full h-full"
             />
-            {/* Subtle border glow per shard */}
             <span
               className="absolute inset-0"
               style={{ border: `1px solid ${VORONOI_LIGHT[(seed + i) % VORONOI_LIGHT.length]}50` }}

@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Bell } from "lucide-react";
-import { MosaicButton } from "./MosaicButton";
+import { ShardButton } from "./ShardButton";
 
 interface NotificationSettingsProps {
   notificationsEnabled: boolean;
@@ -32,7 +32,7 @@ export function NotificationSettings({ notificationsEnabled, onToggle, onClose }
             />
           </div>
         </div>
-        <MosaicButton onClick={onClose} className="w-full mt-2 transition-smooth hover:scale-105">Done</MosaicButton>
+        <ShardButton seed={5} onClick={onClose} className="w-full mt-2 transition-smooth hover:scale-105">Done</ShardButton>
       </DialogContent>
     </Dialog>
   );

@@ -8,7 +8,7 @@ import Aurora from "./Aurora";
 import { AURORA_COLORS } from "@/constants";
 import { useState } from "react";
 import { StreakBadge } from "./StreakBadge";
-import { MosaicButton } from "./MosaicButton";
+import { ShardButton } from "./ShardButton";
 import { motion } from "framer-motion";
 import type { Plan, ProgressMap, EngagementState, SelectedDay } from "@/types";
 
@@ -123,9 +123,9 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
               )}
               {onEditGoal && (
                 <div className="flex justify-center mb-3">
-                  <MosaicButton onClick={onEditGoal} size="sm" className="transition-smooth hover:scale-105">
+                  <ShardButton seed={6} onClick={onEditGoal} size="sm" className="transition-smooth hover:scale-105">
                     <Edit2 className="w-4 h-4 mr-1" />Edit Goal
-                  </MosaicButton>
+                  </ShardButton>
                 </div>
               )}
             </div>)}

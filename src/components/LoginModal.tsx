@@ -11,7 +11,7 @@ import { ForgotPasswordModal } from './ForgotPasswordModal';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { validatePassword } from '@/lib/validation';
 import { VoronoiMosaic } from "./VoronoiMosaic";
-import { MosaicButton } from "./MosaicButton";
+import { ShardButton } from "./ShardButton";
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -173,9 +173,9 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
                 </div>
               </div>
             )}
-            <MosaicButton type="submit" className="w-full transition-smooth hover:scale-105 disabled:hover:scale-100" disabled={loading}>
+            <ShardButton seed={3} type="submit" className="w-full transition-smooth hover:scale-105 disabled:hover:scale-100" disabled={loading}>
               {loading ? 'Please wait...' : isLogin ? 'Log In' : 'Sign Up'}
-            </MosaicButton>
+            </ShardButton>
           </form>
 
           <div className="mt-4 text-center space-y-3 max-w-md mx-auto">

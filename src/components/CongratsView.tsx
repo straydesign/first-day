@@ -6,7 +6,7 @@ import { Calendar, ArrowRight, Zap } from "lucide-react";
 import Aurora from "./Aurora";
 import { AURORA_COLORS } from "@/constants";
 import { AchievementCard } from "./AchievementCard";
-import { MosaicButton } from "./MosaicButton";
+import { ShardButton } from "./ShardButton";
 import type { Milestone, XPBreakdown, Achievement } from "@/types";
 
 interface ConfettiPiece {
@@ -256,20 +256,20 @@ export function CongratsView({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 1.1, ease: "easeOut" }}
           >
-            <MosaicButton
+            <ShardButton seed={30}
               onClick={onViewCalendar}
               size="lg"
               className="px-6 py-5 md:px-8 md:py-6 text-base md:text-lg shadow-lg hover:shadow-xl transition-smooth hover:scale-105"
             >
               <Calendar className="mr-2 w-5 h-5 flex-shrink-0" />View Calendar
-            </MosaicButton>
-            <MosaicButton
+            </ShardButton>
+            <ShardButton seed={31}
               onClick={onDoMore}
               size="lg"
               className="px-6 py-5 md:px-8 md:py-6 text-base md:text-lg shadow-md hover:shadow-lg transition-smooth hover:scale-105"
             >
               <ArrowRight className="mr-2 w-5 h-5 flex-shrink-0" />Back to Goals
-            </MosaicButton>
+            </ShardButton>
           </motion.div>
         </div>
       </div>

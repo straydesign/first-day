@@ -8,7 +8,7 @@ import { MosaicCard } from "./MosaicCard";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CheckCircle2, Calendar, Youtube, ExternalLink, Zap } from "lucide-react";
 import { BackButton } from "@/components/ui/back-button";
-import { MosaicButton } from "./MosaicButton";
+import { ShardButton } from "./ShardButton";
 import { previewDayXP } from "@/lib/engagement";
 import Aurora from "./Aurora";
 import { AURORA_COLORS } from "@/constants";
@@ -185,7 +185,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
             transition={{ duration: 0.4, delay: 0.45 + (hasActivities ? activities.length * 0.1 : 0), ease: "easeOut" }}
           >
             <div className="flex justify-center">
-              <MosaicButton onClick={handleSubmit} disabled={!canSubmit} size="lg" className="px-6 py-5 md:px-8 md:py-6 text-base md:text-lg disabled:opacity-50 transition-smooth hover:scale-105 disabled:hover:scale-100">Complete Day</MosaicButton>
+              <ShardButton seed={4} onClick={handleSubmit} disabled={!canSubmit} size="lg" className="px-6 py-5 md:px-8 md:py-6 text-base md:text-lg disabled:opacity-50 transition-smooth hover:scale-105 disabled:hover:scale-100">Complete Day</ShardButton>
             </div>
             {canSubmit && (
               <motion.div

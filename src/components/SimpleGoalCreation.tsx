@@ -8,7 +8,7 @@ import { BackButton } from '@/components/ui/back-button';
 import { GOAL_CATEGORY_MAP, GOAL_CATEGORY_COLORS, GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, AURORA_COLORS } from '@/constants';
 import { motion, AnimatePresence } from 'framer-motion';
 import Aurora from './Aurora';
-import { MosaicButton } from './MosaicButton';
+import { ShardButton } from './ShardButton';
 import type { GoalFormData } from '@/types';
 
 interface SimpleGoalCreationProps {
@@ -81,7 +81,7 @@ export function SimpleGoalCreation({ onComplete, onCancel }: SimpleGoalCreationP
             </AnimatePresence>
             <div className="mb-0">
               <label className="block text-sm font-semibold text-white/80 mb-3">What&apos;s your goal?</label>
-              <Textarea value={goal} onChange={(e) => { setGoal(e.target.value); setError(null); }} placeholder="Type your goal here..." className="px-5 py-4 bg-white/50 border-2 border-white/10 text-lg focus:border-white/40 focus:ring-4 focus:ring-white/10 transition-all resize-none min-h-[80px] md:min-h-[120px]" disabled={isGenerating} autoFocus rows={3} />
+              <Textarea value={goal} onChange={(e) => { setGoal(e.target.value); setError(null); }} placeholder="Type your goal here..." className="px-5 py-4 bg-black border-2 border-white/10 text-lg focus:border-white/40 focus:ring-4 focus:ring-white/10 transition-all resize-none min-h-[80px] md:min-h-[120px]" disabled={isGenerating} autoFocus rows={3} />
             </div>
           </div>
         </motion.div>
@@ -96,13 +96,13 @@ export function SimpleGoalCreation({ onComplete, onCancel }: SimpleGoalCreationP
           <div className="p-4 md:p-12">
             <div className="mb-4 md:mb-8">
               <label className="block text-sm font-semibold text-white/80 mb-2 md:mb-3">Why do you want to achieve this?</label>
-              <Textarea value={why} onChange={(e) => setWhy(e.target.value)} placeholder="Tell us what motivates you..." className="px-5 py-4 bg-white/50 border-2 border-white/10 text-lg focus:border-white/40 focus:ring-4 focus:ring-white/10 transition-all resize-none min-h-[80px] md:min-h-[120px]" disabled={isGenerating} rows={3} />
+              <Textarea value={why} onChange={(e) => setWhy(e.target.value)} placeholder="Tell us what motivates you..." className="px-5 py-4 bg-black border-2 border-white/10 text-lg focus:border-white/40 focus:ring-4 focus:ring-white/10 transition-all resize-none min-h-[80px] md:min-h-[120px]" disabled={isGenerating} rows={3} />
             </div>
             <div className="mb-4 md:mb-8">
               <label className="block text-sm font-semibold text-white/80 mb-2 md:mb-3">What&apos;s your experience level?</label>
               <div className="flex flex-col gap-3">
                 {[{ value: 'beginner' as const, label: 'Beginner', desc: 'Just starting' }, { value: 'intermediate' as const, label: 'Intermediate', desc: 'Some experience' }, { value: 'advanced' as const, label: 'Advanced', desc: 'Experienced' }].map((level, index) => (
-                  <button key={level.value} onClick={() => setExperienceLevel(level.value)} disabled={isGenerating} className={`p-4 clip-tile-${['a','b','c'][index] || 'a'} border-2 transition-all text-left ${experienceLevel === level.value ? 'border-white/40 bg-[#FF1493]' : 'border-white/10 bg-white/50 hover:border-white/20'}`}>
+                  <button key={level.value} onClick={() => setExperienceLevel(level.value)} disabled={isGenerating} className={`p-4 clip-tile-${['a','b','c'][index] || 'a'} border-2 transition-all text-left ${experienceLevel === level.value ? 'border-white/40 bg-black ring-2 ring-white/30' : 'border-white/10 bg-black hover:border-white/20'}`}>
                     <div className="font-semibold text-white">{level.label}</div>
                     <div className="text-sm text-white/80">{level.desc}</div>
                   </button>
@@ -118,20 +118,22 @@ export function SimpleGoalCreation({ onComplete, onCancel }: SimpleGoalCreationP
                 <div className="mt-4 space-y-4 md:space-y-6">
                   <div>
                     <label className="block text-sm font-semibold text-white/80 mb-2 md:mb-3">What have you tried before?</label>
-                    <Input type="text" value={priorExperience} onChange={(e) => setPriorExperience(e.target.value)} placeholder="e.g., Took an online course, read a book..." className="px-5 py-4 bg-white/50 border-2 border-white/10 text-lg focus:border-white/40 focus:ring-4 focus:ring-white/10 transition-all" disabled={isGenerating} />
+                    <Input type="text" value={priorExperience} onChange={(e) => setPriorExperience(e.target.value)} placeholder="e.g., Took an online course, read a book..." className="px-5 py-4 bg-black border-2 border-white/10 text-lg focus:border-white/40 focus:ring-4 focus:ring-white/10 transition-all" disabled={isGenerating} />
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-white/80 mb-2 md:mb-3">How do you like to learn?</label>
-                    <Input type="text" value={preferredTactics} onChange={(e) => setPreferredTactics(e.target.value)} placeholder="e.g., Videos, hands-on practice, reading..." className="px-5 py-4 bg-white/50 border-2 border-white/10 text-lg focus:border-white/40 focus:ring-4 focus:ring-white/10 transition-all" disabled={isGenerating} />
+                    <Input type="text" value={preferredTactics} onChange={(e) => setPreferredTactics(e.target.value)} placeholder="e.g., Videos, hands-on practice, reading..." className="px-5 py-4 bg-black border-2 border-white/10 text-lg focus:border-white/40 focus:ring-4 focus:ring-white/10 transition-all" disabled={isGenerating} />
                   </div>
                 </div>
               )}
             </div>
             <div className="flex flex-col gap-3">
-              <MosaicButton size="lg" onClick={handleGenerate} disabled={isGenerating || !goal.trim()} className="w-full shadow-lg transition-smooth hover:scale-105 disabled:hover:scale-100">
+              <ShardButton seed={5} shardCount={4} onClick={handleGenerate} disabled={isGenerating || !goal.trim()} className="w-full py-4 text-lg shadow-lg transition-smooth hover:scale-105 disabled:hover:scale-100">
                 {isGenerating ? (<><Loader2 className="w-5 h-5 mr-2 animate-spin" />Generating...</>) : (<>Generate My Plan<ArrowRight className="w-5 h-5 ml-2" /></>)}
-              </MosaicButton>
-              <Button variant="outline" size="lg" onClick={onCancel} disabled={isGenerating} className="w-full border-2 border-white/10 text-white/80 hover:bg-white/10">Cancel</Button>
+              </ShardButton>
+              <ShardButton seed={9} shardCount={3} onClick={onCancel} disabled={isGenerating} className="w-full py-3 opacity-70">
+                Cancel
+              </ShardButton>
             </div>
             <div className="mt-6 text-center">
               <p className="text-sm text-white/50"><Sparkles className="w-4 h-4 inline-block mr-1 text-purple-500" />AI will create a personalized 30-day plan just for you</p>

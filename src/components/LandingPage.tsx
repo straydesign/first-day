@@ -10,7 +10,6 @@ import { Footer } from "./Footer";
 import { MosaicCard } from "./MosaicCard";
 import { GeometricFrame } from "./GeometricFrame";
 import { Button } from "@/components/ui/button";
-import { MosaicButton } from "./MosaicButton";
 import { ShardButton } from "./ShardButton";
 import { VoronoiMosaic } from "./VoronoiMosaic";
 import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, GOAL_CATEGORY_MAP, GOAL_CATEGORY_COLORS, VORONOI_DARK } from "@/constants";
@@ -94,7 +93,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
             <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
           </div>
 
-          {/* Top bar */}
+          {/* Top bar — buttons + tagline between them */}
           <div className="absolute top-11 left-0 right-0 flex items-center justify-between px-4 z-50">
             <ShardButton
               onClick={onLogin || onGetStarted}
@@ -103,6 +102,13 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
             >
               Log In
             </ShardButton>
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: "easeOut" }}
+            >
+              <FirstDayLogo size="hero" showTagline={true} showLetters={false} />
+            </motion.div>
             <ShardButton
               onClick={onGetStarted}
               seed={3}
@@ -110,17 +116,6 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
             >
               Get Started
             </ShardButton>
-          </div>
-
-          {/* Hero content — at top, above the sunset image */}
-          <div className="absolute top-28 left-0 right-0 z-20 flex justify-center px-4">
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: "easeOut" }}
-            >
-              <FirstDayLogo size="hero" showTagline={true} showLetters={false} />
-            </motion.div>
           </div>
 
           {/* Scroll indicator */}
@@ -168,73 +163,18 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                 <p className="text-white/80">Three simple steps to your best month</p>
               </div>
 
-              <div className="relative z-10 px-6 md:px-10 pb-8 md:pb-12 space-y-4">
-                {/* Step 1 */}
-                <MosaicCard seed={10} tileVariant="a" className="p-5 md:p-8">
-                  <div className="flex gap-5 items-start">
-                    <div className="clip-diamond w-14 h-14 bg-[#FF1493] text-white flex items-center justify-center shadow-md text-xl font-bold flex-shrink-0">
-                      1
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-2xl font-bold text-white mb-2">Set Your Goal</h3>
-                      <p className="text-white text-lg mb-4">
-                        Pick any goal and answer a few quick questions about your experience and what motivates you. Takes less than 2 minutes.
-                      </p>
-                      <p className="text-white/70 text-sm">
-                        <strong className="text-white">Examples:</strong> Learn Spanish basics, Build a meditation habit, Write a short story, Run a 5K
-                      </p>
-                    </div>
-                  </div>
+              <div className="relative z-10 px-6 md:px-10 pb-8 md:pb-12 grid grid-cols-3 gap-3 md:gap-5">
+                <MosaicCard seed={10} tileVariant="a" className="p-4 md:p-6 text-center">
+                  <span className="text-3xl md:text-5xl font-bold text-white block mb-1">1</span>
+                  <h3 className="text-lg md:text-2xl font-bold text-white">Set Your Goal</h3>
                 </MosaicCard>
-
-                {/* Step 2 */}
-                <MosaicCard seed={20} tileVariant="b" className="p-5 md:p-8">
-                  <div className="flex gap-5 items-start">
-                    <div className="clip-diamond w-14 h-14 bg-purple-600 text-white flex items-center justify-center shadow-md text-xl font-bold flex-shrink-0">
-                      2
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-2xl font-bold text-white mb-2">Get Your Plan</h3>
-                      <p className="text-white text-lg mb-3">
-                        AI generates a structured 30-day plan with daily activities, curated resources, and weekly book recommendations tailored to you.
-                      </p>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3">
-                        <div className="flex items-start gap-2 text-white/70 text-sm">
-                          <CheckSquare className="w-4 h-4 text-purple-500 flex-shrink-0 mt-0.5" />
-                          <span>Daily activities with video and article resources</span>
-                        </div>
-                        <div className="flex items-start gap-2 text-white/70 text-sm">
-                          <BookOpen className="w-4 h-4 text-purple-500 flex-shrink-0 mt-0.5" />
-                          <span>Weekly book recommendations to deepen your learning</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                <MosaicCard seed={20} tileVariant="b" className="p-4 md:p-6 text-center">
+                  <span className="text-3xl md:text-5xl font-bold text-white block mb-1">2</span>
+                  <h3 className="text-lg md:text-2xl font-bold text-white">Get Your Plan</h3>
                 </MosaicCard>
-
-                {/* Step 3 */}
-                <MosaicCard seed={30} tileVariant="c" className="p-5 md:p-8">
-                  <div className="flex gap-5 items-start">
-                    <div className="clip-diamond w-14 h-14 bg-lime-500 text-white flex items-center justify-center shadow-md text-xl font-bold flex-shrink-0">
-                      3
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-2xl font-bold text-white mb-2">Show Up Daily</h3>
-                      <p className="text-white text-lg mb-4">
-                        Check off activities, reflect on your progress, and watch your calendar fill up with completed days.
-                      </p>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        <div className="flex items-center gap-2 text-white/70 text-sm">
-                          <Calendar className="w-4 h-4 text-lime-600 flex-shrink-0" />
-                          <span>Visual 30-day calendar with progress tracking</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-white/70 text-sm">
-                          <Mail className="w-4 h-4 text-lime-600 flex-shrink-0" />
-                          <span>Daily email reminders to keep you on track</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                <MosaicCard seed={30} tileVariant="c" className="p-4 md:p-6 text-center">
+                  <span className="text-3xl md:text-5xl font-bold text-white block mb-1">3</span>
+                  <h3 className="text-lg md:text-2xl font-bold text-white">Show Up Daily</h3>
                 </MosaicCard>
               </div>
             </div>
@@ -383,13 +323,13 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
 
                 {/* CTA */}
                 <div className="text-center mt-6 md:mt-8">
-                  <MosaicButton
+                  <ShardButton seed={7}
                     onClick={onGetStarted}
                     size="lg"
                     className="shadow-lg hover:shadow-xl"
                   >
                     Create Your Plan
-                  </MosaicButton>
+                  </ShardButton>
                   <p className="text-sm text-white/70 mt-3">
                     <Sparkles className="w-4 h-4 inline-block mr-1 text-purple-500" />
                     Every plan is unique — personalized to your goal and experience

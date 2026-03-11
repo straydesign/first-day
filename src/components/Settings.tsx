@@ -10,7 +10,7 @@ import { API_BASE } from "@/lib/supabase/client";
 import Aurora from "./Aurora";
 import { AURORA_COLORS } from "@/constants";
 import { MosaicCard } from "./MosaicCard";
-import { MosaicButton } from "./MosaicButton";
+import { ShardButton } from "./ShardButton";
 
 interface SettingsProps {
   accessToken: string;
@@ -91,9 +91,9 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
           <div className="text-white/80 text-sm space-y-2 mb-4">
             <p>Daily reminder emails are automatically sent based on your goal&apos;s preferred time slot.</p>
           </div>
-          <MosaicButton onClick={handleSendTestEmail} disabled={isSendingTestEmail} size="sm" className="transition-smooth hover:scale-105 disabled:hover:scale-100">
+          <ShardButton seed={2} onClick={handleSendTestEmail} disabled={isSendingTestEmail} size="sm" className="transition-smooth hover:scale-105 disabled:hover:scale-100">
             <Bell className="w-4 h-4 mr-2" />{isSendingTestEmail ? "Sending..." : "Send Test Email"}
-          </MosaicButton>
+          </ShardButton>
         </MosaicCard>
         <MosaicCard seed={4} className="p-4 md:p-6 bg-red-950/30 backdrop-blur-sm">
           <div className="flex items-center gap-3 mb-4">

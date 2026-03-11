@@ -9,7 +9,7 @@ import { AURORA_COLORS } from "@/constants";
 import { Target, Plus, Trash2, Calendar, CheckCircle, Menu, LogOut } from "lucide-react";
 import { createClient, API_BASE } from "@/lib/supabase/client";
 import { BouncingButton } from "./BouncingButton";
-import { MosaicButton } from "./MosaicButton";
+import { ShardButton } from "./ShardButton";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { toast } from "sonner";
 import { StreakBadge } from "./StreakBadge";
@@ -144,9 +144,9 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
       <div className="sticky top-0 z-50 flex justify-end px-4 py-2">
         <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
           <SheetTrigger asChild>
-            <MosaicButton size="sm" aria-label="Menu">
+            <ShardButton seed={10} size="sm" aria-label="Menu">
               <Menu className="w-5 h-5" />
-            </MosaicButton>
+            </ShardButton>
           </SheetTrigger>
           <SheetContent side="right" className="w-[168px] backdrop-blur-xl border-l-2 border-white/10 pt-12">
             <SheetTitle className="text-lg font-bold text-white mb-4 pt-8 text-center">Menu</SheetTitle>
@@ -186,12 +186,12 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                     </Button>
                   </div>
                   <div className="space-y-3 mb-6">
-                    <MosaicButton size="lg" onClick={() => onSelectGoal(goal.id)} className="w-full transition-smooth hover:scale-105">
+                    <ShardButton seed={11} size="lg" onClick={() => onSelectGoal(goal.id)} className="w-full transition-smooth hover:scale-105">
                       <Calendar className="w-5 h-5 mr-2" />View 30 Day Plan
-                    </MosaicButton>
-                    <MosaicButton size="lg" className="w-full transition-smooth hover:scale-105" onClick={(e) => { e.stopPropagation(); if (onViewTodayActivities) onViewTodayActivities(goal.id); else onSelectGoal(goal.id); }}>
+                    </ShardButton>
+                    <ShardButton seed={12} size="lg" className="w-full transition-smooth hover:scale-105" onClick={(e) => { e.stopPropagation(); if (onViewTodayActivities) onViewTodayActivities(goal.id); else onSelectGoal(goal.id); }}>
                       <CheckCircle className="w-5 h-5 mr-2" />View Today&apos;s Activities
-                    </MosaicButton>
+                    </ShardButton>
                   </div>
                   {/* Stats & Achievements */}
                   {engagement && (
@@ -202,9 +202,9 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                       </div>
                     </div>
                   )}
-                  <MosaicButton onClick={onCreateGoal} size="lg" className="w-full transition-smooth hover:scale-105 text-lg py-4 md:py-6">
+                  <ShardButton seed={13} onClick={onCreateGoal} size="lg" className="w-full transition-smooth hover:scale-105 text-lg py-4 md:py-6">
                     <Plus className="w-6 h-6 mr-2" />Add New Goal
-                  </MosaicButton>
+                  </ShardButton>
                 </div>
               </MosaicCard>
             ))}
