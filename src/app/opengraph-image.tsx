@@ -13,23 +13,27 @@ export default async function Image() {
   )
   const notoFont = await readFile(notoPath)
 
-  // Mosaic tile layout — irregularly placed colored blocks with black gaps
-  const tiles = [
-    // top row
-    { x: -10, y: -20, w: 300, h: 240, color: "#db2b85", r: -2 },
-    { x: 300, y: -25, w: 260, h: 230, color: "#3075e1", r: 3 },
-    { x: 570, y: -15, w: 280, h: 250, color: "#f9334d", r: -1 },
-    { x: 860, y: -20, w: 180, h: 220, color: "#fb7025", r: 2 },
-    { x: 1040, y: -25, w: 200, h: 260, color: "#4e35b8", r: -3 },
-    // middle sides (peeking out from behind text bar)
-    { x: -20, y: 220, w: 250, h: 200, color: "#fa4835", r: 2 },
-    { x: 980, y: 210, w: 260, h: 220, color: "#fcd02a", r: -2 },
-    // bottom row
-    { x: -15, y: 420, w: 280, h: 260, color: "#3075e1", r: -3 },
-    { x: 270, y: 410, w: 260, h: 270, color: "#cf1b61", r: 2 },
-    { x: 540, y: 425, w: 250, h: 250, color: "#db2b85", r: -1 },
-    { x: 800, y: 410, w: 220, h: 270, color: "#fcd02a", r: 3 },
-    { x: 1020, y: 420, w: 230, h: 260, color: "#fa4835", r: -2 },
+  // Shard tiles — angled/skewed colored blocks with gaps
+  const shards = [
+    // top-left cluster
+    { x: -30, y: -40, w: 320, h: 220, color: "#FFE633", skew: -4, rotate: -2 },
+    { x: 280, y: -30, w: 280, h: 200, color: "#FF2D55", skew: 3, rotate: 1 },
+    { x: 550, y: -35, w: 250, h: 210, color: "#00EAFF", skew: -2, rotate: -3 },
+    { x: 790, y: -25, w: 230, h: 190, color: "#FF10F0", skew: 4, rotate: 2 },
+    { x: 1010, y: -40, w: 240, h: 230, color: "#FF6B2B", skew: -3, rotate: -1 },
+    // left side
+    { x: -40, y: 180, w: 200, h: 280, color: "#4FC3F7", skew: 3, rotate: 2 },
+    { x: 140, y: 200, w: 100, h: 240, color: "#FF4500", skew: -5, rotate: -2 },
+    // right side
+    { x: 980, y: 170, w: 130, h: 300, color: "#2979FF", skew: -4, rotate: 1 },
+    { x: 1100, y: 190, w: 150, h: 260, color: "#FFE633", skew: 3, rotate: -3 },
+    // bottom cluster
+    { x: -20, y: 440, w: 260, h: 240, color: "#FF6B2B", skew: 4, rotate: -2 },
+    { x: 230, y: 430, w: 240, h: 250, color: "#FF10F0", skew: -3, rotate: 3 },
+    { x: 460, y: 445, w: 220, h: 230, color: "#FFE633", skew: 2, rotate: -1 },
+    { x: 670, y: 435, w: 200, h: 240, color: "#FF2D55", skew: -4, rotate: 2 },
+    { x: 860, y: 440, w: 180, h: 250, color: "#00EAFF", skew: 3, rotate: -3 },
+    { x: 1030, y: 430, w: 220, h: 260, color: "#4FC3F7", skew: -2, rotate: 1 },
   ]
 
   const PALETTE = [
@@ -37,8 +41,8 @@ export default async function Image() {
     "#FF10F0", "#FF1493", "#4FC3F7", "#FF4500",
   ]
 
-  const letters = "ADD NEW GOAL".split("")
-  let colorIdx = 0
+  const topText = "FIRST DAY OF THE"
+  const bottomText = "REST OF YOUR LIFE"
 
   return new ImageResponse(
     (
@@ -52,67 +56,82 @@ export default async function Image() {
           overflow: "hidden",
         }}
       >
-        {/* Mosaic tiles */}
-        {tiles.map((t, i) => (
+        {/* Shard tiles with skew + rotate for angular look */}
+        {shards.map((s, i) => (
           <div
             key={i}
             style={{
               position: "absolute",
-              left: t.x,
-              top: t.y,
-              width: t.w,
-              height: t.h,
-              backgroundColor: t.color,
-              transform: `rotate(${t.r}deg)`,
+              left: s.x,
+              top: s.y,
+              width: s.w,
+              height: s.h,
+              backgroundColor: s.color,
+              transform: `rotate(${s.rotate}deg) skewX(${s.skew}deg)`,
             }}
           />
         ))}
 
-        {/* Black bar with colored text */}
+        {/* Center content — black bar with tagline */}
         <div
           style={{
             position: "absolute",
-            left: 40,
-            right: 40,
-            top: 210,
-            height: 210,
+            left: 30,
+            right: 30,
+            top: 170,
+            height: 290,
             backgroundColor: "#000000",
             display: "flex",
+            flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
+            gap: 8,
           }}
         >
-          {/* Plus sign */}
-          <span
-            style={{
-              color: "#ffffff",
-              fontSize: 130,
-              fontWeight: 900,
-              marginRight: 16,
-            }}
-          >
-            +
-          </span>
-          {/* Colored letters */}
+          {/* Top line: colored per-letter */}
           <div style={{ display: "flex", alignItems: "center" }}>
-            {letters.map((char, i) => {
+            {topText.split("").map((char, i) => {
               if (char === " ") {
                 return (
-                  <span key={i} style={{ width: 30 }}>
+                  <span key={i} style={{ width: 24 }}>
                     {" "}
                   </span>
                 )
               }
-              const color = PALETTE[colorIdx % PALETTE.length]
-              colorIdx++
               return (
                 <span
                   key={i}
                   style={{
-                    color,
-                    fontSize: 130,
+                    color: PALETTE[i % PALETTE.length],
+                    fontSize: 90,
                     fontWeight: 900,
-                    letterSpacing: -2,
+                    letterSpacing: -1,
+                  }}
+                >
+                  {char}
+                </span>
+              )
+            })}
+          </div>
+
+          {/* Bottom line: colored per-letter */}
+          <div style={{ display: "flex", alignItems: "center" }}>
+            {bottomText.split("").map((char, i) => {
+              if (char === " ") {
+                return (
+                  <span key={i} style={{ width: 24 }}>
+                    {" "}
+                  </span>
+                )
+              }
+              return (
+                <span
+                  key={i}
+                  style={{
+                    color: PALETTE[(i + 4) % PALETTE.length],
+                    fontSize: 90,
+                    fontWeight: 900,
+                    letterSpacing: -1,
                   }}
                 >
                   {char}
@@ -126,7 +145,7 @@ export default async function Image() {
         <div
           style={{
             position: "absolute",
-            bottom: 20,
+            bottom: 16,
             left: 0,
             right: 0,
             display: "flex",
@@ -135,12 +154,12 @@ export default async function Image() {
         >
           <span
             style={{
-              fontSize: 20,
+              fontSize: 22,
               fontWeight: 900,
               color: "#ffffff",
-              letterSpacing: 4,
+              letterSpacing: 6,
               backgroundColor: "#000000",
-              padding: "6px 20px",
+              padding: "8px 24px",
             }}
           >
             FIRSTDAY.LIFE
