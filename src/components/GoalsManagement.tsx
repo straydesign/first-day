@@ -187,7 +187,13 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                         className="inline-flex items-center gap-2 mb-1 bg-black px-5 py-2"
                         style={{ clipPath: "polygon(1% 0%, 100% 3%, 98% 100%, 0% 96%)" }}
                       >
-                        <CardTitle className="text-2xl text-white">{goal.title}</CardTitle>
+                        <CardTitle className="text-2xl">
+                          {goal.title.split(" ").map((word, i) => (
+                            <span key={i} style={{ color: ["#FFE633","#FF6B2B","#FF2D55","#00EAFF","#FF10F0","#FF1493","#4FC3F7","#FF4500"][i % 8] }}>
+                              {word}{i < goal.title.split(" ").length - 1 ? " " : ""}
+                            </span>
+                          ))}
+                        </CardTitle>
                         {engagement && (engagement.currentStreak > 0 || engagement.isAtRisk) && (
                           <StreakBadge streak={engagement.currentStreak} isAtRisk={engagement.isAtRisk} size="sm" />
                         )}
@@ -217,13 +223,13 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                       </div>
                     </div>
                   )}
-                  <div className="mt-auto">
+                  <div className="mt-auto pt-6">
                     <button
                       onClick={onCreateGoal}
-                      className="w-full bg-black py-10 md:py-12 text-6xl md:text-8xl font-black uppercase tracking-wide hover:scale-105 transition-transform flex items-center justify-center gap-3"
-                      style={{ clipPath: "polygon(2% 0%, 100% 4%, 98% 100%, 0% 96%)", fontFamily: "var(--font-bebas), system-ui, sans-serif", letterSpacing: 6, fontWeight: 900 }}
+                      className="w-full bg-black py-4 md:py-5 text-xl md:text-2xl font-black uppercase tracking-wide hover:scale-105 transition-transform flex items-center justify-center gap-2"
+                      style={{ clipPath: "polygon(2% 0%, 100% 4%, 98% 100%, 0% 96%)", fontFamily: "var(--font-bebas), system-ui, sans-serif", letterSpacing: 3 }}
                     >
-                      <Plus className="w-8 h-8 text-white" />
+                      <Plus className="w-5 h-5 text-white" />
                       {"ADD NEW GOAL".split("").map((char, i) => (
                         <span key={i} style={{ color: char === " " ? "transparent" : ["#FFE633","#FF6B2B","#FF2D55","#00EAFF","#FF10F0","#FF1493","#4FC3F7","#FF4500"][i % 8], width: char === " " ? "0.35em" : undefined, display: "inline-block" }}>{char}</span>
                       ))}
