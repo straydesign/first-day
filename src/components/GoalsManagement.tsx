@@ -225,22 +225,13 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                       </div>
                     </div>
                   )}
-                  <div className="space-y-3">
-                    <button
-                      onClick={() => onSelectGoal(goal.id)}
-                      className="w-full bg-black text-white py-4 text-lg font-black uppercase tracking-wide hover:scale-105 transition-transform flex items-center justify-center gap-2"
-                      style={{ clipPath: "polygon(1% 0%, 100% 3%, 99% 97%, 0% 100%)" }}
-                    >
-                      <Calendar className="w-5 h-5" />View 30 Day Plan
-                    </button>
-                    <button
-                      onClick={(e) => { e.stopPropagation(); if (onViewTodayActivities) onViewTodayActivities(goal.id); else onSelectGoal(goal.id); }}
-                      className="w-full bg-black text-white py-4 text-lg font-black uppercase tracking-wide hover:scale-105 transition-transform flex items-center justify-center gap-2"
-                      style={{ clipPath: "polygon(0% 3%, 99% 0%, 100% 97%, 1% 100%)" }}
-                    >
-                      <CheckCircle className="w-5 h-5" />View Today&apos;s Activities
-                    </button>
-                  </div>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); if (onViewTodayActivities) onViewTodayActivities(goal.id); else onSelectGoal(goal.id); }}
+                    className="w-full bg-black text-white py-4 text-lg font-black uppercase tracking-wide hover:scale-105 transition-transform flex items-center justify-center gap-2"
+                    style={{ clipPath: "polygon(0% 3%, 99% 0%, 100% 97%, 1% 100%)" }}
+                  >
+                    <CheckCircle className="w-5 h-5" />View Today&apos;s Activities
+                  </button>
                 </div>
               </MosaicCard>
             ))}
