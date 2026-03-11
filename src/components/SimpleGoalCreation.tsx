@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
-import { ArrowRight, Loader2, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react';
+import { ArrowRight, Loader2, AlertCircle, ChevronDown, ChevronUp, Check } from 'lucide-react';
 import { BackButton } from '@/components/ui/back-button';
 import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, AURORA_COLORS } from '@/constants';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -137,11 +137,16 @@ export function SimpleGoalCreation({ onComplete, onCancel }: SimpleGoalCreationP
                     key={level.value}
                     onClick={() => setExperienceLevel(level.value)}
                     disabled={isGenerating}
-                    className={`p-4 transition-all text-left text-black font-bold ${experienceLevel === level.value ? 'ring-2 ring-white/40 scale-[1.02]' : 'opacity-70 hover:opacity-100'}`}
+                    className={`p-4 transition-all text-left text-black font-bold flex items-center gap-4 ${experienceLevel === level.value ? 'ring-2 ring-white/40 scale-[1.02]' : 'opacity-70 hover:opacity-100'}`}
                     style={{ backgroundColor: level.color, clipPath: SHARD_CLIPS[index % SHARD_CLIPS.length] }}
                   >
-                    <div className="font-bold text-black">{level.label}</div>
-                    <div className="text-sm text-black/70">{level.desc}</div>
+                    <div className={`w-7 h-7 flex-shrink-0 flex items-center justify-center border-2 border-black/40 transition-all ${experienceLevel === level.value ? 'bg-black' : 'bg-transparent'}`}>
+                      {experienceLevel === level.value && <Check className="w-5 h-5 text-white" strokeWidth={3} />}
+                    </div>
+                    <div>
+                      <div className="font-bold text-black">{level.label}</div>
+                      <div className="text-sm text-black/70">{level.desc}</div>
+                    </div>
                   </button>
                 ))}
               </div>
