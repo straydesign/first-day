@@ -56,16 +56,16 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
     return BRIGHT_COLORS[index % BRIGHT_COLORS.length];
   };
 
-  const renderScrollRow = (goals: string[], direction: "left" | "right", isPaused: boolean, setIsPaused: (v: boolean) => void, rowIndex: number) => (
-    <div
-      className="overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing select-none"
-      onMouseDown={() => setIsPaused(true)}
-      onMouseUp={() => setIsPaused(false)}
-      onMouseLeave={() => setIsPaused(false)}
-      onTouchStart={() => setIsPaused(true)}
-      onTouchEnd={() => setIsPaused(false)}
-    >
-      <div className={`flex whitespace-nowrap ${isPaused ? "" : direction === "left" ? "motion-safe:animate-scroll-left" : "motion-safe:animate-scroll-right"}`}>
+  const SCROLL_SPEEDS = ["20s", "30s", "25s"];
+
+  const renderScrollRow = (goals: string[], direction: "left" | "right", _isPaused: boolean, _setIsPaused: (v: boolean) => void, rowIndex: number) => (
+    <div className="overflow-hidden select-none">
+      <div
+        className="flex whitespace-nowrap"
+        style={{
+          animation: `scroll-${direction === "left" ? "left" : "right"} ${SCROLL_SPEEDS[rowIndex]} linear infinite`,
+        }}
+      >
         {[...goals, ...goals, ...goals, ...goals, ...goals, ...goals, ...goals, ...goals].map((goal, index) => (
           <div
             key={index}

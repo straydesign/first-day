@@ -138,6 +138,7 @@ function FirstDayLogoInner({
 
   return (
     <div className={`flex flex-col items-center ${className}`}>
+      {showLetters ? (
       <div className={`bg-black border border-white/10 ${isHero ? "px-6 py-4" : "px-3 py-2"} flex flex-col items-center`} style={{ clipPath: "polygon(3% 2%, 12% 0%, 45% 1%, 78% 0%, 97% 3%, 100% 15%, 99% 50%, 100% 85%, 96% 98%, 82% 100%, 50% 99%, 18% 100%, 2% 97%, 0% 80%, 1% 45%, 0% 12%)" }}>
       {showLetters && (
         <>
@@ -179,9 +180,38 @@ function FirstDayLogoInner({
       )}
 
       {/* Tagline — each letter cycles through palette colors */}
-      {showTagline && (
+      {showLetters && showTagline && (
         <span
-          className={`${showLetters ? "mt-2" : ""} drop-shadow-[0_1px_8px_rgba(0,0,0,0.5)] flex flex-wrap justify-center`}
+          className="mt-2 drop-shadow-[0_1px_8px_rgba(0,0,0,0.5)] flex flex-wrap justify-center"
+          style={{
+            fontSize: "clamp(0.6rem, 1.5vw, 0.75rem)",
+            fontWeight: 900,
+            letterSpacing: 1,
+            textTransform: "uppercase" as const,
+            fontFamily: "var(--font-bebas), system-ui, sans-serif",
+            whiteSpace: "nowrap" as const,
+          }}
+        >
+          {"first day of the rest of your life".split("").map((char, i) => (
+            <span
+              key={i}
+              style={{
+                color: char === " " ? "transparent" : TAGLINE_PALETTE[i % TAGLINE_PALETTE.length],
+                width: char === " " ? "0.35em" : undefined,
+              }}
+            >
+              {char}
+            </span>
+          ))}
+        </span>
+      )}
+      </div>
+      ) : null}
+
+      {/* Tagline only (no card wrapper) */}
+      {!showLetters && showTagline && (
+        <span
+          className="drop-shadow-[0_1px_8px_rgba(0,0,0,0.5)] flex flex-wrap justify-center"
           style={{
             fontSize: isHero ? "clamp(2rem, 5vw, 4rem)" : "clamp(0.6rem, 1.5vw, 0.75rem)",
             fontWeight: 900,
@@ -206,7 +236,6 @@ function FirstDayLogoInner({
           ))}
         </span>
       )}
-      </div>
     </div>
   );
 }
