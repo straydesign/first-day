@@ -6,7 +6,7 @@ import { MosaicCard } from "./MosaicCard";
 import { Textarea } from "@/components/ui/textarea";
 import Aurora from "./Aurora";
 import { AURORA_COLORS } from "@/constants";
-import { Target, Plus, Trash2, Calendar, CheckCircle, Menu, LogOut } from "lucide-react";
+import { Target, Plus, Trash2, Calendar, CheckCircle, Menu, LogOut, Palette } from "lucide-react";
 import { createClient, API_BASE } from "@/lib/supabase/client";
 import { BouncingButton } from "./BouncingButton";
 import { ShardButton } from "./ShardButton";
@@ -54,6 +54,18 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
   const [reflections, setReflections] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState<Record<string, boolean>>({});
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [monotone, setMonotone] = useState(() => {
+    if (typeof window !== "undefined") return localStorage.getItem("fd-monotone") === "true";
+    return false;
+  });
+
+  const toggleMonotone = () => {
+    setMonotone(prev => {
+      const next = !prev;
+      localStorage.setItem("fd-monotone", String(next));
+      return next;
+    });
+  };
 
   useEffect(() => { loadGoals(); }, []);
 
@@ -162,7 +174,8 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
           <nav className="flex flex-col gap-3 px-3">
             <button onClick={() => setMobileMenuOpen(false)} className="bg-black text-white py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2" style={{ clipPath: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" }}><Target className="w-4 h-4" />My Goals</button>
             <button onClick={() => { setMobileMenuOpen(false); if (goals[0]) onSelectGoal(goals[0].id); }} className="bg-black text-white py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2" style={{ clipPath: "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)" }}><Calendar className="w-4 h-4" />30 Day Plan</button>
-            <button onClick={onLogout} className="bg-black text-red-400 py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2 mt-4" style={{ clipPath: "polygon(3% 0%, 100% 4%, 97% 100%, 0% 96%)" }}><LogOut className="w-4 h-4" />Logout</button>
+            <button onClick={toggleMonotone} className={`py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2 mt-4 ${monotone ? "bg-white text-black" : "bg-black text-white"}`} style={{ clipPath: "polygon(1% 0%, 98% 3%, 100% 97%, 2% 100%)" }}><Palette className="w-4 h-4" />{monotone ? "Color Mode" : "Monotone"}</button>
+            <button onClick={onLogout} className="bg-black text-red-400 py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2" style={{ clipPath: "polygon(3% 0%, 100% 4%, 97% 100%, 0% 96%)" }}><LogOut className="w-4 h-4" />Logout</button>
           </nav>
         </SheetContent>
       </Sheet>
@@ -188,11 +201,15 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                         style={{ clipPath: "polygon(1% 0%, 100% 3%, 98% 100%, 0% 96%)" }}
                       >
                         <CardTitle className="text-2xl">
-                          {goal.title.split(" ").map((word, i) => (
-                            <span key={i} style={{ color: ["#FFE633","#FF6B2B","#FF2D55","#00EAFF","#FF10F0","#FF1493","#4FC3F7","#FF4500"][i % 8] }}>
-                              {word}{i < goal.title.split(" ").length - 1 ? " " : ""}
-                            </span>
-                          ))}
+                          {monotone ? (
+                            <span className="text-white">{goal.title}</span>
+                          ) : (
+                            goal.title.split(" ").map((word, i) => (
+                              <span key={i} style={{ color: ["#FFE633","#FF6B2B","#FF2D55","#00EAFF","#FF10F0","#FF1493","#4FC3F7","#FF4500"][i % 8] }}>
+                                {word}{i < goal.title.split(" ").length - 1 ? " " : ""}
+                              </span>
+                            ))
+                          )}
                         </CardTitle>
                         {engagement && (engagement.currentStreak > 0 || engagement.isAtRisk) && (
                           <StreakBadge streak={engagement.currentStreak} isAtRisk={engagement.isAtRisk} size="sm" />
@@ -230,9 +247,13 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                       style={{ clipPath: "polygon(2% 0%, 100% 4%, 98% 100%, 0% 96%)", fontFamily: "var(--font-bebas), system-ui, sans-serif", letterSpacing: 3 }}
                     >
                       <Plus className="w-5 h-5 text-white" />
-                      {"ADD NEW GOAL".split("").map((char, i) => (
-                        <span key={i} style={{ color: char === " " ? "transparent" : ["#FFE633","#FF6B2B","#FF2D55","#00EAFF","#FF10F0","#FF1493","#4FC3F7","#FF4500"][i % 8], width: char === " " ? "0.35em" : undefined, display: "inline-block" }}>{char}</span>
-                      ))}
+                      {monotone ? (
+                        <span className="text-white">ADD NEW GOAL</span>
+                      ) : (
+                        "ADD NEW GOAL".split("").map((char, i) => (
+                          <span key={i} style={{ color: char === " " ? "transparent" : ["#FFE633","#FF6B2B","#FF2D55","#00EAFF","#FF10F0","#FF1493","#4FC3F7","#FF4500"][i % 8], width: char === " " ? "0.35em" : undefined, display: "inline-block" }}>{char}</span>
+                        ))
+                      )}
                     </button>
                   </div>
                 </div>
