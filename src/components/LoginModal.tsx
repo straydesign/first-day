@@ -122,9 +122,7 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="w-screen h-screen max-w-none m-0 p-4 md:p-8 bg-black border-0 animate-scaleIn shadow-none overflow-y-auto">
-        <VoronoiMosaic seed={99} tileCount={40} margin={10} gap={3} className="absolute inset-0 w-full h-full" />
-        {/* No scrim — full brightness */}
+      <DialogContent className="w-screen h-screen max-w-none m-0 p-4 md:p-8 bg-white border-0 animate-scaleIn shadow-none overflow-y-auto">
         <div className="relative z-10">
           <DialogTitle className="sr-only">{isLogin ? 'Log in to First Day' : 'Sign up for First Day'}</DialogTitle>
           <DialogDescription className="sr-only">{isLogin ? 'Enter your email and password' : 'Create an account'}</DialogDescription>
@@ -136,43 +134,47 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
             >
               <FirstDayLogo size="hero" showTagline={true} showLetters={false} className="w-full" />
             </div>
-            <p className="text-white/80 mt-3 text-sm sm:text-base text-center animate-slideInUp" style={{ animationDelay: '0.1s' }}>
+            <p className="text-black/70 mt-3 text-sm sm:text-base text-center animate-slideInUp" style={{ animationDelay: '0.1s' }}>
               {isLogin ? 'Welcome back!' : 'Start your journey today'}
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto">
             {!isLogin && (
-              <div>
-                <Label htmlFor="name" className="text-white/80">Name</Label>
-                <Input id="name" type="text" placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} disabled={loading} className="bg-black border-white/10 text-white placeholder:text-white/50" />
+              <div className="bg-black overflow-hidden" style={{ clipPath: "polygon(1% 0%, 100% 2%, 99% 100%, 0% 97%)" }}>
+                <Label htmlFor="name" className="block px-4 pt-3 pb-1 text-white/60 text-xs font-bold uppercase tracking-wider">Name</Label>
+                <div className="mx-3 border-t border-white/10" />
+                <Input id="name" type="text" placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} disabled={loading} className="bg-transparent border-0 text-white placeholder:text-white/40 rounded-none focus-visible:ring-0 px-4" />
               </div>
             )}
-            <div>
-              <Label htmlFor="email" className="text-white/80">Email</Label>
-              <Input id="email" type="email" placeholder="your@email.com" value={email} onChange={(e) => setEmail(e.target.value)} disabled={loading} className="bg-black border-white/10 text-white placeholder:text-white/50" />
+            <div className="bg-black overflow-hidden" style={{ clipPath: "polygon(0% 2%, 99% 0%, 100% 98%, 1% 100%)" }}>
+              <Label htmlFor="email" className="block px-4 pt-3 pb-1 text-white/60 text-xs font-bold uppercase tracking-wider">Email</Label>
+              <div className="mx-3 border-t border-white/10" />
+              <Input id="email" type="email" placeholder="your@email.com" value={email} onChange={(e) => setEmail(e.target.value)} disabled={loading} className="bg-transparent border-0 text-white placeholder:text-white/40 rounded-none focus-visible:ring-0 px-4" />
             </div>
-            <div>
-              <div className="flex items-center justify-between mb-1">
-                <Label htmlFor="password" className="text-white/80">Password</Label>
+            <div className="bg-black overflow-hidden" style={{ clipPath: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" }}>
+              <div className="flex items-center justify-between px-4 pt-3 pb-1">
+                <Label htmlFor="password" className="text-white/60 text-xs font-bold uppercase tracking-wider">Password</Label>
                 {isLogin && (
-                  <button type="button" onClick={() => setShowForgotPassword(true)} className="text-xs text-white/80 hover:text-white hover:underline font-medium" disabled={loading}>Forgot password?</button>
+                  <button type="button" onClick={() => setShowForgotPassword(true)} className="text-xs text-white/50 hover:text-white hover:underline font-medium" disabled={loading}>Forgot?</button>
                 )}
               </div>
-              <Input id="password" type="password" placeholder={isLogin ? 'Enter password' : 'Create password'} value={password} onChange={(e) => setPassword(e.target.value)} disabled={loading} className="bg-black border-white/10 text-white placeholder:text-white/50" />
+              <div className="mx-3 border-t border-white/10" />
+              <Input id="password" type="password" placeholder={isLogin ? 'Enter password' : 'Create password'} value={password} onChange={(e) => setPassword(e.target.value)} disabled={loading} className="bg-transparent border-0 text-white placeholder:text-white/40 rounded-none focus-visible:ring-0 px-4" />
             </div>
             {!isLogin && (
-              <div>
-                <Label htmlFor="confirmPassword" className="text-white/80">Confirm Password</Label>
-                <Input id="confirmPassword" type="password" placeholder="Re-enter password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} disabled={loading} className="bg-black border-white/10 text-white placeholder:text-white/50" />
+              <div className="bg-black overflow-hidden" style={{ clipPath: "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)" }}>
+                <Label htmlFor="confirmPassword" className="block px-4 pt-3 pb-1 text-white/60 text-xs font-bold uppercase tracking-wider">Confirm Password</Label>
+                <div className="mx-3 border-t border-white/10" />
+                <Input id="confirmPassword" type="password" placeholder="Re-enter password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} disabled={loading} className="bg-transparent border-0 text-white placeholder:text-white/40 rounded-none focus-visible:ring-0 px-4" />
               </div>
             )}
             {!isLogin && (
               <div className="flex items-start gap-2">
                 <Checkbox id="terms" checked={agreeToTerms} onCheckedChange={(checked) => setAgreeToTerms(checked === true)} className="mt-1 flex-shrink-0" />
-                <div className="flex flex-col text-white/80 text-sm">
+                <div className="flex flex-col text-black/80 text-sm">
                   <span>I agree to the</span>
-                  <button type="button" className="text-white hover:underline text-left font-medium" onClick={onShowTerms}>terms and conditions</button>
+                  <button type="button" className="text-black hover:underline text-left font-medium" onClick={onShowTerms}>terms and conditions</button>
                 </div>
               </div>
             )}
@@ -183,14 +185,14 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
 
           <div className="mt-6 text-center space-y-4 max-w-md mx-auto">
             <div>
-              <button onClick={() => { setIsLogin(!isLogin); setName(''); setEmail(''); setPassword(''); setConfirmPassword(''); }} className="text-white hover:underline text-lg font-black uppercase tracking-wide" disabled={loading}>
+              <button onClick={() => { setIsLogin(!isLogin); setName(''); setEmail(''); setPassword(''); setConfirmPassword(''); }} className="text-black hover:underline text-lg font-black uppercase tracking-wide" disabled={loading}>
                 {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Log in'}
               </button>
             </div>
             <div>
               <a
                 href="/preview"
-                className="inline-flex items-center gap-2 text-white hover:underline font-black text-lg uppercase tracking-wide transition-colors"
+                className="inline-flex items-center gap-2 text-black hover:underline font-black text-lg uppercase tracking-wide transition-colors"
               >
                 Try the demo — no account needed
               </a>
