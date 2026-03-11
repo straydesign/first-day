@@ -187,7 +187,10 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                 <div className="max-w-2xl mx-auto">
                   <div className="mb-6 flex items-start justify-between">
                     <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
+                      <div
+                        className="inline-flex items-center gap-2 mb-1 bg-black px-5 py-2"
+                        style={{ clipPath: "polygon(1% 0%, 100% 3%, 98% 100%, 0% 96%)" }}
+                      >
                         <CardTitle className="text-2xl text-white">{goal.title}</CardTitle>
                         {engagement && (engagement.currentStreak > 0 || engagement.isAtRisk) && (
                           <StreakBadge streak={engagement.currentStreak} isAtRisk={engagement.isAtRisk} size="sm" />
