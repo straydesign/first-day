@@ -207,8 +207,8 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                   <div className="mb-6">
                     <button
                       onClick={onCreateGoal}
-                      className="w-full bg-black py-8 md:py-10 text-5xl md:text-6xl font-black uppercase tracking-wide hover:scale-105 transition-transform flex items-center justify-center gap-3"
-                      style={{ clipPath: "polygon(2% 0%, 100% 4%, 98% 100%, 0% 96%)", fontFamily: "var(--font-bebas), system-ui, sans-serif", letterSpacing: 5, fontWeight: 900 }}
+                      className="w-full bg-black py-10 md:py-12 text-6xl md:text-8xl font-black uppercase tracking-wide hover:scale-105 transition-transform flex items-center justify-center gap-3"
+                      style={{ clipPath: "polygon(2% 0%, 100% 4%, 98% 100%, 0% 96%)", fontFamily: "var(--font-bebas), system-ui, sans-serif", letterSpacing: 6, fontWeight: 900 }}
                     >
                       <Plus className="w-8 h-8 text-white" />
                       {"ADD NEW GOAL".split("").map((char, i) => (
