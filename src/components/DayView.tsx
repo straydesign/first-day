@@ -11,7 +11,7 @@ import { BackButton } from "@/components/ui/back-button";
 import { ShardButton } from "./ShardButton";
 import { previewDayXP } from "@/lib/engagement";
 import Aurora from "./Aurora";
-import { AURORA_COLORS } from "@/constants";
+import { AURORA_COLORS, HERO_PALETTE } from "@/constants";
 import type { SelectedDay, DayProgress, Activity, ActivityResource } from "@/types";
 
 interface DayViewProps {
@@ -26,6 +26,13 @@ interface DayViewProps {
 export function DayView({ day, onComplete, isCompleted = false, savedProgress = null, onBack, currentStreak = 0 }: DayViewProps) {
   const [completedActivities, setCompletedActivities] = useState<Record<number, boolean>>({});
   const [feedback, setFeedback] = useState("");
+  const [btnColorIdx, setBtnColorIdx] = useState(0);
+  const btnColors = useMemo(() => HERO_PALETTE.filter((_, i) => i > 2 && i !== 28), []);
+
+  useEffect(() => {
+    const interval = setInterval(() => setBtnColorIdx(prev => (prev + 1) % btnColors.length), 800);
+    return () => clearInterval(interval);
+  }, [btnColors.length]);
 
   useEffect(() => {
     if (savedProgress) {
@@ -61,7 +68,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
       <div className="fixed inset-0 z-0 w-full h-full">
         <Aurora colorStops={[...AURORA_COLORS]} />
       </div>
-      <div className="relative z-10 max-w-3xl mx-auto p-4 md:p-8 pt-4 md:pt-8">
+      <div className="relative z-10 p-4 md:p-8 pt-4 md:pt-8">
         {onBack && <BackButton onClick={onBack} />}
 
         {isCompleted && (
@@ -98,9 +105,17 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{ duration: 0.4, delay: 0.15, ease: "easeOut" }}
           >
-            <div className="mb-4 md:mb-6">
-              <MosaicCard seed={1} className="backdrop-blur-md">
-                <CardHeader><CardTitle className="text-2xl text-white">Your Activities</CardTitle></CardHeader>
+            <div className="mb-4 md:mb-6 -mx-4 md:-mx-8">
+              <MosaicCard seed={1} className="backdrop-blur-md min-h-screen px-4 md:px-8">
+                <CardHeader>
+                  <div className="bg-black px-5 py-3 inline-block" style={{ clipPath: "polygon(1% 0%, 100% 3%, 99% 97%, 0% 100%)" }}>
+                    <CardTitle className="text-2xl">
+                      {"Your Activities".split("").map((char, i) => (
+                        <span key={i} style={{ color: char === " " ? "transparent" : ["#FFE633","#FF6B2B","#FF2D55","#00EAFF","#FF10F0","#FF1493","#4FC3F7","#FF4500"][i % 8], width: char === " " ? "0.3em" : undefined, display: "inline-block" }}>{char}</span>
+                      ))}
+                    </CardTitle>
+                  </div>
+                </CardHeader>
                 <CardContent className="space-y-4">
                   {activities.map((activity: string | Activity, index: number) => {
                     const activityText = typeof activity === 'string' ? activity : activity.text;
@@ -141,6 +156,16 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
                       </motion.div>
                     );
                   })}
+                  {/* How did today go? — merged into activities card */}
+                  <div className="mt-6">
+                    <div className="bg-black px-5 py-3 inline-block mb-3" style={{ clipPath: "polygon(0% 0%, 98% 4%, 100% 96%, 2% 100%)" }}>
+                      <h3 className="text-xl font-black text-white uppercase tracking-wide">How did today go?</h3>
+                    </div>
+                    <div className="bg-black p-3 md:p-5" style={{ clipPath: "polygon(1% 0%, 100% 2%, 99% 100%, 0% 98%)" }}>
+                      <Textarea value={feedback} onChange={(e) => !isCompleted && setFeedback(e.target.value)} placeholder="Share your thoughts, challenges, or wins from today..." className="min-h-32 text-lg border-0 focus-visible:ring-0 bg-transparent text-white placeholder:text-white/40 resize-none" disabled={isCompleted} />
+                    </div>
+                    {!isCompleted && <p className="text-sm text-white/50 mt-2">Reflect on your progress — what went well and what you can improve.</p>}
+                  </div>
                 </CardContent>
               </MosaicCard>
             </div>
@@ -162,22 +187,6 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
           </motion.div>
         )}
 
-        <motion.div
-          initial={{ opacity: 0, y: 20, filter: "blur(4px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ duration: 0.4, delay: 0.35 + (hasActivities ? activities.length * 0.1 : 0), ease: "easeOut" }}
-        >
-          <div className="mb-4 md:mb-6">
-            <MosaicCard seed={3} className="backdrop-blur-md">
-              <CardHeader><CardTitle className="text-2xl text-white">How did today go?</CardTitle></CardHeader>
-              <CardContent>
-                <Textarea value={feedback} onChange={(e) => !isCompleted && setFeedback(e.target.value)} placeholder="Share your thoughts, challenges, or wins from today..." className="min-h-32 text-lg border-white/20 focus:border-white/40 bg-white/5 text-white placeholder:text-white/40" disabled={isCompleted} />
-                {!isCompleted && <p className="text-sm text-white/50 mt-2">Reflect on your progress -- what went well and what you can improve.</p>}
-              </CardContent>
-            </MosaicCard>
-          </div>
-        </motion.div>
-
         {!isCompleted && (
           <motion.div
             initial={{ opacity: 0, y: 20, filter: "blur(4px)" }}
@@ -185,7 +194,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
             transition={{ duration: 0.4, delay: 0.45 + (hasActivities ? activities.length * 0.1 : 0), ease: "easeOut" }}
           >
             <div className="flex justify-center">
-              <button onClick={handleSubmit} disabled={!canSubmit} className="px-10 py-5 md:px-14 md:py-6 text-lg md:text-xl font-black text-black uppercase tracking-wide disabled:opacity-50 hover:scale-105 disabled:hover:scale-100 transition-transform" style={{ backgroundColor: "#fcd02a", clipPath: "polygon(2% 0%, 100% 4%, 98% 100%, 0% 96%)" }}>Complete Day</button>
+              <button onClick={handleSubmit} disabled={!canSubmit} className="px-10 py-5 md:px-14 md:py-6 text-lg md:text-xl font-black text-white uppercase tracking-wide disabled:opacity-50 hover:scale-105 disabled:hover:scale-100 transition-all duration-500" style={{ backgroundColor: btnColors[btnColorIdx], clipPath: "polygon(2% 0%, 100% 4%, 98% 100%, 0% 96%)" }}>Complete Day</button>
             </div>
             {canSubmit && (
               <motion.div

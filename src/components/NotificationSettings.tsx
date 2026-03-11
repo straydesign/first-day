@@ -32,7 +32,7 @@ export function NotificationSettings({ notificationsEnabled, onToggle, onClose }
             />
           </div>
         </div>
-        <ShardButton seed={5} onClick={onClose} className="w-full mt-2 transition-smooth hover:scale-105">Done</ShardButton>
+        <button onClick={onClose} className="w-full mt-2 py-3 font-black text-black uppercase tracking-wide hover:scale-105 transition-transform" style={{ backgroundColor: "#fcd02a", clipPath: "polygon(1% 0%, 100% 3%, 99% 97%, 0% 100%)" }}>Done</button>
       </DialogContent>
     </Dialog>
   );

@@ -91,9 +91,9 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
           <div className="text-white/80 text-sm space-y-2 mb-4">
             <p>Daily reminder emails are automatically sent based on your goal&apos;s preferred time slot.</p>
           </div>
-          <ShardButton seed={2} onClick={handleSendTestEmail} disabled={isSendingTestEmail} size="sm" className="transition-smooth hover:scale-105 disabled:hover:scale-100">
-            <Bell className="w-4 h-4 mr-2" />{isSendingTestEmail ? "Sending..." : "Send Test Email"}
-          </ShardButton>
+          <button onClick={handleSendTestEmail} disabled={isSendingTestEmail} className="flex items-center gap-2 px-5 py-3 font-black text-black uppercase tracking-wide text-sm hover:scale-105 disabled:hover:scale-100 disabled:opacity-50 transition-transform" style={{ backgroundColor: "#fcd02a", clipPath: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" }}>
+            <Bell className="w-4 h-4" />{isSendingTestEmail ? "Sending..." : "Send Test Email"}
+          </button>
         </MosaicCard>
         <MosaicCard seed={4} className="p-4 md:p-6 bg-red-950/30 backdrop-blur-sm">
           <div className="flex items-center gap-3 mb-4">

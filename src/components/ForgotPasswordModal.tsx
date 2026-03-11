@@ -73,12 +73,12 @@ export function ForgotPasswordModal({ isOpen, onClose }: ForgotPasswordModalProp
               <Label htmlFor="reset-email" className="text-white/80">Email</Label>
               <Input id="reset-email" type="email" placeholder="your@email.com" value={email} onChange={(e) => setEmail(e.target.value)} disabled={loading} className="bg-black border-white/10" />
             </div>
-            <ShardButton seed={20} type="submit" className="w-full transition-smooth hover:scale-105 disabled:hover:scale-100" disabled={loading}>
+            <button type="submit" disabled={loading} className="w-full py-3 font-black text-black uppercase tracking-wide hover:scale-105 disabled:hover:scale-100 disabled:opacity-50 transition-transform" style={{ backgroundColor: "#fb7025", clipPath: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" }}>
               {loading ? 'Sending...' : 'Send Reset Link'}
-            </ShardButton>
+            </button>
           </form>
         ) : (
-          <ShardButton seed={21} onClick={onClose} className="w-full mt-4 transition-smooth hover:scale-105">Done</ShardButton>
+          <button onClick={onClose} className="w-full mt-4 py-3 font-black text-black uppercase tracking-wide hover:scale-105 transition-transform" style={{ backgroundColor: "#fcd02a", clipPath: "polygon(1% 0%, 100% 4%, 99% 96%, 0% 100%)" }}>Done</button>
         )}
       </DialogContent>
     </Dialog>
