@@ -141,29 +141,27 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
 
   return (
     <div className="min-h-screen relative bg-black">
-      <div className="sticky top-0 z-50 flex justify-end px-4 py-2">
-        <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-          <SheetTrigger asChild>
-            <button
-              aria-label="Menu"
-              className="bg-black text-white p-3 hover:scale-105 transition-transform"
-              style={{ clipPath: "polygon(3% 0%, 100% 5%, 97% 100%, 0% 92%)" }}
-            >
-              <Menu className="w-5 h-5" />
-            </button>
-          </SheetTrigger>
-          <SheetContent side="right" className="w-[168px] backdrop-blur-xl border-l-2 border-white/10 pt-12">
-            <SheetTitle className="text-lg font-bold text-white mb-4 pt-8 text-center">Menu</SheetTitle>
-            <SheetDescription className="sr-only">Navigation options for your goals</SheetDescription>
-            <nav className="flex flex-col gap-2 px-3">
-              <Button onClick={() => setMobileMenuOpen(false)} variant="outline" size="sm" className="justify-start bg-black hover:bg-white/10 text-white border-white/10 text-sm py-2"><Target className="w-4 h-4 mr-2" />My Goals</Button>
-              <Button onClick={() => { setMobileMenuOpen(false); if (goals[0]) onSelectGoal(goals[0].id); }} variant="outline" size="sm" className="justify-start hover:bg-white/10 text-sm py-2"><Calendar className="w-4 h-4 mr-2" />30 Day Plan</Button>
-              <div className="my-2" />
-              <Button onClick={onLogout} variant="outline" size="sm" className="justify-start hover:bg-red-500/10 text-red-400 border-red-400/20 text-sm py-2"><LogOut className="w-4 h-4 mr-2" />Logout</Button>
-            </nav>
-          </SheetContent>
-        </Sheet>
-      </div>
+      <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+        <SheetTrigger asChild>
+          <button
+            aria-label="Menu"
+            className="fixed top-4 right-4 z-50 bg-black text-white p-3 hover:scale-105 transition-transform"
+            style={{ clipPath: "polygon(3% 0%, 100% 5%, 97% 100%, 0% 92%)" }}
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+        </SheetTrigger>
+        <SheetContent side="right" className="w-[168px] backdrop-blur-xl border-l-2 border-white/10 pt-12">
+          <SheetTitle className="text-lg font-bold text-white mb-4 pt-8 text-center">Menu</SheetTitle>
+          <SheetDescription className="sr-only">Navigation options for your goals</SheetDescription>
+          <nav className="flex flex-col gap-2 px-3">
+            <Button onClick={() => setMobileMenuOpen(false)} variant="outline" size="sm" className="justify-start bg-black hover:bg-white/10 text-white border-white/10 text-sm py-2"><Target className="w-4 h-4 mr-2" />My Goals</Button>
+            <Button onClick={() => { setMobileMenuOpen(false); if (goals[0]) onSelectGoal(goals[0].id); }} variant="outline" size="sm" className="justify-start hover:bg-white/10 text-sm py-2"><Calendar className="w-4 h-4 mr-2" />30 Day Plan</Button>
+            <div className="my-2" />
+            <Button onClick={onLogout} variant="outline" size="sm" className="justify-start hover:bg-red-500/10 text-red-400 border-red-400/20 text-sm py-2"><LogOut className="w-4 h-4 mr-2" />Logout</Button>
+          </nav>
+        </SheetContent>
+      </Sheet>
       <div className="fixed inset-0 z-0 w-full h-full"><Aurora colorStops={[...AURORA_COLORS]} /></div>
       <div className="relative z-10 w-full">
         {goals.length > 0 ? (
@@ -197,9 +195,14 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                         <CardDescription className="text-white font-bold">Day {goalCurrentDays[goal.id] || 0} of 30</CardDescription>
                       </div>
                     </div>
-                    <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); handleDeleteGoal(goal.id, goal.title); }} className="text-red-400 hover:text-red-300 hover:bg-red-500/10" aria-label="Delete goal">
+                    <button
+                      onClick={(e) => { e.stopPropagation(); handleDeleteGoal(goal.id, goal.title); }}
+                      aria-label="Delete goal"
+                      className="bg-red-500 text-white p-3 hover:scale-105 transition-transform flex-shrink-0"
+                      style={{ clipPath: "polygon(0% 5%, 97% 0%, 100% 95%, 3% 100%)" }}
+                    >
                       <Trash2 className="w-5 h-5" />
-                    </Button>
+                    </button>
                   </div>
                   <div className="mb-6">
                     <button
