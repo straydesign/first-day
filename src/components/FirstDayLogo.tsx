@@ -2,7 +2,13 @@
 
 import { memo } from "react";
 import { VoronoiMosaic } from "./VoronoiMosaic";
-import { VORONOI_LIGHT, VORONOI_PALETTE } from "@/constants";
+import { VORONOI_LIGHT } from "@/constants";
+
+/** Tagline palette — blues instead of purple */
+const TAGLINE_PALETTE = [
+  "#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF",
+  "#FF10F0", "#FF1493", "#4FC3F7", "#FF4500",
+] as const;
 
 interface FirstDayLogoProps {
   className?: string;
@@ -154,7 +160,7 @@ function FirstDayLogoInner({
             <span
               key={i}
               style={{
-                color: char === " " ? "transparent" : VORONOI_PALETTE[i % VORONOI_PALETTE.length],
+                color: char === " " ? "transparent" : TAGLINE_PALETTE[i % TAGLINE_PALETTE.length],
                 width: char === " " ? "0.3em" : undefined,
               }}
             >

@@ -136,7 +136,7 @@ export function SimpleGoalCreation({ onComplete, onCancel }: SimpleGoalCreationP
               </ShardButton>
             </div>
             <div className="mt-6 text-center">
-              <p className="text-sm text-white/50"><Sparkles className="w-4 h-4 inline-block mr-1 text-purple-500" />AI will create a personalized 30-day plan just for you</p>
+              <p className="text-sm text-white/50"><Sparkles className="w-4 h-4 inline-block mr-1 text-blue-400" />AI will create a personalized 30-day plan just for you</p>
             </div>
           </div>
         </motion.div>

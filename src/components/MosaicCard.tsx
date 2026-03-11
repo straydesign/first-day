@@ -10,6 +10,7 @@ interface MosaicCardProps {
   children: React.ReactNode;
   tileVariant?: TileVariant;
   seed?: number;
+  palette?: string[];
   className?: string;
 }
 
@@ -17,6 +18,7 @@ function MosaicCardInner({
   children,
   tileVariant,
   seed = 0,
+  palette,
   className,
 }: MosaicCardProps) {
   const variant = tileVariant ?? TILE_VARIANTS[seed % 4];
@@ -35,6 +37,7 @@ function MosaicCardInner({
         tileCount={55}
         margin={8}
         gap={3}
+        palette={palette}
         className="absolute inset-0 w-full h-full"
       />
       {/* No scrim — full brightness mosaic */}

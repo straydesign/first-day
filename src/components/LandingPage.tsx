@@ -1,18 +1,15 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import Image from "next/image";
-import { Sparkles, Calendar, Mail, BookOpen, CheckSquare, Flame, Zap, Trophy, Target } from "lucide-react";
+import { Sparkles, Flame, Zap, Trophy, Target } from "lucide-react";
 import Aurora from "./Aurora";
 import { FirstDayLogo } from "./FirstDayLogo";
 import { Footer } from "./Footer";
 import { MosaicCard } from "./MosaicCard";
 import { GeometricFrame } from "./GeometricFrame";
-import { Button } from "@/components/ui/button";
-import { ShardButton } from "./ShardButton";
-import { VoronoiMosaic } from "./VoronoiMosaic";
-import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, GOAL_CATEGORY_MAP, GOAL_CATEGORY_COLORS, VORONOI_DARK } from "@/constants";
+import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, VORONOI_LIGHT } from "@/constants";
 
 interface LandingPageProps {
   onGetStarted: () => void;
@@ -42,10 +39,21 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
   const [isPausedRow1, setIsPausedRow1] = useState(false);
   const [isPausedRow2, setIsPausedRow2] = useState(false);
   const [isPausedRow3, setIsPausedRow3] = useState(false);
+  const [isNavSticky, setIsNavSticky] = useState(false);
+  const heroNavRef = useRef<HTMLDivElement>(null);
 
-  const getGoalColorClasses = (goal: string) => {
-    const goalType = GOAL_CATEGORY_MAP[goal] || "lifestyle";
-    return GOAL_CATEGORY_COLORS[goalType];
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!heroNavRef.current) return;
+      const rect = heroNavRef.current.getBoundingClientRect();
+      setIsNavSticky(rect.top <= 0);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const getGoalBgColor = (goal: string, index: number) => {
+    return VORONOI_LIGHT[index % VORONOI_LIGHT.length];
   };
 
   const renderScrollRow = (goals: string[], direction: "left" | "right", isPaused: boolean, setIsPaused: (v: boolean) => void, rowIndex: number) => (
@@ -61,7 +69,8 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
         {[...goals, ...goals, ...goals, ...goals, ...goals, ...goals, ...goals, ...goals].map((goal, index) => (
           <div
             key={index}
-            className={`${index % 2 === 0 ? "clip-badge-a" : "clip-badge-b"} inline-block px-5 py-2 text-white border-2 ${getGoalColorClasses(goal)} text-sm font-medium mx-1.5 select-none`}
+            className={`${index % 2 === 0 ? "clip-badge-a" : "clip-badge-b"} inline-block px-5 py-2 text-black text-sm font-bold mx-1.5 select-none`}
+            style={{ backgroundColor: getGoalBgColor(goal, index) }}
           >
             {goal}
           </div>
@@ -74,11 +83,11 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
     <div className="min-h-screen relative bg-black">
       {/* Aurora Background */}
       <div className="fixed inset-0 z-0 w-full h-full">
-        <Aurora colorStops={["#FFE633", "#FF2D55", "#7C4DFF"]} />
+        <Aurora colorStops={["#FFE633", "#FF2D55", "#2979FF"]} />
       </div>
 
       {/* Content */}
-      <div className="relative z-10 pt-[44px]">
+      <div className="relative z-10">
         {/* Hero Section */}
         <section className="relative min-h-screen flex flex-col justify-center items-center px-0">
           {/* Full-bleed hero image */}
@@ -93,15 +102,14 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
             <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
           </div>
 
-          {/* Top bar — buttons + tagline between them */}
-          <div className="absolute top-11 left-0 right-0 flex items-center justify-between px-4 z-50">
-            <ShardButton
+          {/* Center nav — becomes sticky after scrolling past */}
+          <div ref={heroNavRef} className="relative z-50 flex items-center justify-center gap-6 px-4">
+            <button
               onClick={onLogin || onGetStarted}
-              seed={0}
-              shardCount={4}
+              className="text-white font-black text-sm tracking-wide uppercase hover:opacity-70 transition-opacity"
             >
               Log In
-            </ShardButton>
+            </button>
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -109,13 +117,12 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
             >
               <FirstDayLogo size="hero" showTagline={true} showLetters={false} />
             </motion.div>
-            <ShardButton
+            <button
               onClick={onGetStarted}
-              seed={3}
-              shardCount={3}
+              className="text-white font-black text-sm tracking-wide uppercase hover:opacity-70 transition-opacity"
             >
               Get Started
-            </ShardButton>
+            </button>
           </div>
 
           {/* Scroll indicator */}
@@ -134,6 +141,25 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
             </div>
           </motion.div>
         </section>
+
+        {/* Sticky nav — appears when scrolled past hero center */}
+        {isNavSticky && (
+          <div className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md py-3 px-4 flex items-center justify-center gap-6">
+            <button
+              onClick={onLogin || onGetStarted}
+              className="text-white font-black text-sm tracking-wide uppercase hover:opacity-70 transition-opacity"
+            >
+              Log In
+            </button>
+            <FirstDayLogo showTagline={true} showLetters={false} />
+            <button
+              onClick={onGetStarted}
+              className="text-white font-black text-sm tracking-wide uppercase hover:opacity-70 transition-opacity"
+            >
+              Get Started
+            </button>
+          </div>
+        )}
 
         {/* Scrolling Goal Pills */}
         <section className="py-8">
@@ -154,48 +180,28 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
 
         {/* How It Works */}
         <AnimatedSection>
-          <section id="how-it-works" className="w-full py-8 md:py-16 px-0 md:px-4">
-            <div className="clip-section-both relative bg-black backdrop-blur-xl border-y md:border border-white/10 overflow-hidden">
-              <VoronoiMosaic seed={200} tileCount={35} margin={10} gap={3} palette={VORONOI_DARK} className="absolute inset-0 w-full h-full" />
-              {/* No scrim — full brightness */}
-              <div className="relative z-10 px-6 md:px-10 pt-8 md:pt-12 pb-4 text-center">
-                <h2 className="text-3xl md:text-5xl font-bold text-white mb-2">How It Works</h2>
-                <p className="text-white/80">Three simple steps to your best month</p>
+          <section id="how-it-works" className="w-full py-8 md:py-16 px-4 md:px-10 text-center">
+              <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">How It Works</h2>
+              <div className="space-y-2 text-lg md:text-2xl font-bold text-white/90">
+                <p><span className="text-[#FFE633]">1.</span> Set Your Goal</p>
+                <p><span className="text-[#FF6B2B]">2.</span> Get Your Plan</p>
+                <p><span className="text-[#FF2D55]">3.</span> Show Up Daily</p>
               </div>
-
-              <div className="relative z-10 px-6 md:px-10 pb-8 md:pb-12 grid grid-cols-3 gap-3 md:gap-5">
-                <MosaicCard seed={10} tileVariant="a" className="p-4 md:p-6 text-center">
-                  <span className="text-3xl md:text-5xl font-bold text-white block mb-1">1</span>
-                  <h3 className="text-lg md:text-2xl font-bold text-white">Set Your Goal</h3>
-                </MosaicCard>
-                <MosaicCard seed={20} tileVariant="b" className="p-4 md:p-6 text-center">
-                  <span className="text-3xl md:text-5xl font-bold text-white block mb-1">2</span>
-                  <h3 className="text-lg md:text-2xl font-bold text-white">Get Your Plan</h3>
-                </MosaicCard>
-                <MosaicCard seed={30} tileVariant="c" className="p-4 md:p-6 text-center">
-                  <span className="text-3xl md:text-5xl font-bold text-white block mb-1">3</span>
-                  <h3 className="text-lg md:text-2xl font-bold text-white">Show Up Daily</h3>
-                </MosaicCard>
-              </div>
-            </div>
           </section>
         </AnimatedSection>
 
         {/* Stay Motivated */}
         <AnimatedSection>
-          <section className="w-full py-8 md:py-16 px-0 md:px-4">
-            <div className="clip-section-both relative bg-black backdrop-blur-xl border-y md:border border-white/10 overflow-hidden">
-              <VoronoiMosaic seed={300} tileCount={35} margin={10} gap={3} palette={VORONOI_DARK} className="absolute inset-0 w-full h-full" />
-              {/* No scrim — full brightness */}
-              <div className="relative z-10 px-6 md:px-10 pt-8 md:pt-12 pb-4 text-center">
+          <section className="w-full py-8 md:py-16 px-4 md:px-10">
+              <div className="text-center mb-6">
                 <h2 className="text-3xl md:text-5xl font-bold text-white mb-2">Stay Motivated</h2>
                 <p className="text-white/80">Built-in streaks, XP, and achievements keep you coming back</p>
               </div>
 
-              <div className="relative z-10 px-6 md:px-10 pb-6 md:pb-10">
+              <div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
                   {/* Streaks */}
-                  <MosaicCard seed={40} tileVariant="a" className="p-5 text-center">
+                  <MosaicCard seed={41} tileVariant="a" className="p-5 text-center">
                     <div className="clip-diamond inline-flex items-center justify-center w-14 h-14 bg-orange-500/20 mb-3">
                       <Flame className="w-7 h-7 text-orange-500" />
                     </div>
@@ -209,7 +215,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                   </MosaicCard>
 
                   {/* XP & Levels */}
-                  <MosaicCard seed={50} tileVariant="b" className="p-5 text-center">
+                  <MosaicCard seed={51} tileVariant="b" className="p-5 text-center">
                     <div className="clip-diamond inline-flex items-center justify-center w-14 h-14 bg-yellow-500/20 mb-3">
                       <Zap className="w-7 h-7 text-yellow-500" />
                     </div>
@@ -229,8 +235,8 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
 
                   {/* Achievements */}
                   <MosaicCard seed={60} tileVariant="c" className="p-5 text-center">
-                    <div className="clip-diamond inline-flex items-center justify-center w-14 h-14 bg-purple-500/20 mb-3">
-                      <Trophy className="w-7 h-7 text-purple-500" />
+                    <div className="clip-diamond inline-flex items-center justify-center w-14 h-14 bg-blue-500/20 mb-3">
+                      <Trophy className="w-7 h-7 text-blue-400" />
                     </div>
                     <h3 className="text-xl font-bold text-white mb-1">Unlock Badges</h3>
                     <p className="text-white text-sm mb-4">Hit milestones and earn achievements. Can you collect them all before day 30?</p>
@@ -275,29 +281,25 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                   </div>
                   <div className="clip-badge-a text-center bg-black/80 py-3 px-2 border border-white/10">
                     <div className="flex items-center justify-center gap-1 mb-0.5">
-                      <Trophy className="w-3.5 h-3.5 text-purple-500" />
+                      <Trophy className="w-3.5 h-3.5 text-blue-400" />
                       <span className="text-xs text-white/70 font-medium">Badges</span>
                     </div>
                     <p className="text-3xl font-bold text-white">5/8</p>
                   </div>
                 </div>
               </div>
-            </div>
           </section>
         </AnimatedSection>
 
         {/* What Your Plan Looks Like */}
         <AnimatedSection>
-          <section className="w-full py-8 md:py-16 px-0 md:px-4">
-            <div className="clip-section-both relative bg-black backdrop-blur-xl border-y md:border border-white/10 overflow-hidden">
-              <VoronoiMosaic seed={400} tileCount={35} margin={10} gap={3} palette={VORONOI_DARK} className="absolute inset-0 w-full h-full" />
-              {/* No scrim — full brightness */}
-              <div className="relative z-10 px-6 md:px-10 pt-8 md:pt-12 pb-4 text-center">
+          <section className="w-full py-8 md:py-16 px-4 md:px-10">
+              <div className="text-center mb-6">
                 <h2 className="text-3xl md:text-5xl font-bold text-white mb-2">What Your Plan Looks Like</h2>
                 <p className="text-white/80">Real screens from &quot;Learn to play guitar&quot;</p>
               </div>
 
-              <div className="relative z-10 px-6 md:px-10 pb-6 md:pb-10">
+              <div>
                 <div className="flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-4 -mx-2 px-2">
                   {[
                     { src: "/screenshots/calendar-view.png", label: "Your 30-Day Calendar", alt: "Calendar view showing weekly plan with day cards", tile: "a" as const, frameSeed: 500 },
@@ -322,21 +324,19 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                 </div>
 
                 {/* CTA */}
-                <div className="text-center mt-6 md:mt-8">
-                  <ShardButton seed={7}
+                <div className="text-center mt-8 md:mt-12">
+                  <button
                     onClick={onGetStarted}
-                    size="lg"
-                    className="shadow-lg hover:shadow-xl"
+                    className="text-white font-black text-3xl md:text-5xl uppercase tracking-wide hover:opacity-70 transition-opacity"
                   >
                     Create Your Plan
-                  </ShardButton>
+                  </button>
                   <p className="text-sm text-white/70 mt-3">
-                    <Sparkles className="w-4 h-4 inline-block mr-1 text-purple-500" />
+                    <Sparkles className="w-4 h-4 inline-block mr-1 text-blue-400" />
                     Every plan is unique — personalized to your goal and experience
                   </p>
                 </div>
               </div>
-            </div>
           </section>
         </AnimatedSection>
 
