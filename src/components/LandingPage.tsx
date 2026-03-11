@@ -98,40 +98,35 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
               </Button>
             </div>
 
-            {/* Value Proposition */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              className="text-center px-4 mb-4"
-            >
-              <h1 className="text-4xl md:text-5xl font-bold text-slate-800 mb-3">
-                Achieve any goal in 30 days
-              </h1>
-              <p className="text-lg md:text-xl text-teal-700 max-w-2xl mx-auto">
-                AI creates your personalized daily plan. You just show up.
-              </p>
-            </motion.div>
-
-            {/* Logo */}
+            {/* Hero Logo — big, bold, colorful */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
-              className="text-center pb-4 flex items-center justify-center"
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="text-center pb-2 flex items-center justify-center"
             >
               <button
                 onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-                className="inline-block cursor-pointer hover:scale-105 transition-transform duration-300"
+                className="inline-block cursor-pointer hover:scale-[1.02] transition-transform duration-300"
                 aria-label="First Day - Home"
               >
-                <FirstDayLogo
-                  width={280}
-                  height={48}
-                  showTagline={true}
-                  layout="horizontal"
-                />
+                <FirstDayLogo size="hero" showTagline={true} />
               </button>
+            </motion.div>
+
+            {/* Subtitle */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
+              className="text-center px-4 mb-2"
+            >
+              <h1 className="text-2xl md:text-3xl font-bold text-slate-800 mb-2">
+                Achieve any goal in 30 days
+              </h1>
+              <p className="text-base md:text-lg text-slate-600 max-w-xl mx-auto">
+                AI creates your personalized daily plan. You just show up.
+              </p>
             </motion.div>
 
             {/* Scrolling Goal Pills */}
