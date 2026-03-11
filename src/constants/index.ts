@@ -1,26 +1,47 @@
 /** Shared constants used across multiple components. */
 
+/**
+ * Hero SVG 30-Color Palette — the master palette.
+ * Every color in the app should come from this set.
+ */
+export const HERO_PALETTE = [
+  // Deep Darks (near-black/navy)
+  "#0a1121", "#071671", "#0c144c",
+  // Deep Blues/Indigos
+  "#112c97", "#13248a", "#1c30ae", "#212bbd", "#2142c3", "#2267d9", "#3075e1", "#3540d4",
+  // Purples
+  "#29187d", "#3d268c", "#4e35b8", "#5b1f8a", "#7e2dba",
+  // Magentas/Pinks
+  "#540a2a", "#821d81", "#9a2393", "#ab1c79", "#cf1b61", "#db2b85", "#f31b5e", "#f9334d",
+  // Warm (orange/yellow)
+  "#fa4835", "#fb7025", "#fc9a03", "#fcd02a",
+  // Forest green
+  "#3a4637",
+  // Cloud highlight
+  "#f4cac9",
+] as const;
+
 /** Sunset Sky — Light palette (foreground tiles, highlights) */
 export const VORONOI_LIGHT = [
-  "#FFE633", // Golden Peach
-  "#FF6B2B", // Warm Apricot
-  "#FF2D55", // Soft Coral
-  "#00EAFF", // Rose Pink
+  "#fcd02a", // Golden Yellow
+  "#fb7025", // Warm Orange
+  "#f31b5e", // Hot Red-Pink
+  "#3075e1", // Bright Blue
 ] as const;
 
 /** Sunset Sky — Dark palette (deep backgrounds, shadows) */
 export const VORONOI_DARK = [
-  "#2979FF", // Vivid Blue
-  "#FF1493", // Hot Pink
-  "#4FC3F7", // Carolina Blue
-  "#FF4500", // Orange Red
+  "#212bbd", // Royal Blue
+  "#db2b85", // Hot Pink
+  "#4e35b8", // Purple
+  "#fa4835", // Orange Red
 ] as const;
 
 /** Combined palette — default for VoronoiMosaic */
 export const VORONOI_PALETTE = [...VORONOI_LIGHT, ...VORONOI_DARK] as const;
 
 /** Aurora gradient background colors (sunset accents). */
-export const AURORA_COLORS = ["#FFE633", "#FF2D55", "#2979FF"] as const;
+export const AURORA_COLORS = ["#fcd02a", "#f31b5e", "#212bbd"] as const;
 
 /** Goal category type for color mapping. */
 export type GoalCategory = "fitness" | "creative" | "professional" | "lifestyle";
