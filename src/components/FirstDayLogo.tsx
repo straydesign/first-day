@@ -211,9 +211,9 @@ function FirstDayLogoInner({
       {/* Tagline only (no card wrapper) */}
       {!showLetters && showTagline && (
         <span
-          className="drop-shadow-[0_1px_8px_rgba(0,0,0,0.5)] flex flex-wrap justify-center"
+          className="drop-shadow-[0_1px_8px_rgba(0,0,0,0.5)] flex flex-nowrap justify-center"
           style={{
-            fontSize: isHero ? "clamp(2rem, 5vw, 4rem)" : "clamp(0.76rem, 1.9vw, 0.95rem)",
+            fontSize: isHero ? "clamp(1.4rem, 4.5vw, 4rem)" : "clamp(0.76rem, 1.9vw, 0.95rem)",
             fontWeight: 900,
             letterSpacing: isHero ? 3 : 1,
             textTransform: "uppercase" as const,
