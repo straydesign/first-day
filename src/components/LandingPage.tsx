@@ -11,6 +11,7 @@ import { MosaicCard } from "./MosaicCard";
 import { GeometricFrame } from "./GeometricFrame";
 import { Button } from "@/components/ui/button";
 import { MosaicButton } from "./MosaicButton";
+import { ShardButton } from "./ShardButton";
 import { VoronoiMosaic } from "./VoronoiMosaic";
 import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, GOAL_CATEGORY_MAP, GOAL_CATEGORY_COLORS, VORONOI_DARK } from "@/constants";
 
@@ -95,14 +96,13 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
 
           {/* Top bar */}
           <div className="absolute top-11 left-0 right-0 flex items-center justify-between px-4 z-50">
-            <Button
+            <ShardButton
               onClick={onLogin || onGetStarted}
-              variant="outline"
-              size="sm"
-              className="bg-white/10 backdrop-blur-sm border-2 border-white/50 text-white hover:bg-white/20 shadow-md px-6 py-2 clip-btn-c"
+              seed={0}
+              shardCount={4}
             >
               Log In
-            </Button>
+            </ShardButton>
             <Button
               onClick={onGetStarted}
               size="sm"

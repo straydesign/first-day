@@ -95,7 +95,7 @@ function FirstDayLogoInner({
 
   return (
     <div className={`flex flex-col items-center ${className}`}>
-      <div className={`bg-black border border-white/10 ${isHero ? "px-6 py-4" : "px-3 py-2"} flex flex-col items-center`} style={{ clipPath: "polygon(3% 2%, 12% 0%, 45% 1%, 78% 0%, 97% 3%, 100% 15%, 99% 50%, 100% 85%, 96% 98%, 82% 100%, 50% 99%, 18% 100%, 2% 97%, 0% 80%, 1% 45%, 0% 12%)" }}>
+      <div className={`bg-black/70 backdrop-blur-sm border border-white/10 ${isHero ? "px-6 py-4" : "px-3 py-2"} flex flex-col items-center`} style={{ clipPath: "polygon(3% 2%, 12% 0%, 45% 1%, 78% 0%, 97% 3%, 100% 15%, 99% 50%, 100% 85%, 96% 98%, 82% 100%, 50% 99%, 18% 100%, 2% 97%, 0% 80%, 1% 45%, 0% 12%)" }}>
       {showLetters && (
         <>
           {/* FIRST row */}
@@ -140,12 +140,14 @@ function FirstDayLogoInner({
         <span
           className={`${showLetters ? "mt-2" : ""} drop-shadow-[0_1px_8px_rgba(0,0,0,0.5)] flex flex-wrap justify-center`}
           style={{
-            fontSize: isHero ? "clamp(1.4rem, 4.5vw, 4rem)" : "clamp(0.6rem, 1.5vw, 0.75rem)",
+            fontSize: isHero ? "clamp(1.6rem, 5vw, 4.5rem)" : "clamp(0.6rem, 1.5vw, 0.75rem)",
             fontWeight: 900,
-            letterSpacing: 2,
+            letterSpacing: 1,
             textTransform: "uppercase" as const,
             fontFamily: "var(--font-bebas), system-ui, sans-serif",
             whiteSpace: "nowrap" as const,
+            transform: isHero ? "scaleY(1.4)" : undefined,
+            transformOrigin: "center",
           }}
         >
           {"first day of the rest of your life".split("").map((char, i) => (
