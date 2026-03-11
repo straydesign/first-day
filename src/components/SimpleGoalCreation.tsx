@@ -1,15 +1,24 @@
 "use client";
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
-import { Sparkles, ArrowRight, Loader2, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react';
+import { ArrowRight, Loader2, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { BackButton } from '@/components/ui/back-button';
-import { GOAL_CATEGORY_MAP, GOAL_CATEGORY_COLORS, GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, AURORA_COLORS } from '@/constants';
+import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, AURORA_COLORS } from '@/constants';
 import { motion, AnimatePresence } from 'framer-motion';
 import Aurora from './Aurora';
-import { ShardButton } from './ShardButton';
 import type { GoalFormData } from '@/types';
+
+const BRIGHT_COLORS = ["#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF", "#FF10F0", "#4FC3F7", "#FF4500", "#2979FF", "#FFD38A", "#39FF14"];
+
+const SHARD_CLIPS = [
+  "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)",
+  "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)",
+  "polygon(1% 0%, 100% 2%, 99% 100%, 0% 98%)",
+  "polygon(3% 2%, 100% 0%, 97% 98%, 0% 100%)",
+];
+
+const FIELD_COLORS = ["#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF"];
 
 interface SimpleGoalCreationProps {
   onComplete: (goalData: GoalFormData) => void;
@@ -25,18 +34,8 @@ export function SimpleGoalCreation({ onComplete, onCancel }: SimpleGoalCreationP
   const [isGenerating, setIsGenerating] = useState(false);
   const [showOptional, setShowOptional] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [isPaused, setIsPaused] = useState(false);
-  const [dragStartPos, setDragStartPos] = useState<{ x: number; y: number } | null>(null);
 
-  const getGoalColorClasses = (g: string) => {
-    const goalType = GOAL_CATEGORY_MAP[g] || 'lifestyle';
-    return GOAL_CATEGORY_COLORS[goalType];
-  };
-
-  const handleSuggestionClick = (suggestion: string) => { setGoal(suggestion); setError(null); setIsPaused(false); };
-  const handleMouseDown = (e: React.MouseEvent | React.TouchEvent) => { const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX; const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY; setDragStartPos({ x: clientX, y: clientY }); setIsPaused(true); };
-  const handleMouseUp = () => { setIsPaused(false); setDragStartPos(null); };
-  const handleButtonClick = (e: React.MouseEvent, suggestion: string) => { if (dragStartPos) { const distance = Math.sqrt(Math.pow(e.clientX - dragStartPos.x, 2) + Math.pow(e.clientY - dragStartPos.y, 2)); if (distance > 10) return; } e.stopPropagation(); handleSuggestionClick(suggestion); };
+  const handleSuggestionClick = (suggestion: string) => { setGoal(suggestion); setError(null); };
 
   const handleGenerate = () => {
     if (!goal.trim()) { setError('Please enter a goal'); return; }
@@ -45,11 +44,27 @@ export function SimpleGoalCreation({ onComplete, onCancel }: SimpleGoalCreationP
     onComplete({ goal: goal.trim(), why: why.trim(), experienceLevel, priorExperience: priorExperience.trim(), preferredTactics: preferredTactics.trim(), timestamp: Date.now() });
   };
 
-  const renderScrollRow = (goals: string[], direction: 'left' | 'right') => (
-    <div className="overflow-x-scroll py-0.5 scrollbar-hide cursor-grab active:cursor-grabbing" onMouseDown={handleMouseDown} onMouseUp={handleMouseUp} onMouseLeave={() => setIsPaused(false)} onTouchStart={handleMouseDown} onTouchEnd={handleMouseUp}>
-      <div className={`flex whitespace-nowrap ${isPaused ? '' : direction === 'left' ? 'animate-scroll-left' : 'animate-scroll-right'}`}>
+  const SCROLL_SPEEDS = ["20s", "30s", "25s"];
+
+  const renderScrollRow = (goals: string[], direction: 'left' | 'right', rowIndex: number) => (
+    <div className="overflow-hidden select-none">
+      <div
+        className="flex whitespace-nowrap"
+        style={{
+          animation: `scroll-${direction} ${SCROLL_SPEEDS[rowIndex % SCROLL_SPEEDS.length]} linear infinite`,
+        }}
+      >
         {[...goals, ...goals, ...goals, ...goals, ...goals, ...goals, ...goals, ...goals].map((suggestion, index) => (
-          <button key={index} onClick={(e) => handleButtonClick(e, suggestion)} disabled={isGenerating} className={`inline-block px-5 py-2.5 text-sm border-2 ${index % 2 === 0 ? 'clip-badge-a' : 'clip-badge-b'} transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed mx-1 ${getGoalColorClasses(suggestion)} ${goal === suggestion ? 'scale-105 ring-2 ring-white/40 shadow-md' : ''}`}>
+          <button
+            key={index}
+            onClick={() => handleSuggestionClick(suggestion)}
+            disabled={isGenerating}
+            className={`inline-block px-5 py-2 text-black text-sm font-bold mx-1.5 select-none hover:scale-105 transition-transform disabled:opacity-50 ${goal === suggestion ? 'ring-2 ring-white/60 scale-105' : ''}`}
+            style={{
+              backgroundColor: BRIGHT_COLORS[(index * 7 + 3) % BRIGHT_COLORS.length],
+              clipPath: index % 2 === 0 ? "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" : "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)",
+            }}
+          >
             {suggestion}
           </button>
         ))}
@@ -68,43 +83,65 @@ export function SimpleGoalCreation({ onComplete, onCancel }: SimpleGoalCreationP
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-4xl mx-auto">
           <div className="p-4 md:p-12">
             <div className="text-center mb-6 md:mb-10">
-              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2 md:mb-3">Let&apos;s Create Your Goal</h1>
-              <p className="text-lg text-white/80 font-bold">Tell us what you want to achieve</p>
+              <div className="inline-block bg-black px-8 py-3 mb-3" style={{ clipPath: "polygon(1% 0%, 100% 3%, 99% 97%, 0% 100%)" }}>
+                <h1 className="text-3xl md:text-4xl font-bold text-white">Let&apos;s Create Your Goal</h1>
+              </div>
+              <div className="inline-block bg-black px-6 py-2" style={{ clipPath: "polygon(2% 0%, 98% 4%, 100% 96%, 0% 100%)" }}>
+                <p className="text-lg text-white font-bold">Tell us what you want to achieve</p>
+              </div>
             </div>
             <AnimatePresence>
               {error && (
-                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="mb-6 bg-red-50 border border-red-200 clip-tile-c p-4 flex items-start gap-3">
+                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="mb-6 bg-red-50 border border-red-200 p-4 flex items-start gap-3" style={{ clipPath: SHARD_CLIPS[0] }}>
                   <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
                   <p className="text-sm font-medium text-red-800">{error}</p>
                 </motion.div>
               )}
             </AnimatePresence>
             <div className="mb-0">
-              <label className="block text-sm font-semibold text-white/80 mb-3">What&apos;s your goal?</label>
-              <Textarea value={goal} onChange={(e) => { setGoal(e.target.value); setError(null); }} placeholder="Type your goal here..." className="px-5 py-4 bg-black border-2 border-white/10 text-lg focus:border-white/40 focus:ring-4 focus:ring-white/10 transition-all resize-none min-h-[80px] md:min-h-[120px]" disabled={isGenerating} autoFocus rows={3} />
+              <div
+                className="overflow-hidden"
+                style={{ backgroundColor: FIELD_COLORS[0], clipPath: SHARD_CLIPS[0] }}
+              >
+                <label className="block px-5 pt-3 pb-1 text-black/60 text-xs font-bold uppercase tracking-wider">What&apos;s your goal?</label>
+                <div className="mx-4 border-t border-black/10" />
+                <Textarea value={goal} onChange={(e) => { setGoal(e.target.value); setError(null); }} placeholder="Type your goal here..." className="px-5 py-3 bg-transparent border-0 text-black placeholder:text-black/40 text-lg focus-visible:ring-0 rounded-none resize-none min-h-[80px] md:min-h-[120px]" disabled={isGenerating} autoFocus rows={3} />
+              </div>
             </div>
           </div>
         </motion.div>
       </div>
-      <div className="w-full space-y-0 mb-4 md:mb-8 py-3 md:py-6">
-        {renderScrollRow(GOAL_SUGGESTIONS_ROW_1, 'left')}
-        {renderScrollRow(GOAL_SUGGESTIONS_ROW_2, 'right')}
-        {renderScrollRow(GOAL_SUGGESTIONS_ROW_3, 'left')}
+      <div className="w-full space-y-1 mb-4 md:mb-8 py-3 md:py-6">
+        {renderScrollRow(GOAL_SUGGESTIONS_ROW_1, 'left', 0)}
+        {renderScrollRow(GOAL_SUGGESTIONS_ROW_2, 'right', 1)}
+        {renderScrollRow(GOAL_SUGGESTIONS_ROW_3, 'left', 2)}
       </div>
       <div className="flex items-center justify-center">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-4xl mx-auto">
           <div className="p-4 md:p-12">
             <div className="mb-4 md:mb-8">
-              <label className="block text-sm font-semibold text-white/80 mb-2 md:mb-3">Why do you want to achieve this?</label>
-              <Textarea value={why} onChange={(e) => setWhy(e.target.value)} placeholder="Tell us what motivates you..." className="px-5 py-4 bg-black border-2 border-white/10 text-lg focus:border-white/40 focus:ring-4 focus:ring-white/10 transition-all resize-none min-h-[80px] md:min-h-[120px]" disabled={isGenerating} rows={3} />
+              <div
+                className="overflow-hidden"
+                style={{ backgroundColor: FIELD_COLORS[1], clipPath: SHARD_CLIPS[1] }}
+              >
+                <label className="block px-5 pt-3 pb-1 text-black/60 text-xs font-bold uppercase tracking-wider">Why do you want to achieve this?</label>
+                <div className="mx-4 border-t border-black/10" />
+                <Textarea value={why} onChange={(e) => setWhy(e.target.value)} placeholder="Tell us what motivates you..." className="px-5 py-3 bg-transparent border-0 text-black placeholder:text-black/40 text-lg focus-visible:ring-0 rounded-none resize-none min-h-[80px] md:min-h-[120px]" disabled={isGenerating} rows={3} />
+              </div>
             </div>
             <div className="mb-4 md:mb-8">
               <label className="block text-sm font-semibold text-white/80 mb-2 md:mb-3">What&apos;s your experience level?</label>
               <div className="flex flex-col gap-3">
-                {[{ value: 'beginner' as const, label: 'Beginner', desc: 'Just starting' }, { value: 'intermediate' as const, label: 'Intermediate', desc: 'Some experience' }, { value: 'advanced' as const, label: 'Advanced', desc: 'Experienced' }].map((level, index) => (
-                  <button key={level.value} onClick={() => setExperienceLevel(level.value)} disabled={isGenerating} className={`p-4 clip-tile-${['a','b','c'][index] || 'a'} border-2 transition-all text-left ${experienceLevel === level.value ? 'border-white/40 bg-black ring-2 ring-white/30' : 'border-white/10 bg-black hover:border-white/20'}`}>
-                    <div className="font-semibold text-white">{level.label}</div>
-                    <div className="text-sm text-white/80">{level.desc}</div>
+                {[{ value: 'beginner' as const, label: 'Beginner', desc: 'Just starting', color: FIELD_COLORS[0] }, { value: 'intermediate' as const, label: 'Intermediate', desc: 'Some experience', color: FIELD_COLORS[2] }, { value: 'advanced' as const, label: 'Advanced', desc: 'Experienced', color: FIELD_COLORS[3] }].map((level, index) => (
+                  <button
+                    key={level.value}
+                    onClick={() => setExperienceLevel(level.value)}
+                    disabled={isGenerating}
+                    className={`p-4 transition-all text-left text-black font-bold ${experienceLevel === level.value ? 'ring-2 ring-white/40 scale-[1.02]' : 'opacity-70 hover:opacity-100'}`}
+                    style={{ backgroundColor: level.color, clipPath: SHARD_CLIPS[index % SHARD_CLIPS.length] }}
+                  >
+                    <div className="font-bold text-black">{level.label}</div>
+                    <div className="text-sm text-black/70">{level.desc}</div>
                   </button>
                 ))}
               </div>
@@ -116,27 +153,45 @@ export function SimpleGoalCreation({ onComplete, onCancel }: SimpleGoalCreationP
               </button>
               {showOptional && (
                 <div className="mt-4 space-y-4 md:space-y-6">
-                  <div>
-                    <label className="block text-sm font-semibold text-white/80 mb-2 md:mb-3">What have you tried before?</label>
-                    <Input type="text" value={priorExperience} onChange={(e) => setPriorExperience(e.target.value)} placeholder="e.g., Took an online course, read a book..." className="px-5 py-4 bg-black border-2 border-white/10 text-lg focus:border-white/40 focus:ring-4 focus:ring-white/10 transition-all" disabled={isGenerating} />
+                  <div
+                    className="overflow-hidden"
+                    style={{ backgroundColor: FIELD_COLORS[2], clipPath: SHARD_CLIPS[2] }}
+                  >
+                    <label className="block px-5 pt-3 pb-1 text-black/60 text-xs font-bold uppercase tracking-wider">What have you tried before?</label>
+                    <div className="mx-4 border-t border-black/10" />
+                    <Input type="text" value={priorExperience} onChange={(e) => setPriorExperience(e.target.value)} placeholder="e.g., Took an online course, read a book..." className="px-5 py-3 bg-transparent border-0 text-black placeholder:text-black/40 text-lg focus-visible:ring-0 rounded-none" disabled={isGenerating} />
                   </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-white/80 mb-2 md:mb-3">How do you like to learn?</label>
-                    <Input type="text" value={preferredTactics} onChange={(e) => setPreferredTactics(e.target.value)} placeholder="e.g., Videos, hands-on practice, reading..." className="px-5 py-4 bg-black border-2 border-white/10 text-lg focus:border-white/40 focus:ring-4 focus:ring-white/10 transition-all" disabled={isGenerating} />
+                  <div
+                    className="overflow-hidden"
+                    style={{ backgroundColor: FIELD_COLORS[3], clipPath: SHARD_CLIPS[3] }}
+                  >
+                    <label className="block px-5 pt-3 pb-1 text-black/60 text-xs font-bold uppercase tracking-wider">How do you like to learn?</label>
+                    <div className="mx-4 border-t border-black/10" />
+                    <Input type="text" value={preferredTactics} onChange={(e) => setPreferredTactics(e.target.value)} placeholder="e.g., Videos, hands-on practice, reading..." className="px-5 py-3 bg-transparent border-0 text-black placeholder:text-black/40 text-lg focus-visible:ring-0 rounded-none" disabled={isGenerating} />
                   </div>
                 </div>
               )}
             </div>
             <div className="flex flex-col gap-3">
-              <ShardButton seed={5} shardCount={4} onClick={handleGenerate} disabled={isGenerating || !goal.trim()} className="w-full py-4 text-lg shadow-lg transition-smooth hover:scale-105 disabled:hover:scale-100">
-                {isGenerating ? (<><Loader2 className="w-5 h-5 mr-2 animate-spin" />Generating...</>) : (<>Generate My Plan<ArrowRight className="w-5 h-5 ml-2" /></>)}
-              </ShardButton>
-              <ShardButton seed={9} shardCount={3} onClick={onCancel} disabled={isGenerating} className="w-full py-3 opacity-70">
+              <button
+                onClick={handleGenerate}
+                disabled={isGenerating || !goal.trim()}
+                className="w-full bg-black text-white py-4 text-xl font-black uppercase tracking-wide hover:scale-105 transition-transform disabled:hover:scale-100 disabled:opacity-50 flex items-center justify-center gap-2"
+                style={{ clipPath: "polygon(1% 0%, 100% 3%, 99% 97%, 0% 100%)" }}
+              >
+                {isGenerating ? (<><Loader2 className="w-5 h-5 animate-spin" />Generating...</>) : (<>Generate My Plan<ArrowRight className="w-5 h-5" /></>)}
+              </button>
+              <button
+                onClick={onCancel}
+                disabled={isGenerating}
+                className="w-full bg-black/50 text-white/70 py-3 font-bold uppercase tracking-wide hover:scale-105 transition-transform"
+                style={{ clipPath: "polygon(0% 3%, 99% 0%, 100% 97%, 1% 100%)" }}
+              >
                 Cancel
-              </ShardButton>
+              </button>
             </div>
             <div className="mt-6 text-center">
-              <p className="text-sm text-white/50"><Sparkles className="w-4 h-4 inline-block mr-1 text-blue-400" />AI will create a personalized 30-day plan just for you</p>
+              <p className="text-sm text-white/50">AI will create a personalized 30-day plan just for you</p>
             </div>
           </div>
         </motion.div>
