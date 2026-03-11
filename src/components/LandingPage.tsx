@@ -51,9 +51,10 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const BRIGHT_COLORS = ["#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF", "#FF10F0", "#4FC3F7", "#FF4500", "#2979FF", "#FFD38A", "#39FF14"];
+  const BRIGHT_COLORS = ["#FFE633", "#2979FF", "#FF2D55", "#39FF14", "#FF10F0", "#00EAFF", "#FF4500", "#4FC3F7", "#FF6B2B", "#FFD38A"];
   const getGoalBgColor = (_goal: string, index: number) => {
-    return BRIGHT_COLORS[index % BRIGHT_COLORS.length];
+    // Scattered step avoids adjacent same-hue colors, feels infinite
+    return BRIGHT_COLORS[(index * 7 + 3) % BRIGHT_COLORS.length];
   };
 
   const SCROLL_SPEEDS = ["20s", "30s", "25s"];
@@ -112,10 +113,11 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
               Log In
             </button>
           </div>
-          <div className="absolute top-5 right-4 z-50">
+          <div className="absolute top-4 right-4 z-50">
             <button
               onClick={onGetStarted}
-              className="text-white font-black text-sm tracking-wide uppercase hover:opacity-70 transition-opacity"
+              className="bg-black px-8 py-4 text-white font-black text-lg tracking-wide uppercase hover:scale-105 transition-transform"
+              style={{ clipPath: "polygon(0% 8%, 97% 0%, 100% 88%, 3% 100%)" }}
             >
               Get Started
             </button>
@@ -151,43 +153,35 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
           </motion.div>
         </section>
 
-        {/* Sticky nav — cracked bar + corner buttons, appears when scrolled past */}
+        {/* Sticky nav — tagline bar with centered login/get-started */}
         {isNavSticky && (
-          <>
-            {/* Corner buttons */}
-            <div className="fixed top-4 left-4 z-[60]">
+          <motion.div
+            initial={{ y: -60, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="fixed top-0 left-0 right-0 z-50 bg-black px-4 py-5"
+          >
+            <div className="flex items-center justify-between">
               <motion.button
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 onClick={onLogin || onGetStarted}
-                className="bg-black px-8 py-4 text-white font-black text-lg tracking-wide uppercase hover:scale-105 transition-transform"
+                className="bg-white/10 px-6 py-3 text-white font-black text-base tracking-wide uppercase hover:scale-105 hover:bg-white/15 transition-all flex-shrink-0"
                 style={{ clipPath: "polygon(3% 0%, 100% 8%, 97% 100%, 0% 88%)" }}
               >
                 Log In
               </motion.button>
-            </div>
-            <div className="fixed top-5 right-4 z-[60]">
+              <FirstDayLogo showTagline={true} showLetters={false} />
               <motion.button
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 onClick={onGetStarted}
-                className="text-white font-black text-sm tracking-wide uppercase hover:opacity-70 transition-opacity"
+                className="text-white font-black text-sm tracking-wide uppercase hover:opacity-70 transition-opacity flex-shrink-0"
               >
                 Get Started
               </motion.button>
             </div>
-            {/* Solid black tagline bar */}
-            <motion.div
-              initial={{ y: -60, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
-              className="fixed top-0 left-0 right-0 z-50 bg-black py-3"
-            >
-              <div className="flex items-center justify-center">
-                <FirstDayLogo showTagline={true} showLetters={false} />
-              </div>
-            </motion.div>
-          </>
+          </motion.div>
         )}
 
         {/* Scrolling Goal Pills */}
@@ -329,7 +323,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                   </div>
                   <div
                     className="text-center py-4 px-2"
-                    style={{ backgroundColor: "#4FC3F7", clipPath: "polygon(6% 0%, 100% 10%, 94% 100%, 0% 88%)" }}
+                    style={{ backgroundColor: "#FF2D55", clipPath: "polygon(6% 0%, 100% 10%, 94% 100%, 0% 88%)" }}
                   >
                     <div className="flex items-center justify-center gap-1 mb-0.5">
                       <Trophy className="w-3.5 h-3.5 text-black" />
