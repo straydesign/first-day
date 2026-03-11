@@ -129,11 +129,9 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
           <DialogTitle className="sr-only">{isLogin ? 'Log in to First Day' : 'Sign up for First Day'}</DialogTitle>
           <DialogDescription className="sr-only">{isLogin ? 'Enter your email and password' : 'Create an account'}</DialogDescription>
 
-          <div className="mb-4 sm:mb-6 text-center">
-            <div className="mb-2 flex justify-center animate-fadeIn">
-              <FirstDayLogo width={200} height={100} layout="horizontal" showTagline={false} className="text-white max-w-full" />
-            </div>
-            <p className="text-white/80 mt-2 text-sm sm:text-base animate-slideInUp" style={{ animationDelay: '0.1s' }}>
+          <div className="mb-6 sm:mb-8 animate-fadeIn">
+            <FirstDayLogo size="hero" showTagline={true} showLetters={false} className="w-full" />
+            <p className="text-white/80 mt-3 text-sm sm:text-base text-center animate-slideInUp" style={{ animationDelay: '0.1s' }}>
               {isLogin ? 'Welcome back!' : 'Start your journey today'}
             </p>
           </div>
@@ -173,21 +171,21 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
                 </div>
               </div>
             )}
-            <ShardButton seed={3} type="submit" className="w-full transition-smooth hover:scale-105 disabled:hover:scale-100" disabled={loading}>
+            <ShardButton seed={3} size="lg" type="submit" className="w-full transition-smooth hover:scale-105 disabled:hover:scale-100 text-xl font-black uppercase tracking-wide" disabled={loading}>
               {loading ? 'Please wait...' : isLogin ? 'Log In' : 'Sign Up'}
             </ShardButton>
           </form>
 
-          <div className="mt-4 text-center space-y-3 max-w-md mx-auto">
-            <div className="clip-badge-b inline-block">
-              <button onClick={() => { setIsLogin(!isLogin); setName(''); setEmail(''); setPassword(''); setConfirmPassword(''); }} className="text-white/80 hover:text-white hover:underline text-sm sm:text-base font-bold" disabled={loading}>
+          <div className="mt-6 text-center space-y-4 max-w-md mx-auto">
+            <div>
+              <button onClick={() => { setIsLogin(!isLogin); setName(''); setEmail(''); setPassword(''); setConfirmPassword(''); }} className="text-white hover:underline text-lg font-black uppercase tracking-wide" disabled={loading}>
                 {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Log in'}
               </button>
             </div>
             <div>
               <a
                 href="/preview"
-                className="inline-flex items-center gap-2 text-[#00EAFF] hover:text-white font-bold text-sm sm:text-base transition-colors"
+                className="inline-flex items-center gap-2 text-white hover:underline font-black text-lg uppercase tracking-wide transition-colors"
               >
                 Try the demo — no account needed
               </a>

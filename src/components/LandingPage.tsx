@@ -102,21 +102,20 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
             <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
           </div>
 
-          {/* Top corners — Log In / Get Started on black */}
+          {/* Top corners — Log In shard / Get Started text */}
           <div className="absolute top-4 left-4 z-50">
             <button
               onClick={onLogin || onGetStarted}
-              className="bg-black px-4 py-2 text-white font-black text-sm tracking-wide uppercase hover:opacity-70 transition-opacity"
-              style={{ clipPath: "polygon(4% 8%, 95% 0%, 100% 85%, 8% 100%)" }}
+              className="bg-black px-8 py-4 text-white font-black text-lg tracking-wide uppercase hover:scale-105 transition-transform"
+              style={{ clipPath: "polygon(3% 0%, 100% 8%, 97% 100%, 0% 88%)" }}
             >
               Log In
             </button>
           </div>
-          <div className="absolute top-4 right-4 z-50">
+          <div className="absolute top-5 right-4 z-50">
             <button
               onClick={onGetStarted}
-              className="bg-black px-4 py-2 text-white font-black text-sm tracking-wide uppercase hover:opacity-70 transition-opacity"
-              style={{ clipPath: "polygon(0% 10%, 96% 0%, 92% 100%, 5% 85%)" }}
+              className="text-white font-black text-sm tracking-wide uppercase hover:opacity-70 transition-opacity"
             >
               Get Started
             </button>
@@ -161,19 +160,18 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 onClick={onLogin || onGetStarted}
-                className="bg-black px-4 py-2 text-white font-black text-sm tracking-wide uppercase hover:opacity-70 transition-opacity"
-                style={{ clipPath: "polygon(4% 8%, 95% 0%, 100% 85%, 8% 100%)" }}
+                className="bg-black px-8 py-4 text-white font-black text-lg tracking-wide uppercase hover:scale-105 transition-transform"
+                style={{ clipPath: "polygon(3% 0%, 100% 8%, 97% 100%, 0% 88%)" }}
               >
                 Log In
               </motion.button>
             </div>
-            <div className="fixed top-4 right-4 z-[60]">
+            <div className="fixed top-5 right-4 z-[60]">
               <motion.button
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 onClick={onGetStarted}
-                className="bg-black px-4 py-2 text-white font-black text-sm tracking-wide uppercase hover:opacity-70 transition-opacity"
-                style={{ clipPath: "polygon(0% 10%, 96% 0%, 92% 100%, 5% 85%)" }}
+                className="text-white font-black text-sm tracking-wide uppercase hover:opacity-70 transition-opacity"
               >
                 Get Started
               </motion.button>
