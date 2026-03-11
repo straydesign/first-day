@@ -231,9 +231,19 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
           </div>
         ) : (
           <MosaicCard seed={0} className="min-h-screen p-6 md:p-10 flex flex-col items-center justify-center">
-            <div className="text-center mb-4 md:mb-8">
-              <h1 className="text-3xl md:text-5xl font-bold mb-2 md:mb-4 text-white">Set Your First Goal</h1>
-              <p className="text-xl text-white/80 font-bold">Pick any goal and get a personalized 30-day plan</p>
+            <div className="text-center mb-4 md:mb-8 space-y-3">
+              <div
+                className="inline-block bg-black px-8 py-3"
+                style={{ clipPath: "polygon(1% 0%, 100% 3%, 99% 97%, 0% 100%)" }}
+              >
+                <h1 className="text-3xl md:text-5xl font-bold text-white">Set Your First Goal</h1>
+              </div>
+              <div
+                className="inline-block bg-black px-6 py-2"
+                style={{ clipPath: "polygon(2% 0%, 98% 4%, 100% 96%, 0% 100%)" }}
+              >
+                <p className="text-xl text-white font-bold">Pick any goal and get a personalized 30-day plan</p>
+              </div>
             </div>
             <BouncingButton onClick={onCreateGoal} />
           </MosaicCard>
