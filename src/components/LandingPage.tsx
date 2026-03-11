@@ -93,12 +93,11 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
         <section className="relative min-h-screen flex flex-col justify-center items-center px-0">
           {/* Full-bleed hero image */}
           <div className="absolute inset-0 z-0">
-            <Image
-              src="/hero-sunset.png"
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/hero-sunset.svg"
               alt="Voronoi mosaic sunset over mountains and lake"
-              fill
-              className="object-cover"
-              priority
+              className="absolute inset-0 w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
           </div>
