@@ -327,6 +327,30 @@ html {
   filter: grayscale(0.5) brightness(0.7);
 }
 
+/* Small button variant — uses smaller mosaic pill images */
+.mosaic-btn-sm {
+  background: url('/buttons/mosaic-btn-sm-default.png') center / contain no-repeat;
+  border: none;
+  cursor: pointer;
+}
+.mosaic-btn-sm:hover {
+  background-image: url('/buttons/mosaic-btn-sm-hover.png');
+  transform: scale(1.03);
+  filter: brightness(1.05);
+}
+.mosaic-btn-sm:active {
+  background-image: url('/buttons/mosaic-btn-sm-pressed.png');
+  transform: scale(0.97);
+  filter: brightness(0.95);
+}
+.mosaic-btn-sm:focus-visible {
+  outline: none;
+  filter: drop-shadow(0 0 6px rgba(130, 80, 255, 0.6)) drop-shadow(0 0 12px rgba(130, 80, 255, 0.3));
+}
+.mosaic-btn-sm:disabled {
+  filter: grayscale(0.5) brightness(0.7);
+}
+
 /* ============================================
    GEOMETRIC MOSAIC CLIP-PATH SYSTEM
    "Nothing can be a square or rectangle"
