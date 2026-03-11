@@ -12,7 +12,7 @@ export const VORONOI_LIGHT = [
 export const VORONOI_DARK = [
   "#5227FF", // Deep Violet
   "#FF1493", // Indigo Blue
-  "#0D1120", // Burnt Magenta
+  "#4FC3F7", // Burnt Magenta
   "#060B18", // Midnight Navy
 ] as const;
 
