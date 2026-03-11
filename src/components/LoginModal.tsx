@@ -130,7 +130,12 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
           <DialogDescription className="sr-only">{isLogin ? 'Enter your email and password' : 'Create an account'}</DialogDescription>
 
           <div className="mb-6 sm:mb-8 animate-fadeIn">
-            <FirstDayLogo size="hero" showTagline={true} showLetters={false} className="w-full" />
+            <div
+              className="w-full bg-black py-3 flex items-center justify-center"
+              style={{ clipPath: "polygon(1% 0%, 99% 4%, 100% 96%, 0% 100%)" }}
+            >
+              <FirstDayLogo size="hero" showTagline={true} showLetters={false} className="w-full" />
+            </div>
             <p className="text-white/80 mt-3 text-sm sm:text-base text-center animate-slideInUp" style={{ animationDelay: '0.1s' }}>
               {isLogin ? 'Welcome back!' : 'Start your journey today'}
             </p>
