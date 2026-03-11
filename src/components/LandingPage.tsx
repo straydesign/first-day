@@ -10,6 +10,7 @@ import { Footer } from "./Footer";
 import { MosaicCard } from "./MosaicCard";
 import { GeometricFrame } from "./GeometricFrame";
 import { Button } from "@/components/ui/button";
+import { MosaicButton } from "./MosaicButton";
 import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, GOAL_CATEGORY_MAP, GOAL_CATEGORY_COLORS } from "@/constants";
 
 interface LandingPageProps {
@@ -146,13 +147,13 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
               transition={{ duration: 0.4, delay: 0.6 }}
               className="mt-8"
             >
-              <Button
+              <MosaicButton
                 onClick={onGetStarted}
-                variant="vivid"
-                className="shadow-lg hover:shadow-xl transition-smooth hover:scale-105 px-10 py-6 text-lg clip-btn-a bg-[#7cff67] text-[#0a0a1e]"
+                size="lg"
+                className="shadow-lg hover:shadow-xl"
               >
                 Start Your Own Journey
-              </Button>
+              </MosaicButton>
             </motion.div>
           </div>
 
@@ -410,13 +411,13 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
 
                 {/* CTA */}
                 <div className="text-center mt-6 md:mt-8">
-                  <Button
+                  <MosaicButton
                     onClick={onGetStarted}
-                    variant="vivid"
-                    className="shadow-lg hover:shadow-xl transition-smooth hover:scale-105 px-8 py-5 md:px-10 md:py-6 text-base md:text-lg clip-btn-a bg-[#7cff67] text-[#0a0a1e]"
+                    size="lg"
+                    className="shadow-lg hover:shadow-xl"
                   >
                     Create Your Plan
-                  </Button>
+                  </MosaicButton>
                   <p className="text-sm text-white/70 mt-3">
                     <Sparkles className="w-4 h-4 inline-block mr-1 text-purple-500" />
                     Every plan is unique — personalized to your goal and experience

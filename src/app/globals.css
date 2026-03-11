@@ -302,6 +302,31 @@ html {
 }
 
 /* ============================================
+   MOSAIC BUTTON — Image-based states
+   ============================================ */
+.mosaic-btn {
+  background: url('/buttons/mosaic-btn-default.png') center / contain no-repeat;
+  border: none;
+  cursor: pointer;
+}
+.mosaic-btn:hover {
+  background-image: url('/buttons/mosaic-btn-hover.png');
+  transform: scale(1.03);
+  filter: brightness(1.05);
+}
+.mosaic-btn:active {
+  transform: scale(0.97);
+  filter: brightness(0.9);
+}
+.mosaic-btn:focus-visible {
+  outline: none;
+  filter: drop-shadow(0 0 6px rgba(130, 80, 255, 0.6)) drop-shadow(0 0 12px rgba(130, 80, 255, 0.3));
+}
+.mosaic-btn:disabled {
+  filter: grayscale(0.5) brightness(0.7);
+}
+
+/* ============================================
    GEOMETRIC MOSAIC CLIP-PATH SYSTEM
    "Nothing can be a square or rectangle"
    ============================================ */
