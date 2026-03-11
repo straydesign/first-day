@@ -185,10 +185,10 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
                     {week.isUnlocked ? (
                       <div className="space-y-3 md:space-y-4">
                         {week.weeklyBook && (
-                          <div className="bg-gradient-to-br from-[#FF1493] to-[#FF1493] clip-tile-b border-2 border-yellow-600/30 overflow-hidden">
-                            <button onClick={() => toggleWeekBook(week.weekNumber)} className="w-full p-3 md:p-4 flex items-center justify-between hover:bg-white/10 transition-colors">
-                              <div className="flex items-center gap-2"><BookOpen className="w-4 h-4 md:w-5 md:h-5 text-yellow-400" /><h3 className="text-xs md:text-sm text-yellow-200 font-medium">Week {week.weekNumber} Reading</h3></div>
-                              {expandedWeeks.has(week.weekNumber) ? <ChevronUp className="w-4 h-4 text-yellow-400" /> : <ChevronDown className="w-4 h-4 text-yellow-400" />}
+                          <div className="bg-black clip-tile-b overflow-hidden">
+                            <button onClick={() => toggleWeekBook(week.weekNumber)} className="w-full p-4 md:p-5 flex items-center justify-between hover:bg-white/5 transition-colors">
+                              <div className="flex items-center gap-3"><BookOpen className="w-6 h-6 md:w-7 md:h-7 text-[#fcd02a]" /><h3 className="text-2xl md:text-3xl text-[#fcd02a] font-black uppercase tracking-wide">Week {week.weekNumber} Reading</h3></div>
+                              {expandedWeeks.has(week.weekNumber) ? <ChevronUp className="w-5 h-5 text-[#fcd02a]" /> : <ChevronDown className="w-5 h-5 text-[#fcd02a]" />}
                             </button>
                             {expandedWeeks.has(week.weekNumber) && (
                               <div className="px-3 md:px-4 pb-3 md:pb-4 space-y-1 md:space-y-2">
