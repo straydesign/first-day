@@ -257,7 +257,7 @@ html {
 
   .animate-shimmer {
     animation: shimmer 2s infinite linear;
-    background: linear-gradient(to right, #000000 0%, #FF1493 20%, #000000 40%, #000000 100%);
+    background: linear-gradient(to right, #000000 0%, #FFE633 20%, #000000 40%, #000000 100%);
     background-size: 1000px 100%;
   }
 

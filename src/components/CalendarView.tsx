@@ -116,7 +116,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
                 <h2 className="text-lg md:text-xl text-white font-bold">Your 30-Day Plan</h2>
               </div>
               {engagement?.isAtRisk && (
-                <div className="mb-3 mx-auto max-w-md bg-[#FF1493] border border-coral-500/40 clip-tile-c px-4 py-2 flex items-center gap-2 animate-pulse">
+                <div className="mb-3 mx-auto max-w-md bg-black border border-coral-500/40 clip-tile-c px-4 py-2 flex items-center gap-2 animate-pulse">
                   <AlertTriangle className="w-4 h-4 text-coral-400 flex-shrink-0" />
                   <p className="text-sm text-coral-300 font-medium">Your {engagement.currentStreak}-day streak is at risk! Complete today to keep it alive.</p>
                 </div>

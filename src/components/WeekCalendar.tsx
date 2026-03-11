@@ -44,12 +44,12 @@ export function WeekCalendar({ weekNumber, days, progress = {}, onDayClick, plan
               : "border-l-white/10";
 
         const badgeBg = isCompleted
-          ? "bg-[#FFE633] text-[#060B18]"
+          ? "bg-[#FFE633] text-[#000000]"
           : day.isToday
             ? "bg-white/20 text-white font-bold"
             : isPast && !isCompleted
               ? "bg-coral-400 text-white"
-              : "bg-[#FF1493] text-white/80";
+              : "bg-black text-white/80";
 
         return (
           <button

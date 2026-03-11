@@ -246,7 +246,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                           className={`clip-diamond w-10 h-10 flex items-center justify-center text-lg ${
                             badge.locked
                               ? "bg-white/5 border border-dashed border-white/10 grayscale opacity-50"
-                              : "bg-[#FF1493] border border-white/10"
+                              : "bg-black border border-white/10"
                           }`}
                           title={badge.label}
                         >
@@ -259,21 +259,21 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
 
                 {/* Stat bar */}
                 <div className="mt-6 grid grid-cols-3 gap-3 max-w-lg mx-auto">
-                  <div className="clip-badge-a text-center bg-[#FF1493]/80 py-3 px-2 border border-white/10">
+                  <div className="clip-badge-a text-center bg-black/80 py-3 px-2 border border-white/10">
                     <div className="flex items-center justify-center gap-1 mb-0.5">
                       <Target className="w-3.5 h-3.5 text-white" />
                       <span className="text-xs text-white/70 font-medium">Rate</span>
                     </div>
                     <p className="text-3xl font-bold text-white">87%</p>
                   </div>
-                  <div className="clip-badge-a text-center bg-[#FF1493]/80 py-3 px-2 border border-white/10">
+                  <div className="clip-badge-a text-center bg-black/80 py-3 px-2 border border-white/10">
                     <div className="flex items-center justify-center gap-1 mb-0.5">
                       <Flame className="w-3.5 h-3.5 text-orange-500" />
                       <span className="text-xs text-white/70 font-medium">Streak</span>
                     </div>
                     <p className="text-3xl font-bold text-white">12</p>
                   </div>
-                  <div className="clip-badge-a text-center bg-[#FF1493]/80 py-3 px-2 border border-white/10">
+                  <div className="clip-badge-a text-center bg-black/80 py-3 px-2 border border-white/10">
                     <div className="flex items-center justify-center gap-1 mb-0.5">
                       <Trophy className="w-3.5 h-3.5 text-purple-500" />
                       <span className="text-xs text-white/70 font-medium">Badges</span>
