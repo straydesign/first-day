@@ -166,9 +166,19 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
           <div className="animate-fadeIn">
             {goals.map(goal => (
               <MosaicCard key={goal.id} seed={goals.indexOf(goal)} className="backdrop-blur-sm min-h-screen p-6 md:p-10">
-                <div className="text-center mb-6 md:mb-8">
-                  <h1 className="text-3xl md:text-5xl font-bold mb-2 md:mb-4 text-white">Today&apos;s Activities</h1>
-                  <p className="text-xl text-white/80 font-bold">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                <div className="text-center mb-6 md:mb-8 space-y-3">
+                  <div
+                    className="inline-block bg-black px-8 py-3"
+                    style={{ clipPath: "polygon(1% 0%, 100% 3%, 99% 97%, 0% 100%)" }}
+                  >
+                    <h1 className="text-3xl md:text-5xl font-bold text-white">Today&apos;s Activities</h1>
+                  </div>
+                  <div
+                    className="inline-block bg-black px-6 py-2"
+                    style={{ clipPath: "polygon(2% 0%, 98% 4%, 100% 96%, 0% 100%)" }}
+                  >
+                    <p className="text-xl text-white font-bold">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                  </div>
                 </div>
                 <div className="max-w-2xl mx-auto">
                   <div className="mb-6 flex items-start justify-between">
@@ -179,19 +189,32 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                           <StreakBadge streak={engagement.currentStreak} isAtRisk={engagement.isAtRisk} size="sm" />
                         )}
                       </div>
-                      <CardDescription className="text-white/70 font-bold">Day {goalCurrentDays[goal.id] || 0} of 30</CardDescription>
+                      <div
+                        className="inline-block bg-black px-4 py-1.5 mt-1"
+                        style={{ clipPath: "polygon(0% 0%, 97% 5%, 100% 95%, 3% 100%)" }}
+                      >
+                        <CardDescription className="text-white font-bold">Day {goalCurrentDays[goal.id] || 0} of 30</CardDescription>
+                      </div>
                     </div>
                     <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); handleDeleteGoal(goal.id, goal.title); }} className="text-red-400 hover:text-red-300 hover:bg-red-500/10" aria-label="Delete goal">
                       <Trash2 className="w-5 h-5" />
                     </Button>
                   </div>
                   <div className="space-y-3 mb-6">
-                    <ShardButton seed={11} size="lg" onClick={() => onSelectGoal(goal.id)} className="w-full transition-smooth hover:scale-105">
-                      <Calendar className="w-5 h-5 mr-2" />View 30 Day Plan
-                    </ShardButton>
-                    <ShardButton seed={12} size="lg" className="w-full transition-smooth hover:scale-105" onClick={(e) => { e.stopPropagation(); if (onViewTodayActivities) onViewTodayActivities(goal.id); else onSelectGoal(goal.id); }}>
-                      <CheckCircle className="w-5 h-5 mr-2" />View Today&apos;s Activities
-                    </ShardButton>
+                    <button
+                      onClick={() => onSelectGoal(goal.id)}
+                      className="w-full bg-black text-white py-4 text-lg font-black uppercase tracking-wide hover:scale-105 transition-transform flex items-center justify-center gap-2"
+                      style={{ clipPath: "polygon(1% 0%, 100% 3%, 99% 97%, 0% 100%)" }}
+                    >
+                      <Calendar className="w-5 h-5" />View 30 Day Plan
+                    </button>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); if (onViewTodayActivities) onViewTodayActivities(goal.id); else onSelectGoal(goal.id); }}
+                      className="w-full bg-black text-white py-4 text-lg font-black uppercase tracking-wide hover:scale-105 transition-transform flex items-center justify-center gap-2"
+                      style={{ clipPath: "polygon(0% 3%, 99% 0%, 100% 97%, 1% 100%)" }}
+                    >
+                      <CheckCircle className="w-5 h-5" />View Today&apos;s Activities
+                    </button>
                   </div>
                   {/* Stats & Achievements */}
                   {engagement && (
@@ -202,9 +225,13 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                       </div>
                     </div>
                   )}
-                  <ShardButton seed={13} onClick={onCreateGoal} size="lg" className="w-full transition-smooth hover:scale-105 text-lg py-4 md:py-6">
-                    <Plus className="w-6 h-6 mr-2" />Add New Goal
-                  </ShardButton>
+                  <button
+                    onClick={onCreateGoal}
+                    className="w-full bg-black text-white py-4 md:py-6 text-lg font-black uppercase tracking-wide hover:scale-105 transition-transform flex items-center justify-center gap-2"
+                    style={{ clipPath: "polygon(2% 0%, 100% 4%, 98% 100%, 0% 96%)" }}
+                  >
+                    <Plus className="w-6 h-6" />Add New Goal
+                  </button>
                 </div>
               </MosaicCard>
             ))}
