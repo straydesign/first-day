@@ -102,7 +102,27 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
             <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
           </div>
 
-          {/* Center nav — full-width cracked black bar, becomes sticky after scrolling past */}
+          {/* Top corners — Log In / Get Started on black */}
+          <div className="absolute top-4 left-4 z-50">
+            <button
+              onClick={onLogin || onGetStarted}
+              className="bg-black px-4 py-2 text-white font-black text-sm tracking-wide uppercase hover:opacity-70 transition-opacity"
+              style={{ clipPath: "polygon(4% 8%, 95% 0%, 100% 85%, 8% 100%)" }}
+            >
+              Log In
+            </button>
+          </div>
+          <div className="absolute top-4 right-4 z-50">
+            <button
+              onClick={onGetStarted}
+              className="bg-black px-4 py-2 text-white font-black text-sm tracking-wide uppercase hover:opacity-70 transition-opacity"
+              style={{ clipPath: "polygon(0% 10%, 96% 0%, 92% 100%, 5% 85%)" }}
+            >
+              Get Started
+            </button>
+          </div>
+
+          {/* Full-width tagline — cracked black bar centered in hero */}
           <div ref={heroNavRef} className="relative z-50 w-full h-14">
             {/* Cracked black shards */}
             {[
@@ -114,14 +134,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
             ].map((clip, i) => (
               <div key={i} className="absolute inset-0 bg-black" style={{ clipPath: clip }} />
             ))}
-            {/* Nav content */}
-            <div className="relative z-10 h-full flex items-center justify-between px-6">
-              <button
-                onClick={onLogin || onGetStarted}
-                className="text-white font-black text-sm tracking-wide uppercase hover:opacity-70 transition-opacity"
-              >
-                Log In
-              </button>
+            <div className="relative z-10 h-full flex items-center justify-center">
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -129,12 +142,6 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
               >
                 <FirstDayLogo size="hero" showTagline={true} showLetters={false} />
               </motion.div>
-              <button
-                onClick={onGetStarted}
-                className="text-white font-black text-sm tracking-wide uppercase hover:opacity-70 transition-opacity"
-              >
-                Get Started
-              </button>
             </div>
           </div>
 
@@ -155,41 +162,53 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
           </motion.div>
         </section>
 
-        {/* Sticky nav — identical to hero bar, appears when scrolled past */}
+        {/* Sticky nav — cracked bar + corner buttons, appears when scrolled past */}
         {isNavSticky && (
-          <motion.div
-            initial={{ y: -60, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-            className="fixed top-0 left-0 right-0 z-50 h-14"
-          >
-            {/* Cracked black shards — same pattern as hero */}
-            {[
-              "polygon(0% 0%, 22% 0%, 21% 48%, 20.5% 100%, 0% 100%)",
-              "polygon(22.5% 0%, 42% 0%, 41.5% 55%, 42.2% 100%, 21.2% 100%, 21.6% 48%)",
-              "polygon(42.5% 0%, 60% 0%, 59.2% 42%, 59.8% 100%, 42.8% 100%, 42.1% 55%)",
-              "polygon(60.5% 0%, 80% 0%, 79.5% 52%, 80.2% 100%, 60.4% 100%, 60.8% 42%)",
-              "polygon(80.5% 0%, 100% 0%, 100% 100%, 80.8% 100%, 80.1% 52%)",
-            ].map((clip, i) => (
-              <div key={i} className="absolute inset-0 bg-black" style={{ clipPath: clip }} />
-            ))}
-            {/* Nav content */}
-            <div className="relative z-10 h-full flex items-center justify-between px-6">
-              <button
+          <>
+            {/* Corner buttons */}
+            <div className="fixed top-4 left-4 z-[60]">
+              <motion.button
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
                 onClick={onLogin || onGetStarted}
-                className="text-white font-black text-sm tracking-wide uppercase hover:opacity-70 transition-opacity"
+                className="bg-black px-4 py-2 text-white font-black text-sm tracking-wide uppercase hover:opacity-70 transition-opacity"
+                style={{ clipPath: "polygon(4% 8%, 95% 0%, 100% 85%, 8% 100%)" }}
               >
                 Log In
-              </button>
-              <FirstDayLogo showTagline={true} showLetters={false} />
-              <button
+              </motion.button>
+            </div>
+            <div className="fixed top-4 right-4 z-[60]">
+              <motion.button
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
                 onClick={onGetStarted}
-                className="text-white font-black text-sm tracking-wide uppercase hover:opacity-70 transition-opacity"
+                className="bg-black px-4 py-2 text-white font-black text-sm tracking-wide uppercase hover:opacity-70 transition-opacity"
+                style={{ clipPath: "polygon(0% 10%, 96% 0%, 92% 100%, 5% 85%)" }}
               >
                 Get Started
-              </button>
+              </motion.button>
             </div>
-          </motion.div>
+            {/* Cracked tagline bar */}
+            <motion.div
+              initial={{ y: -60, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="fixed top-0 left-0 right-0 z-50 h-14"
+            >
+              {[
+                "polygon(0% 0%, 22% 0%, 21% 48%, 20.5% 100%, 0% 100%)",
+                "polygon(22.5% 0%, 42% 0%, 41.5% 55%, 42.2% 100%, 21.2% 100%, 21.6% 48%)",
+                "polygon(42.5% 0%, 60% 0%, 59.2% 42%, 59.8% 100%, 42.8% 100%, 42.1% 55%)",
+                "polygon(60.5% 0%, 80% 0%, 79.5% 52%, 80.2% 100%, 60.4% 100%, 60.8% 42%)",
+                "polygon(80.5% 0%, 100% 0%, 100% 100%, 80.8% 100%, 80.1% 52%)",
+              ].map((clip, i) => (
+                <div key={i} className="absolute inset-0 bg-black" style={{ clipPath: clip }} />
+              ))}
+              <div className="relative z-10 h-full flex items-center justify-center">
+                <FirstDayLogo showTagline={true} showLetters={false} />
+              </div>
+            </motion.div>
+          </>
         )}
 
         {/* Scrolling Goal Pills */}
