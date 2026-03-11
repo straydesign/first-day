@@ -169,12 +169,12 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
             </div>
             <div className="animate-fadeIn space-y-4">
               {goals.map(goal => (
-                <MosaicCard key={goal.id} seed={goals.indexOf(goal)} className="bg-[#1a1a3e]/90 backdrop-blur-sm">
+                <MosaicCard key={goal.id} seed={goals.indexOf(goal)} className="backdrop-blur-sm">
                   <CardHeader>
                     <div className="mb-4 flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
-                          <CardTitle className="text-2xl text-teal-900">{goal.title}</CardTitle>
+                          <CardTitle className="text-2xl text-white">{goal.title}</CardTitle>
                           {engagement && (engagement.currentStreak > 0 || engagement.isAtRisk) && (
                             <StreakBadge streak={engagement.currentStreak} isAtRisk={engagement.isAtRisk} size="sm" />
                           )}

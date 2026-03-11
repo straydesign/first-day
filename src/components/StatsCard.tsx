@@ -1,6 +1,7 @@
 "use client";
 import type { EngagementState } from "@/types";
 import { Flame, Zap, TrendingUp, Target } from "lucide-react";
+import { MosaicCard } from "./MosaicCard";
 
 interface StatsCardProps {
   engagement: EngagementState;
@@ -11,34 +12,34 @@ export function StatsCard({ engagement }: StatsCardProps) {
 
   return (
     <div className="grid grid-cols-2 gap-3">
-      <div className="bg-[#1a1a3e]/80 backdrop-blur-sm clip-tile-a p-3 border border-white/10">
+      <MosaicCard seed={80} tileVariant="a" mosaicOpacity={0.85} className="p-3">
         <div className="flex items-center gap-2 mb-1">
-          <Target className="w-4 h-4 text-teal-600" />
-          <span className="text-xs text-white/50 font-medium">Completion</span>
+          <Target className="w-4 h-4 text-teal-400" />
+          <span className="text-xs text-white/70 font-medium">Completion</span>
         </div>
-        <p className="text-2xl font-bold text-white">{completionRate}%</p>
-      </div>
+        <p className="text-3xl font-bold text-white">{completionRate}%</p>
+      </MosaicCard>
 
-      <div className="bg-[#1a1a3e]/80 backdrop-blur-sm clip-tile-b p-3 border border-white/10">
+      <MosaicCard seed={81} tileVariant="b" mosaicOpacity={0.85} className="p-3">
         <div className="flex items-center gap-2 mb-1">
           <Flame className="w-4 h-4 text-coral-500" />
-          <span className="text-xs text-white/50 font-medium">Streak</span>
+          <span className="text-xs text-white/70 font-medium">Streak</span>
         </div>
-        <p className="text-2xl font-bold text-white">{currentStreak} days</p>
-      </div>
+        <p className="text-3xl font-bold text-white">{currentStreak} days</p>
+      </MosaicCard>
 
-      <div className="bg-[#1a1a3e]/80 backdrop-blur-sm clip-tile-c p-3 border border-white/10">
+      <MosaicCard seed={82} tileVariant="c" mosaicOpacity={0.85} className="p-3">
         <div className="flex items-center gap-2 mb-1">
           <Zap className="w-4 h-4 text-yellow-500" />
-          <span className="text-xs text-white/50 font-medium">Total XP</span>
+          <span className="text-xs text-white/70 font-medium">Total XP</span>
         </div>
-        <p className="text-2xl font-bold text-white">{totalXP.toLocaleString()}</p>
-      </div>
+        <p className="text-3xl font-bold text-white">{totalXP.toLocaleString()}</p>
+      </MosaicCard>
 
-      <div className="bg-[#1a1a3e]/80 backdrop-blur-sm clip-tile-d p-3 border border-white/10">
+      <MosaicCard seed={83} tileVariant="d" mosaicOpacity={0.85} className="p-3">
         <div className="flex items-center gap-2 mb-1">
           <TrendingUp className="w-4 h-4 text-indigo-500" />
-          <span className="text-xs text-white/50 font-medium">Level</span>
+          <span className="text-xs text-white/70 font-medium">Level</span>
         </div>
         <p className="text-lg font-bold text-white">{level.name}</p>
         {level.nextThreshold && (
@@ -51,7 +52,7 @@ export function StatsCard({ engagement }: StatsCardProps) {
             </div>
           </div>
         )}
-      </div>
+      </MosaicCard>
     </div>
   );
 }

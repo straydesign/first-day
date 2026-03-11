@@ -190,8 +190,9 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-bebas), var(--font-plus-jakarta-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    letter-spacing: 0.04em;
+    font-family: var(--font-bebas), system-ui, sans-serif;
+    letter-spacing: 0.06em;
+    font-weight: 700;
   }
 }
 

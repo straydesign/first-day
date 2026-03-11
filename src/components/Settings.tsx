@@ -61,7 +61,7 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
           <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">Account Settings</h1>
           <p className="text-teal-700">Manage your account and data preferences</p>
         </div>
-        <MosaicCard seed={1} className="p-4 md:p-6 mb-4 md:mb-6 bg-[#1a1a3e]/90 backdrop-blur-sm">
+        <MosaicCard seed={1} className="p-4 md:p-6 mb-4 md:mb-6 backdrop-blur-sm">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 clip-diamond bg-teal-100 border border-teal-300 flex items-center justify-center"><User className="w-5 h-5 text-teal-600" /></div>
             <h2 className="text-xl font-semibold text-white">Account Information</h2>
@@ -71,7 +71,7 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
             <div className="flex items-center gap-3 text-white/80"><Shield className="w-4 h-4 text-white/50" /><span className="text-sm">User ID:</span><span className="text-sm font-mono text-xs">{userId}</span></div>
           </div>
         </MosaicCard>
-        <MosaicCard seed={2} className="p-4 md:p-6 mb-4 md:mb-6 bg-[#1a1a3e]/90 backdrop-blur-sm">
+        <MosaicCard seed={2} className="p-4 md:p-6 mb-4 md:mb-6 backdrop-blur-sm">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 clip-diamond bg-teal-100 border border-teal-300 flex items-center justify-center"><Shield className="w-5 h-5 text-teal-600" /></div>
             <h2 className="text-xl font-semibold text-white">Privacy</h2>
@@ -82,7 +82,7 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
             <p>You have full control over your data</p>
           </div>
         </MosaicCard>
-        <MosaicCard seed={3} className="p-4 md:p-6 mb-4 md:mb-6 bg-[#1a1a3e]/90 backdrop-blur-sm">
+        <MosaicCard seed={3} className="p-4 md:p-6 mb-4 md:mb-6 backdrop-blur-sm">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 clip-diamond bg-blue-100 border border-blue-300 flex items-center justify-center"><Bell className="w-5 h-5 text-blue-600" /></div>
             <h2 className="text-xl font-semibold text-white">Email Notifications</h2>

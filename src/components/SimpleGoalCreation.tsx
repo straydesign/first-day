@@ -127,7 +127,7 @@ export function SimpleGoalCreation({ onComplete, onCancel }: SimpleGoalCreationP
               )}
             </div>
             <div className="flex flex-col gap-3">
-              <Button size="lg" onClick={handleGenerate} disabled={isGenerating || !goal.trim()} className="w-full shadow-lg transition-smooth hover:scale-105 disabled:hover:scale-100">
+              <Button size="lg" onClick={handleGenerate} disabled={isGenerating || !goal.trim()} className="w-full shadow-lg transition-smooth hover:scale-105 disabled:hover:scale-100 bg-[#5227FF] text-white hover:bg-[#5227FF]/90">
                 {isGenerating ? (<><Loader2 className="w-5 h-5 mr-2 animate-spin" />Generating...</>) : (<>Generate My Plan<ArrowRight className="w-5 h-5 ml-2" /></>)}
               </Button>
               <Button variant="outline" size="lg" onClick={onCancel} disabled={isGenerating} className="w-full border-2 border-white/10 text-white/80 hover:bg-white/10">Cancel</Button>

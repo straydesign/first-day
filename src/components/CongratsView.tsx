@@ -175,7 +175,7 @@ export function CongratsView({
           {/* 3. XP count-up */}
           {xp && xp.total > 0 && (
             <motion.div
-              className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm clip-badge-a px-6 py-2 mb-4 shadow-md"
+              className="inline-flex items-center gap-2 bg-[#242450] backdrop-blur-sm clip-badge-a px-6 py-2 mb-4 shadow-md border border-white/15"
               initial={{ opacity: 0, scale: 0.8, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.85, ease: "easeOut" }}
@@ -257,14 +257,15 @@ export function CongratsView({
           >
             <Button
               onClick={onViewCalendar}
-              className="px-6 py-5 md:px-8 md:py-6 text-base md:text-lg shadow-lg hover:shadow-xl transition-smooth hover:scale-105"
+              variant="vivid"
+              className="px-6 py-5 md:px-8 md:py-6 text-base md:text-lg shadow-lg hover:shadow-xl transition-smooth hover:scale-105 bg-[#00c7fc] text-[#0a0a1e]"
             >
               <Calendar className="mr-2 w-5 h-5 flex-shrink-0" />View Calendar
             </Button>
             <Button
               onClick={onDoMore}
               variant="outline"
-              className="px-6 py-5 md:px-8 md:py-6 text-base md:text-lg border-2 border-teal-600 text-teal-600 hover:bg-[#242450] shadow-md hover:shadow-lg transition-smooth hover:scale-105 bg-[#1a1a3e]"
+              className="px-6 py-5 md:px-8 md:py-6 text-base md:text-lg border-2 border-white/20 text-white hover:bg-[#242450] shadow-md hover:shadow-lg transition-smooth hover:scale-105 bg-[#0a0a1e]"
             >
               <ArrowRight className="mr-2 w-5 h-5 flex-shrink-0" />Back to Goals
             </Button>

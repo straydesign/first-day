@@ -9,6 +9,7 @@ import { FirstDayLogo } from "./FirstDayLogo";
 import { Footer } from "./Footer";
 import { MosaicCard } from "./MosaicCard";
 import { MosaicBackground } from "./MosaicBackground";
+import { GeometricFrame } from "./GeometricFrame";
 import { Button } from "@/components/ui/button";
 import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, GOAL_CATEGORY_MAP, GOAL_CATEGORY_COLORS } from "@/constants";
 
@@ -59,7 +60,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
         {[...goals, ...goals, ...goals, ...goals, ...goals, ...goals, ...goals, ...goals].map((goal, index) => (
           <div
             key={index}
-            className={`${index % 2 === 0 ? "clip-badge-a" : "clip-badge-b"} inline-block px-5 py-2 text-white/80 border-2 ${getGoalColorClasses(goal)} text-sm font-medium mx-1.5 select-none`}
+            className={`${index % 2 === 0 ? "clip-badge-a" : "clip-badge-b"} inline-block px-5 py-2 text-white border-2 ${getGoalColorClasses(goal)} text-sm font-medium mx-1.5 select-none`}
           >
             {goal}
           </div>
@@ -91,6 +92,11 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
             <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
           </div>
 
+          {/* Vivid mosaic behind hero */}
+          <div className="absolute inset-0 z-[1]">
+            <MosaicBackground density={14} opacity={0.5} seed={777} mode="bright-only" />
+          </div>
+
           {/* Top bar */}
           <div className="absolute top-11 left-0 right-0 flex items-center justify-between px-4 z-50">
             <Button
@@ -120,32 +126,26 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
               <FirstDayLogo size="hero" showTagline={true} />
             </motion.div>
 
-            {/* Subtitle on geometric dark cards */}
+            {/* Subtitle on vivid mosaic cards */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
               className="mt-8 flex flex-col items-center gap-3"
             >
-              <div
-                className="clip-tile-a px-6 py-3 backdrop-blur-sm shadow-lg"
-                style={{ background: "rgba(29, 15, 102, 0.75)" }}
-              >
-                <h1 className="text-xl md:text-2xl font-bold text-white">
+              <MosaicCard seed={100} tileVariant="a" mosaicOpacity={0.85} className="px-6 py-3 shadow-lg">
+                <h1 className="text-3xl md:text-5xl font-bold text-white">
                   Achieve any goal in 30 days
                 </h1>
-              </div>
-              <div
-                className="clip-tile-b px-6 py-2.5 backdrop-blur-sm shadow-lg"
-                style={{ background: "rgba(45, 21, 144, 0.7)" }}
-              >
-                <p className="text-sm md:text-base text-white/90">
+              </MosaicCard>
+              <MosaicCard seed={101} tileVariant="b" mosaicOpacity={0.85} className="px-6 py-2.5 shadow-lg">
+                <p className="text-base md:text-lg text-white">
                   AI creates your personalized daily plan. You just show up.
                 </p>
-              </div>
+              </MosaicCard>
             </motion.div>
 
-            {/* CTA */}
+            {/* CTA — vivid green */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -154,7 +154,8 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
             >
               <Button
                 onClick={onGetStarted}
-                className="shadow-lg hover:shadow-xl transition-smooth hover:scale-105 px-10 py-6 text-lg clip-btn-a"
+                variant="vivid"
+                className="shadow-lg hover:shadow-xl transition-smooth hover:scale-105 px-10 py-6 text-lg clip-btn-a bg-[#7cff67] text-[#0a0a1e]"
               >
                 Start Your Own Journey
               </Button>
@@ -187,7 +188,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
             className="overflow-hidden w-full"
           >
             <div className="py-4 overflow-hidden space-y-1.5">
-              <p className="text-white/80 text-sm font-medium mb-3 text-center px-4">Goals you can achieve in 30 days:</p>
+              <p className="text-white text-sm font-medium mb-3 text-center px-4">Goals you can achieve in 30 days:</p>
               {renderScrollRow(GOAL_SUGGESTIONS_ROW_1, "left", isPausedRow1, setIsPausedRow1, 0)}
               {renderScrollRow(GOAL_SUGGESTIONS_ROW_2, "right", isPausedRow2, setIsPausedRow2, 1)}
               {renderScrollRow(GOAL_SUGGESTIONS_ROW_3, "left", isPausedRow3, setIsPausedRow3, 2)}
@@ -198,49 +199,49 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
         {/* How It Works */}
         <AnimatedSection>
           <section id="how-it-works" className="w-full py-8 md:py-16 px-0 md:px-4">
-            <div className="clip-section-both relative bg-[#1a1a3e] backdrop-blur-xl border-y md:border border-white/10 overflow-hidden">
-              <MosaicBackground density={10} opacity={0.03} seed={200} />
+            <div className="clip-section-both relative bg-[#0a0a1e] backdrop-blur-xl border-y md:border border-white/10 overflow-hidden">
+              <MosaicBackground density={12} opacity={0.5} seed={200} mode="bright-only" />
               <div className="relative z-10 px-6 md:px-10 pt-8 md:pt-12 pb-4 text-center">
-                <h2 className="text-2xl md:text-4xl font-bold text-white mb-2">How It Works</h2>
-                <p className="text-teal-700">Three simple steps to your best month</p>
+                <h2 className="text-3xl md:text-5xl font-bold text-white mb-2">How It Works</h2>
+                <p className="text-white/80">Three simple steps to your best month</p>
               </div>
 
               <div className="relative z-10 px-6 md:px-10 pb-8 md:pb-12 space-y-4">
                 {/* Step 1 */}
-                <MosaicCard seed={10} tileVariant="a" mosaicOpacity={0.12} className="p-5 md:p-8">
+                <MosaicCard seed={10} tileVariant="a" mosaicOpacity={0.85} className="p-5 md:p-8">
                   <div className="flex gap-5 items-start">
-                    <div className="clip-diamond w-12 h-12 bg-teal-600 text-white flex items-center justify-center shadow-md text-xl font-bold flex-shrink-0">
+                    <div className="clip-diamond w-14 h-14 bg-teal-600 text-white flex items-center justify-center shadow-md text-xl font-bold flex-shrink-0">
                       1
                     </div>
                     <div className="flex-1">
                       <h3 className="text-2xl font-bold text-white mb-2">Set Your Goal</h3>
-                      <p className="text-white/80 text-lg mb-4">
+                      <p className="text-white text-lg mb-4">
                         Pick any goal and answer a few quick questions about your experience and what motivates you. Takes less than 2 minutes.
                       </p>
-                      <p className="text-white/50 text-sm">
-                        <strong className="text-white/80">Examples:</strong> Learn Spanish basics, Build a meditation habit, Write a short story, Run a 5K
+                      <p className="text-white/70 text-sm">
+                        <strong className="text-white">Examples:</strong> Learn Spanish basics, Build a meditation habit, Write a short story, Run a 5K
                       </p>
                     </div>
                   </div>
                 </MosaicCard>
 
                 {/* Step 2 */}
-                <MosaicCard seed={20} tileVariant="b" mosaicOpacity={0.12} className="p-5 md:p-8">
+                <MosaicCard seed={20} tileVariant="b" mosaicOpacity={0.85} className="p-5 md:p-8">
                   <div className="flex gap-5 items-start">
-                    <div className="clip-diamond w-12 h-12 bg-purple-600 text-white flex items-center justify-center shadow-md text-xl font-bold flex-shrink-0">
+                    <div className="clip-diamond w-14 h-14 bg-purple-600 text-white flex items-center justify-center shadow-md text-xl font-bold flex-shrink-0">
                       2
                     </div>
                     <div className="flex-1">
                       <h3 className="text-2xl font-bold text-white mb-2">Get Your Plan</h3>
-                      <p className="text-white/80 text-lg mb-3">
+                      <p className="text-white text-lg mb-3">
                         AI generates a structured 30-day plan with daily activities, curated resources, and weekly book recommendations tailored to you.
                       </p>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3">
-                        <div className="flex items-start gap-2 text-white/50 text-sm">
+                        <div className="flex items-start gap-2 text-white/70 text-sm">
                           <CheckSquare className="w-4 h-4 text-purple-500 flex-shrink-0 mt-0.5" />
                           <span>Daily activities with video and article resources</span>
                         </div>
-                        <div className="flex items-start gap-2 text-white/50 text-sm">
+                        <div className="flex items-start gap-2 text-white/70 text-sm">
                           <BookOpen className="w-4 h-4 text-purple-500 flex-shrink-0 mt-0.5" />
                           <span>Weekly book recommendations to deepen your learning</span>
                         </div>
@@ -250,22 +251,22 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                 </MosaicCard>
 
                 {/* Step 3 */}
-                <MosaicCard seed={30} tileVariant="c" mosaicOpacity={0.12} className="p-5 md:p-8">
+                <MosaicCard seed={30} tileVariant="c" mosaicOpacity={0.85} className="p-5 md:p-8">
                   <div className="flex gap-5 items-start">
-                    <div className="clip-diamond w-12 h-12 bg-lime-500 text-white flex items-center justify-center shadow-md text-xl font-bold flex-shrink-0">
+                    <div className="clip-diamond w-14 h-14 bg-lime-500 text-white flex items-center justify-center shadow-md text-xl font-bold flex-shrink-0">
                       3
                     </div>
                     <div className="flex-1">
                       <h3 className="text-2xl font-bold text-white mb-2">Show Up Daily</h3>
-                      <p className="text-white/80 text-lg mb-4">
+                      <p className="text-white text-lg mb-4">
                         Check off activities, reflect on your progress, and watch your calendar fill up with completed days.
                       </p>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        <div className="flex items-center gap-2 text-white/50 text-sm">
+                        <div className="flex items-center gap-2 text-white/70 text-sm">
                           <Calendar className="w-4 h-4 text-lime-600 flex-shrink-0" />
                           <span>Visual 30-day calendar with progress tracking</span>
                         </div>
-                        <div className="flex items-center gap-2 text-white/50 text-sm">
+                        <div className="flex items-center gap-2 text-white/70 text-sm">
                           <Mail className="w-4 h-4 text-lime-600 flex-shrink-0" />
                           <span>Daily email reminders to keep you on track</span>
                         </div>
@@ -281,55 +282,55 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
         {/* Stay Motivated */}
         <AnimatedSection>
           <section className="w-full py-8 md:py-16 px-0 md:px-4">
-            <div className="clip-section-both relative bg-[#1a1a3e] backdrop-blur-xl border-y md:border border-white/10 overflow-hidden">
-              <MosaicBackground density={10} opacity={0.03} seed={300} />
+            <div className="clip-section-both relative bg-[#0a0a1e] backdrop-blur-xl border-y md:border border-white/10 overflow-hidden">
+              <MosaicBackground density={12} opacity={0.5} seed={300} mode="bright-only" />
               <div className="relative z-10 px-6 md:px-10 pt-8 md:pt-12 pb-4 text-center">
-                <h2 className="text-2xl md:text-4xl font-bold text-white mb-2">Stay Motivated</h2>
-                <p className="text-teal-700">Built-in streaks, XP, and achievements keep you coming back</p>
+                <h2 className="text-3xl md:text-5xl font-bold text-white mb-2">Stay Motivated</h2>
+                <p className="text-white/80">Built-in streaks, XP, and achievements keep you coming back</p>
               </div>
 
               <div className="relative z-10 px-6 md:px-10 pb-6 md:pb-10">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
                   {/* Streaks */}
-                  <MosaicCard seed={40} tileVariant="a" mosaicOpacity={0.15} className="p-5 text-center">
+                  <MosaicCard seed={40} tileVariant="a" mosaicOpacity={0.85} className="p-5 text-center">
                     <div className="clip-diamond inline-flex items-center justify-center w-14 h-14 bg-orange-500/20 mb-3">
                       <Flame className="w-7 h-7 text-orange-500" />
                     </div>
                     <h3 className="text-xl font-bold text-white mb-1">Daily Streaks</h3>
-                    <p className="text-white/80 text-sm mb-4">Keep your streak alive by showing up every day. The longer you go, the more bonus XP you earn.</p>
-                    <div className="clip-badge-a inline-flex items-center gap-1.5 bg-orange-500/20 text-orange-700 px-5 py-1.5 font-bold text-lg">
+                    <p className="text-white text-sm mb-4">Keep your streak alive by showing up every day. The longer you go, the more bonus XP you earn.</p>
+                    <div className="clip-badge-a inline-flex items-center gap-1.5 bg-orange-500/20 text-orange-400 px-5 py-1.5 font-bold text-lg">
                       <Flame className="w-5 h-5" />
                       <span>12</span>
                     </div>
-                    <p className="text-xs text-orange-600 mt-1 font-medium">12-day streak</p>
+                    <p className="text-xs text-orange-400 mt-1 font-medium">12-day streak</p>
                   </MosaicCard>
 
                   {/* XP & Levels */}
-                  <MosaicCard seed={50} tileVariant="b" mosaicOpacity={0.15} className="p-5 text-center">
+                  <MosaicCard seed={50} tileVariant="b" mosaicOpacity={0.85} className="p-5 text-center">
                     <div className="clip-diamond inline-flex items-center justify-center w-14 h-14 bg-yellow-500/20 mb-3">
                       <Zap className="w-7 h-7 text-yellow-500" />
                     </div>
                     <h3 className="text-xl font-bold text-white mb-1">Earn XP</h3>
-                    <p className="text-white/80 text-sm mb-4">Earn points for every activity you complete, every reflection you write, and every streak day.</p>
+                    <p className="text-white text-sm mb-4">Earn points for every activity you complete, every reflection you write, and every streak day.</p>
                     <div className="space-y-2 max-w-[180px] mx-auto">
                       <div className="flex justify-between text-sm">
-                        <span className="font-semibold text-white/80">Dedicated</span>
-                        <span className="text-yellow-600 font-bold">1,450 XP</span>
+                        <span className="font-semibold text-white">Dedicated</span>
+                        <span className="text-yellow-400 font-bold">1,450 XP</span>
                       </div>
                       <div className="clip-progress w-full h-2.5 bg-white/10 overflow-hidden">
                         <div className="h-full bg-gradient-to-r from-yellow-400 to-yellow-500" style={{ width: "62%" }} />
                       </div>
-                      <p className="text-xs text-white/50">750 XP to Unstoppable</p>
+                      <p className="text-xs text-white/70">750 XP to Unstoppable</p>
                     </div>
                   </MosaicCard>
 
                   {/* Achievements */}
-                  <MosaicCard seed={60} tileVariant="c" mosaicOpacity={0.15} className="p-5 text-center">
+                  <MosaicCard seed={60} tileVariant="c" mosaicOpacity={0.85} className="p-5 text-center">
                     <div className="clip-diamond inline-flex items-center justify-center w-14 h-14 bg-purple-500/20 mb-3">
                       <Trophy className="w-7 h-7 text-purple-500" />
                     </div>
                     <h3 className="text-xl font-bold text-white mb-1">Unlock Badges</h3>
-                    <p className="text-white/80 text-sm mb-4">Hit milestones and earn achievements. Can you collect them all before day 30?</p>
+                    <p className="text-white text-sm mb-4">Hit milestones and earn achievements. Can you collect them all before day 30?</p>
                     <div className="flex justify-center gap-2">
                       {[
                         { icon: "🚀", label: "First Step", locked: false },
@@ -355,26 +356,26 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
 
                 {/* Stat bar */}
                 <div className="mt-6 grid grid-cols-3 gap-3 max-w-lg mx-auto">
-                  <div className="clip-badge-a text-center bg-white/5 py-3 px-2 border border-white/10">
+                  <div className="clip-badge-a text-center bg-[#242450]/80 py-3 px-2 border border-white/10">
                     <div className="flex items-center justify-center gap-1 mb-0.5">
-                      <Target className="w-3.5 h-3.5 text-teal-600" />
-                      <span className="text-xs text-white/50 font-medium">Rate</span>
+                      <Target className="w-3.5 h-3.5 text-teal-400" />
+                      <span className="text-xs text-white/70 font-medium">Rate</span>
                     </div>
-                    <p className="text-xl font-bold text-white">87%</p>
+                    <p className="text-3xl font-bold text-white">87%</p>
                   </div>
-                  <div className="clip-badge-a text-center bg-white/5 py-3 px-2 border border-white/10">
+                  <div className="clip-badge-a text-center bg-[#242450]/80 py-3 px-2 border border-white/10">
                     <div className="flex items-center justify-center gap-1 mb-0.5">
                       <Flame className="w-3.5 h-3.5 text-orange-500" />
-                      <span className="text-xs text-white/50 font-medium">Streak</span>
+                      <span className="text-xs text-white/70 font-medium">Streak</span>
                     </div>
-                    <p className="text-xl font-bold text-white">12</p>
+                    <p className="text-3xl font-bold text-white">12</p>
                   </div>
-                  <div className="clip-badge-a text-center bg-white/5 py-3 px-2 border border-white/10">
+                  <div className="clip-badge-a text-center bg-[#242450]/80 py-3 px-2 border border-white/10">
                     <div className="flex items-center justify-center gap-1 mb-0.5">
                       <Trophy className="w-3.5 h-3.5 text-purple-500" />
-                      <span className="text-xs text-white/50 font-medium">Badges</span>
+                      <span className="text-xs text-white/70 font-medium">Badges</span>
                     </div>
-                    <p className="text-xl font-bold text-white">5/8</p>
+                    <p className="text-3xl font-bold text-white">5/8</p>
                   </div>
                 </div>
               </div>
@@ -385,31 +386,33 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
         {/* What Your Plan Looks Like */}
         <AnimatedSection>
           <section className="w-full py-8 md:py-16 px-0 md:px-4">
-            <div className="clip-section-both relative bg-[#1a1a3e] backdrop-blur-xl border-y md:border border-white/10 overflow-hidden">
-              <MosaicBackground density={10} opacity={0.03} seed={400} />
+            <div className="clip-section-both relative bg-[#0a0a1e] backdrop-blur-xl border-y md:border border-white/10 overflow-hidden">
+              <MosaicBackground density={12} opacity={0.5} seed={400} mode="bright-only" />
               <div className="relative z-10 px-6 md:px-10 pt-8 md:pt-12 pb-4 text-center">
-                <h2 className="text-2xl md:text-4xl font-bold text-white mb-2">What Your Plan Looks Like</h2>
-                <p className="text-teal-700">Real screens from &quot;Learn to play guitar&quot;</p>
+                <h2 className="text-3xl md:text-5xl font-bold text-white mb-2">What Your Plan Looks Like</h2>
+                <p className="text-white/80">Real screens from &quot;Learn to play guitar&quot;</p>
               </div>
 
               <div className="relative z-10 px-6 md:px-10 pb-6 md:pb-10">
                 <div className="flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-4 -mx-2 px-2">
                   {[
-                    { src: "/screenshots/calendar-view.png", label: "Your 30-Day Calendar", alt: "Calendar view showing weekly plan with day cards", tile: "a" as const },
-                    { src: "/screenshots/day-view.png", label: "Daily Activities", alt: "Day view with checkable activities and YouTube resources", tile: "c" as const },
-                    { src: "/screenshots/congrats-view.png", label: "Celebrate Wins", alt: "Congratulations screen with XP breakdown and achievements", tile: "b" as const },
+                    { src: "/screenshots/calendar-view.png", label: "Your 30-Day Calendar", alt: "Calendar view showing weekly plan with day cards", tile: "a" as const, frameSeed: 500 },
+                    { src: "/screenshots/day-view.png", label: "Daily Activities", alt: "Day view with checkable activities and YouTube resources", tile: "c" as const, frameSeed: 501 },
+                    { src: "/screenshots/congrats-view.png", label: "Celebrate Wins", alt: "Congratulations screen with XP breakdown and achievements", tile: "b" as const, frameSeed: 502 },
                   ].map((screen) => (
                     <div key={screen.label} className="flex-shrink-0 snap-center">
-                      <div className={`clip-tile-${screen.tile} relative w-[200px] md:w-[220px] border-[4px] border-gray-800 bg-black overflow-hidden shadow-xl`}>
-                        <Image
-                          src={screen.src}
-                          alt={screen.alt}
-                          width={375}
-                          height={812}
-                          className="w-full h-auto"
-                        />
-                      </div>
-                      <p className="text-center text-sm font-medium text-white/80 mt-3">{screen.label}</p>
+                      <GeometricFrame seed={screen.frameSeed} borderWidth={8} irregularity={0.2}>
+                        <div className={`clip-tile-${screen.tile} relative w-[200px] md:w-[220px] border-[4px] border-gray-800 bg-black overflow-hidden shadow-xl`}>
+                          <Image
+                            src={screen.src}
+                            alt={screen.alt}
+                            width={375}
+                            height={812}
+                            className="w-full h-auto"
+                          />
+                        </div>
+                      </GeometricFrame>
+                      <p className="text-center text-sm font-medium text-white mt-3">{screen.label}</p>
                     </div>
                   ))}
                 </div>
@@ -418,11 +421,12 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                 <div className="text-center mt-6 md:mt-8">
                   <Button
                     onClick={onGetStarted}
-                    className="shadow-lg hover:shadow-xl transition-smooth hover:scale-105 px-8 py-5 md:px-10 md:py-6 text-base md:text-lg clip-btn-a"
+                    variant="vivid"
+                    className="shadow-lg hover:shadow-xl transition-smooth hover:scale-105 px-8 py-5 md:px-10 md:py-6 text-base md:text-lg clip-btn-a bg-[#7cff67] text-[#0a0a1e]"
                   >
                     Create Your Plan
                   </Button>
-                  <p className="text-sm text-white/50 mt-3">
+                  <p className="text-sm text-white/70 mt-3">
                     <Sparkles className="w-4 h-4 inline-block mr-1 text-purple-500" />
                     Every plan is unique — personalized to your goal and experience
                   </p>

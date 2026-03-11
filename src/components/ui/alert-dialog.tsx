@@ -65,7 +65,7 @@ function AlertDialogContent({
         )}
         {...props}
       >
-        <MosaicBackground density={6} opacity={0.05} seed={99} />
+        <MosaicBackground density={8} opacity={0.4} seed={99} safeZone={{ yStart: 0.15, yEnd: 0.85, bleedProbability: 0.15 }} />
         <div className="relative z-10 grid gap-4">
           {children}
         </div>

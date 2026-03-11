@@ -140,11 +140,11 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
               >
                 <div className="mb-3 flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <h3 className="text-lg md:text-xl font-bold text-teal-300">Week {week.weekNumber}: {week.label}</h3>
+                    <h3 className="text-xl md:text-2xl font-bold text-teal-300">Week {week.weekNumber}: {week.label}</h3>
                     {!week.isUnlocked && <span className="text-xs md:text-sm text-purple-300 bg-purple-900/40 px-3 py-1 clip-badge-a font-medium">Locked</span>}
                   </div>
                 </div>
-                <MosaicCard seed={weekIndex} tileVariant={(["a", "b", "c", "d"] as const)[weekIndex % 4]} className={`p-3 md:p-6 transition-smooth ${week.isUnlocked ? 'bg-[#1a1a3e]/90 backdrop-blur-sm hover:bg-[#1a1a3e]' : 'bg-[#12122e] opacity-60 cursor-not-allowed'}`}>
+                <MosaicCard seed={weekIndex} tileVariant={(["a", "b", "c", "d"] as const)[weekIndex % 4]} className={`p-3 md:p-6 transition-smooth ${week.isUnlocked ? 'backdrop-blur-sm' : 'opacity-60 cursor-not-allowed'}`}>
                   {week.isUnlocked ? (
                     <div className="space-y-3 md:space-y-4">
                       {week.weeklyBook && (

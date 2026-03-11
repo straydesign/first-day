@@ -98,7 +98,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
             transition={{ duration: 0.4, delay: 0.15, ease: "easeOut" }}
           >
             <div className="mb-4 md:mb-6">
-              <MosaicCard seed={1} className="bg-white/10 backdrop-blur-md border border-white/10">
+              <MosaicCard seed={1} className="backdrop-blur-md">
                 <CardHeader><CardTitle className="text-2xl text-white">Your Activities</CardTitle></CardHeader>
                 <CardContent className="space-y-4">
                   {activities.map((activity: string | Activity, index: number) => {
@@ -112,7 +112,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
                         transition={{ duration: 0.4, delay: 0.25 + index * 0.1, ease: "easeOut" }}
                         className="space-y-2"
                       >
-                        <div className={`flex items-start gap-2 md:gap-4 p-2 md:p-4 clip-tile-c border-2 transition-smooth ${completedActivities[index] ? 'border-lime-500 bg-lime-500/10' : 'border-white/20 hover:border-teal-400'} ${isCompleted ? 'opacity-75' : ''}`}>
+                        <div className={`flex items-start gap-2 md:gap-4 p-2 md:p-4 clip-tile-c border-2 transition-smooth ${completedActivities[index] ? 'border-[#7cff67] bg-[#7cff67]/10' : 'border-white/20 hover:border-teal-400'} ${isCompleted ? 'opacity-75' : ''}`}>
                           <Checkbox checked={completedActivities[index] || false} onCheckedChange={() => !isCompleted && toggleActivity(index)} id={`activity-${index}`} className="mt-1 flex-shrink-0 size-6 border-2 border-white/40 data-[state=checked]:border-lime-500 data-[state=checked]:bg-lime-500" disabled={isCompleted} />
                           <label htmlFor={`activity-${index}`} className="flex-1 min-w-0 cursor-pointer">
                             <div className="text-base md:text-lg leading-relaxed select-text text-white/90">{activityText}</div>
@@ -151,7 +151,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
             transition={{ duration: 0.4, delay: 0.15, ease: "easeOut" }}
           >
             <div className="mb-4 md:mb-6">
-              <MosaicCard seed={2} className="bg-white/10 backdrop-blur-md border border-white/10">
+              <MosaicCard seed={2} className="backdrop-blur-md">
                 <CardContent className="py-8 text-center">
                   <p className="text-white/60 text-lg">Activities for this day are not available yet.</p>
                   <p className="text-white/40 text-sm mt-2">Check back later or contact support if this persists.</p>
@@ -167,7 +167,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
           transition={{ duration: 0.4, delay: 0.35 + (hasActivities ? activities.length * 0.1 : 0), ease: "easeOut" }}
         >
           <div className="mb-4 md:mb-6">
-            <MosaicCard seed={3} className="bg-white/10 backdrop-blur-md border border-white/10">
+            <MosaicCard seed={3} className="backdrop-blur-md">
               <CardHeader><CardTitle className="text-2xl text-white">How did today go?</CardTitle></CardHeader>
               <CardContent>
                 <Textarea value={feedback} onChange={(e) => !isCompleted && setFeedback(e.target.value)} placeholder="Share your thoughts, challenges, or wins from today..." className="min-h-32 text-lg border-white/20 focus:border-teal-400 bg-white/5 text-white placeholder:text-white/40" disabled={isCompleted} />
@@ -184,7 +184,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
             transition={{ duration: 0.4, delay: 0.45 + (hasActivities ? activities.length * 0.1 : 0), ease: "easeOut" }}
           >
             <div className="flex justify-center">
-              <Button onClick={handleSubmit} disabled={!canSubmit} className="px-6 py-5 md:px-8 md:py-6 text-base md:text-lg border border-white/10 disabled:opacity-50 transition-smooth hover:scale-105 disabled:hover:scale-100">Complete Day</Button>
+              <Button onClick={handleSubmit} disabled={!canSubmit} variant={canSubmit ? "vivid" : "default"} className="px-6 py-5 md:px-8 md:py-6 text-base md:text-lg border border-white/10 disabled:opacity-50 transition-smooth hover:scale-105 disabled:hover:scale-100">Complete Day</Button>
             </div>
             {canSubmit && (
               <motion.div
