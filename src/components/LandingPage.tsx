@@ -8,7 +8,6 @@ import Aurora from "./Aurora";
 import { FirstDayLogo } from "./FirstDayLogo";
 import { Footer } from "./Footer";
 import { MosaicCard } from "./MosaicCard";
-import { MosaicBackground } from "./MosaicBackground";
 import { GeometricFrame } from "./GeometricFrame";
 import { Button } from "@/components/ui/button";
 import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, GOAL_CATEGORY_MAP, GOAL_CATEGORY_COLORS } from "@/constants";
@@ -90,11 +89,6 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
               priority
             />
             <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
-          </div>
-
-          {/* Vivid mosaic behind hero */}
-          <div className="absolute inset-0 z-[1]">
-            <MosaicBackground density={14} opacity={0.5} seed={777} mode="bright-only" />
           </div>
 
           {/* Top bar */}
@@ -200,7 +194,6 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
         <AnimatedSection>
           <section id="how-it-works" className="w-full py-8 md:py-16 px-0 md:px-4">
             <div className="clip-section-both relative bg-[#0a0a1e] backdrop-blur-xl border-y md:border border-white/10 overflow-hidden">
-              <MosaicBackground density={12} opacity={0.5} seed={200} mode="bright-only" />
               <div className="relative z-10 px-6 md:px-10 pt-8 md:pt-12 pb-4 text-center">
                 <h2 className="text-3xl md:text-5xl font-bold text-white mb-2">How It Works</h2>
                 <p className="text-white/80">Three simple steps to your best month</p>
@@ -283,7 +276,6 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
         <AnimatedSection>
           <section className="w-full py-8 md:py-16 px-0 md:px-4">
             <div className="clip-section-both relative bg-[#0a0a1e] backdrop-blur-xl border-y md:border border-white/10 overflow-hidden">
-              <MosaicBackground density={12} opacity={0.5} seed={300} mode="bright-only" />
               <div className="relative z-10 px-6 md:px-10 pt-8 md:pt-12 pb-4 text-center">
                 <h2 className="text-3xl md:text-5xl font-bold text-white mb-2">Stay Motivated</h2>
                 <p className="text-white/80">Built-in streaks, XP, and achievements keep you coming back</p>
@@ -387,7 +379,6 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
         <AnimatedSection>
           <section className="w-full py-8 md:py-16 px-0 md:px-4">
             <div className="clip-section-both relative bg-[#0a0a1e] backdrop-blur-xl border-y md:border border-white/10 overflow-hidden">
-              <MosaicBackground density={12} opacity={0.5} seed={400} mode="bright-only" />
               <div className="relative z-10 px-6 md:px-10 pt-8 md:pt-12 pb-4 text-center">
                 <h2 className="text-3xl md:text-5xl font-bold text-white mb-2">What Your Plan Looks Like</h2>
                 <p className="text-white/80">Real screens from &quot;Learn to play guitar&quot;</p>

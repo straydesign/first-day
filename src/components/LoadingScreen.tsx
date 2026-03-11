@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import Aurora from "./Aurora";
 import { AURORA_COLORS } from "@/constants";
-import { MosaicBackground } from "./MosaicBackground";
 import { FirstDayLogo } from "./FirstDayLogo";
 import { Progress } from "@/components/ui/progress";
 import { motion, AnimatePresence } from "framer-motion";
@@ -51,9 +50,6 @@ export function LoadingScreen({ showProgress = false, estimatedDuration = 15000 
     <div className="fixed inset-0 z-[100] bg-black overflow-hidden">
       <div className="absolute inset-0 z-[101] w-full h-full">
         <Aurora colorStops={[...AURORA_COLORS]} />
-      </div>
-      <div className="absolute inset-0 z-[102] w-full h-full">
-        <MosaicBackground density={10} opacity={0.4} seed={999} mode="bright-only" />
       </div>
       <div className="absolute inset-0 z-[105] flex flex-col items-center justify-center gap-8 px-6">
         <FirstDayLogo width={300} height={150} showTagline={true} layout="vertical" />
