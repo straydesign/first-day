@@ -122,19 +122,9 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
             </button>
           </div>
 
-          {/* Full-width tagline — cracked black bar centered in hero */}
-          <div ref={heroNavRef} className="relative z-50 w-full h-14">
-            {/* Cracked black shards */}
-            {[
-              "polygon(0% 0%, 22% 0%, 21% 48%, 20.5% 100%, 0% 100%)",
-              "polygon(22.5% 0%, 42% 0%, 41.5% 55%, 42.2% 100%, 21.2% 100%, 21.6% 48%)",
-              "polygon(42.5% 0%, 60% 0%, 59.2% 42%, 59.8% 100%, 42.8% 100%, 42.1% 55%)",
-              "polygon(60.5% 0%, 80% 0%, 79.5% 52%, 80.2% 100%, 60.4% 100%, 60.8% 42%)",
-              "polygon(80.5% 0%, 100% 0%, 100% 100%, 80.8% 100%, 80.1% 52%)",
-            ].map((clip, i) => (
-              <div key={i} className="absolute inset-0 bg-black" style={{ clipPath: clip }} />
-            ))}
-            <div className="relative z-10 h-full flex items-center justify-center">
+          {/* Full-width tagline — solid black strip centered in hero */}
+          <div ref={heroNavRef} className="relative z-50 w-full bg-black py-3">
+            <div className="flex items-center justify-center">
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -188,23 +178,14 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                 Get Started
               </motion.button>
             </div>
-            {/* Cracked tagline bar */}
+            {/* Solid black tagline bar */}
             <motion.div
               initial={{ y: -60, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.3, ease: "easeOut" }}
-              className="fixed top-0 left-0 right-0 z-50 h-14"
+              className="fixed top-0 left-0 right-0 z-50 bg-black py-3"
             >
-              {[
-                "polygon(0% 0%, 22% 0%, 21% 48%, 20.5% 100%, 0% 100%)",
-                "polygon(22.5% 0%, 42% 0%, 41.5% 55%, 42.2% 100%, 21.2% 100%, 21.6% 48%)",
-                "polygon(42.5% 0%, 60% 0%, 59.2% 42%, 59.8% 100%, 42.8% 100%, 42.1% 55%)",
-                "polygon(60.5% 0%, 80% 0%, 79.5% 52%, 80.2% 100%, 60.4% 100%, 60.8% 42%)",
-                "polygon(80.5% 0%, 100% 0%, 100% 100%, 80.8% 100%, 80.1% 52%)",
-              ].map((clip, i) => (
-                <div key={i} className="absolute inset-0 bg-black" style={{ clipPath: clip }} />
-              ))}
-              <div className="relative z-10 h-full flex items-center justify-center">
+              <div className="flex items-center justify-center">
                 <FirstDayLogo showTagline={true} showLetters={false} />
               </div>
             </motion.div>
@@ -309,50 +290,54 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                     <h3 className="text-xl font-bold text-black mb-1">Unlock Badges</h3>
                     <p className="text-black/80 text-sm mb-4">Hit milestones and earn achievements. Can you collect them all before day 30?</p>
                     <div className="flex justify-center gap-2">
-                      {[
-                        { icon: "🚀", label: "First Step", locked: false },
-                        { icon: "🔥", label: "On Fire", locked: false },
-                        { icon: "⭐", label: "Perfect Week", locked: false },
-                        { icon: "🏆", label: "???", locked: true },
-                      ].map((badge) => (
+                      {["First Step", "On Fire", "Perfect Week", "???"].map((label, i) => (
                         <div
-                          key={badge.label}
-                          className={`clip-diamond w-10 h-10 flex items-center justify-center text-lg ${
-                            badge.locked
-                              ? "bg-black/10 grayscale opacity-50"
-                              : "bg-black/20"
+                          key={label}
+                          className={`clip-diamond w-10 h-10 flex items-center justify-center text-xs font-bold ${
+                            i === 3
+                              ? "bg-black/10 text-black/30"
+                              : "bg-black/20 text-black"
                           }`}
-                          title={badge.label}
+                          title={label}
                         >
-                          {badge.icon}
+                          {i === 3 ? "?" : (i + 1)}
                         </div>
                       ))}
                     </div>
                   </div>
                 </div>
 
-                {/* Stat bar */}
+                {/* Stat bar — single-color shards */}
                 <div className="mt-6 grid grid-cols-3 gap-3 max-w-lg mx-auto">
-                  <div className="clip-badge-a text-center bg-black/80 py-3 px-2 border border-white/10">
+                  <div
+                    className="text-center py-4 px-2"
+                    style={{ backgroundColor: "#00EAFF", clipPath: "polygon(4% 8%, 95% 0%, 100% 85%, 8% 100%)" }}
+                  >
                     <div className="flex items-center justify-center gap-1 mb-0.5">
-                      <Target className="w-3.5 h-3.5 text-white" />
-                      <span className="text-xs text-white/70 font-medium">Rate</span>
+                      <Target className="w-3.5 h-3.5 text-black" />
+                      <span className="text-xs text-black/70 font-medium">Rate</span>
                     </div>
-                    <p className="text-3xl font-bold text-white">87%</p>
+                    <p className="text-3xl font-bold text-black">87%</p>
                   </div>
-                  <div className="clip-badge-a text-center bg-black/80 py-3 px-2 border border-white/10">
+                  <div
+                    className="text-center py-4 px-2"
+                    style={{ backgroundColor: "#FF4500", clipPath: "polygon(0% 5%, 92% 0%, 98% 92%, 3% 95%)" }}
+                  >
                     <div className="flex items-center justify-center gap-1 mb-0.5">
-                      <Flame className="w-3.5 h-3.5 text-orange-500" />
-                      <span className="text-xs text-white/70 font-medium">Streak</span>
+                      <Flame className="w-3.5 h-3.5 text-black" />
+                      <span className="text-xs text-black/70 font-medium">Streak</span>
                     </div>
-                    <p className="text-3xl font-bold text-white">12</p>
+                    <p className="text-3xl font-bold text-black">12</p>
                   </div>
-                  <div className="clip-badge-a text-center bg-black/80 py-3 px-2 border border-white/10">
+                  <div
+                    className="text-center py-4 px-2"
+                    style={{ backgroundColor: "#4FC3F7", clipPath: "polygon(6% 0%, 100% 10%, 94% 100%, 0% 88%)" }}
+                  >
                     <div className="flex items-center justify-center gap-1 mb-0.5">
-                      <Trophy className="w-3.5 h-3.5 text-blue-400" />
-                      <span className="text-xs text-white/70 font-medium">Badges</span>
+                      <Trophy className="w-3.5 h-3.5 text-black" />
+                      <span className="text-xs text-black/70 font-medium">Badges</span>
                     </div>
-                    <p className="text-3xl font-bold text-white">5/8</p>
+                    <p className="text-3xl font-bold text-black">5/8</p>
                   </div>
                 </div>
               </div>

@@ -183,9 +183,9 @@ function FirstDayLogoInner({
         <span
           className={`${showLetters ? "mt-2" : ""} drop-shadow-[0_1px_8px_rgba(0,0,0,0.5)] flex flex-wrap justify-center`}
           style={{
-            fontSize: isHero ? "clamp(0.9rem, 2.5vw, 2rem)" : "clamp(0.6rem, 1.5vw, 0.75rem)",
+            fontSize: isHero ? "clamp(2rem, 5vw, 4rem)" : "clamp(0.6rem, 1.5vw, 0.75rem)",
             fontWeight: 900,
-            letterSpacing: 1,
+            letterSpacing: isHero ? 3 : 1,
             textTransform: "uppercase" as const,
             fontFamily: "var(--font-bebas), system-ui, sans-serif",
             whiteSpace: "nowrap" as const,
@@ -198,7 +198,7 @@ function FirstDayLogoInner({
               key={i}
               style={{
                 color: char === " " ? "transparent" : TAGLINE_PALETTE[i % TAGLINE_PALETTE.length],
-                width: char === " " ? "0.3em" : undefined,
+                width: char === " " ? "0.35em" : undefined,
               }}
             >
               {char}

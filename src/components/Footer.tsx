@@ -1,7 +1,7 @@
 "use client";
 
 import { VoronoiMosaic } from "./VoronoiMosaic";
-import { VORONOI_DARK } from "@/constants";
+import { VORONOI_PALETTE } from "@/constants";
 
 interface FooterProps {
   onPrivacyClick?: () => void;
@@ -12,7 +12,7 @@ export function Footer({ onPrivacyClick, onTermsClick }: FooterProps) {
   const currentYear = new Date().getFullYear();
   return (
     <footer className="relative bg-black py-6 mt-auto border-t border-white/10 clip-section-top overflow-hidden">
-      <VoronoiMosaic seed={999} tileCount={15} margin={6} gap={2} palette={VORONOI_DARK} className="absolute inset-0 w-full h-full" />
+      <VoronoiMosaic seed={999} tileCount={60} margin={4} gap={2} palette={[...VORONOI_PALETTE, "#FF10F0"]} className="absolute inset-0 w-full h-full" />
       {/* No scrim — full brightness */}
       <div className="relative z-10 max-w-7xl mx-auto px-4">
         <div className="flex flex-wrap gap-4 justify-center mb-4">
