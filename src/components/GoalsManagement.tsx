@@ -176,7 +176,7 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                     <p className="text-xl text-white font-bold">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</p>
                   </div>
                 </div>
-                <div className="max-w-2xl mx-auto flex-1 flex flex-col justify-center w-full">
+                <div className="max-w-2xl mx-auto flex-1 flex flex-col w-full">
                   <div className="mb-6 flex items-start justify-between">
                     <div className="flex-1">
                       <div
