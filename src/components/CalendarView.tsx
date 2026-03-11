@@ -116,7 +116,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
                 <h2 className="text-lg md:text-xl text-white font-bold">Your 30-Day Plan</h2>
               </div>
               {engagement?.isAtRisk && (
-                <div className="mb-3 mx-auto max-w-md bg-[#2437A6] border border-coral-500/40 clip-tile-c px-4 py-2 flex items-center gap-2 animate-pulse">
+                <div className="mb-3 mx-auto max-w-md bg-[#3A0CA3] border border-coral-500/40 clip-tile-c px-4 py-2 flex items-center gap-2 animate-pulse">
                   <AlertTriangle className="w-4 h-4 text-coral-400 flex-shrink-0" />
                   <p className="text-sm text-coral-300 font-medium">Your {engagement.currentStreak}-day streak is at risk! Complete today to keep it alive.</p>
                 </div>
@@ -149,7 +149,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
                   {week.isUnlocked ? (
                     <div className="space-y-3 md:space-y-4">
                       {week.weeklyBook && (
-                        <div className="bg-gradient-to-br from-[#2437A6] to-[#2437A6] clip-tile-b border-2 border-yellow-600/30 overflow-hidden">
+                        <div className="bg-gradient-to-br from-[#3A0CA3] to-[#3A0CA3] clip-tile-b border-2 border-yellow-600/30 overflow-hidden">
                           <button onClick={() => toggleWeekBook(week.weekNumber)} className="w-full p-3 md:p-4 flex items-center justify-between hover:bg-white/10 transition-colors">
                             <div className="flex items-center gap-2"><BookOpen className="w-4 h-4 md:w-5 md:h-5 text-yellow-400" /><h3 className="text-xs md:text-sm text-yellow-200 font-medium">Week {week.weekNumber} Reading</h3></div>
                             {expandedWeeks.has(week.weekNumber) ? <ChevronUp className="w-4 h-4 text-yellow-400" /> : <ChevronDown className="w-4 h-4 text-yellow-400" />}

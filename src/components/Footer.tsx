@@ -11,9 +11,9 @@ interface FooterProps {
 export function Footer({ onPrivacyClick, onTermsClick }: FooterProps) {
   const currentYear = new Date().getFullYear();
   return (
-    <footer className="relative bg-[#0F1B3A] py-6 mt-auto border-t border-white/10 clip-section-top overflow-hidden">
+    <footer className="relative bg-[#0B132B] py-6 mt-auto border-t border-white/10 clip-section-top overflow-hidden">
       <VoronoiMosaic seed={999} tileCount={15} margin={6} gap={2} palette={VORONOI_DARK} className="absolute inset-0 w-full h-full" />
-      <div className="absolute inset-0 bg-[#0F1B3A]/60" />
+      <div className="absolute inset-0 bg-[#0B132B]/60" />
       <div className="relative z-10 max-w-7xl mx-auto px-4">
         <div className="flex flex-wrap gap-4 justify-center mb-4">
           {onPrivacyClick ? (

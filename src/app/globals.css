@@ -6,21 +6,21 @@
 
 :root {
   --font-size: 16px;
-  --background: #0F1B3A;
+  --background: #0B132B;
   --foreground: #ffffff;
-  --card: #0F1B3A;
+  --card: #0B132B;
   --card-foreground: #ffffff;
-  --popover: #2437A6;
+  --popover: #3A0CA3;
   --popover-foreground: #ffffff;
   --primary: #cc5533;
   --primary-foreground: #ffffff;
-  --secondary: #2437A6;
+  --secondary: #3A0CA3;
   --secondary-foreground: #ffffff;
-  --muted: #0F1B3A;
+  --muted: #0B132B;
   --muted-foreground: rgba(255, 255, 255, 0.5);
-  --accent: #2437A6;
+  --accent: #3A0CA3;
   --accent-foreground: #ffffff;
-  --destructive: #FF8E72;
+  --destructive: #FF6F91;
   --destructive-foreground: #ffffff;
   --border: rgba(255, 255, 255, 0.1);
   --input: rgba(255, 255, 255, 0.1);
@@ -30,16 +30,16 @@
   --font-weight-normal: 400;
   --ring: #cc5533;
   --chart-1: #cc5533;
-  --chart-2: #FFB07C;
-  --chart-3: #FFD38A;
-  --chart-4: #F77BAA;
-  --chart-5: #FF8E72;
+  --chart-2: #FF9E7A;
+  --chart-3: #FFD166;
+  --chart-4: #FFB3C6;
+  --chart-5: #FF6F91;
   --radius: 0;
-  --sidebar: #0F1B3A;
+  --sidebar: #0B132B;
   --sidebar-foreground: #ffffff;
   --sidebar-primary: #cc5533;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #2437A6;
+  --sidebar-accent: #3A0CA3;
   --sidebar-accent-foreground: #ffffff;
   --sidebar-border: rgba(255, 255, 255, 0.1);
   --sidebar-ring: #cc5533;
@@ -76,14 +76,14 @@
   /*
    * DESIGN SYSTEM — COLOR ROLES (Sunset Voronoi Mosaic Theme)
    *
-   * Backgrounds: #0F1B3A (Midnight Navy), #2437A6 (Indigo Blue elevated)
+   * Backgrounds: #0B132B (Midnight Navy), #3A0CA3 (Indigo Blue elevated)
    * Borders: white/10 universally
    *
    * Primary CTA: #cc5533 (warm orange) — buttons, focus rings, progress bars.
-   * Light palette: #FFD38A (Golden Peach), #FFB07C (Warm Apricot),
-   *                #FF8E72 (Soft Coral), #F77BAA (Rose Pink)
-   * Dark palette: #5227FF (Deep Violet), #2437A6 (Indigo Blue),
-   *               #8A2C6D (Burnt Magenta), #0F1B3A (Midnight Navy)
+   * Light palette: #FFD166 (Golden Peach), #FF9E7A (Warm Apricot),
+   *                #FF6F91 (Soft Coral), #FFB3C6 (Rose Pink)
+   * Dark palette: #5227FF (Deep Violet), #3A0CA3 (Indigo Blue),
+   *               #1B1B3A (Burnt Magenta), #0B132B (Midnight Navy)
    *
    * Text: #ffffff (primary), white/80 (secondary), white/50 (muted).
    * No rounded corners anywhere — all sharp edges.
@@ -115,7 +115,7 @@
   --color-coral-200: #ffc9c9;
   --color-coral-300: #ffa8a8;
   --color-coral-400: #ff8787;
-  --color-coral-500: #FF8E72;
+  --color-coral-500: #FF6F91;
   --color-coral-600: #fa5252;
   --color-coral-700: #f03e3e;
   --color-coral-800: #e03131;
@@ -244,7 +244,7 @@ html {
 
   .animate-shimmer {
     animation: shimmer 2s infinite linear;
-    background: linear-gradient(to right, #0F1B3A 0%, #2437A6 20%, #0F1B3A 40%, #0F1B3A 100%);
+    background: linear-gradient(to right, #0B132B 0%, #3A0CA3 20%, #0B132B 40%, #0B132B 100%);
     background-size: 1000px 100%;
   }
 

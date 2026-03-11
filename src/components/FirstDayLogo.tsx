@@ -15,17 +15,17 @@ interface FirstDayLogoProps {
 
 // Per-letter tile colors from sunset light palette
 const LETTER_TILES = [
-  { letter: "F", color: "#FFD38A", tile: "a", rotate: -1.5 },
-  { letter: "I", color: "#FFB07C", tile: "b", rotate: 1.2 },
-  { letter: "R", color: "#FF8E72", tile: "c", rotate: -0.8 },
-  { letter: "S", color: "#F77BAA", tile: "d", rotate: 1.8 },
-  { letter: "T", color: "#FFD38A", tile: "a", rotate: -1.2 },
+  { letter: "F", color: "#FFD166", tile: "a", rotate: -1.5 },
+  { letter: "I", color: "#FF9E7A", tile: "b", rotate: 1.2 },
+  { letter: "R", color: "#FF6F91", tile: "c", rotate: -0.8 },
+  { letter: "S", color: "#FFB3C6", tile: "d", rotate: 1.8 },
+  { letter: "T", color: "#FFD166", tile: "a", rotate: -1.2 },
 ] as const;
 
 const DAY_TILES = [
-  { letter: "D", color: "#FF8E72", tile: "b", rotate: 1.5 },
-  { letter: "A", color: "#FFB07C", tile: "c", rotate: -2 },
-  { letter: "Y", color: "#F77BAA", tile: "d", rotate: 0.8 },
+  { letter: "D", color: "#FF6F91", tile: "b", rotate: 1.5 },
+  { letter: "A", color: "#FF9E7A", tile: "c", rotate: -2 },
+  { letter: "Y", color: "#FFB3C6", tile: "d", rotate: 0.8 },
 ] as const;
 
 const TILE_CLIP: Record<string, string> = {

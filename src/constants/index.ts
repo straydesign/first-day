@@ -2,25 +2,25 @@
 
 /** Sunset Sky — Light palette (foreground tiles, highlights) */
 export const VORONOI_LIGHT = [
-  "#FFD38A", // Golden Peach
-  "#FFB07C", // Warm Apricot
-  "#FF8E72", // Soft Coral
-  "#F77BAA", // Rose Pink
+  "#FFD166", // Golden Peach
+  "#FF9E7A", // Warm Apricot
+  "#FF6F91", // Soft Coral
+  "#FFB3C6", // Rose Pink
 ] as const;
 
 /** Sunset Sky — Dark palette (deep backgrounds, shadows) */
 export const VORONOI_DARK = [
   "#5227FF", // Deep Violet
-  "#2437A6", // Indigo Blue
-  "#8A2C6D", // Burnt Magenta
-  "#0F1B3A", // Midnight Navy
+  "#3A0CA3", // Indigo Blue
+  "#1B1B3A", // Burnt Magenta
+  "#0B132B", // Midnight Navy
 ] as const;
 
 /** Combined palette — default for VoronoiMosaic */
 export const VORONOI_PALETTE = [...VORONOI_LIGHT, ...VORONOI_DARK] as const;
 
 /** Aurora gradient background colors (sunset accents). */
-export const AURORA_COLORS = ["#FFD38A", "#FF8E72", "#5227FF"] as const;
+export const AURORA_COLORS = ["#FFD166", "#FF6F91", "#5227FF"] as const;
 
 /** Goal category type for color mapping. */
 export type GoalCategory = "fitness" | "creative" | "professional" | "lifestyle";
@@ -68,10 +68,10 @@ export const GOAL_CATEGORY_MAP: Record<string, GoalCategory> = {
 
 /** Tailwind class sets for each goal category — uses sunset light palette. */
 export const GOAL_CATEGORY_COLORS: Record<GoalCategory, string> = {
-  fitness: "border-[#FFD38A] bg-[#FFD38A]/25 hover:bg-[#FFD38A]/40 hover:border-[#FFD38A]",
-  creative: "border-[#FFB07C] bg-[#FFB07C]/25 hover:bg-[#FFB07C]/40 hover:border-[#FFB07C]",
-  professional: "border-[#FF8E72] bg-[#FF8E72]/25 hover:bg-[#FF8E72]/40 hover:border-[#FF8E72]",
-  lifestyle: "border-[#F77BAA] bg-[#F77BAA]/25 hover:bg-[#F77BAA]/40 hover:border-[#F77BAA]",
+  fitness: "border-[#FFD166] bg-[#FFD166]/25 hover:bg-[#FFD166]/40 hover:border-[#FFD166]",
+  creative: "border-[#FF9E7A] bg-[#FF9E7A]/25 hover:bg-[#FF9E7A]/40 hover:border-[#FF9E7A]",
+  professional: "border-[#FF6F91] bg-[#FF6F91]/25 hover:bg-[#FF6F91]/40 hover:border-[#FF6F91]",
+  lifestyle: "border-[#FFB3C6] bg-[#FFB3C6]/25 hover:bg-[#FFB3C6]/40 hover:border-[#FFB3C6]",
 };
 
 /** Scrolling goal suggestion rows for SimpleGoalCreation and LandingPage. */

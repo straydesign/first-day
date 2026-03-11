@@ -16,7 +16,7 @@ export function BackButton({ onClick, label = "Back", disabled, variant = "defau
       <button
         onClick={onClick}
         disabled={disabled}
-        className={`fixed top-[16px] left-4 z-50 bg-[#0F1B3A]/90 backdrop-blur shadow-lg hover:shadow-xl ${baseClasses}`}
+        className={`fixed top-[16px] left-4 z-50 bg-[#0B132B]/90 backdrop-blur shadow-lg hover:shadow-xl ${baseClasses}`}
         aria-label={label}
       >
         <ArrowLeft className="w-5 h-5" />

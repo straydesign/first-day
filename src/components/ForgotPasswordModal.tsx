@@ -62,7 +62,7 @@ export function ForgotPasswordModal({ isOpen, onClose }: ForgotPasswordModalProp
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-[#0F1B3A] border border-white/10 max-w-md">
+      <DialogContent className="bg-[#0B132B] border border-white/10 max-w-md">
         <DialogTitle className="text-lg font-bold text-white">Reset Password</DialogTitle>
         <DialogDescription className="text-white/80">
           {sent ? 'Check your email for a password reset link.' : 'Enter your email address and we\'ll send you a reset link.'}
@@ -71,7 +71,7 @@ export function ForgotPasswordModal({ isOpen, onClose }: ForgotPasswordModalProp
           <form onSubmit={handleSubmit} className="space-y-4 mt-4">
             <div>
               <Label htmlFor="reset-email" className="text-white/80">Email</Label>
-              <Input id="reset-email" type="email" placeholder="your@email.com" value={email} onChange={(e) => setEmail(e.target.value)} disabled={loading} className="bg-[#0F1B3A] border-white/10" />
+              <Input id="reset-email" type="email" placeholder="your@email.com" value={email} onChange={(e) => setEmail(e.target.value)} disabled={loading} className="bg-[#0B132B] border-white/10" />
             </div>
             <MosaicButton type="submit" className="w-full transition-smooth hover:scale-105 disabled:hover:scale-100" disabled={loading}>
               {loading ? 'Sending...' : 'Send Reset Link'}

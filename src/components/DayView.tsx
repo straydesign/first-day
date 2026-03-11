@@ -113,7 +113,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
                         transition={{ duration: 0.4, delay: 0.25 + index * 0.1, ease: "easeOut" }}
                         className="space-y-2"
                       >
-                        <div className={`flex items-start gap-2 md:gap-4 p-2 md:p-4 clip-tile-c border-2 transition-smooth ${completedActivities[index] ? 'border-[#FFD38A] bg-[#FFD38A]/10' : 'border-white/20 hover:border-white/40'} ${isCompleted ? 'opacity-75' : ''}`}>
+                        <div className={`flex items-start gap-2 md:gap-4 p-2 md:p-4 clip-tile-c border-2 transition-smooth ${completedActivities[index] ? 'border-[#FFD166] bg-[#FFD166]/10' : 'border-white/20 hover:border-white/40'} ${isCompleted ? 'opacity-75' : ''}`}>
                           <Checkbox checked={completedActivities[index] || false} onCheckedChange={() => !isCompleted && toggleActivity(index)} id={`activity-${index}`} className="mt-1 flex-shrink-0 size-6 border-2 border-white/40 data-[state=checked]:border-lime-500 data-[state=checked]:bg-lime-500" disabled={isCompleted} />
                           <label htmlFor={`activity-${index}`} className="flex-1 min-w-0 cursor-pointer">
                             <div className="text-base md:text-lg leading-relaxed select-text text-white/90">{activityText}</div>
