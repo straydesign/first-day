@@ -9,7 +9,7 @@ interface PrivacyPolicyProps {
 
 export function PrivacyPolicy({ onBack, onNavigate }: PrivacyPolicyProps) {
   return (
-    <div className="min-h-screen bg-[#060B18] flex flex-col">
+    <div className="min-h-screen bg-black flex flex-col">
       <div className="max-w-4xl mx-auto px-4 py-6 md:py-12 flex-1">
         <BackButton onClick={onBack} />
         <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 md:mb-8">Privacy Policy</h1>

@@ -25,7 +25,7 @@ function MosaicCardInner({
     <div
       className={cn(
         `clip-tile-${variant}`,
-        "relative overflow-hidden border border-white/15 bg-[#060B18] focus-geo",
+        "relative overflow-hidden border border-white/15 bg-black focus-geo",
         className
       )}
     >
@@ -37,8 +37,7 @@ function MosaicCardInner({
         gap={3}
         className="absolute inset-0 w-full h-full"
       />
-      {/* Dark scrim for text readability */}
-      <div className="absolute inset-0 bg-[#060B18]/45 z-[1]" />
+      {/* No scrim — full brightness mosaic */}
       <div className="relative z-10 flex flex-col justify-center">{children}</div>
     </div>
   );

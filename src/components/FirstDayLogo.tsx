@@ -2,13 +2,14 @@
 
 import { memo } from "react";
 import { VoronoiMosaic } from "./VoronoiMosaic";
-import { VORONOI_LIGHT } from "@/constants";
+import { VORONOI_LIGHT, VORONOI_PALETTE } from "@/constants";
 
 interface FirstDayLogoProps {
   className?: string;
   width?: number;
   height?: number;
   showTagline?: boolean;
+  showLetters?: boolean;
   layout?: "horizontal" | "vertical";
   size?: "default" | "hero";
 }
@@ -86,6 +87,7 @@ function LetterTile({ letter, color, tile, rotate, fontSize, seed, showMosaic }:
 function FirstDayLogoInner({
   className = "",
   showTagline = true,
+  showLetters = true,
   size = "default",
 }: FirstDayLogoProps) {
   const isHero = size === "hero";
@@ -93,58 +95,72 @@ function FirstDayLogoInner({
 
   return (
     <div className={`flex flex-col items-center ${className}`}>
-      {/* FIRST row */}
-      <div
-        className="flex items-center drop-shadow-[0_2px_16px_rgba(0,0,0,0.6)]"
-        style={{ gap: isHero ? "4px" : "2px", marginLeft: isHero ? "-2px" : "0" }}
-      >
-        {LETTER_TILES.map((lt, i) => (
-          <LetterTile
-            key={lt.letter}
-            {...lt}
-            fontSize={letterSize}
-            seed={i * 7}
-            showMosaic={isHero}
-          />
-        ))}
-      </div>
+      <div className={`bg-black border border-white/10 ${isHero ? "px-6 py-4" : "px-3 py-2"} flex flex-col items-center`} style={{ clipPath: "polygon(3% 2%, 12% 0%, 45% 1%, 78% 0%, 97% 3%, 100% 15%, 99% 50%, 100% 85%, 96% 98%, 82% 100%, 50% 99%, 18% 100%, 2% 97%, 0% 80%, 1% 45%, 0% 12%)" }}>
+      {showLetters && (
+        <>
+          {/* FIRST row */}
+          <div
+            className="flex items-center drop-shadow-[0_2px_16px_rgba(0,0,0,0.6)]"
+            style={{ gap: isHero ? "10px" : "5px" }}
+          >
+            {LETTER_TILES.map((lt, i) => (
+              <LetterTile
+                key={lt.letter}
+                {...lt}
+                fontSize={letterSize}
+                seed={i * 7}
+                showMosaic={isHero}
+              />
+            ))}
+          </div>
 
-      {/* DAY row */}
-      <div
-        className="flex items-center drop-shadow-[0_2px_16px_rgba(0,0,0,0.6)]"
-        style={{
-          gap: isHero ? "4px" : "2px",
-          marginTop: isHero ? "-6px" : "-3px",
-          marginRight: isHero ? "-4px" : "0",
-        }}
-      >
-        {DAY_TILES.map((lt, i) => (
-          <LetterTile
-            key={lt.letter}
-            {...lt}
-            fontSize={letterSize}
-            seed={(i + 5) * 11}
-            showMosaic={isHero}
-          />
-        ))}
-      </div>
+          {/* DAY row */}
+          <div
+            className="flex items-center drop-shadow-[0_2px_16px_rgba(0,0,0,0.6)]"
+            style={{
+              gap: isHero ? "10px" : "5px",
+              marginTop: isHero ? "4px" : "2px",
+            }}
+          >
+            {DAY_TILES.map((lt, i) => (
+              <LetterTile
+                key={lt.letter}
+                {...lt}
+                fontSize={letterSize}
+                seed={(i + 5) * 11}
+                showMosaic={isHero}
+              />
+            ))}
+          </div>
+        </>
+      )}
 
-      {/* Tagline */}
+      {/* Tagline — each letter cycles through palette colors */}
       {showTagline && (
         <span
-          className="mt-2 drop-shadow-[0_1px_8px_rgba(0,0,0,0.5)]"
+          className={`${showLetters ? "mt-2" : ""} drop-shadow-[0_1px_8px_rgba(0,0,0,0.5)] flex flex-wrap justify-center`}
           style={{
-            fontSize: isHero ? "clamp(0.85rem, 2vw, 1.15rem)" : "clamp(0.6rem, 1.5vw, 0.75rem)",
-            fontWeight: 500,
-            color: "rgba(255,255,255,0.7)",
+            fontSize: isHero ? "clamp(1.2rem, 3vw, 2rem)" : "clamp(0.6rem, 1.5vw, 0.75rem)",
+            fontWeight: 700,
             letterSpacing: 3,
             textTransform: "uppercase" as const,
-            fontFamily: "var(--font-inter), system-ui, sans-serif",
+            fontFamily: "var(--font-bebas), system-ui, sans-serif",
           }}
         >
-          Your first day starts now
+          {"first day of the rest of your life".split("").map((char, i) => (
+            <span
+              key={i}
+              style={{
+                color: char === " " ? "transparent" : VORONOI_PALETTE[i % VORONOI_PALETTE.length],
+                width: char === " " ? "0.4em" : undefined,
+              }}
+            >
+              {char}
+            </span>
+          ))}
         </span>
       )}
+      </div>
     </div>
   );
 }

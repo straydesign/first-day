@@ -11,9 +11,9 @@ export const VORONOI_LIGHT = [
 /** Sunset Sky — Dark palette (deep backgrounds, shadows) */
 export const VORONOI_DARK = [
   "#5227FF", // Deep Violet
-  "#FF1493", // Indigo Blue
-  "#4FC3F7", // Burnt Magenta
-  "#060B18", // Midnight Navy
+  "#FF1493", // Hot Pink
+  "#4FC3F7", // Carolina Blue
+  "#FF4500", // Orange Red
 ] as const;
 
 /** Combined palette — default for VoronoiMosaic */

@@ -16,14 +16,14 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
     <div
       className={`relative flex flex-col items-center text-center p-3 clip-tile-c border transition-smooth overflow-hidden ${
         unlocked
-          ? "bg-[#060B18] border-[#FFE633]"
-          : "bg-[#060B18] border-white/10 opacity-50 grayscale"
+          ? "bg-black border-[#FFE633]"
+          : "bg-black border-white/10 opacity-50 grayscale"
       }`}
     >
       {unlocked && (
         <>
           <VoronoiMosaic seed={seed} tileCount={15} margin={3} gap={2} className="absolute inset-0 w-full h-full" />
-          <div className="absolute inset-0 bg-[#060B18]/45 z-[1]" />
+          {/* No scrim — full brightness */}
         </>
       )}
       <div className="relative z-10">

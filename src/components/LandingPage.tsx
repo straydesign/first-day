@@ -119,42 +119,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
             >
-              <FirstDayLogo size="hero" showTagline={true} />
-            </motion.div>
-
-            {/* Subtitle on vivid mosaic cards */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
-              className="mt-8 flex flex-col items-center gap-3"
-            >
-              <MosaicCard seed={100} tileVariant="a" className="px-6 py-3 shadow-lg">
-                <h1 className="text-3xl md:text-5xl font-bold text-white">
-                  Achieve any goal in 30 days
-                </h1>
-              </MosaicCard>
-              <MosaicCard seed={101} tileVariant="b" className="px-6 py-2.5 shadow-lg">
-                <p className="text-base md:text-lg text-white">
-                  AI creates your personalized daily plan. You just show up.
-                </p>
-              </MosaicCard>
-            </motion.div>
-
-            {/* CTA — vivid green */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.6 }}
-              className="mt-8"
-            >
-              <MosaicButton
-                onClick={onGetStarted}
-                size="lg"
-                className="shadow-lg hover:shadow-xl"
-              >
-                Start Your Own Journey
-              </MosaicButton>
+              <FirstDayLogo size="hero" showTagline={true} showLetters={false} />
             </motion.div>
           </div>
 
@@ -195,9 +160,9 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
         {/* How It Works */}
         <AnimatedSection>
           <section id="how-it-works" className="w-full py-8 md:py-16 px-0 md:px-4">
-            <div className="clip-section-both relative bg-[#060B18] backdrop-blur-xl border-y md:border border-white/10 overflow-hidden">
+            <div className="clip-section-both relative bg-black backdrop-blur-xl border-y md:border border-white/10 overflow-hidden">
               <VoronoiMosaic seed={200} tileCount={35} margin={10} gap={3} palette={VORONOI_DARK} className="absolute inset-0 w-full h-full" />
-              <div className="absolute inset-0 bg-[#060B18]/60" />
+              {/* No scrim — full brightness */}
               <div className="relative z-10 px-6 md:px-10 pt-8 md:pt-12 pb-4 text-center">
                 <h2 className="text-3xl md:text-5xl font-bold text-white mb-2">How It Works</h2>
                 <p className="text-white/80">Three simple steps to your best month</p>
@@ -279,9 +244,9 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
         {/* Stay Motivated */}
         <AnimatedSection>
           <section className="w-full py-8 md:py-16 px-0 md:px-4">
-            <div className="clip-section-both relative bg-[#060B18] backdrop-blur-xl border-y md:border border-white/10 overflow-hidden">
+            <div className="clip-section-both relative bg-black backdrop-blur-xl border-y md:border border-white/10 overflow-hidden">
               <VoronoiMosaic seed={300} tileCount={35} margin={10} gap={3} palette={VORONOI_DARK} className="absolute inset-0 w-full h-full" />
-              <div className="absolute inset-0 bg-[#060B18]/60" />
+              {/* No scrim — full brightness */}
               <div className="relative z-10 px-6 md:px-10 pt-8 md:pt-12 pb-4 text-center">
                 <h2 className="text-3xl md:text-5xl font-bold text-white mb-2">Stay Motivated</h2>
                 <p className="text-white/80">Built-in streaks, XP, and achievements keep you coming back</p>
@@ -384,9 +349,9 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
         {/* What Your Plan Looks Like */}
         <AnimatedSection>
           <section className="w-full py-8 md:py-16 px-0 md:px-4">
-            <div className="clip-section-both relative bg-[#060B18] backdrop-blur-xl border-y md:border border-white/10 overflow-hidden">
+            <div className="clip-section-both relative bg-black backdrop-blur-xl border-y md:border border-white/10 overflow-hidden">
               <VoronoiMosaic seed={400} tileCount={35} margin={10} gap={3} palette={VORONOI_DARK} className="absolute inset-0 w-full h-full" />
-              <div className="absolute inset-0 bg-[#060B18]/60" />
+              {/* No scrim — full brightness */}
               <div className="relative z-10 px-6 md:px-10 pt-8 md:pt-12 pb-4 text-center">
                 <h2 className="text-3xl md:text-5xl font-bold text-white mb-2">What Your Plan Looks Like</h2>
                 <p className="text-white/80">Real screens from &quot;Learn to play guitar&quot;</p>

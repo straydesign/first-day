@@ -122,9 +122,9 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="w-screen h-screen max-w-none m-0 p-4 md:p-8 bg-[#060B18] border-0 animate-scaleIn shadow-none overflow-y-auto">
+      <DialogContent className="w-screen h-screen max-w-none m-0 p-4 md:p-8 bg-black border-0 animate-scaleIn shadow-none overflow-y-auto">
         <VoronoiMosaic seed={99} tileCount={40} margin={10} gap={3} className="absolute inset-0 w-full h-full" />
-        <div className="absolute inset-0 bg-[#060B18]/50" />
+        {/* No scrim — full brightness */}
         <div className="relative z-10">
           <DialogTitle className="sr-only">{isLogin ? 'Log in to First Day' : 'Sign up for First Day'}</DialogTitle>
           <DialogDescription className="sr-only">{isLogin ? 'Enter your email and password' : 'Create an account'}</DialogDescription>
@@ -142,12 +142,12 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
             {!isLogin && (
               <div>
                 <Label htmlFor="name" className="text-white/80">Name</Label>
-                <Input id="name" type="text" placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} disabled={loading} className="bg-[#060B18] border-white/10 text-white placeholder:text-white/50" />
+                <Input id="name" type="text" placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} disabled={loading} className="bg-black border-white/10 text-white placeholder:text-white/50" />
               </div>
             )}
             <div>
               <Label htmlFor="email" className="text-white/80">Email</Label>
-              <Input id="email" type="email" placeholder="your@email.com" value={email} onChange={(e) => setEmail(e.target.value)} disabled={loading} className="bg-[#060B18] border-white/10 text-white placeholder:text-white/50" />
+              <Input id="email" type="email" placeholder="your@email.com" value={email} onChange={(e) => setEmail(e.target.value)} disabled={loading} className="bg-black border-white/10 text-white placeholder:text-white/50" />
             </div>
             <div>
               <div className="flex items-center justify-between mb-1">
@@ -156,12 +156,12 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
                   <button type="button" onClick={() => setShowForgotPassword(true)} className="text-xs text-white/80 hover:text-white hover:underline font-medium" disabled={loading}>Forgot password?</button>
                 )}
               </div>
-              <Input id="password" type="password" placeholder={isLogin ? 'Enter password' : 'Create password'} value={password} onChange={(e) => setPassword(e.target.value)} disabled={loading} className="bg-[#060B18] border-white/10 text-white placeholder:text-white/50" />
+              <Input id="password" type="password" placeholder={isLogin ? 'Enter password' : 'Create password'} value={password} onChange={(e) => setPassword(e.target.value)} disabled={loading} className="bg-black border-white/10 text-white placeholder:text-white/50" />
             </div>
             {!isLogin && (
               <div>
                 <Label htmlFor="confirmPassword" className="text-white/80">Confirm Password</Label>
-                <Input id="confirmPassword" type="password" placeholder="Re-enter password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} disabled={loading} className="bg-[#060B18] border-white/10 text-white placeholder:text-white/50" />
+                <Input id="confirmPassword" type="password" placeholder="Re-enter password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} disabled={loading} className="bg-black border-white/10 text-white placeholder:text-white/50" />
               </div>
             )}
             {!isLogin && (

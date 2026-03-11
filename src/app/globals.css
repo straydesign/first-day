@@ -6,9 +6,9 @@
 
 :root {
   --font-size: 16px;
-  --background: #060B18;
+  --background: #000000;
   --foreground: #ffffff;
-  --card: #060B18;
+  --card: #000000;
   --card-foreground: #ffffff;
   --popover: #FF1493;
   --popover-foreground: #ffffff;
@@ -16,7 +16,7 @@
   --primary-foreground: #ffffff;
   --secondary: #FF1493;
   --secondary-foreground: #ffffff;
-  --muted: #060B18;
+  --muted: #000000;
   --muted-foreground: rgba(255, 255, 255, 0.5);
   --accent: #FF1493;
   --accent-foreground: #ffffff;
@@ -35,7 +35,7 @@
   --chart-4: #00EAFF;
   --chart-5: #FF2D55;
   --radius: 0;
-  --sidebar: #060B18;
+  --sidebar: #000000;
   --sidebar-foreground: #ffffff;
   --sidebar-primary: #cc5533;
   --sidebar-primary-foreground: #ffffff;
@@ -188,11 +188,7 @@
     @apply bg-background text-foreground;
     font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
     font-weight: 500;
-    background-image: url('/mosaic-bg.png');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    background-repeat: no-repeat;
+    background-color: #000000;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -261,7 +257,7 @@ html {
 
   .animate-shimmer {
     animation: shimmer 2s infinite linear;
-    background: linear-gradient(to right, #060B18 0%, #FF1493 20%, #060B18 40%, #060B18 100%);
+    background: linear-gradient(to right, #000000 0%, #FF1493 20%, #000000 40%, #000000 100%);
     background-size: 1000px 100%;
   }
 
