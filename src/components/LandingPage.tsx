@@ -93,8 +93,8 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
           {/* Full-bleed hero image */}
           <div className="absolute inset-0 z-0">
             <Image
-              src="/logo-mark.png"
-              alt="Sunrise between mountains over a lake"
+              src="/hero-sunset.png"
+              alt="Voronoi mosaic sunset over mountains and lake"
               fill
               className="object-cover"
               priority
