@@ -58,20 +58,20 @@ export function ResetPasswordView({ token, onSuccess }: ResetPasswordViewProps) 
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white p-4 md:p-8">
+    <div className="min-h-screen flex items-center justify-center bg-[#1a1a3e] p-4 md:p-8">
       <div className="max-w-md w-full space-y-6">
         <div className="text-center">
           <FirstDayLogo width={200} height={100} layout="horizontal" showTagline={false} />
-          <h2 className="text-2xl font-bold text-slate-800 mt-4">Reset Your Password</h2>
+          <h2 className="text-2xl font-bold text-white mt-4">Reset Your Password</h2>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <Label htmlFor="new-password" className="text-gray-700">New Password</Label>
-            <Input id="new-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} disabled={loading} className="bg-white border-gray-300" />
+            <Label htmlFor="new-password" className="text-white/80">New Password</Label>
+            <Input id="new-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} disabled={loading} className="bg-[#12122e] border-white/10" />
           </div>
           <div>
-            <Label htmlFor="confirm-new-password" className="text-gray-700">Confirm Password</Label>
-            <Input id="confirm-new-password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} disabled={loading} className="bg-white border-gray-300" />
+            <Label htmlFor="confirm-new-password" className="text-white/80">Confirm Password</Label>
+            <Input id="confirm-new-password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} disabled={loading} className="bg-[#12122e] border-white/10" />
           </div>
           <Button type="submit" className="w-full transition-smooth hover:scale-105 disabled:hover:scale-100" disabled={loading}>
             {loading ? 'Resetting...' : 'Reset Password'}

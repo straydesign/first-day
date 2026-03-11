@@ -14,10 +14,10 @@ export function StreakBadge({ streak, isAtRisk, size = "md" }: StreakBadgeProps)
 
   return (
     <div
-      className={`inline-flex items-center gap-1 rounded-full font-bold shadow-sm ${
+      className={`inline-flex items-center gap-1 rounded-full font-bold ${
         isAtRisk
-          ? "bg-coral-100 text-coral-700 animate-pulse"
-          : "bg-lime-100 text-lime-700"
+          ? "bg-coral-500/20 text-coral-400 animate-pulse"
+          : "bg-lime-500/20 text-lime-400"
       } ${isSm ? "px-2 py-0.5 text-xs" : "px-3 py-1 text-sm"}`}
     >
       <Flame className={isSm ? "w-3 h-3" : "w-4 h-4"} />

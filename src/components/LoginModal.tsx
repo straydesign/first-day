@@ -120,15 +120,15 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="w-screen h-screen max-w-none m-0 p-4 md:p-8 bg-white border-0 rounded-none animate-scaleIn shadow-none overflow-y-auto">
+      <DialogContent className="w-screen h-screen max-w-none m-0 p-4 md:p-8 bg-[#1a1a3e] border-0 rounded-none animate-scaleIn shadow-none overflow-y-auto">
         <DialogTitle className="sr-only">{isLogin ? 'Log in to First Day' : 'Sign up for First Day'}</DialogTitle>
         <DialogDescription className="sr-only">{isLogin ? 'Enter your email and password' : 'Create an account'}</DialogDescription>
 
         <div className="mb-4 sm:mb-6 text-center">
           <div className="mb-2 flex justify-center animate-fadeIn">
-            <FirstDayLogo width={200} height={100} layout="horizontal" showTagline={false} className="text-gray-900 max-w-full" />
+            <FirstDayLogo width={200} height={100} layout="horizontal" showTagline={false} className="text-white max-w-full" />
           </div>
-          <p className="text-gray-600 mt-2 text-sm sm:text-base animate-slideInUp" style={{ animationDelay: '0.1s' }}>
+          <p className="text-white/80 mt-2 text-sm sm:text-base animate-slideInUp" style={{ animationDelay: '0.1s' }}>
             {isLogin ? 'Welcome back!' : 'Start your journey today'}
           </p>
         </div>
@@ -136,33 +136,33 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
         <form onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto">
           {!isLogin && (
             <div>
-              <Label htmlFor="name" className="text-gray-700">Name</Label>
-              <Input id="name" type="text" placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} disabled={loading} className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-500" />
+              <Label htmlFor="name" className="text-white/80">Name</Label>
+              <Input id="name" type="text" placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} disabled={loading} className="bg-[#1a1a3e] border-white/10 text-white placeholder:text-white/50" />
             </div>
           )}
           <div>
-            <Label htmlFor="email" className="text-gray-700">Email</Label>
-            <Input id="email" type="email" placeholder="your@email.com" value={email} onChange={(e) => setEmail(e.target.value)} disabled={loading} className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-500" />
+            <Label htmlFor="email" className="text-white/80">Email</Label>
+            <Input id="email" type="email" placeholder="your@email.com" value={email} onChange={(e) => setEmail(e.target.value)} disabled={loading} className="bg-[#1a1a3e] border-white/10 text-white placeholder:text-white/50" />
           </div>
           <div>
             <div className="flex items-center justify-between mb-1">
-              <Label htmlFor="password" className="text-gray-700">Password</Label>
+              <Label htmlFor="password" className="text-white/80">Password</Label>
               {isLogin && (
                 <button type="button" onClick={() => setShowForgotPassword(true)} className="text-xs text-teal-600 hover:underline" disabled={loading}>Forgot password?</button>
               )}
             </div>
-            <Input id="password" type="password" placeholder={isLogin ? 'Enter password' : 'Create password'} value={password} onChange={(e) => setPassword(e.target.value)} disabled={loading} className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-500" />
+            <Input id="password" type="password" placeholder={isLogin ? 'Enter password' : 'Create password'} value={password} onChange={(e) => setPassword(e.target.value)} disabled={loading} className="bg-[#1a1a3e] border-white/10 text-white placeholder:text-white/50" />
           </div>
           {!isLogin && (
             <div>
-              <Label htmlFor="confirmPassword" className="text-gray-700">Confirm Password</Label>
-              <Input id="confirmPassword" type="password" placeholder="Re-enter password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} disabled={loading} className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-500" />
+              <Label htmlFor="confirmPassword" className="text-white/80">Confirm Password</Label>
+              <Input id="confirmPassword" type="password" placeholder="Re-enter password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} disabled={loading} className="bg-[#1a1a3e] border-white/10 text-white placeholder:text-white/50" />
             </div>
           )}
           {!isLogin && (
             <div className="flex items-start gap-2">
               <Checkbox id="terms" checked={agreeToTerms} onCheckedChange={(checked) => setAgreeToTerms(checked === true)} className="mt-1 flex-shrink-0" />
-              <div className="flex flex-col text-gray-700 text-sm">
+              <div className="flex flex-col text-white/80 text-sm">
                 <span>I agree to the</span>
                 <button type="button" className="text-teal-600 hover:underline text-left" onClick={onShowTerms}>terms and conditions</button>
               </div>
@@ -177,7 +177,7 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
           <button onClick={() => { setIsLogin(!isLogin); setName(''); setEmail(''); setPassword(''); setConfirmPassword(''); }} className="text-teal-600 hover:underline text-sm sm:text-base" disabled={loading}>
             {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Log in'}
           </button>
-          {isLogin && <p className="text-xs text-gray-600 px-2">First time here? Create an account to get started</p>}
+          {isLogin && <p className="text-xs text-white/80 px-2">First time here? Create an account to get started</p>}
         </div>
       </DialogContent>
 

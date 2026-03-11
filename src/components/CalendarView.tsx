@@ -105,24 +105,24 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
             {onBack && <BackButton onClick={onBack} />}
             {goalTitle && (<div className="text-center">
               <div className="flex items-center justify-center gap-3 mb-2">
-                <h1 className="text-3xl md:text-5xl font-bold text-slate-800 px-4">{goalTitle}</h1>
+                <h1 className="text-3xl md:text-5xl font-bold text-white px-4">{goalTitle}</h1>
                 {engagement && (engagement.currentStreak > 0 || engagement.isAtRisk) && (
                   <StreakBadge streak={engagement.currentStreak} isAtRisk={engagement.isAtRisk} />
                 )}
               </div>
               <div className="inline-flex items-center justify-center gap-2 mb-4">
                 <CalendarIcon className="w-5 h-5 text-teal-600" />
-                <h2 className="text-lg md:text-xl text-teal-700">Your 30-Day Plan</h2>
+                <h2 className="text-lg md:text-xl text-teal-400">Your 30-Day Plan</h2>
               </div>
               {engagement?.isAtRisk && (
-                <div className="mb-3 mx-auto max-w-md bg-coral-50 border border-coral-300 rounded-lg px-4 py-2 flex items-center gap-2 animate-pulse">
-                  <AlertTriangle className="w-4 h-4 text-coral-600 flex-shrink-0" />
-                  <p className="text-sm text-coral-700 font-medium">Your {engagement.currentStreak}-day streak is at risk! Complete today to keep it alive.</p>
+                <div className="mb-3 mx-auto max-w-md bg-[#242450] border border-coral-500/40 rounded-none px-4 py-2 flex items-center gap-2 animate-pulse">
+                  <AlertTriangle className="w-4 h-4 text-coral-400 flex-shrink-0" />
+                  <p className="text-sm text-coral-300 font-medium">Your {engagement.currentStreak}-day streak is at risk! Complete today to keep it alive.</p>
                 </div>
               )}
               {onEditGoal && (
                 <div className="flex justify-center mb-3">
-                  <Button onClick={onEditGoal} variant="outline" size="sm" className="border-2 border-teal-600 text-teal-600 hover:bg-teal-50 transition-smooth hover:scale-105">
+                  <Button onClick={onEditGoal} variant="outline" size="sm" className="border-2 border-teal-600 text-teal-400 hover:bg-white/10 transition-smooth hover:scale-105">
                     <Edit2 className="w-4 h-4 mr-1" />Edit Goal
                   </Button>
                 </div>
@@ -140,24 +140,24 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
               >
                 <div className="mb-3 flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <h3 className="text-lg md:text-xl font-bold text-teal-800">Week {week.weekNumber}: {week.label}</h3>
-                    {!week.isUnlocked && <span className="text-xs md:text-sm text-purple-600 bg-purple-100 px-3 py-1 rounded-full font-medium">Locked</span>}
+                    <h3 className="text-lg md:text-xl font-bold text-teal-300">Week {week.weekNumber}: {week.label}</h3>
+                    {!week.isUnlocked && <span className="text-xs md:text-sm text-purple-300 bg-purple-900/40 px-3 py-1 rounded-full font-medium">Locked</span>}
                   </div>
                 </div>
-                <Card className={`p-3 md:p-6 shadow-lg border border-gray-200 rounded-xl transition-smooth ${week.isUnlocked ? 'bg-white/90 backdrop-blur-sm hover:shadow-xl' : 'bg-gray-100 opacity-60 cursor-not-allowed'}`}>
+                <Card className={`p-3 md:p-6 border border-white/10 rounded-none transition-smooth ${week.isUnlocked ? 'bg-[#1a1a3e]/90 backdrop-blur-sm hover:bg-[#1a1a3e]' : 'bg-[#12122e] opacity-60 cursor-not-allowed'}`}>
                   {week.isUnlocked ? (
                     <div className="space-y-3 md:space-y-4">
                       {week.weeklyBook && (
-                        <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-lg border-2 border-yellow-200 overflow-hidden">
-                          <button onClick={() => toggleWeekBook(week.weekNumber)} className="w-full p-3 md:p-4 flex items-center justify-between hover:bg-yellow-100/50 transition-colors">
-                            <div className="flex items-center gap-2"><BookOpen className="w-4 h-4 md:w-5 md:h-5 text-yellow-600" /><h3 className="text-xs md:text-sm text-yellow-900 font-medium">Week {week.weekNumber} Reading</h3></div>
-                            {expandedWeeks.has(week.weekNumber) ? <ChevronUp className="w-4 h-4 text-yellow-600" /> : <ChevronDown className="w-4 h-4 text-yellow-600" />}
+                        <div className="bg-gradient-to-br from-[#242450] to-[#2a2a55] rounded-none border-2 border-yellow-600/30 overflow-hidden">
+                          <button onClick={() => toggleWeekBook(week.weekNumber)} className="w-full p-3 md:p-4 flex items-center justify-between hover:bg-white/10 transition-colors">
+                            <div className="flex items-center gap-2"><BookOpen className="w-4 h-4 md:w-5 md:h-5 text-yellow-400" /><h3 className="text-xs md:text-sm text-yellow-200 font-medium">Week {week.weekNumber} Reading</h3></div>
+                            {expandedWeeks.has(week.weekNumber) ? <ChevronUp className="w-4 h-4 text-yellow-400" /> : <ChevronDown className="w-4 h-4 text-yellow-400" />}
                           </button>
                           {expandedWeeks.has(week.weekNumber) && (
                             <div className="px-3 md:px-4 pb-3 md:pb-4 space-y-1 md:space-y-2">
-                              <p className="text-sm md:text-base text-yellow-900 font-semibold">{week.weeklyBook.title}</p>
-                              <p className="text-xs md:text-sm text-yellow-600">by {week.weeklyBook.author}</p>
-                              <p className="text-xs text-yellow-700 italic mt-1 md:mt-2">{week.weeklyBook.description || week.weeklyBook.reason}</p>
+                              <p className="text-sm md:text-base text-yellow-100 font-semibold">{week.weeklyBook.title}</p>
+                              <p className="text-xs md:text-sm text-yellow-400">by {week.weeklyBook.author}</p>
+                              <p className="text-xs text-yellow-300/80 italic mt-1 md:mt-2">{week.weeklyBook.description || week.weeklyBook.reason}</p>
                             </div>
                           )}
                         </div>
@@ -166,9 +166,9 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
                     </div>
                   ) : (
                     <div className="text-center py-6 md:py-12">
-                      <div className="inline-flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-purple-100"><BookOpen className="w-8 h-8 text-purple-600" /></div>
-                      <h4 className="text-lg font-semibold text-gray-700 mb-2">Week {week.weekNumber} Coming Soon!</h4>
-                      <p className="text-sm text-gray-600 max-w-md mx-auto mb-3">Complete Week {week.weekNumber - 1} to unlock this week.</p>
+                      <div className="inline-flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-purple-900/40"><BookOpen className="w-8 h-8 text-purple-400" /></div>
+                      <h4 className="text-lg font-semibold text-white/80 mb-2">Week {week.weekNumber} Coming Soon!</h4>
+                      <p className="text-sm text-white/80 max-w-md mx-auto mb-3">Complete Week {week.weekNumber - 1} to unlock this week.</p>
                     </div>
                   )}
                 </Card>

@@ -31,22 +31,19 @@ export function FirstDayLogo({
   const isVertical = layout === "vertical";
   const isHero = size === "hero";
 
-  // Hero: massive wordmark, logo mark as accent
+  // Hero: massive white wordmark over full-screen image
   if (isHero) {
     return (
       <div className={`flex flex-col items-center ${className}`}>
-        {/* Logo mark — mountains + sun */}
-        <FirstDayLogoMark size={160} className="mb-4 drop-shadow-lg" />
-
-        {/* Giant wordmark — each word its own color */}
-        <div className="flex items-baseline gap-3 md:gap-5">
+        {/* Giant wordmark — all white */}
+        <div className="flex items-baseline gap-3 md:gap-5 drop-shadow-[0_2px_16px_rgba(0,0,0,0.6)]">
           <span
             style={{
               fontSize: "clamp(3.5rem, 10vw, 7rem)",
               fontWeight: 900,
               letterSpacing: -3,
               lineHeight: 1,
-              color: COLORS.cyan,
+              color: "#ffffff",
             }}
           >
             FIRST
@@ -57,21 +54,21 @@ export function FirstDayLogo({
               fontWeight: 900,
               letterSpacing: -3,
               lineHeight: 1,
-              color: COLORS.purple,
+              color: "#ffffff",
             }}
           >
             DAY
           </span>
         </div>
 
-        {/* Tagline */}
+        {/* Tagline — white */}
         {showTagline && (
           <span
-            className="mt-2"
+            className="mt-2 drop-shadow-[0_1px_8px_rgba(0,0,0,0.5)]"
             style={{
               fontSize: "clamp(0.85rem, 2vw, 1.15rem)",
               fontWeight: 600,
-              color: COLORS.purple,
+              color: "#ffffff",
               letterSpacing: 3,
               textTransform: "uppercase" as const,
             }}
@@ -117,7 +114,7 @@ export function FirstDayLogo({
               fontSize,
               fontWeight: 900,
               letterSpacing: -1,
-              color: COLORS.purple,
+              color: COLORS.green,
             }}
           >
             DAY

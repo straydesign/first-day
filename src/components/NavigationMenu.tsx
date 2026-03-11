@@ -38,7 +38,7 @@ export function NavigationMenu({
               onClick={item.onClick}
               variant={isActive ? "default" : "outline"}
               size="sm"
-              className={`transition-smooth hover:scale-105 ${isActive ? "" : "bg-transparent border-2 border-teal-600 text-teal-600 hover:bg-teal-50"}`}
+              className={`transition-smooth hover:scale-105 ${isActive ? "" : "bg-transparent border-2 border-teal-600 text-teal-600 hover:bg-white/10"}`}
             >
               <Icon className="w-4 h-4 mr-2" />
               {item.label}
@@ -46,7 +46,7 @@ export function NavigationMenu({
           );
         })}
       </div>
-      <Button onClick={onLogout} variant="outline" size="sm" className="bg-transparent border-2 border-slate-300 text-slate-600 hover:bg-slate-50 transition-smooth hover:scale-105">
+      <Button onClick={onLogout} variant="outline" size="sm" className="bg-transparent border-2 border-white/10 text-white/80 hover:bg-white/10 transition-smooth hover:scale-105">
         <LogOut className="w-4 h-4 mr-2" />
         Logout
       </Button>

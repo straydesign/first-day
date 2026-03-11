@@ -52,68 +52,68 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
   };
 
   return (
-    <div className="min-h-screen bg-white relative overflow-hidden">
+    <div className="min-h-screen bg-[#1a1a3e] relative overflow-hidden">
       <div className="fixed inset-0 z-0 w-full h-full"><Aurora colorStops={[...AURORA_COLORS]} /></div>
       <div className="relative z-10 max-w-4xl mx-auto px-4 py-6 md:py-12">
         <BackButton onClick={onBack} />
         <div className="mb-4 md:mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-800 mb-2">Account Settings</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">Account Settings</h1>
           <p className="text-teal-700">Manage your account and data preferences</p>
         </div>
-        <div className="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-xl p-4 md:p-6 mb-4 md:mb-6 shadow-lg">
+        <div className="bg-[#1a1a3e]/90 backdrop-blur-sm border border-white/10 rounded-none p-4 md:p-6 mb-4 md:mb-6">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-full bg-teal-100 border border-teal-300 flex items-center justify-center"><User className="w-5 h-5 text-teal-600" /></div>
-            <h2 className="text-xl font-semibold text-slate-800">Account Information</h2>
+            <h2 className="text-xl font-semibold text-white">Account Information</h2>
           </div>
           <div className="space-y-3">
-            <div className="flex items-center gap-3 text-gray-700"><Mail className="w-4 h-4 text-gray-500" /><span className="text-sm">Email:</span><span className="text-sm">{userEmail || "Not available"}</span></div>
-            <div className="flex items-center gap-3 text-gray-700"><Shield className="w-4 h-4 text-gray-500" /><span className="text-sm">User ID:</span><span className="text-sm font-mono text-xs">{userId}</span></div>
+            <div className="flex items-center gap-3 text-white/80"><Mail className="w-4 h-4 text-white/50" /><span className="text-sm">Email:</span><span className="text-sm">{userEmail || "Not available"}</span></div>
+            <div className="flex items-center gap-3 text-white/80"><Shield className="w-4 h-4 text-white/50" /><span className="text-sm">User ID:</span><span className="text-sm font-mono text-xs">{userId}</span></div>
           </div>
         </div>
-        <div className="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-xl p-4 md:p-6 mb-4 md:mb-6 shadow-lg">
+        <div className="bg-[#1a1a3e]/90 backdrop-blur-sm border border-white/10 rounded-none p-4 md:p-6 mb-4 md:mb-6">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-full bg-teal-100 border border-teal-300 flex items-center justify-center"><Shield className="w-5 h-5 text-teal-600" /></div>
-            <h2 className="text-xl font-semibold text-slate-800">Privacy</h2>
+            <h2 className="text-xl font-semibold text-white">Privacy</h2>
           </div>
-          <div className="text-gray-700 text-sm space-y-2 mb-4">
+          <div className="text-white/80 text-sm space-y-2 mb-4">
             <p>Your data is encrypted and stored securely</p>
             <p>We never sell or share your personal information</p>
             <p>You have full control over your data</p>
           </div>
         </div>
-        <div className="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-xl p-4 md:p-6 mb-4 md:mb-6 shadow-lg">
+        <div className="bg-[#1a1a3e]/90 backdrop-blur-sm border border-white/10 rounded-none p-4 md:p-6 mb-4 md:mb-6">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-full bg-blue-100 border border-blue-300 flex items-center justify-center"><Bell className="w-5 h-5 text-blue-600" /></div>
-            <h2 className="text-xl font-semibold text-slate-800">Email Notifications</h2>
+            <h2 className="text-xl font-semibold text-white">Email Notifications</h2>
           </div>
-          <div className="text-gray-700 text-sm space-y-2 mb-4">
+          <div className="text-white/80 text-sm space-y-2 mb-4">
             <p>Daily reminder emails are automatically sent based on your goal&apos;s preferred time slot.</p>
           </div>
-          <Button onClick={handleSendTestEmail} disabled={isSendingTestEmail} variant="outline" className="border-2 border-teal-600 text-teal-600 hover:bg-teal-50 transition-smooth hover:scale-105 disabled:hover:scale-100 bg-white">
+          <Button onClick={handleSendTestEmail} disabled={isSendingTestEmail} variant="outline" className="border-2 border-teal-600 text-teal-600 hover:bg-white/10 transition-smooth hover:scale-105 disabled:hover:scale-100 bg-[#1a1a3e]">
             <Bell className="w-4 h-4 mr-2" />{isSendingTestEmail ? "Sending..." : "Send Test Email"}
           </Button>
         </div>
-        <div className="bg-red-50 backdrop-blur-sm border border-red-200 rounded-xl p-4 md:p-6 shadow-lg">
+        <div className="bg-red-950/30 backdrop-blur-sm border border-red-500/20 rounded-none p-4 md:p-6">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-full bg-red-100 border border-red-300 flex items-center justify-center"><Trash2 className="w-5 h-5 text-red-600" /></div>
-            <h2 className="text-xl font-semibold text-slate-800">Danger Zone</h2>
+            <h2 className="text-xl font-semibold text-white">Danger Zone</h2>
           </div>
-          <p className="text-gray-700 text-sm mb-4">Permanently delete your account and all associated data. This action cannot be undone.</p>
+          <p className="text-white/80 text-sm mb-4">Permanently delete your account and all associated data. This action cannot be undone.</p>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button variant="outline" className="border-red-400 text-red-600 hover:bg-red-100 hover:text-red-700 bg-white transition-smooth hover:scale-105"><Trash2 className="w-4 h-4 mr-2" />Delete My Account</Button>
+              <Button variant="outline" className="border-red-400 text-red-600 hover:bg-red-950/50 hover:text-red-400 bg-[#1a1a3e] transition-smooth hover:scale-105"><Trash2 className="w-4 h-4 mr-2" />Delete My Account</Button>
             </AlertDialogTrigger>
-            <AlertDialogContent className="bg-white border border-gray-200">
+            <AlertDialogContent className="bg-[#1a1a3e] border border-white/10">
               <AlertDialogHeader>
-                <AlertDialogTitle className="text-slate-800">Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription className="text-gray-600">This action cannot be undone. This will permanently delete your account and remove all your data.</AlertDialogDescription>
+                <AlertDialogTitle className="text-white">Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription className="text-white/80">This action cannot be undone. This will permanently delete your account and remove all your data.</AlertDialogDescription>
               </AlertDialogHeader>
               <div className="my-4">
-                <label className="text-sm text-gray-600 mb-2 block">Type <span className="font-bold text-red-600">DELETE</span> to confirm:</label>
-                <Input type="text" value={confirmText} onChange={(e) => setConfirmText(e.target.value)} className="bg-white border-gray-300 text-gray-900 focus:ring-2 focus:ring-red-500" placeholder="Type DELETE" />
+                <label className="text-sm text-white/80 mb-2 block">Type <span className="font-bold text-red-600">DELETE</span> to confirm:</label>
+                <Input type="text" value={confirmText} onChange={(e) => setConfirmText(e.target.value)} className="bg-[#1a1a3e] border-white/10 text-white focus:ring-2 focus:ring-red-500" placeholder="Type DELETE" />
               </div>
               <AlertDialogFooter>
-                <AlertDialogCancel onClick={() => setConfirmText("")} className="bg-white border-2 border-slate-300 text-slate-600 hover:bg-slate-50">Cancel</AlertDialogCancel>
+                <AlertDialogCancel onClick={() => setConfirmText("")} className="bg-[#1a1a3e] border-2 border-white/10 text-white/80 hover:bg-white/10">Cancel</AlertDialogCancel>
                 <AlertDialogAction onClick={handleDeleteAccount} disabled={isDeleting || confirmText !== "DELETE"} className="bg-red-600 text-white hover:bg-red-700 disabled:opacity-50">{isDeleting ? "Deleting..." : "Delete Account"}</AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>

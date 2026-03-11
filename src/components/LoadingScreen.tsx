@@ -58,7 +58,7 @@ export function LoadingScreen({ showProgress = false, estimatedDuration = 15000 
           <div className="w-full max-w-md space-y-4 animate-fadeIn">
             <Progress
               value={progress}
-              className="h-2 bg-slate-800/20 [&>[data-slot=progress-indicator]]:bg-teal-600 [&>[data-slot=progress-indicator]]:shadow-[0_0_12px_rgba(13,148,136,0.5)] [&>[data-slot=progress-indicator]]:transition-all"
+              className="h-2 bg-white/10 [&>[data-slot=progress-indicator]]:bg-[#cc5533] [&>[data-slot=progress-indicator]]:shadow-[0_0_12px_rgba(204,85,51,0.5)] [&>[data-slot=progress-indicator]]:transition-all"
             />
             <AnimatePresence mode="wait">
               <motion.div
@@ -67,7 +67,7 @@ export function LoadingScreen({ showProgress = false, estimatedDuration = 15000 
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.3 }}
-                className="flex items-center justify-center gap-2 text-slate-800"
+                className="flex items-center justify-center gap-2 text-white"
               >
                 {(() => {
                   const Icon = PROGRESS_STEPS[currentStep].icon;
@@ -78,7 +78,7 @@ export function LoadingScreen({ showProgress = false, estimatedDuration = 15000 
                 </span>
               </motion.div>
             </AnimatePresence>
-            <p className="text-center text-xs text-slate-600">
+            <p className="text-center text-xs text-white/80">
               {Math.round(progress)}%
             </p>
           </div>

@@ -97,7 +97,7 @@ export function BouncingButton({ onClick }: BouncingButtonProps) {
         ref={buttonRef}
         onClick={onClick}
         size="lg"
-        className="text-white shadow-lg hover:shadow-xl transition-smooth hover:scale-105 text-lg px-8 py-6 absolute"
+        className="text-white shadow-lg shadow-black/30 hover:shadow-xl transition-smooth hover:scale-105 text-lg px-8 py-6 absolute"
         style={{ left: `${position.x}px`, top: `${position.y}px`, backgroundColor: bgColor }}
       >
         Create Your Goal

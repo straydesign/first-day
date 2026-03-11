@@ -67,20 +67,20 @@ export function SimpleGoalCreation({ onComplete, onCancel }: SimpleGoalCreationP
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-4xl mx-auto">
           <div className="p-4 md:p-12">
             <div className="text-center mb-6 md:mb-10">
-              <h1 className="text-3xl md:text-4xl font-bold text-slate-800 mb-2 md:mb-3">Let&apos;s Create Your Goal</h1>
+              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2 md:mb-3">Let&apos;s Create Your Goal</h1>
               <p className="text-lg text-teal-700">Tell us what you want to achieve</p>
             </div>
             <AnimatePresence>
               {error && (
-                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="mb-6 bg-red-50 border border-red-200 rounded-xl p-4 flex items-start gap-3">
+                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="mb-6 bg-red-50 border border-red-200 rounded-none p-4 flex items-start gap-3">
                   <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
                   <p className="text-sm font-medium text-red-800">{error}</p>
                 </motion.div>
               )}
             </AnimatePresence>
             <div className="mb-0">
-              <label className="block text-sm font-semibold text-gray-700 mb-3">What&apos;s your goal?</label>
-              <Textarea value={goal} onChange={(e) => { setGoal(e.target.value); setError(null); }} placeholder="Type your goal here..." className="px-5 py-4 bg-white/50 border-2 border-gray-200 rounded-xl text-lg focus:border-teal-400 focus:ring-4 focus:ring-teal-100 transition-all resize-none min-h-[80px] md:min-h-[120px]" disabled={isGenerating} autoFocus rows={3} />
+              <label className="block text-sm font-semibold text-white/80 mb-3">What&apos;s your goal?</label>
+              <Textarea value={goal} onChange={(e) => { setGoal(e.target.value); setError(null); }} placeholder="Type your goal here..." className="px-5 py-4 bg-white/50 border-2 border-white/10 rounded-none text-lg focus:border-teal-400 focus:ring-4 focus:ring-teal-100 transition-all resize-none min-h-[80px] md:min-h-[120px]" disabled={isGenerating} autoFocus rows={3} />
             </div>
           </div>
         </motion.div>
@@ -94,16 +94,16 @@ export function SimpleGoalCreation({ onComplete, onCancel }: SimpleGoalCreationP
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-4xl mx-auto">
           <div className="p-4 md:p-12">
             <div className="mb-4 md:mb-8">
-              <label className="block text-sm font-semibold text-gray-700 mb-2 md:mb-3">Why do you want to achieve this?</label>
-              <Textarea value={why} onChange={(e) => setWhy(e.target.value)} placeholder="Tell us what motivates you..." className="px-5 py-4 bg-white/50 border-2 border-gray-200 rounded-xl text-lg focus:border-teal-400 focus:ring-4 focus:ring-teal-100 transition-all resize-none min-h-[80px] md:min-h-[120px]" disabled={isGenerating} rows={3} />
+              <label className="block text-sm font-semibold text-white/80 mb-2 md:mb-3">Why do you want to achieve this?</label>
+              <Textarea value={why} onChange={(e) => setWhy(e.target.value)} placeholder="Tell us what motivates you..." className="px-5 py-4 bg-white/50 border-2 border-white/10 rounded-none text-lg focus:border-teal-400 focus:ring-4 focus:ring-teal-100 transition-all resize-none min-h-[80px] md:min-h-[120px]" disabled={isGenerating} rows={3} />
             </div>
             <div className="mb-4 md:mb-8">
-              <label className="block text-sm font-semibold text-gray-700 mb-2 md:mb-3">What&apos;s your experience level?</label>
+              <label className="block text-sm font-semibold text-white/80 mb-2 md:mb-3">What&apos;s your experience level?</label>
               <div className="flex flex-col gap-3">
                 {[{ value: 'beginner' as const, label: 'Beginner', desc: 'Just starting' }, { value: 'intermediate' as const, label: 'Intermediate', desc: 'Some experience' }, { value: 'advanced' as const, label: 'Advanced', desc: 'Experienced' }].map((level) => (
-                  <button key={level.value} onClick={() => setExperienceLevel(level.value)} disabled={isGenerating} className={`p-4 rounded-xl border-2 transition-all text-left ${experienceLevel === level.value ? 'border-teal-400 bg-teal-50 shadow-md' : 'border-gray-200 bg-white/50 hover:border-gray-300'}`}>
-                    <div className="font-semibold text-gray-900">{level.label}</div>
-                    <div className="text-sm text-gray-600">{level.desc}</div>
+                  <button key={level.value} onClick={() => setExperienceLevel(level.value)} disabled={isGenerating} className={`p-4 rounded-none border-2 transition-all text-left ${experienceLevel === level.value ? 'border-teal-400 bg-[#242450]' : 'border-white/10 bg-white/50 hover:border-white/20'}`}>
+                    <div className="font-semibold text-white">{level.label}</div>
+                    <div className="text-sm text-white/80">{level.desc}</div>
                   </button>
                 ))}
               </div>
@@ -116,12 +116,12 @@ export function SimpleGoalCreation({ onComplete, onCancel }: SimpleGoalCreationP
               {showOptional && (
                 <div className="mt-4 space-y-4 md:space-y-6">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2 md:mb-3">What have you tried before?</label>
-                    <Input type="text" value={priorExperience} onChange={(e) => setPriorExperience(e.target.value)} placeholder="e.g., Took an online course, read a book..." className="px-5 py-4 bg-white/50 border-2 border-gray-200 rounded-xl text-lg focus:border-teal-400 focus:ring-4 focus:ring-teal-100 transition-all" disabled={isGenerating} />
+                    <label className="block text-sm font-semibold text-white/80 mb-2 md:mb-3">What have you tried before?</label>
+                    <Input type="text" value={priorExperience} onChange={(e) => setPriorExperience(e.target.value)} placeholder="e.g., Took an online course, read a book..." className="px-5 py-4 bg-white/50 border-2 border-white/10 rounded-none text-lg focus:border-teal-400 focus:ring-4 focus:ring-teal-100 transition-all" disabled={isGenerating} />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2 md:mb-3">How do you like to learn?</label>
-                    <Input type="text" value={preferredTactics} onChange={(e) => setPreferredTactics(e.target.value)} placeholder="e.g., Videos, hands-on practice, reading..." className="px-5 py-4 bg-white/50 border-2 border-gray-200 rounded-xl text-lg focus:border-teal-400 focus:ring-4 focus:ring-teal-100 transition-all" disabled={isGenerating} />
+                    <label className="block text-sm font-semibold text-white/80 mb-2 md:mb-3">How do you like to learn?</label>
+                    <Input type="text" value={preferredTactics} onChange={(e) => setPreferredTactics(e.target.value)} placeholder="e.g., Videos, hands-on practice, reading..." className="px-5 py-4 bg-white/50 border-2 border-white/10 rounded-none text-lg focus:border-teal-400 focus:ring-4 focus:ring-teal-100 transition-all" disabled={isGenerating} />
                   </div>
                 </div>
               )}
@@ -130,10 +130,10 @@ export function SimpleGoalCreation({ onComplete, onCancel }: SimpleGoalCreationP
               <Button size="lg" onClick={handleGenerate} disabled={isGenerating || !goal.trim()} className="w-full shadow-lg transition-smooth hover:scale-105 disabled:hover:scale-100">
                 {isGenerating ? (<><Loader2 className="w-5 h-5 mr-2 animate-spin" />Generating...</>) : (<>Generate My Plan<ArrowRight className="w-5 h-5 ml-2" /></>)}
               </Button>
-              <Button variant="outline" size="lg" onClick={onCancel} disabled={isGenerating} className="w-full border-2 border-slate-300 text-slate-600 hover:bg-slate-50">Cancel</Button>
+              <Button variant="outline" size="lg" onClick={onCancel} disabled={isGenerating} className="w-full border-2 border-white/10 text-white/80 hover:bg-white/10">Cancel</Button>
             </div>
             <div className="mt-6 text-center">
-              <p className="text-sm text-gray-500"><Sparkles className="w-4 h-4 inline-block mr-1 text-purple-500" />AI will create a personalized 30-day plan just for you</p>
+              <p className="text-sm text-white/50"><Sparkles className="w-4 h-4 inline-block mr-1 text-purple-500" />AI will create a personalized 30-day plan just for you</p>
             </div>
           </div>
         </motion.div>

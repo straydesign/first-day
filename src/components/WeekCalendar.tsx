@@ -41,7 +41,7 @@ export function WeekCalendar({ weekNumber, days, progress = {}, onDayClick, plan
             ? "border-l-teal-500"
             : isPast && !isCompleted
               ? "border-l-coral-400"
-              : "border-l-gray-200";
+              : "border-l-white/10";
 
         const badgeBg = isCompleted
           ? "bg-lime-500 text-white"
@@ -49,7 +49,7 @@ export function WeekCalendar({ weekNumber, days, progress = {}, onDayClick, plan
             ? "bg-teal-500 text-white"
             : isPast && !isCompleted
               ? "bg-coral-400 text-white"
-              : "bg-gray-200 text-gray-600";
+              : "bg-white/10 text-white/80";
 
         return (
           <button
@@ -67,7 +67,7 @@ export function WeekCalendar({ weekNumber, days, progress = {}, onDayClick, plan
                 ...dayData,
               })
             }
-            className={`w-full bg-white/80 backdrop-blur-sm rounded-lg border-l-4 ${borderColor} p-3 md:p-4 flex items-center gap-3 md:gap-4 transition-smooth hover:shadow-md active:scale-[0.98] md:hover:scale-[1.01]`}
+            className={`w-full bg-[#1a1a3e]/80 backdrop-blur-sm rounded-none border-l-4 ${borderColor} p-3 md:p-4 flex items-center gap-3 md:gap-4 transition-smooth hover:bg-white/10 active:scale-[0.98] md:hover:scale-[1.01] border border-white/10`}
           >
             <div
               className={`w-9 h-9 md:w-10 md:h-10 rounded-full flex items-center justify-center flex-shrink-0 text-sm md:text-base font-bold ${badgeBg}`}
@@ -76,8 +76,8 @@ export function WeekCalendar({ weekNumber, days, progress = {}, onDayClick, plan
             </div>
 
             <div className="flex-1 text-left min-w-0">
-              <p className="text-sm md:text-base font-semibold text-slate-800 truncate">{title}</p>
-              <p className="text-xs md:text-sm text-gray-500">
+              <p className="text-sm md:text-base font-semibold text-white truncate">{title}</p>
+              <p className="text-xs md:text-sm text-white/50">
                 {day.date.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}
                 {" · "}
                 {activityCount} {activityCount === 1 ? "activity" : "activities"}
@@ -90,7 +90,7 @@ export function WeekCalendar({ weekNumber, days, progress = {}, onDayClick, plan
               ) : (
                 <Circle
                   className={`w-5 h-5 md:w-6 md:h-6 ${
-                    day.isToday ? "text-teal-500" : isPast ? "text-coral-400" : "text-gray-300"
+                    day.isToday ? "text-teal-500" : isPast ? "text-coral-400" : "text-white/30"
                   }`}
                 />
               )}

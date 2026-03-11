@@ -138,7 +138,7 @@ export function CongratsView({
           </motion.div>
 
           {/* 2. Word-by-word headline reveal */}
-          <h1 className="text-3xl md:text-5xl font-bold mb-2 text-slate-800">
+          <h1 className="text-3xl md:text-5xl font-bold mb-2 text-white">
             {title.split(" ").map((word, i) => (
               <motion.span
                 key={i}
@@ -181,8 +181,8 @@ export function CongratsView({
               transition={{ duration: 0.5, delay: 0.85, ease: "easeOut" }}
             >
               <Zap className="w-5 h-5 text-yellow-500" />
-              <span className="text-lg font-bold text-slate-800">+{displayXP} XP</span>
-              <span className="text-sm text-gray-500">
+              <span className="text-lg font-bold text-white">+{displayXP} XP</span>
+              <span className="text-sm text-white/50">
                 ({xp.base} base
                 {xp.activities > 0 && ` + ${xp.activities} activities`}
                 {xp.reflection > 0 && ` + ${xp.reflection} reflection`}
@@ -217,7 +217,7 @@ export function CongratsView({
                       damping: 15,
                     }}
                   >
-                    <div className="absolute -inset-1 bg-gradient-to-r from-yellow-400 via-lime-400 to-teal-400 rounded-xl opacity-50 blur-sm animate-pulse" />
+                    <div className="absolute -inset-1 bg-gradient-to-r from-yellow-400 via-lime-400 to-teal-400 rounded-none opacity-50 blur-sm animate-pulse" />
                     <div className="relative">
                       <AchievementCard achievement={a} />
                     </div>
@@ -229,7 +229,7 @@ export function CongratsView({
 
           {daysRemaining !== null && daysRemaining > 0 && (
             <motion.p
-              className="text-sm md:text-base text-slate-600 mb-6 md:mb-12"
+              className="text-sm md:text-base text-white/80 mb-6 md:mb-12"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 1.0, ease: "easeOut" }}
@@ -264,7 +264,7 @@ export function CongratsView({
             <Button
               onClick={onDoMore}
               variant="outline"
-              className="px-6 py-5 md:px-8 md:py-6 text-base md:text-lg border-2 border-teal-600 text-teal-600 hover:bg-teal-50 shadow-md hover:shadow-lg transition-smooth hover:scale-105 bg-white"
+              className="px-6 py-5 md:px-8 md:py-6 text-base md:text-lg border-2 border-teal-600 text-teal-600 hover:bg-[#242450] shadow-md hover:shadow-lg transition-smooth hover:scale-105 bg-[#1a1a3e]"
             >
               <ArrowRight className="mr-2 w-5 h-5 flex-shrink-0" />Back to Goals
             </Button>

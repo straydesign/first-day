@@ -61,16 +61,16 @@ export function ForgotPasswordModal({ isOpen, onClose }: ForgotPasswordModalProp
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-white border border-gray-200 max-w-md">
-        <DialogTitle className="text-lg font-bold text-gray-900">Reset Password</DialogTitle>
-        <DialogDescription className="text-gray-600">
+      <DialogContent className="bg-[#1a1a3e] border border-white/10 max-w-md">
+        <DialogTitle className="text-lg font-bold text-white">Reset Password</DialogTitle>
+        <DialogDescription className="text-white/80">
           {sent ? 'Check your email for a password reset link.' : 'Enter your email address and we\'ll send you a reset link.'}
         </DialogDescription>
         {!sent ? (
           <form onSubmit={handleSubmit} className="space-y-4 mt-4">
             <div>
-              <Label htmlFor="reset-email" className="text-gray-700">Email</Label>
-              <Input id="reset-email" type="email" placeholder="your@email.com" value={email} onChange={(e) => setEmail(e.target.value)} disabled={loading} className="bg-white border-gray-300" />
+              <Label htmlFor="reset-email" className="text-white/80">Email</Label>
+              <Input id="reset-email" type="email" placeholder="your@email.com" value={email} onChange={(e) => setEmail(e.target.value)} disabled={loading} className="bg-[#12122e] border-white/10" />
             </div>
             <Button type="submit" className="w-full transition-smooth hover:scale-105 disabled:hover:scale-100" disabled={loading}>
               {loading ? 'Sending...' : 'Send Reset Link'}

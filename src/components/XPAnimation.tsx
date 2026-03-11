@@ -44,7 +44,7 @@ export function XPAnimation({ xp, show }: XPAnimationProps) {
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
         >
-          <div className="bg-black/60 backdrop-blur-sm rounded-2xl p-6 min-w-[240px] text-center pointer-events-auto">
+          <div className="bg-black/60 backdrop-blur-sm rounded-none p-6 min-w-[240px] text-center pointer-events-auto border border-white/10">
             <div className="space-y-2 mb-4">
               {lines.map((line, i) => (
                 <motion.div

@@ -131,7 +131,7 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
           <div className="h-full bg-teal-400 rounded-r-full animate-shimmer" style={{ width: '60%', animation: 'loadingBar 1.5s ease-in-out infinite' }} />
         </div>
         <div className="relative z-10">
-          <p className="text-lg text-slate-700 font-medium">Loading your goals...</p>
+          <p className="text-lg text-white/80 font-medium">Loading your goals...</p>
         </div>
       </div>
     );
@@ -142,18 +142,18 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
       <div className="sticky top-0 z-50 flex justify-end px-4 py-2">
         <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
           <SheetTrigger asChild>
-            <Button variant="outline" size="sm" className="bg-transparent border-2 border-teal-600 text-teal-600 hover:bg-teal-50 shadow-md px-3 py-2 rounded-lg" aria-label="Menu">
+            <Button variant="outline" size="sm" className="bg-transparent border-2 border-teal-600 text-teal-600 hover:bg-white/10 px-3 py-2 rounded-none" aria-label="Menu">
               <Menu className="w-5 h-5" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="right" className="w-[168px] bg-white/95 backdrop-blur-xl border-l-2 border-teal-200 pt-12">
-            <SheetTitle className="text-lg font-bold text-gray-900 mb-4 pt-8 text-center">Menu</SheetTitle>
+          <SheetContent side="right" className="w-[168px] bg-[#1a1a3e]/95 backdrop-blur-xl border-l-2 border-white/10 pt-12">
+            <SheetTitle className="text-lg font-bold text-white mb-4 pt-8 text-center">Menu</SheetTitle>
             <SheetDescription className="sr-only">Navigation options for your goals</SheetDescription>
             <nav className="flex flex-col gap-2 px-3">
-              <Button onClick={() => setMobileMenuOpen(false)} variant="outline" size="sm" className="justify-start bg-blue-50 hover:bg-blue-100 text-blue-900 border-blue-300 text-sm py-2"><Target className="w-4 h-4 mr-2" />My Goals</Button>
-              <Button onClick={() => { setMobileMenuOpen(false); if (goals[0]) onSelectGoal(goals[0].id); }} variant="outline" size="sm" className="justify-start hover:bg-gray-50 text-sm py-2"><Calendar className="w-4 h-4 mr-2" />30 Day Plan</Button>
+              <Button onClick={() => setMobileMenuOpen(false)} variant="outline" size="sm" className="justify-start bg-[#242450] hover:bg-white/10 text-white border-white/10 text-sm py-2"><Target className="w-4 h-4 mr-2" />My Goals</Button>
+              <Button onClick={() => { setMobileMenuOpen(false); if (goals[0]) onSelectGoal(goals[0].id); }} variant="outline" size="sm" className="justify-start hover:bg-white/10 text-sm py-2"><Calendar className="w-4 h-4 mr-2" />30 Day Plan</Button>
               <div className="my-2" />
-              <Button onClick={onLogout} variant="outline" size="sm" className="justify-start hover:bg-red-50 text-red-600 border-red-200 text-sm py-2"><LogOut className="w-4 h-4 mr-2" />Logout</Button>
+              <Button onClick={onLogout} variant="outline" size="sm" className="justify-start hover:bg-red-500/10 text-red-400 border-red-400/20 text-sm py-2"><LogOut className="w-4 h-4 mr-2" />Logout</Button>
             </nav>
           </SheetContent>
         </Sheet>
@@ -163,12 +163,12 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
         {goals.length > 0 ? (
           <>
             <div className="text-center mb-4 md:mb-8 px-4">
-              <h1 className="text-3xl md:text-5xl font-bold mb-2 md:mb-4 text-slate-800">Today&apos;s Activities</h1>
+              <h1 className="text-3xl md:text-5xl font-bold mb-2 md:mb-4 text-white">Today&apos;s Activities</h1>
               <p className="text-xl text-teal-700">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</p>
             </div>
             <div className="animate-fadeIn space-y-4">
               {goals.map(goal => (
-                <Card key={goal.id} className="bg-white/90 backdrop-blur-sm border border-gray-200 shadow-lg rounded-xl">
+                <Card key={goal.id} className="bg-[#1a1a3e]/90 backdrop-blur-sm border border-white/10 rounded-none">
                   <CardHeader>
                     <div className="mb-4 flex items-start justify-between">
                       <div className="flex-1">
@@ -180,11 +180,11 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                         </div>
                         <CardDescription className="text-teal-600">Day {goalCurrentDays[goal.id] || 0} of 30</CardDescription>
                       </div>
-                      <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); handleDeleteGoal(goal.id, goal.title); }} className="text-red-500 hover:text-red-700 hover:bg-red-50" aria-label="Delete goal">
+                      <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); handleDeleteGoal(goal.id, goal.title); }} className="text-red-400 hover:text-red-300 hover:bg-red-500/10" aria-label="Delete goal">
                         <Trash2 className="w-5 h-5" />
                       </Button>
                     </div>
-                    <Button size="lg" onClick={() => onSelectGoal(goal.id)} variant="outline" className="w-full bg-transparent border-2 border-teal-600 text-teal-600 hover:bg-teal-50 transition-smooth hover:scale-105 mb-3">
+                    <Button size="lg" onClick={() => onSelectGoal(goal.id)} variant="outline" className="w-full bg-transparent border-2 border-teal-600 text-teal-600 hover:bg-white/10 transition-smooth hover:scale-105 mb-3">
                       <Calendar className="w-5 h-5 mr-2" />View 30 Day Plan
                     </Button>
                     <Button size="lg" className="w-full transition-smooth hover:scale-105" onClick={(e) => { e.stopPropagation(); if (onViewTodayActivities) onViewTodayActivities(goal.id); else onSelectGoal(goal.id); }}>
@@ -203,7 +203,7 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                 </div>
               )}
               <div className="pt-2 md:pt-4 pb-4 md:pb-8 px-4">
-                <Button onClick={onCreateGoal} size="lg" variant="outline" className="w-full bg-transparent border-2 border-teal-600 text-teal-600 hover:bg-teal-50 shadow-lg hover:shadow-xl transition-smooth hover:scale-105 text-lg py-4 md:py-6 rounded-xl">
+                <Button onClick={onCreateGoal} size="lg" variant="outline" className="w-full bg-transparent border-2 border-teal-600 text-teal-600 hover:bg-white/10 transition-smooth hover:scale-105 text-lg py-4 md:py-6 rounded-none">
                   <Plus className="w-6 h-6 mr-2" />Add New Goal
                 </Button>
               </div>
@@ -212,7 +212,7 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
         ) : (
           <>
             <div className="text-center mb-4 md:mb-8 px-4">
-              <h1 className="text-3xl md:text-5xl font-bold mb-2 md:mb-4 text-slate-800">Set Your First Goal</h1>
+              <h1 className="text-3xl md:text-5xl font-bold mb-2 md:mb-4 text-white">Set Your First Goal</h1>
               <p className="text-xl text-teal-700">Pick any goal and get a personalized 30-day plan</p>
             </div>
             <BouncingButton onClick={onCreateGoal} />
