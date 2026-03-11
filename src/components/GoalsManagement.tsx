@@ -148,11 +148,11 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
               <Menu className="w-5 h-5" />
             </MosaicButton>
           </SheetTrigger>
-          <SheetContent side="right" className="w-[168px] bg-[#1a1a3e]/95 backdrop-blur-xl border-l-2 border-white/10 pt-12">
+          <SheetContent side="right" className="w-[168px] backdrop-blur-xl border-l-2 border-white/10 pt-12">
             <SheetTitle className="text-lg font-bold text-white mb-4 pt-8 text-center">Menu</SheetTitle>
             <SheetDescription className="sr-only">Navigation options for your goals</SheetDescription>
             <nav className="flex flex-col gap-2 px-3">
-              <Button onClick={() => setMobileMenuOpen(false)} variant="outline" size="sm" className="justify-start bg-[#242450] hover:bg-white/10 text-white border-white/10 text-sm py-2"><Target className="w-4 h-4 mr-2" />My Goals</Button>
+              <Button onClick={() => setMobileMenuOpen(false)} variant="outline" size="sm" className="justify-start bg-[#2437A6] hover:bg-white/10 text-white border-white/10 text-sm py-2"><Target className="w-4 h-4 mr-2" />My Goals</Button>
               <Button onClick={() => { setMobileMenuOpen(false); if (goals[0]) onSelectGoal(goals[0].id); }} variant="outline" size="sm" className="justify-start hover:bg-white/10 text-sm py-2"><Calendar className="w-4 h-4 mr-2" />30 Day Plan</Button>
               <div className="my-2" />
               <Button onClick={onLogout} variant="outline" size="sm" className="justify-start hover:bg-red-500/10 text-red-400 border-red-400/20 text-sm py-2"><LogOut className="w-4 h-4 mr-2" />Logout</Button>

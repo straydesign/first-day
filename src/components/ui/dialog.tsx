@@ -6,7 +6,7 @@ import { Dialog as DialogPrimitive } from "radix-ui"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { MosaicBackground } from "@/components/MosaicBackground"
+import { VoronoiMosaic } from "@/components/VoronoiMosaic"
 
 function Dialog({
   ...props
@@ -62,12 +62,13 @@ function DialogContent({
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(
-          "clip-dialog bg-[#242450] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-none border border-white/10 p-6 shadow-lg duration-200 outline-none sm:max-w-lg",
+          "clip-dialog bg-[#0F1B3A] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-none border border-white/10 p-6 shadow-lg duration-200 outline-none sm:max-w-lg overflow-hidden",
           className
         )}
         {...props}
       >
-        {/* mosaic removed — clean surface */}
+        <VoronoiMosaic seed={42} tileCount={20} margin={4} gap={2} className="absolute inset-0 w-full h-full" />
+        <div className="absolute inset-0 bg-[#0F1B3A]/50" />
         <div className="relative z-10 grid gap-4">
           {children}
         </div>

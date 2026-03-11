@@ -6,21 +6,21 @@
 
 :root {
   --font-size: 16px;
-  --background: #12122e;
+  --background: #0F1B3A;
   --foreground: #ffffff;
-  --card: #1a1a3e;
+  --card: #0F1B3A;
   --card-foreground: #ffffff;
-  --popover: #242450;
+  --popover: #2437A6;
   --popover-foreground: #ffffff;
   --primary: #cc5533;
   --primary-foreground: #ffffff;
-  --secondary: #242450;
+  --secondary: #2437A6;
   --secondary-foreground: #ffffff;
-  --muted: #1a1a3e;
+  --muted: #0F1B3A;
   --muted-foreground: rgba(255, 255, 255, 0.5);
-  --accent: #242450;
+  --accent: #2437A6;
   --accent-foreground: #ffffff;
-  --destructive: #ff6b6b;
+  --destructive: #FF8E72;
   --destructive-foreground: #ffffff;
   --border: rgba(255, 255, 255, 0.1);
   --input: rgba(255, 255, 255, 0.1);
@@ -30,16 +30,16 @@
   --font-weight-normal: 400;
   --ring: #cc5533;
   --chart-1: #cc5533;
-  --chart-2: #a3e2fd;
-  --chart-3: #c8ffbe;
-  --chart-4: #b5a6ff;
-  --chart-5: #ff6b6b;
+  --chart-2: #FFB07C;
+  --chart-3: #FFD38A;
+  --chart-4: #F77BAA;
+  --chart-5: #FF8E72;
   --radius: 0;
-  --sidebar: #12122e;
+  --sidebar: #0F1B3A;
   --sidebar-foreground: #ffffff;
   --sidebar-primary: #cc5533;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #242450;
+  --sidebar-accent: #2437A6;
   --sidebar-accent-foreground: #ffffff;
   --sidebar-border: rgba(255, 255, 255, 0.1);
   --sidebar-ring: #cc5533;
@@ -74,16 +74,16 @@
   --color-chart-5: var(--chart-5);
 
   /*
-   * DESIGN SYSTEM — COLOR ROLES (Geometric Mosaic Dark Theme)
+   * DESIGN SYSTEM — COLOR ROLES (Sunset Voronoi Mosaic Theme)
    *
-   * Backgrounds: #12122e (page), #1a1a3e (card/surface), #242450 (elevated)
+   * Backgrounds: #0F1B3A (Midnight Navy), #2437A6 (Indigo Blue elevated)
    * Borders: white/10 universally
    *
    * Primary CTA: #cc5533 (warm orange) — buttons, focus rings, progress bars.
-   * Green accent: #c8ffbe — success, completion, checkmarks.
-   * Cyan accent: #a3e2fd — info highlights, secondary interactive.
-   * Lavender accent: #b5a6ff — decorative, categories, tags.
-   * Coral accent: #ff6b6b — destructive, missed-day, warnings.
+   * Light palette: #FFD38A (Golden Peach), #FFB07C (Warm Apricot),
+   *                #FF8E72 (Soft Coral), #F77BAA (Rose Pink)
+   * Dark palette: #5227FF (Deep Violet), #2437A6 (Indigo Blue),
+   *               #8A2C6D (Burnt Magenta), #0F1B3A (Midnight Navy)
    *
    * Text: #ffffff (primary), white/80 (secondary), white/50 (muted).
    * No rounded corners anywhere — all sharp edges.
@@ -115,7 +115,7 @@
   --color-coral-200: #ffc9c9;
   --color-coral-300: #ffa8a8;
   --color-coral-400: #ff8787;
-  --color-coral-500: #ff6b6b;
+  --color-coral-500: #FF8E72;
   --color-coral-600: #fa5252;
   --color-coral-700: #f03e3e;
   --color-coral-800: #e03131;
@@ -244,7 +244,7 @@ html {
 
   .animate-shimmer {
     animation: shimmer 2s infinite linear;
-    background: linear-gradient(to right, #1a1a3e 0%, #242450 20%, #1a1a3e 40%, #1a1a3e 100%);
+    background: linear-gradient(to right, #0F1B3A 0%, #2437A6 20%, #0F1B3A 40%, #0F1B3A 100%);
     background-size: 1000px 100%;
   }
 

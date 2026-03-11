@@ -102,7 +102,7 @@ export function SimpleGoalCreation({ onComplete, onCancel }: SimpleGoalCreationP
               <label className="block text-sm font-semibold text-white/80 mb-2 md:mb-3">What&apos;s your experience level?</label>
               <div className="flex flex-col gap-3">
                 {[{ value: 'beginner' as const, label: 'Beginner', desc: 'Just starting' }, { value: 'intermediate' as const, label: 'Intermediate', desc: 'Some experience' }, { value: 'advanced' as const, label: 'Advanced', desc: 'Experienced' }].map((level, index) => (
-                  <button key={level.value} onClick={() => setExperienceLevel(level.value)} disabled={isGenerating} className={`p-4 clip-tile-${['a','b','c'][index] || 'a'} border-2 transition-all text-left ${experienceLevel === level.value ? 'border-white/40 bg-[#242450]' : 'border-white/10 bg-white/50 hover:border-white/20'}`}>
+                  <button key={level.value} onClick={() => setExperienceLevel(level.value)} disabled={isGenerating} className={`p-4 clip-tile-${['a','b','c'][index] || 'a'} border-2 transition-all text-left ${experienceLevel === level.value ? 'border-white/40 bg-[#2437A6]' : 'border-white/10 bg-white/50 hover:border-white/20'}`}>
                     <div className="font-semibold text-white">{level.label}</div>
                     <div className="text-sm text-white/80">{level.desc}</div>
                   </button>

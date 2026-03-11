@@ -5,16 +5,16 @@ interface AuroraProps {
   colorStops?: string[];
 }
 
-export default function Aurora({ colorStops = ['#7cff67', '#00c7fc', '#5227FF'] }: AuroraProps) {
+export default function Aurora({ colorStops = ['#FFD38A', '#FF8E72', '#5227FF'] }: AuroraProps) {
   const [mounted, setMounted] = useState(false);
   useEffect(() => { setMounted(true); }, []);
 
   if (!mounted) {
-    return <div className="w-full h-full bg-gradient-to-br from-[#12122e] via-[#1a1a3e] to-[#12122e]" />;
+    return <div className="w-full h-full bg-gradient-to-br from-[#0F1B3A] via-[#2437A6] to-[#0F1B3A]" />;
   }
 
   return (
-    <div className="w-full h-full relative overflow-hidden bg-gradient-to-br from-[#12122e] via-[#1a1a3e] to-[#12122e]">
+    <div className="w-full h-full relative overflow-hidden bg-gradient-to-br from-[#0F1B3A] via-[#2437A6] to-[#0F1B3A]">
       <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse 100% 80% at 50% 30%, ${colorStops[0]} 0%, transparent 70%)`, opacity: 0.12 }} />
       <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse 80% 70% at 20% 50%, ${colorStops[1]} 0%, transparent 60%)`, opacity: 0.10 }} />
       <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse 90% 75% at 80% 60%, ${colorStops[2]} 0%, transparent 65%)`, opacity: 0.10 }} />

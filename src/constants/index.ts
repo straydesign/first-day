@@ -1,23 +1,26 @@
 /** Shared constants used across multiple components. */
 
-/** Aurora gradient background colors (green, cyan, indigo). */
-export const AURORA_COLORS = ["#7cff67", "#00c7fc", "#5227FF"] as const;
-
-/** Vivid bright mosaic tile colors — used in outer zones. */
-export const MOSAIC_BRIGHT_COLORS = [
-  "#7cff67", "#00c7fc", "#5227FF", "#cc5533",
-  "#b5a6ff", "#ff6b6b", "#c8ffbe", "#a3e2fd",
+/** Sunset Sky — Light palette (foreground tiles, highlights) */
+export const VORONOI_LIGHT = [
+  "#FFD38A", // Golden Peach
+  "#FFB07C", // Warm Apricot
+  "#FF8E72", // Soft Coral
+  "#F77BAA", // Rose Pink
 ] as const;
 
-/** Dark mosaic tile colors — used in text safe zone. */
-export const MOSAIC_DARK_COLORS = [
-  "#0a0a1e", "#12122e", "#1a1a3e", "#1e1e45", "#242450",
+/** Sunset Sky — Dark palette (deep backgrounds, shadows) */
+export const VORONOI_DARK = [
+  "#5227FF", // Deep Violet
+  "#2437A6", // Indigo Blue
+  "#8A2C6D", // Burnt Magenta
+  "#0F1B3A", // Midnight Navy
 ] as const;
 
-/** Default safe zone for dual-zone mosaic cards. */
-export const DEFAULT_SAFE_ZONE = {
-  yStart: 0.20, yEnd: 0.80, bleedProbability: 0.15,
-} as const;
+/** Combined palette — default for VoronoiMosaic */
+export const VORONOI_PALETTE = [...VORONOI_LIGHT, ...VORONOI_DARK] as const;
+
+/** Aurora gradient background colors (sunset accents). */
+export const AURORA_COLORS = ["#FFD38A", "#FF8E72", "#5227FF"] as const;
 
 /** Goal category type for color mapping. */
 export type GoalCategory = "fitness" | "creative" | "professional" | "lifestyle";
@@ -63,12 +66,12 @@ export const GOAL_CATEGORY_MAP: Record<string, GoalCategory> = {
   "Learn graphic design basics": "professional",
 };
 
-/** Tailwind class sets for each goal category — uses Aurora accent colors. */
+/** Tailwind class sets for each goal category — uses sunset light palette. */
 export const GOAL_CATEGORY_COLORS: Record<GoalCategory, string> = {
-  fitness: "border-[#7cff67] bg-[#7cff67]/25 hover:bg-[#7cff67]/40 hover:border-[#7cff67]",
-  creative: "border-[#00c7fc] bg-[#00c7fc]/25 hover:bg-[#00c7fc]/40 hover:border-[#00c7fc]",
-  professional: "border-[#5227FF] bg-[#5227FF]/25 hover:bg-[#5227FF]/40 hover:border-[#5227FF]",
-  lifestyle: "border-[#ff6b6b] bg-[#ff6b6b]/25 hover:bg-[#ff6b6b]/40 hover:border-[#ff6b6b]",
+  fitness: "border-[#FFD38A] bg-[#FFD38A]/25 hover:bg-[#FFD38A]/40 hover:border-[#FFD38A]",
+  creative: "border-[#FFB07C] bg-[#FFB07C]/25 hover:bg-[#FFB07C]/40 hover:border-[#FFB07C]",
+  professional: "border-[#FF8E72] bg-[#FF8E72]/25 hover:bg-[#FF8E72]/40 hover:border-[#FF8E72]",
+  lifestyle: "border-[#F77BAA] bg-[#F77BAA]/25 hover:bg-[#F77BAA]/40 hover:border-[#F77BAA]",
 };
 
 /** Scrolling goal suggestion rows for SimpleGoalCreation and LandingPage. */

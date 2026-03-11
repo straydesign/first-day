@@ -1,8 +1,7 @@
 "use client";
 import { memo, useMemo } from "react";
 import { Delaunay } from "d3-delaunay";
-
-const DEFAULT_PALETTE = ["#7cff67", "#00c7fc", "#5227FF", "#ff6b6b"];
+import { VORONOI_PALETTE } from "@/constants";
 
 /** Seeded PRNG — mulberry32 */
 function createRng(seed: number) {
@@ -91,7 +90,7 @@ function VoronoiMosaicInner({
   tileCount = 60,
   margin = 40,
   gap = 3,
-  palette = DEFAULT_PALETTE,
+  palette = VORONOI_PALETTE,
   className,
 }: VoronoiMosaicProps) {
   const polygons = useMemo(() => {

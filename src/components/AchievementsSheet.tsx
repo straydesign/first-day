@@ -27,7 +27,7 @@ export function AchievementsSheet({ achievements, children }: AchievementsSheetP
           </Button>
         )}
       </SheetTrigger>
-      <SheetContent side="bottom" className="max-h-[70vh] overflow-y-auto bg-[#12122e] border-t border-white/10">
+      <SheetContent side="bottom" className="max-h-[70vh] overflow-y-auto border-t border-white/10">
         <SheetTitle className="text-xl font-bold text-white mb-1 pt-2">
           Achievements
         </SheetTitle>

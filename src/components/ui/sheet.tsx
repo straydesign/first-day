@@ -5,7 +5,7 @@ import { XIcon } from "lucide-react"
 import { Dialog as SheetPrimitive } from "radix-ui"
 
 import { cn } from "@/lib/utils"
-import { MosaicBackground } from "@/components/MosaicBackground"
+import { VoronoiMosaic } from "@/components/VoronoiMosaic"
 
 function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>) {
   return <SheetPrimitive.Root data-slot="sheet" {...props} />
@@ -69,7 +69,7 @@ function SheetContent({
         data-slot="sheet-content"
         className={cn(
           SHEET_CLIP[side],
-          "bg-[#1a1a3e] data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 flex flex-col gap-4 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500",
+          "bg-[#0F1B3A] overflow-hidden data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 flex flex-col gap-4 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500",
           side === "right" &&
             "data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right inset-y-0 right-0 h-full w-3/4 border-l sm:max-w-sm",
           side === "left" &&
@@ -82,7 +82,8 @@ function SheetContent({
         )}
         {...props}
       >
-        {/* mosaic removed — clean surface */}
+        <VoronoiMosaic seed={77} tileCount={30} margin={6} gap={2} className="absolute inset-0 w-full h-full" />
+        <div className="absolute inset-0 bg-[#0F1B3A]/50" />
         <div className="relative z-10 flex flex-col gap-4 flex-1">
           {children}
         </div>

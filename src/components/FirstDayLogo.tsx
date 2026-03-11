@@ -1,7 +1,8 @@
 "use client";
 
 import { memo } from "react";
-import { MosaicBackground } from "./MosaicBackground";
+import { VoronoiMosaic } from "./VoronoiMosaic";
+import { VORONOI_LIGHT } from "@/constants";
 
 interface FirstDayLogoProps {
   className?: string;
@@ -12,19 +13,19 @@ interface FirstDayLogoProps {
   size?: "default" | "hero";
 }
 
-// Per-letter tile colors from accent palette
+// Per-letter tile colors from sunset light palette
 const LETTER_TILES = [
-  { letter: "F", color: "#7cff67", tile: "a", rotate: -1.5 },
-  { letter: "I", color: "#00c7fc", tile: "b", rotate: 1.2 },
-  { letter: "R", color: "#5227FF", tile: "c", rotate: -0.8 },
-  { letter: "S", color: "#cc5533", tile: "d", rotate: 1.8 },
-  { letter: "T", color: "#b5a6ff", tile: "a", rotate: -1.2 },
+  { letter: "F", color: "#FFD38A", tile: "a", rotate: -1.5 },
+  { letter: "I", color: "#FFB07C", tile: "b", rotate: 1.2 },
+  { letter: "R", color: "#FF8E72", tile: "c", rotate: -0.8 },
+  { letter: "S", color: "#F77BAA", tile: "d", rotate: 1.8 },
+  { letter: "T", color: "#FFD38A", tile: "a", rotate: -1.2 },
 ] as const;
 
 const DAY_TILES = [
-  { letter: "D", color: "#ff6b6b", tile: "b", rotate: 1.5 },
-  { letter: "A", color: "#c8ffbe", tile: "c", rotate: -2 },
-  { letter: "Y", color: "#a3e2fd", tile: "d", rotate: 0.8 },
+  { letter: "D", color: "#FF8E72", tile: "b", rotate: 1.5 },
+  { letter: "A", color: "#FFB07C", tile: "c", rotate: -2 },
+  { letter: "Y", color: "#F77BAA", tile: "d", rotate: 0.8 },
 ] as const;
 
 const TILE_CLIP: Record<string, string> = {
@@ -47,7 +48,7 @@ interface LetterTileProps {
 function LetterTile({ letter, color, tile, rotate, fontSize, seed, showMosaic }: LetterTileProps) {
   return (
     <div
-      className="relative inline-flex items-center justify-center"
+      className="relative inline-flex items-center justify-center overflow-hidden"
       style={{
         clipPath: TILE_CLIP[tile],
         transform: `rotate(${rotate}deg)`,
@@ -56,11 +57,13 @@ function LetterTile({ letter, color, tile, rotate, fontSize, seed, showMosaic }:
       }}
     >
       {showMosaic && (
-        <MosaicBackground
-          density={4}
-          opacity={0.2}
+        <VoronoiMosaic
           seed={seed}
-          colorSubset={[color]}
+          tileCount={7}
+          margin={2}
+          gap={1}
+          palette={[VORONOI_LIGHT[seed % VORONOI_LIGHT.length]]}
+          className="absolute inset-0 w-full h-full opacity-20"
         />
       )}
       <span

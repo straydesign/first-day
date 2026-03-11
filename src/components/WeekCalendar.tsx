@@ -44,12 +44,12 @@ export function WeekCalendar({ weekNumber, days, progress = {}, onDayClick, plan
               : "border-l-white/10";
 
         const badgeBg = isCompleted
-          ? "bg-[#7cff67] text-[#0a0a1e]"
+          ? "bg-[#FFD38A] text-[#0F1B3A]"
           : day.isToday
             ? "bg-white/20 text-white font-bold"
             : isPast && !isCompleted
               ? "bg-coral-400 text-white"
-              : "bg-[#242450] text-white/80";
+              : "bg-[#2437A6] text-white/80";
 
         return (
           <button
@@ -67,7 +67,7 @@ export function WeekCalendar({ weekNumber, days, progress = {}, onDayClick, plan
                 ...dayData,
               })
             }
-            className={`w-full bg-[#1a1a3e]/80 backdrop-blur-sm clip-tile-c border-l-4 ${borderColor} p-3 md:p-4 flex items-center gap-3 md:gap-4 transition-smooth hover:bg-white/10 active:scale-[0.98] md:hover:scale-[1.01] border border-white/10`}
+            className={`w-full bg-[#0F1B3A]/80 backdrop-blur-sm clip-tile-c border-l-4 ${borderColor} p-3 md:p-4 flex items-center gap-3 md:gap-4 transition-smooth hover:bg-white/10 active:scale-[0.98] md:hover:scale-[1.01] border border-white/10`}
           >
             <div
               className={`w-9 h-9 md:w-10 md:h-10 clip-diamond flex items-center justify-center flex-shrink-0 text-sm md:text-base font-bold ${badgeBg}`}
