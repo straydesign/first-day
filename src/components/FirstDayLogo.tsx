@@ -124,7 +124,6 @@ function FirstDayLogoInner({
               fontFamily: "var(--font-bebas), system-ui, sans-serif",
               fontSize: "clamp(2.5rem, 7vw, 4.5rem)",
               fontWeight: 900,
-              textShadow: `0 0 16px ${l.color}60`,
               transform: "scaleY(1.3)",
               display: "inline-block",
             }}
