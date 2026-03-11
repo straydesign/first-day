@@ -123,7 +123,7 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="w-screen h-screen max-w-none m-0 p-4 md:p-8 bg-white border-0 animate-scaleIn shadow-none overflow-y-auto">
-        <div className="relative z-10">
+        <div className="relative z-10 flex flex-col min-h-full">
           <DialogTitle className="sr-only">{isLogin ? 'Log in to First Day' : 'Sign up for First Day'}</DialogTitle>
           <DialogDescription className="sr-only">{isLogin ? 'Enter your email and password' : 'Create an account'}</DialogDescription>
 
