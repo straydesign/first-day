@@ -7,16 +7,38 @@ export const size = { width: 1200, height: 630 }
 export const contentType = "image/png"
 
 export default async function Image() {
-  const iconPath = join(process.cwd(), "public", "app-icon.png")
-  const iconData = await readFile(iconPath)
-  const iconBase64 = `data:image/png;base64,${iconData.toString("base64")}`
-
-  // Load the bundled Noto Sans from @vercel/og as guaranteed fallback
   const notoPath = join(
     process.cwd(),
     "node_modules/next/dist/compiled/@vercel/og/noto-sans-v27-latin-regular.ttf"
   )
   const notoFont = await readFile(notoPath)
+
+  // Mosaic tile layout — irregularly placed colored blocks with black gaps
+  const tiles = [
+    // top row
+    { x: -10, y: -20, w: 300, h: 240, color: "#db2b85", r: -2 },
+    { x: 300, y: -25, w: 260, h: 230, color: "#3075e1", r: 3 },
+    { x: 570, y: -15, w: 280, h: 250, color: "#f9334d", r: -1 },
+    { x: 860, y: -20, w: 180, h: 220, color: "#fb7025", r: 2 },
+    { x: 1040, y: -25, w: 200, h: 260, color: "#4e35b8", r: -3 },
+    // middle sides (peeking out from behind text bar)
+    { x: -20, y: 220, w: 250, h: 200, color: "#fa4835", r: 2 },
+    { x: 980, y: 210, w: 260, h: 220, color: "#fcd02a", r: -2 },
+    // bottom row
+    { x: -15, y: 420, w: 280, h: 260, color: "#3075e1", r: -3 },
+    { x: 270, y: 410, w: 260, h: 270, color: "#cf1b61", r: 2 },
+    { x: 540, y: 425, w: 250, h: 250, color: "#db2b85", r: -1 },
+    { x: 800, y: 410, w: 220, h: 270, color: "#fcd02a", r: 3 },
+    { x: 1020, y: 420, w: 230, h: 260, color: "#fa4835", r: -2 },
+  ]
+
+  const PALETTE = [
+    "#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF",
+    "#FF10F0", "#FF1493", "#4FC3F7", "#FF4500",
+  ]
+
+  const letters = "ADD NEW GOAL".split("")
+  let colorIdx = 0
 
   return new ImageResponse(
     (
@@ -25,83 +47,104 @@ export default async function Image() {
           width: "100%",
           height: "100%",
           display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
+          position: "relative",
           backgroundColor: "#000000",
+          overflow: "hidden",
         }}
       >
-        <img
-          src={iconBase64}
-          width="140"
-          height="140"
-          style={{ borderRadius: 32, marginBottom: 32 }}
-        />
+        {/* Mosaic tiles */}
+        {tiles.map((t, i) => (
+          <div
+            key={i}
+            style={{
+              position: "absolute",
+              left: t.x,
+              top: t.y,
+              width: t.w,
+              height: t.h,
+              backgroundColor: t.color,
+              transform: `rotate(${t.r}deg)`,
+            }}
+          />
+        ))}
 
+        {/* Black bar with colored text */}
         <div
           style={{
+            position: "absolute",
+            left: 40,
+            right: 40,
+            top: 210,
+            height: 210,
+            backgroundColor: "#000000",
             display: "flex",
-            fontWeight: 900,
-            fontSize: 48,
-            letterSpacing: 2,
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          <span style={{ color: "#FFE633" }}>F</span>
-          <span style={{ color: "#FF6B2B" }}>I</span>
-          <span style={{ color: "#FF2D55" }}>R</span>
-          <span style={{ color: "#00EAFF" }}>S</span>
-          <span style={{ color: "#FF10F0" }}>T</span>
-          <span style={{ width: "0.4em" }}>{" "}</span>
-          <span style={{ color: "#FF1493" }}>D</span>
-          <span style={{ color: "#4FC3F7" }}>A</span>
-          <span style={{ color: "#FF4500" }}>Y</span>
-          <span style={{ width: "0.4em" }}>{" "}</span>
-          <span style={{ color: "#FFE633" }}>O</span>
-          <span style={{ color: "#FF6B2B" }}>F</span>
-          <span style={{ width: "0.4em" }}>{" "}</span>
-          <span style={{ color: "#FF2D55" }}>T</span>
-          <span style={{ color: "#00EAFF" }}>H</span>
-          <span style={{ color: "#FF10F0" }}>E</span>
+          {/* Plus sign */}
+          <span
+            style={{
+              color: "#ffffff",
+              fontSize: 130,
+              fontWeight: 900,
+              marginRight: 16,
+            }}
+          >
+            +
+          </span>
+          {/* Colored letters */}
+          <div style={{ display: "flex", alignItems: "center" }}>
+            {letters.map((char, i) => {
+              if (char === " ") {
+                return (
+                  <span key={i} style={{ width: 30 }}>
+                    {" "}
+                  </span>
+                )
+              }
+              const color = PALETTE[colorIdx % PALETTE.length]
+              colorIdx++
+              return (
+                <span
+                  key={i}
+                  style={{
+                    color,
+                    fontSize: 130,
+                    fontWeight: 900,
+                    letterSpacing: -2,
+                  }}
+                >
+                  {char}
+                </span>
+              )
+            })}
+          </div>
         </div>
 
+        {/* Bottom branding */}
         <div
           style={{
+            position: "absolute",
+            bottom: 20,
+            left: 0,
+            right: 0,
             display: "flex",
-            fontWeight: 900,
-            fontSize: 48,
-            letterSpacing: 2,
-            marginTop: 4,
+            justifyContent: "center",
           }}
         >
-          <span style={{ color: "#FF1493" }}>R</span>
-          <span style={{ color: "#4FC3F7" }}>E</span>
-          <span style={{ color: "#FF4500" }}>S</span>
-          <span style={{ color: "#FFE633" }}>T</span>
-          <span style={{ width: "0.4em" }}>{" "}</span>
-          <span style={{ color: "#FF6B2B" }}>O</span>
-          <span style={{ color: "#FF2D55" }}>F</span>
-          <span style={{ width: "0.4em" }}>{" "}</span>
-          <span style={{ color: "#00EAFF" }}>Y</span>
-          <span style={{ color: "#FF10F0" }}>O</span>
-          <span style={{ color: "#FF1493" }}>U</span>
-          <span style={{ color: "#4FC3F7" }}>R</span>
-          <span style={{ width: "0.4em" }}>{" "}</span>
-          <span style={{ color: "#FF4500" }}>L</span>
-          <span style={{ color: "#FFE633" }}>I</span>
-          <span style={{ color: "#FF6B2B" }}>F</span>
-          <span style={{ color: "#FF2D55" }}>E</span>
-        </div>
-
-        <div
-          style={{
-            fontSize: 22,
-            fontWeight: 900,
-            color: "#FFE633",
-            marginTop: 40,
-            letterSpacing: 3,
-          }}
-        >
-          FIRSTDAY.LIFE
+          <span
+            style={{
+              fontSize: 20,
+              fontWeight: 900,
+              color: "#ffffff",
+              letterSpacing: 4,
+              backgroundColor: "#000000",
+              padding: "6px 20px",
+            }}
+          >
+            FIRSTDAY.LIFE
+          </span>
         </div>
       </div>
     ),
