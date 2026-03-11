@@ -171,7 +171,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
               >
                 Log In
               </motion.button>
-              <FirstDayLogo showTagline={true} showLetters={false} />
+              <FirstDayLogo compact={true} />
               <motion.button
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
