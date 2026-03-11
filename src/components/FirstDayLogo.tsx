@@ -18,6 +18,7 @@ interface FirstDayLogoProps {
   showLetters?: boolean;
   layout?: "horizontal" | "vertical";
   size?: "default" | "hero";
+  compact?: boolean;
 }
 
 // Per-letter tile colors from sunset light palette
@@ -90,14 +91,50 @@ function LetterTile({ letter, color, tile, rotate, fontSize, seed, showMosaic }:
   );
 }
 
+/** Abbreviation for sticky header: F·D·O·T·R·O·Y·L */
+const COMPACT_LETTERS = [
+  { char: "F", color: "#FFE633" },
+  { char: "D", color: "#FF6B2B" },
+  { char: "O", color: "#FF2D55" },
+  { char: "T", color: "#00EAFF" },
+  { char: "R", color: "#FF10F0" },
+  { char: "O", color: "#FF1493" },
+  { char: "Y", color: "#4FC3F7" },
+  { char: "L", color: "#FF4500" },
+] as const;
+
 function FirstDayLogoInner({
   className = "",
   showTagline = true,
   showLetters = true,
   size = "default",
+  compact = false,
 }: FirstDayLogoProps) {
   const isHero = size === "hero";
   const letterSize = isHero ? "clamp(3.5rem, 10vw, 7rem)" : "clamp(1.5rem, 4vw, 2.2rem)";
+
+  if (compact) {
+    return (
+      <div className={`flex items-center gap-0.5 ${className}`}>
+        {COMPACT_LETTERS.map((l, i) => (
+          <span
+            key={i}
+            style={{
+              color: l.color,
+              fontFamily: "var(--font-bebas), system-ui, sans-serif",
+              fontSize: "clamp(1.2rem, 3vw, 1.8rem)",
+              fontWeight: 900,
+              textShadow: `0 0 12px ${l.color}60`,
+              transform: "scaleY(1.3)",
+              display: "inline-block",
+            }}
+          >
+            {l.char}
+          </span>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div className={`flex flex-col items-center ${className}`}>

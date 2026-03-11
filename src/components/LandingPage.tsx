@@ -9,7 +9,7 @@ import { FirstDayLogo } from "./FirstDayLogo";
 import { Footer } from "./Footer";
 import { MosaicCard } from "./MosaicCard";
 import { GeometricFrame } from "./GeometricFrame";
-import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, VORONOI_LIGHT } from "@/constants";
+import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, VORONOI_LIGHT, VORONOI_PALETTE } from "@/constants";
 
 interface LandingPageProps {
   onGetStarted: () => void;
@@ -52,8 +52,9 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const getGoalBgColor = (goal: string, index: number) => {
-    return VORONOI_LIGHT[index % VORONOI_LIGHT.length];
+  const BRIGHT_COLORS = ["#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF", "#FF10F0", "#4FC3F7", "#FF4500", "#2979FF", "#FFD38A", "#39FF14"];
+  const getGoalBgColor = (_goal: string, index: number) => {
+    return BRIGHT_COLORS[index % BRIGHT_COLORS.length];
   };
 
   const renderScrollRow = (goals: string[], direction: "left" | "right", isPaused: boolean, setIsPaused: (v: boolean) => void, rowIndex: number) => (
@@ -102,27 +103,40 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
             <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
           </div>
 
-          {/* Center nav — becomes sticky after scrolling past */}
-          <div ref={heroNavRef} className="relative z-50 flex items-center justify-center gap-6 px-4">
-            <button
-              onClick={onLogin || onGetStarted}
-              className="text-white font-black text-sm tracking-wide uppercase hover:opacity-70 transition-opacity"
-            >
-              Log In
-            </button>
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: "easeOut" }}
-            >
-              <FirstDayLogo size="hero" showTagline={true} showLetters={false} />
-            </motion.div>
-            <button
-              onClick={onGetStarted}
-              className="text-white font-black text-sm tracking-wide uppercase hover:opacity-70 transition-opacity"
-            >
-              Get Started
-            </button>
+          {/* Center nav — full-width cracked black bar, becomes sticky after scrolling past */}
+          <div ref={heroNavRef} className="relative z-50 w-full h-14">
+            {/* Cracked black shards */}
+            {[
+              "polygon(0% 0%, 22% 0%, 21% 48%, 20.5% 100%, 0% 100%)",
+              "polygon(22.5% 0%, 42% 0%, 41.5% 55%, 42.2% 100%, 21.2% 100%, 21.6% 48%)",
+              "polygon(42.5% 0%, 60% 0%, 59.2% 42%, 59.8% 100%, 42.8% 100%, 42.1% 55%)",
+              "polygon(60.5% 0%, 80% 0%, 79.5% 52%, 80.2% 100%, 60.4% 100%, 60.8% 42%)",
+              "polygon(80.5% 0%, 100% 0%, 100% 100%, 80.8% 100%, 80.1% 52%)",
+            ].map((clip, i) => (
+              <div key={i} className="absolute inset-0 bg-black" style={{ clipPath: clip }} />
+            ))}
+            {/* Nav content */}
+            <div className="relative z-10 h-full flex items-center justify-between px-6">
+              <button
+                onClick={onLogin || onGetStarted}
+                className="text-white font-black text-sm tracking-wide uppercase hover:opacity-70 transition-opacity"
+              >
+                Log In
+              </button>
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, ease: "easeOut" }}
+              >
+                <FirstDayLogo size="hero" showTagline={true} showLetters={false} />
+              </motion.div>
+              <button
+                onClick={onGetStarted}
+                className="text-white font-black text-sm tracking-wide uppercase hover:opacity-70 transition-opacity"
+              >
+                Get Started
+              </button>
+            </div>
           </div>
 
           {/* Scroll indicator */}
@@ -142,23 +156,41 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
           </motion.div>
         </section>
 
-        {/* Sticky nav — appears when scrolled past hero center */}
+        {/* Sticky nav — identical to hero bar, appears when scrolled past */}
         {isNavSticky && (
-          <div className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md py-3 px-4 flex items-center justify-center gap-6">
-            <button
-              onClick={onLogin || onGetStarted}
-              className="text-white font-black text-sm tracking-wide uppercase hover:opacity-70 transition-opacity"
-            >
-              Log In
-            </button>
-            <FirstDayLogo showTagline={true} showLetters={false} />
-            <button
-              onClick={onGetStarted}
-              className="text-white font-black text-sm tracking-wide uppercase hover:opacity-70 transition-opacity"
-            >
-              Get Started
-            </button>
-          </div>
+          <motion.div
+            initial={{ y: -60, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="fixed top-0 left-0 right-0 z-50 h-14"
+          >
+            {/* Cracked black shards — same pattern as hero */}
+            {[
+              "polygon(0% 0%, 22% 0%, 21% 48%, 20.5% 100%, 0% 100%)",
+              "polygon(22.5% 0%, 42% 0%, 41.5% 55%, 42.2% 100%, 21.2% 100%, 21.6% 48%)",
+              "polygon(42.5% 0%, 60% 0%, 59.2% 42%, 59.8% 100%, 42.8% 100%, 42.1% 55%)",
+              "polygon(60.5% 0%, 80% 0%, 79.5% 52%, 80.2% 100%, 60.4% 100%, 60.8% 42%)",
+              "polygon(80.5% 0%, 100% 0%, 100% 100%, 80.8% 100%, 80.1% 52%)",
+            ].map((clip, i) => (
+              <div key={i} className="absolute inset-0 bg-black" style={{ clipPath: clip }} />
+            ))}
+            {/* Nav content */}
+            <div className="relative z-10 h-full flex items-center justify-between px-6">
+              <button
+                onClick={onLogin || onGetStarted}
+                className="text-white font-black text-sm tracking-wide uppercase hover:opacity-70 transition-opacity"
+              >
+                Log In
+              </button>
+              <FirstDayLogo showTagline={true} showLetters={false} />
+              <button
+                onClick={onGetStarted}
+                className="text-white font-black text-sm tracking-wide uppercase hover:opacity-70 transition-opacity"
+              >
+                Get Started
+              </button>
+            </div>
+          </motion.div>
         )}
 
         {/* Scrolling Goal Pills */}
@@ -200,8 +232,8 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
 
               <div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-                  {/* Streaks */}
-                  <MosaicCard seed={41} tileVariant="a" className="p-5 text-center">
+                  {/* Streaks — single tile */}
+                  <MosaicCard seed={41} tileVariant="a" palette={["#FFE633"]} className="p-5 text-center">
                     <div className="clip-diamond inline-flex items-center justify-center w-14 h-14 bg-orange-500/20 mb-3">
                       <Flame className="w-7 h-7 text-orange-500" />
                     </div>
@@ -214,8 +246,8 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                     <p className="text-xs text-orange-400 mt-1 font-medium">12-day streak</p>
                   </MosaicCard>
 
-                  {/* XP & Levels */}
-                  <MosaicCard seed={51} tileVariant="b" className="p-5 text-center">
+                  {/* XP & Levels — single tile */}
+                  <MosaicCard seed={51} tileVariant="b" palette={["#FF6B2B"]} className="p-5 text-center">
                     <div className="clip-diamond inline-flex items-center justify-center w-14 h-14 bg-yellow-500/20 mb-3">
                       <Zap className="w-7 h-7 text-yellow-500" />
                     </div>
@@ -233,8 +265,8 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                     </div>
                   </MosaicCard>
 
-                  {/* Achievements */}
-                  <MosaicCard seed={60} tileVariant="c" className="p-5 text-center">
+                  {/* Achievements — single tile */}
+                  <MosaicCard seed={60} tileVariant="c" palette={["#FF2D55"]} className="p-5 text-center">
                     <div className="clip-diamond inline-flex items-center justify-center w-14 h-14 bg-blue-500/20 mb-3">
                       <Trophy className="w-7 h-7 text-blue-400" />
                     </div>
