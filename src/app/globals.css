@@ -302,6 +302,13 @@ html {
 }
 
 /* ============================================
+   MOSAIC CARD — Image-based background
+   ============================================ */
+.mosaic-card {
+  background: url('/buttons/mosaic-card-bg.png') center / cover no-repeat;
+}
+
+/* ============================================
    MOSAIC BUTTON — Image-based states
    ============================================ */
 .mosaic-btn {

@@ -42,10 +42,12 @@ function MosaicCardInner({
     <div
       className={cn(
         `clip-tile-${variant}`,
-        "relative overflow-hidden border border-white/15 bg-[#1a1a3e] focus-geo",
+        "mosaic-card relative overflow-hidden border border-white/15 focus-geo",
         className
       )}
     >
+      {/* Dark scrim overlay for text readability */}
+      <div className="absolute inset-0 bg-[#0a0a1e]/50 z-[1]" />
       {showMosaic && (
         <MosaicBackground
           density={mosaicDensity}
