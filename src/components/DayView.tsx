@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useMemo } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { CardHeader, CardContent, CardTitle } from "@/components/ui/card";
@@ -26,6 +26,7 @@ interface DayViewProps {
 export function DayView({ day, onComplete, isCompleted = false, savedProgress = null, onBack, currentStreak = 0 }: DayViewProps) {
   const [completedActivities, setCompletedActivities] = useState<Record<number, boolean>>({});
   const [feedback, setFeedback] = useState("");
+  const [showValidation, setShowValidation] = useState(false);
   const [btnColorIdx, setBtnColorIdx] = useState(0);
   const btnColors = useMemo(() => HERO_PALETTE.filter((_, i) => i > 2 && i !== 28), []);
 
@@ -49,6 +50,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
   };
 
   const handleSubmit = () => {
+    if (!canSubmit) { setShowValidation(true); return; }
     onComplete({ dayNumber: day.number, completed: completedActivities, feedback });
   };
 
@@ -108,12 +110,12 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
             <div className="mb-4 md:mb-6 -mx-4 md:-mx-8">
               <MosaicCard seed={1} className="backdrop-blur-md min-h-screen px-4 md:px-8">
                 <CardHeader>
-                  <div className="bg-black px-5 py-3 inline-block" style={{ clipPath: "polygon(1% 0%, 100% 3%, 99% 97%, 0% 100%)" }}>
-                    <CardTitle className="text-2xl">
+                  <div className="bg-black px-6 py-4 inline-block" style={{ clipPath: "polygon(1% 0%, 100% 3%, 99% 97%, 0% 100%)" }}>
+                    <h2 className="text-5xl md:text-6xl font-black italic uppercase tracking-wide" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>
                       {"Your Activities".split("").map((char, i) => (
                         <span key={i} style={{ color: char === " " ? "transparent" : ["#FFE633","#FF6B2B","#FF2D55","#00EAFF","#FF10F0","#FF1493","#4FC3F7","#FF4500"][i % 8], width: char === " " ? "0.3em" : undefined, display: "inline-block" }}>{char}</span>
                       ))}
-                    </CardTitle>
+                    </h2>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -129,7 +131,16 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
                         className="space-y-2"
                       >
                         <div className={`flex items-start gap-2 md:gap-4 p-3 md:p-5 bg-black transition-smooth ${completedActivities[index] ? 'ring-2 ring-[#FFE633]/40' : ''} ${isCompleted ? 'opacity-75' : ''}`} style={{ clipPath: ["polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)", "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)", "polygon(1% 0%, 100% 2%, 99% 100%, 0% 98%)"][index % 3] }}>
-                          <Checkbox checked={completedActivities[index] || false} onCheckedChange={() => !isCompleted && toggleActivity(index)} id={`activity-${index}`} className="mt-0.5 flex-shrink-0 size-8 border-[3px] border-white data-[state=checked]:border-lime-400 data-[state=checked]:bg-lime-400" disabled={isCompleted} />
+                          <div className="mt-0.5 flex-shrink-0 relative">
+                            <Checkbox checked={completedActivities[index] || false} onCheckedChange={() => !isCompleted && toggleActivity(index)} id={`activity-${index}`} className="size-10 border-[3px] border-[#fcd02a] rounded-none data-[state=checked]:border-[#fcd02a] data-[state=checked]:bg-[#fcd02a]" disabled={isCompleted} />
+                            {completedActivities[index] && (
+                              <motion.div initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0, opacity: 0 }} transition={{ type: "spring", stiffness: 500, damping: 20 }} className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                <svg viewBox="0 0 24 24" className="w-7 h-7 text-black" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+                                  <motion.path d="M5 12l5 5L19 7" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.3, delay: 0.1 }} />
+                                </svg>
+                              </motion.div>
+                            )}
+                          </div>
                           <label htmlFor={`activity-${index}`} className="flex-1 min-w-0 cursor-pointer">
                             <div className="text-base md:text-lg leading-relaxed select-text text-white font-bold">{activityText}</div>
                             {resources && resources.length > 0 && (
@@ -194,7 +205,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
             transition={{ duration: 0.4, delay: 0.45 + (hasActivities ? activities.length * 0.1 : 0), ease: "easeOut" }}
           >
             <div className="flex justify-center">
-              <button onClick={handleSubmit} disabled={!canSubmit} className="px-10 py-5 md:px-14 md:py-6 text-lg md:text-xl font-black text-white uppercase tracking-wide disabled:opacity-50 hover:scale-105 disabled:hover:scale-100 transition-all duration-500" style={{ backgroundColor: btnColors[btnColorIdx], clipPath: "polygon(2% 0%, 100% 4%, 98% 100%, 0% 96%)" }}>Complete Day</button>
+              <button onClick={handleSubmit} className="px-10 py-5 md:px-14 md:py-6 text-lg md:text-xl font-black text-white uppercase tracking-wide hover:scale-105 transition-all duration-500" style={{ backgroundColor: btnColors[btnColorIdx], clipPath: "polygon(2% 0%, 100% 4%, 98% 100%, 0% 96%)" }}>Complete Day</button>
             </div>
             {canSubmit && (
               <motion.div
@@ -207,9 +218,40 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
                 <span>You&apos;ll earn ~<strong>{xpPreview.total} XP</strong></span>
               </motion.div>
             )}
-            {!canSubmit && <p className="text-center text-sm text-white/60 font-medium mt-4">Check at least one activity or add a reflection to continue</p>}
           </motion.div>
         )}
+
+        {/* Validation modal */}
+        <AnimatePresence>
+          {showValidation && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/70"
+              onClick={() => setShowValidation(false)}
+            >
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                className="bg-black p-8 mx-4 max-w-sm text-center"
+                style={{ clipPath: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <p className="text-xl text-white font-black uppercase tracking-wide mb-6">Check at least one activity or add a reflection to continue</p>
+                <button
+                  onClick={() => setShowValidation(false)}
+                  className="px-8 py-3 font-black text-black uppercase tracking-wide hover:scale-105 transition-transform"
+                  style={{ backgroundColor: "#fcd02a", clipPath: "polygon(1% 0%, 100% 4%, 99% 96%, 0% 100%)" }}
+                >
+                  Got It
+                </button>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
