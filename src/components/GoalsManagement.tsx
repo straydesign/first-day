@@ -218,8 +218,9 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                   </div>
                   {/* Giant goal title — word by word, filling the screen */}
                   <div className="flex-1 flex items-center justify-center px-4 md:px-8">
-                    <div
-                      className="bg-black px-6 py-8 md:px-10 md:py-12 w-full"
+                    <button
+                      onClick={() => onSelectGoal(goal.id)}
+                      className="bg-black px-6 py-8 md:px-10 md:py-12 w-full hover:scale-[1.02] transition-transform cursor-pointer"
                       style={{ clipPath: "polygon(1% 0%, 100% 2%, 99% 98%, 0% 100%)" }}
                     >
                       <h1
@@ -236,7 +237,7 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                           ))
                         )}
                       </h1>
-                    </div>
+                    </button>
                   </div>
                   {/* Stats & Achievements */}
                   {engagement && (
