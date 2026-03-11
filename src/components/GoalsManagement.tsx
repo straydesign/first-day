@@ -204,7 +204,16 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                       <Trash2 className="w-5 h-5" />
                     </button>
                   </div>
-                  <div className="mb-6">
+                  {/* Stats & Achievements */}
+                  {engagement && (
+                    <div className="space-y-4 mb-6">
+                      <StatsCard engagement={engagement} />
+                      <div className="flex justify-center">
+                        <AchievementsSheet achievements={engagement.achievements} />
+                      </div>
+                    </div>
+                  )}
+                  <div className="mt-auto">
                     <button
                       onClick={onCreateGoal}
                       className="w-full bg-black py-10 md:py-12 text-6xl md:text-8xl font-black uppercase tracking-wide hover:scale-105 transition-transform flex items-center justify-center gap-3"
@@ -216,15 +225,6 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                       ))}
                     </button>
                   </div>
-                  {/* Stats & Achievements */}
-                  {engagement && (
-                    <div className="space-y-4 mb-6">
-                      <StatsCard engagement={engagement} />
-                      <div className="flex justify-center">
-                        <AchievementsSheet achievements={engagement.achievements} />
-                      </div>
-                    </div>
-                  )}
                 </div>
               </MosaicCard>
             ))}
