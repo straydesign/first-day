@@ -3,6 +3,7 @@
 import { memo } from "react";
 import { VoronoiMosaic } from "./VoronoiMosaic";
 import { VORONOI_LIGHT } from "@/constants";
+import { useMonotone } from "./MonotoneContext";
 
 /** Tagline palette — blues instead of purple */
 const TAGLINE_PALETTE = [
@@ -51,17 +52,19 @@ interface LetterTileProps {
   fontSize: string;
   seed: number;
   showMosaic: boolean;
+  monotone?: boolean;
 }
 
-function LetterTile({ letter, color, tile, rotate, fontSize, seed, showMosaic }: LetterTileProps) {
+function LetterTile({ letter, color, tile, rotate, fontSize, seed, showMosaic, monotone }: LetterTileProps) {
+  const c = monotone ? "#ffffff" : color;
   return (
     <div
       className="relative inline-flex items-center justify-center overflow-hidden"
       style={{
         clipPath: TILE_CLIP[tile],
         transform: `rotate(${rotate}deg)`,
-        backgroundColor: `${color}15`,
-        border: `1px solid ${color}30`,
+        backgroundColor: `${c}15`,
+        border: `1px solid ${c}30`,
       }}
     >
       {showMosaic && (
@@ -80,8 +83,8 @@ function LetterTile({ letter, color, tile, rotate, fontSize, seed, showMosaic }:
           fontFamily: "var(--font-bebas), system-ui, sans-serif",
           fontSize,
           fontWeight: 400,
-          color,
-          textShadow: `0 0 20px ${color}40`,
+          color: c,
+          textShadow: `0 0 20px ${c}40`,
           padding: "0.1em 0.15em",
         }}
       >
@@ -110,6 +113,7 @@ function FirstDayLogoInner({
   size = "default",
   compact = false,
 }: FirstDayLogoProps) {
+  const { monotone } = useMonotone();
   const isHero = size === "hero";
   const letterSize = isHero ? "clamp(3.5rem, 10vw, 7rem)" : "clamp(1.5rem, 4vw, 2.2rem)";
 
@@ -120,7 +124,7 @@ function FirstDayLogoInner({
           <span
             key={i}
             style={{
-              color: l.color,
+              color: monotone ? "#ffffff" : l.color,
               fontFamily: "var(--font-bebas), system-ui, sans-serif",
               fontSize: "clamp(2.5rem, 7vw, 4.5rem)",
               fontWeight: 900,
@@ -153,6 +157,7 @@ function FirstDayLogoInner({
                 fontSize={letterSize}
                 seed={i * 7}
                 showMosaic={isHero}
+                monotone={monotone}
               />
             ))}
           </div>
@@ -172,6 +177,7 @@ function FirstDayLogoInner({
                 fontSize={letterSize}
                 seed={(i + 5) * 11}
                 showMosaic={isHero}
+                monotone={monotone}
               />
             ))}
           </div>
@@ -195,7 +201,7 @@ function FirstDayLogoInner({
             <span
               key={i}
               style={{
-                color: char === " " ? "transparent" : TAGLINE_PALETTE[i % TAGLINE_PALETTE.length],
+                color: char === " " ? "transparent" : monotone ? "#ffffff" : TAGLINE_PALETTE[i % TAGLINE_PALETTE.length],
                 width: char === " " ? "0.35em" : undefined,
               }}
             >
@@ -226,7 +232,7 @@ function FirstDayLogoInner({
             <span
               key={i}
               style={{
-                color: char === " " ? "transparent" : TAGLINE_PALETTE[i % TAGLINE_PALETTE.length],
+                color: char === " " ? "transparent" : monotone ? "#ffffff" : TAGLINE_PALETTE[i % TAGLINE_PALETTE.length],
                 width: char === " " ? "0.35em" : undefined,
               }}
             >

@@ -202,11 +202,17 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
                         <WeekCalendar weekNumber={week.weekNumber} days={week.days} progress={progress} onDayClick={onDayClick} planData={planData} startDate={planData?.startDate} />
                       </div>
                     ) : (
-                      <div className="relative py-10 md:py-16">
+                      <div
+                        className="relative py-10 md:py-16"
+                        style={{
+                          backgroundColor: "#000000",
+                          clipPath: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)",
+                        }}
+                      >
                         <div className="flex flex-col items-center justify-center gap-2">
-                          <Lock className="w-8 h-8 text-white/20" />
-                          <span className="text-2xl md:text-3xl font-black tracking-[0.3em] text-white/15 uppercase">LOCKED</span>
-                          <p className="text-xs text-white/20 mt-1">Complete Week {week.weekNumber - 1} to unlock</p>
+                          <Lock className="w-8 h-8 text-white/30" />
+                          <span className="text-2xl md:text-3xl font-black tracking-[0.3em] text-white/20 uppercase">LOCKED</span>
+                          <p className="text-xs text-white/30 mt-1">Complete Week {week.weekNumber - 1} to unlock</p>
                         </div>
                       </div>
                     )}

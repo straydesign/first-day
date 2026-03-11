@@ -279,7 +279,7 @@ export default function Home() {
 
   const handleOnboardingComplete = async (data: any) => {
     setGoalData(data);
-    await generatePlan(data, null);
+    await generatePlan(data, editingGoalData?.goalId || null);
   };
 
   const generatePlan = async (
@@ -747,6 +747,7 @@ export default function Home() {
           <SimpleGoalCreation
             onComplete={handleOnboardingComplete}
             onCancel={handleBackToGoals}
+            initialData={editingGoalData}
           />
         )}
 

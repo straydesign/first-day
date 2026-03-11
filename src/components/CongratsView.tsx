@@ -30,6 +30,8 @@ interface CongratsViewProps {
   newAchievements?: Achievement[];
 }
 
+import { useMonotone } from "./MonotoneContext";
+
 const CONFETTI_COLORS = ["#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF", "#2979FF"];
 
 export function CongratsView({
@@ -42,6 +44,7 @@ export function CongratsView({
   xp,
   newAchievements = [],
 }: CongratsViewProps) {
+  const { monotone } = useMonotone();
   const daysRemaining = dayNumber ? totalDays - dayNumber : null;
 
   // Milestone-aware icon and title
@@ -256,10 +259,10 @@ export function CongratsView({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 1.1, ease: "easeOut" }}
           >
-            <button onClick={onViewCalendar} className="flex items-center justify-center gap-2 px-8 py-5 md:px-10 md:py-6 text-base md:text-lg font-black text-black uppercase tracking-wide hover:scale-105 transition-transform" style={{ backgroundColor: "#fb7025", clipPath: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" }}>
+            <button onClick={onViewCalendar} className="flex items-center justify-center gap-2 px-8 py-5 md:px-10 md:py-6 text-base md:text-lg font-black text-black uppercase tracking-wide hover:scale-105 transition-transform" style={{ backgroundColor: monotone ? "#666666" : "#fb7025", clipPath: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" }}>
               <Calendar className="w-5 h-5 flex-shrink-0" />View Calendar
             </button>
-            <button onClick={onDoMore} className="flex items-center justify-center gap-2 px-8 py-5 md:px-10 md:py-6 text-base md:text-lg font-black text-black uppercase tracking-wide hover:scale-105 transition-transform" style={{ backgroundColor: "#f31b5e", clipPath: "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)" }}>
+            <button onClick={onDoMore} className="flex items-center justify-center gap-2 px-8 py-5 md:px-10 md:py-6 text-base md:text-lg font-black text-black uppercase tracking-wide hover:scale-105 transition-transform" style={{ backgroundColor: monotone ? "#444444" : "#f31b5e", clipPath: "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)" }}>
               <ArrowRight className="w-5 h-5 flex-shrink-0" />Back to Goals
             </button>
           </motion.div>

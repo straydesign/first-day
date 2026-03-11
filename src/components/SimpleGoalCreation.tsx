@@ -7,6 +7,7 @@ import { BackButton } from '@/components/ui/back-button';
 import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, AURORA_COLORS } from '@/constants';
 import { motion, AnimatePresence } from 'framer-motion';
 import Aurora from './Aurora';
+import { useMonotone } from './MonotoneContext';
 import type { GoalFormData } from '@/types';
 
 const BRIGHT_COLORS = ["#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF", "#FF10F0", "#4FC3F7", "#FF4500", "#2979FF", "#FFD38A", "#39FF14"];
@@ -23,16 +24,30 @@ const FIELD_COLORS = ["#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF"];
 interface SimpleGoalCreationProps {
   onComplete: (goalData: GoalFormData) => void;
   onCancel: () => void;
+  initialData?: {
+    goalId?: string;
+    goal?: string;
+    contextAnswers?: Record<string, string>;
+    timeCommitment?: string;
+    timeSlot?: string;
+    wantsWeeklyBooks?: boolean;
+    availableDays?: string[];
+  } | null;
 }
 
-export function SimpleGoalCreation({ onComplete, onCancel }: SimpleGoalCreationProps) {
-  const [goal, setGoal] = useState('');
-  const [why, setWhy] = useState('');
-  const [experienceLevel, setExperienceLevel] = useState<'beginner' | 'intermediate' | 'advanced'>('beginner');
-  const [priorExperience, setPriorExperience] = useState('');
-  const [preferredTactics, setPreferredTactics] = useState('');
+export function SimpleGoalCreation({ onComplete, onCancel, initialData }: SimpleGoalCreationProps) {
+  const { monotone } = useMonotone();
+  const [goal, setGoal] = useState(initialData?.goal || '');
+  const [why, setWhy] = useState(initialData?.contextAnswers?.why || '');
+  const [experienceLevel, setExperienceLevel] = useState<'beginner' | 'intermediate' | 'advanced'>(
+    (initialData?.contextAnswers?.experienceLevel as 'beginner' | 'intermediate' | 'advanced') || 'beginner'
+  );
+  const [priorExperience, setPriorExperience] = useState(initialData?.contextAnswers?.priorExperience || '');
+  const [preferredTactics, setPreferredTactics] = useState(initialData?.contextAnswers?.preferredTactics || '');
   const [isGenerating, setIsGenerating] = useState(false);
-  const [showOptional, setShowOptional] = useState(false);
+  const [showOptional, setShowOptional] = useState(
+    !!(initialData?.contextAnswers?.priorExperience || initialData?.contextAnswers?.preferredTactics)
+  );
   const [error, setError] = useState<string | null>(null);
 
   const handleSuggestionClick = (suggestion: string) => { setGoal(suggestion); setError(null); };
@@ -41,7 +56,7 @@ export function SimpleGoalCreation({ onComplete, onCancel }: SimpleGoalCreationP
     if (!goal.trim()) { setError('Please enter a goal'); return; }
     setIsGenerating(true);
     setError(null);
-    onComplete({ goal: goal.trim(), why: why.trim(), experienceLevel, priorExperience: priorExperience.trim(), preferredTactics: preferredTactics.trim(), timestamp: Date.now() });
+    onComplete({ goal: goal.trim(), why: why.trim(), experienceLevel, priorExperience: priorExperience.trim(), preferredTactics: preferredTactics.trim(), contextAnswers: { why: why.trim(), experienceLevel, priorExperience: priorExperience.trim(), preferredTactics: preferredTactics.trim() }, timestamp: Date.now() });
   };
 
   const SCROLL_SPEEDS = ["20s", "30s", "25s"];
@@ -61,7 +76,7 @@ export function SimpleGoalCreation({ onComplete, onCancel }: SimpleGoalCreationP
             disabled={isGenerating}
             className={`inline-block px-5 py-2 text-black text-sm font-bold mx-1.5 select-none hover:scale-105 transition-transform disabled:opacity-50 ${goal === suggestion ? 'ring-2 ring-white/60 scale-105' : ''}`}
             style={{
-              backgroundColor: BRIGHT_COLORS[(index * 7 + 3) % BRIGHT_COLORS.length],
+              backgroundColor: monotone ? "#333333" : BRIGHT_COLORS[(index * 7 + 3) % BRIGHT_COLORS.length],
               clipPath: index % 2 === 0 ? "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" : "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)",
             }}
           >
@@ -101,7 +116,7 @@ export function SimpleGoalCreation({ onComplete, onCancel }: SimpleGoalCreationP
             <div className="mb-0">
               <div
                 className="overflow-hidden"
-                style={{ backgroundColor: FIELD_COLORS[0], clipPath: SHARD_CLIPS[0] }}
+                style={{ backgroundColor: monotone ? "#333333" : FIELD_COLORS[0], clipPath: SHARD_CLIPS[0] }}
               >
                 <label className="block px-5 pt-3 pb-1 text-black/60 text-xs font-bold uppercase tracking-wider">What&apos;s your goal?</label>
                 <div className="mx-4 border-t border-black/10" />
@@ -122,7 +137,7 @@ export function SimpleGoalCreation({ onComplete, onCancel }: SimpleGoalCreationP
             <div className="mb-4 md:mb-8">
               <div
                 className="overflow-hidden"
-                style={{ backgroundColor: FIELD_COLORS[1], clipPath: SHARD_CLIPS[1] }}
+                style={{ backgroundColor: monotone ? "#333333" : FIELD_COLORS[1], clipPath: SHARD_CLIPS[1] }}
               >
                 <label className="block px-5 pt-3 pb-1 text-black/60 text-xs font-bold uppercase tracking-wider">Why do you want to achieve this?</label>
                 <div className="mx-4 border-t border-black/10" />
@@ -132,7 +147,7 @@ export function SimpleGoalCreation({ onComplete, onCancel }: SimpleGoalCreationP
             <div className="mb-4 md:mb-8">
               <label className="block text-sm font-semibold text-white/80 mb-2 md:mb-3">What&apos;s your experience level?</label>
               <div className="flex flex-col gap-3">
-                {[{ value: 'beginner' as const, label: 'Beginner', desc: 'Just starting', color: FIELD_COLORS[0] }, { value: 'intermediate' as const, label: 'Intermediate', desc: 'Some experience', color: FIELD_COLORS[2] }, { value: 'advanced' as const, label: 'Advanced', desc: 'Experienced', color: FIELD_COLORS[3] }].map((level, index) => (
+                {[{ value: 'beginner' as const, label: 'Beginner', desc: 'Just starting', color: monotone ? "#555555" : FIELD_COLORS[0] }, { value: 'intermediate' as const, label: 'Intermediate', desc: 'Some experience', color: monotone ? "#555555" : FIELD_COLORS[2] }, { value: 'advanced' as const, label: 'Advanced', desc: 'Experienced', color: monotone ? "#555555" : FIELD_COLORS[3] }].map((level, index) => (
                   <button
                     key={level.value}
                     onClick={() => setExperienceLevel(level.value)}
@@ -160,7 +175,7 @@ export function SimpleGoalCreation({ onComplete, onCancel }: SimpleGoalCreationP
                 <div className="mt-4 space-y-4 md:space-y-6">
                   <div
                     className="overflow-hidden"
-                    style={{ backgroundColor: FIELD_COLORS[2], clipPath: SHARD_CLIPS[2] }}
+                    style={{ backgroundColor: monotone ? "#333333" : FIELD_COLORS[2], clipPath: SHARD_CLIPS[2] }}
                   >
                     <label className="block px-5 pt-3 pb-1 text-black/60 text-xs font-bold uppercase tracking-wider">What have you tried before?</label>
                     <div className="mx-4 border-t border-black/10" />
@@ -168,7 +183,7 @@ export function SimpleGoalCreation({ onComplete, onCancel }: SimpleGoalCreationP
                   </div>
                   <div
                     className="overflow-hidden"
-                    style={{ backgroundColor: FIELD_COLORS[3], clipPath: SHARD_CLIPS[3] }}
+                    style={{ backgroundColor: monotone ? "#333333" : FIELD_COLORS[3], clipPath: SHARD_CLIPS[3] }}
                   >
                     <label className="block px-5 pt-3 pb-1 text-black/60 text-xs font-bold uppercase tracking-wider">How do you like to learn?</label>
                     <div className="mx-4 border-t border-black/10" />

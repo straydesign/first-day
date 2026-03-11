@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans, Inter, Bebas_Neue } from "next/font/google";
 import { Toaster } from "sonner";
+import { MonotoneProvider } from "@/components/MonotoneContext";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -59,7 +60,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${plusJakartaSans.variable} ${inter.variable} ${bebasNeue.variable}`}>
       <body className="antialiased">
-        {children}
+        <MonotoneProvider>
+          {children}
+        </MonotoneProvider>
         <Toaster />
       </body>
     </html>

@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { StreakBadge } from "./StreakBadge";
 import { StatsCard } from "./StatsCard";
 import { AchievementsSheet } from "./AchievementsSheet";
+import { useMonotone } from "./MonotoneContext";
 import type { EngagementState } from "@/types";
 
 interface Goal {
@@ -54,18 +55,7 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
   const [reflections, setReflections] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState<Record<string, boolean>>({});
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [monotone, setMonotone] = useState(() => {
-    if (typeof window !== "undefined") return localStorage.getItem("fd-monotone") === "true";
-    return false;
-  });
-
-  const toggleMonotone = () => {
-    setMonotone(prev => {
-      const next = !prev;
-      localStorage.setItem("fd-monotone", String(next));
-      return next;
-    });
-  };
+  const { monotone, toggleMonotone } = useMonotone();
 
   useEffect(() => { loadGoals(); }, []);
 

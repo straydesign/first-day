@@ -1,6 +1,15 @@
 "use client";
 import { CheckCircle2, Circle } from "lucide-react";
+import { useMonotone } from "./MonotoneContext";
 import type { Plan, ProgressMap, SelectedDay } from "@/types";
+
+const DAY_COLORS = ["#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF", "#FF10F0", "#4FC3F7", "#FF4500", "#2979FF"];
+const DAY_CLIPS = [
+  "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)",
+  "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)",
+  "polygon(1% 0%, 100% 2%, 99% 100%, 0% 98%)",
+  "polygon(3% 2%, 100% 0%, 97% 98%, 0% 100%)",
+];
 
 interface WeekCalendarProps {
   weekNumber: number;
@@ -12,6 +21,7 @@ interface WeekCalendarProps {
 }
 
 export function WeekCalendar({ weekNumber, days, progress = {}, onDayClick, planData, startDate }: WeekCalendarProps) {
+  const { monotone } = useMonotone();
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -51,6 +61,9 @@ export function WeekCalendar({ weekNumber, days, progress = {}, onDayClick, plan
               ? "bg-coral-400 text-white"
               : "bg-black text-white/80";
 
+        const shardColor = monotone ? "#333333" : DAY_COLORS[(day.dayNumber - 1) % DAY_COLORS.length];
+        const shardClip = DAY_CLIPS[(day.dayNumber - 1) % DAY_CLIPS.length];
+
         return (
           <button
             key={day.dayNumber}
@@ -67,17 +80,23 @@ export function WeekCalendar({ weekNumber, days, progress = {}, onDayClick, plan
                 ...dayData,
               })
             }
-            className={`w-full bg-black/80 backdrop-blur-sm clip-tile-c border-l-4 ${borderColor} p-3 md:p-4 flex items-center gap-3 md:gap-4 transition-smooth hover:bg-white/10 active:scale-[0.98] md:hover:scale-[1.01] border border-white/10`}
+            className={`w-full p-3 md:p-4 flex items-center gap-3 md:gap-4 transition-smooth hover:scale-[1.02] active:scale-[0.98] ${isCompleted ? 'ring-2 ring-white/30' : ''}`}
+            style={{
+              backgroundColor: shardColor,
+              clipPath: shardClip,
+            }}
           >
             <div
-              className={`w-9 h-9 md:w-10 md:h-10 clip-diamond flex items-center justify-center flex-shrink-0 text-sm md:text-base font-bold ${badgeBg}`}
+              className={`w-9 h-9 md:w-10 md:h-10 clip-diamond flex items-center justify-center flex-shrink-0 text-sm md:text-base font-bold ${
+                isCompleted ? "bg-black text-white" : "bg-black/20 text-black"
+              }`}
             >
               {day.dayNumber}
             </div>
 
             <div className="flex-1 text-left min-w-0">
-              <p className="text-sm md:text-base font-semibold text-white truncate">{title}</p>
-              <p className="text-xs md:text-sm text-white/50">
+              <p className="text-sm md:text-base font-bold text-black truncate">{title}</p>
+              <p className="text-xs md:text-sm text-black/60">
                 {day.date.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}
                 {" · "}
                 {activityCount} {activityCount === 1 ? "activity" : "activities"}
@@ -86,18 +105,18 @@ export function WeekCalendar({ weekNumber, days, progress = {}, onDayClick, plan
 
             <div className="flex-shrink-0">
               {isCompleted ? (
-                <CheckCircle2 className="w-5 h-5 md:w-6 md:h-6 text-lime-500" />
+                <CheckCircle2 className="w-5 h-5 md:w-6 md:h-6 text-black" />
               ) : (
                 <Circle
                   className={`w-5 h-5 md:w-6 md:h-6 ${
-                    day.isToday ? "text-white" : isPast ? "text-coral-400" : "text-white/30"
+                    day.isToday ? "text-black" : isPast ? "text-black/40" : "text-black/20"
                   }`}
                 />
               )}
             </div>
 
             {day.isToday && (
-              <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-white/30 clip-diamond animate-pulse" />
+              <div className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-black/40 clip-diamond animate-pulse" />
             )}
           </button>
         );

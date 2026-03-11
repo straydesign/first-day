@@ -12,6 +12,7 @@ import { ShardButton } from "./ShardButton";
 import { previewDayXP } from "@/lib/engagement";
 import Aurora from "./Aurora";
 import { AURORA_COLORS, HERO_PALETTE } from "@/constants";
+import { useMonotone } from "./MonotoneContext";
 import type { SelectedDay, DayProgress, Activity, ActivityResource } from "@/types";
 
 interface DayViewProps {
@@ -24,6 +25,7 @@ interface DayViewProps {
 }
 
 export function DayView({ day, onComplete, isCompleted = false, savedProgress = null, onBack, currentStreak = 0 }: DayViewProps) {
+  const { monotone } = useMonotone();
   const [completedActivities, setCompletedActivities] = useState<Record<number, boolean>>({});
   const [feedback, setFeedback] = useState("");
   const [showValidation, setShowValidation] = useState(false);
@@ -113,7 +115,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
                   <div className="bg-black px-6 py-4 inline-block" style={{ clipPath: "polygon(1% 0%, 100% 3%, 99% 97%, 0% 100%)" }}>
                     <h2 className="text-5xl md:text-6xl font-black italic uppercase tracking-wide" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>
                       {"Your Activities".split("").map((char, i) => (
-                        <span key={i} style={{ color: char === " " ? "transparent" : ["#FFE633","#FF6B2B","#FF2D55","#00EAFF","#FF10F0","#FF1493","#4FC3F7","#FF4500"][i % 8], width: char === " " ? "0.3em" : undefined, display: "inline-block" }}>{char}</span>
+                        <span key={i} style={{ color: char === " " ? "transparent" : monotone ? "#ffffff" : ["#FFE633","#FF6B2B","#FF2D55","#00EAFF","#FF10F0","#FF1493","#4FC3F7","#FF4500"][i % 8], width: char === " " ? "0.3em" : undefined, display: "inline-block" }}>{char}</span>
                       ))}
                     </h2>
                   </div>

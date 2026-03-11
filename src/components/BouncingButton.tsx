@@ -1,12 +1,14 @@
 "use client";
 import { useEffect, useRef, useState } from 'react';
 import { HERO_PALETTE } from '@/constants';
+import { useMonotone } from './MonotoneContext';
 
 interface BouncingButtonProps {
   onClick: () => void;
 }
 
 export function BouncingButton({ onClick }: BouncingButtonProps) {
+  const { monotone } = useMonotone();
   const containerRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const positionRef = useRef({ x: 200, y: 200 });
@@ -94,7 +96,7 @@ export function BouncingButton({ onClick }: BouncingButtonProps) {
         style={{
           left: `${position.x}px`,
           top: `${position.y}px`,
-          backgroundColor: bgColor,
+          backgroundColor: monotone ? "#333333" : bgColor,
           clipPath: "polygon(2% 0%, 100% 4%, 98% 100%, 0% 96%)",
         }}
       >

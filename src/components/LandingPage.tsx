@@ -9,6 +9,7 @@ import { FirstDayLogo } from "./FirstDayLogo";
 import { Footer } from "./Footer";
 import { GeometricFrame } from "./GeometricFrame";
 import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, VORONOI_LIGHT, VORONOI_PALETTE } from "@/constants";
+import { useMonotone } from "./MonotoneContext";
 
 interface LandingPageProps {
   onGetStarted: () => void;
@@ -35,6 +36,7 @@ function AnimatedSection({ children, className, delay = 0 }: { children: React.R
 }
 
 export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfService }: LandingPageProps) {
+  const { monotone } = useMonotone();
   const [isPausedRow1, setIsPausedRow1] = useState(false);
   const [isPausedRow2, setIsPausedRow2] = useState(false);
   const [isPausedRow3, setIsPausedRow3] = useState(false);
@@ -71,7 +73,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
           <div
             key={index}
             className={`${index % 2 === 0 ? "clip-badge-a" : "clip-badge-b"} inline-block px-5 py-2 text-black text-sm font-bold mx-1.5 select-none`}
-            style={{ backgroundColor: getGoalBgColor(goal, index) }}
+            style={{ backgroundColor: monotone ? "#333333" : getGoalBgColor(goal, index) }}
           >
             {goal}
           </div>
@@ -227,7 +229,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                   <div
                     className="relative p-5 text-center overflow-hidden"
                     style={{
-                      backgroundColor: "#FFE633",
+                      backgroundColor: monotone ? "#555555" : "#FFE633",
                       clipPath: "polygon(4% 8%, 95% 0%, 100% 85%, 8% 100%)",
                     }}
                   >
@@ -247,7 +249,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                   <div
                     className="relative p-5 text-center overflow-hidden"
                     style={{
-                      backgroundColor: "#FF6B2B",
+                      backgroundColor: monotone ? "#444444" : "#FF6B2B",
                       clipPath: "polygon(0% 5%, 92% 0%, 98% 92%, 3% 95%)",
                     }}
                   >
@@ -272,7 +274,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                   <div
                     className="relative p-5 text-center overflow-hidden"
                     style={{
-                      backgroundColor: "#FF10F0",
+                      backgroundColor: monotone ? "#333333" : "#FF10F0",
                       clipPath: "polygon(6% 0%, 100% 10%, 94% 100%, 0% 88%)",
                     }}
                   >
@@ -303,7 +305,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                 <div className="mt-6 grid grid-cols-3 gap-3 max-w-lg mx-auto">
                   <div
                     className="text-center py-4 px-2"
-                    style={{ backgroundColor: "#00EAFF", clipPath: "polygon(4% 8%, 95% 0%, 100% 85%, 8% 100%)" }}
+                    style={{ backgroundColor: monotone ? "#555555" : "#00EAFF", clipPath: "polygon(4% 8%, 95% 0%, 100% 85%, 8% 100%)" }}
                   >
                     <div className="flex items-center justify-center gap-1 mb-0.5">
                       <Target className="w-3.5 h-3.5 text-black" />
@@ -313,7 +315,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                   </div>
                   <div
                     className="text-center py-4 px-2"
-                    style={{ backgroundColor: "#FF4500", clipPath: "polygon(0% 5%, 92% 0%, 98% 92%, 3% 95%)" }}
+                    style={{ backgroundColor: monotone ? "#444444" : "#FF4500", clipPath: "polygon(0% 5%, 92% 0%, 98% 92%, 3% 95%)" }}
                   >
                     <div className="flex items-center justify-center gap-1 mb-0.5">
                       <Flame className="w-3.5 h-3.5 text-black" />
@@ -323,7 +325,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                   </div>
                   <div
                     className="text-center py-4 px-2"
-                    style={{ backgroundColor: "#FF2D55", clipPath: "polygon(6% 0%, 100% 10%, 94% 100%, 0% 88%)" }}
+                    style={{ backgroundColor: monotone ? "#333333" : "#FF2D55", clipPath: "polygon(6% 0%, 100% 10%, 94% 100%, 0% 88%)" }}
                   >
                     <div className="flex items-center justify-center gap-1 mb-0.5">
                       <Trophy className="w-3.5 h-3.5 text-black" />

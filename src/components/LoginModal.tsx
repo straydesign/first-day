@@ -122,7 +122,7 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="w-screen h-screen max-w-none m-0 p-4 md:p-8 bg-white border-0 animate-scaleIn shadow-none overflow-y-auto">
+      <DialogContent className="w-screen h-screen max-w-none m-0 p-4 md:p-8 bg-black border-0 animate-scaleIn shadow-none overflow-y-auto">
         <div className="relative z-10 flex flex-col min-h-full">
           <DialogTitle className="sr-only">{isLogin ? 'Log in to First Day' : 'Sign up for First Day'}</DialogTitle>
           <DialogDescription className="sr-only">{isLogin ? 'Enter your email and password' : 'Create an account'}</DialogDescription>
@@ -170,9 +170,9 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
             {!isLogin && (
               <div className="flex items-start gap-2">
                 <Checkbox id="terms" checked={agreeToTerms} onCheckedChange={(checked) => setAgreeToTerms(checked === true)} className="mt-1 flex-shrink-0" />
-                <div className="flex flex-col text-black/80 text-sm">
+                <div className="flex flex-col text-white/80 text-sm">
                   <span>I agree to the</span>
-                  <button type="button" className="text-black hover:underline text-left font-medium" onClick={onShowTerms}>terms and conditions</button>
+                  <button type="button" className="text-white hover:underline text-left font-medium" onClick={onShowTerms}>terms and conditions</button>
                 </div>
               </div>
             )}
