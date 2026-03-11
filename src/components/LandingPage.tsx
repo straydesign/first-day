@@ -7,7 +7,6 @@ import { Sparkles, Flame, Zap, Trophy, Target } from "lucide-react";
 import Aurora from "./Aurora";
 import { FirstDayLogo } from "./FirstDayLogo";
 import { Footer } from "./Footer";
-import { MosaicCard } from "./MosaicCard";
 import { GeometricFrame } from "./GeometricFrame";
 import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, VORONOI_LIGHT, VORONOI_PALETTE } from "@/constants";
 
@@ -232,46 +231,64 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
 
               <div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-                  {/* Streaks — single tile */}
-                  <MosaicCard seed={41} tileVariant="a" palette={["#FFE633"]} className="p-5 text-center">
-                    <div className="clip-diamond inline-flex items-center justify-center w-14 h-14 bg-orange-500/20 mb-3">
-                      <Flame className="w-7 h-7 text-orange-500" />
+                  {/* Streaks — single shard */}
+                  <div
+                    className="relative p-5 text-center overflow-hidden"
+                    style={{
+                      backgroundColor: "#FFE633",
+                      clipPath: "polygon(4% 8%, 95% 0%, 100% 85%, 8% 100%)",
+                    }}
+                  >
+                    <div className="clip-diamond inline-flex items-center justify-center w-14 h-14 bg-black/20 mb-3">
+                      <Flame className="w-7 h-7 text-black" />
                     </div>
-                    <h3 className="text-xl font-bold text-white mb-1">Daily Streaks</h3>
-                    <p className="text-white text-sm mb-4">Keep your streak alive by showing up every day. The longer you go, the more bonus XP you earn.</p>
-                    <div className="clip-badge-a inline-flex items-center gap-1.5 bg-orange-500/20 text-orange-400 px-5 py-1.5 font-bold text-lg">
+                    <h3 className="text-xl font-bold text-black mb-1">Daily Streaks</h3>
+                    <p className="text-black/80 text-sm mb-4">Keep your streak alive by showing up every day. The longer you go, the more bonus XP you earn.</p>
+                    <div className="clip-badge-a inline-flex items-center gap-1.5 bg-black/20 text-black px-5 py-1.5 font-bold text-lg">
                       <Flame className="w-5 h-5" />
                       <span>12</span>
                     </div>
-                    <p className="text-xs text-orange-400 mt-1 font-medium">12-day streak</p>
-                  </MosaicCard>
+                    <p className="text-xs text-black/70 mt-1 font-medium">12-day streak</p>
+                  </div>
 
-                  {/* XP & Levels — single tile */}
-                  <MosaicCard seed={51} tileVariant="b" palette={["#FF6B2B"]} className="p-5 text-center">
-                    <div className="clip-diamond inline-flex items-center justify-center w-14 h-14 bg-yellow-500/20 mb-3">
-                      <Zap className="w-7 h-7 text-yellow-500" />
+                  {/* XP & Levels — single shard */}
+                  <div
+                    className="relative p-5 text-center overflow-hidden"
+                    style={{
+                      backgroundColor: "#FF6B2B",
+                      clipPath: "polygon(0% 5%, 92% 0%, 98% 92%, 3% 95%)",
+                    }}
+                  >
+                    <div className="clip-diamond inline-flex items-center justify-center w-14 h-14 bg-black/20 mb-3">
+                      <Zap className="w-7 h-7 text-black" />
                     </div>
-                    <h3 className="text-xl font-bold text-white mb-1">Earn XP</h3>
-                    <p className="text-white text-sm mb-4">Earn points for every activity you complete, every reflection you write, and every streak day.</p>
+                    <h3 className="text-xl font-bold text-black mb-1">Earn XP</h3>
+                    <p className="text-black/80 text-sm mb-4">Earn points for every activity you complete, every reflection you write, and every streak day.</p>
                     <div className="space-y-2 max-w-[180px] mx-auto">
                       <div className="flex justify-between text-sm">
-                        <span className="font-semibold text-white">Dedicated</span>
-                        <span className="text-yellow-400 font-bold">1,450 XP</span>
+                        <span className="font-semibold text-black">Dedicated</span>
+                        <span className="text-black font-bold">1,450 XP</span>
                       </div>
-                      <div className="clip-progress w-full h-2.5 bg-white/10 overflow-hidden">
-                        <div className="h-full bg-gradient-to-r from-yellow-400 to-yellow-500" style={{ width: "62%" }} />
+                      <div className="clip-progress w-full h-2.5 bg-black/20 overflow-hidden">
+                        <div className="h-full bg-black/40" style={{ width: "62%" }} />
                       </div>
-                      <p className="text-xs text-white/70">750 XP to Unstoppable</p>
+                      <p className="text-xs text-black/60">750 XP to Unstoppable</p>
                     </div>
-                  </MosaicCard>
+                  </div>
 
-                  {/* Achievements — single tile */}
-                  <MosaicCard seed={60} tileVariant="c" palette={["#FF2D55"]} className="p-5 text-center">
-                    <div className="clip-diamond inline-flex items-center justify-center w-14 h-14 bg-blue-500/20 mb-3">
-                      <Trophy className="w-7 h-7 text-blue-400" />
+                  {/* Achievements — single shard */}
+                  <div
+                    className="relative p-5 text-center overflow-hidden"
+                    style={{
+                      backgroundColor: "#FF2D55",
+                      clipPath: "polygon(6% 0%, 100% 10%, 94% 100%, 0% 88%)",
+                    }}
+                  >
+                    <div className="clip-diamond inline-flex items-center justify-center w-14 h-14 bg-black/20 mb-3">
+                      <Trophy className="w-7 h-7 text-black" />
                     </div>
-                    <h3 className="text-xl font-bold text-white mb-1">Unlock Badges</h3>
-                    <p className="text-white text-sm mb-4">Hit milestones and earn achievements. Can you collect them all before day 30?</p>
+                    <h3 className="text-xl font-bold text-black mb-1">Unlock Badges</h3>
+                    <p className="text-black/80 text-sm mb-4">Hit milestones and earn achievements. Can you collect them all before day 30?</p>
                     <div className="flex justify-center gap-2">
                       {[
                         { icon: "🚀", label: "First Step", locked: false },
@@ -283,8 +300,8 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                           key={badge.label}
                           className={`clip-diamond w-10 h-10 flex items-center justify-center text-lg ${
                             badge.locked
-                              ? "bg-white/5 border border-dashed border-white/10 grayscale opacity-50"
-                              : "bg-black border border-white/10"
+                              ? "bg-black/10 grayscale opacity-50"
+                              : "bg-black/20"
                           }`}
                           title={badge.label}
                         >
@@ -292,7 +309,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                         </div>
                       ))}
                     </div>
-                  </MosaicCard>
+                  </div>
                 </div>
 
                 {/* Stat bar */}
