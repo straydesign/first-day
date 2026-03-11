@@ -144,9 +144,9 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
       <div className="sticky top-0 z-50 flex justify-end px-4 py-2">
         <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
           <SheetTrigger asChild>
-            <Button variant="outline" size="sm" className="clip-btn-c hover-geo bg-transparent border-2 border-white font-bold text-white hover:bg-white/10 px-5 py-2" aria-label="Menu">
+            <MosaicButton size="sm" aria-label="Menu">
               <Menu className="w-5 h-5" />
-            </Button>
+            </MosaicButton>
           </SheetTrigger>
           <SheetContent side="right" className="w-[168px] bg-[#1a1a3e]/95 backdrop-blur-xl border-l-2 border-white/10 pt-12">
             <SheetTitle className="text-lg font-bold text-white mb-4 pt-8 text-center">Menu</SheetTitle>
@@ -161,64 +161,62 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
         </Sheet>
       </div>
       <div className="fixed inset-0 z-0 w-full h-full"><Aurora colorStops={[...AURORA_COLORS]} /></div>
-      <div className="relative z-10 w-full pt-4 md:pt-8 pb-4 md:pb-8 px-4">
+      <div className="relative z-10 w-full">
         {goals.length > 0 ? (
-          <>
-            <div className="text-center mb-4 md:mb-8 px-4">
-              <h1 className="text-3xl md:text-5xl font-bold mb-2 md:mb-4 text-white">Today&apos;s Activities</h1>
-              <p className="text-xl text-white/80 font-bold">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</p>
-            </div>
-            <div className="animate-fadeIn space-y-4">
-              {goals.map(goal => (
-                <MosaicCard key={goal.id} seed={goals.indexOf(goal)} className="backdrop-blur-sm">
-                  <CardHeader>
-                    <div className="mb-4 flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <CardTitle className="text-2xl text-white">{goal.title}</CardTitle>
-                          {engagement && (engagement.currentStreak > 0 || engagement.isAtRisk) && (
-                            <StreakBadge streak={engagement.currentStreak} isAtRisk={engagement.isAtRisk} size="sm" />
-                          )}
-                        </div>
-                        <CardDescription className="text-white/70 font-bold">Day {goalCurrentDays[goal.id] || 0} of 30</CardDescription>
+          <div className="animate-fadeIn">
+            {goals.map(goal => (
+              <MosaicCard key={goal.id} seed={goals.indexOf(goal)} className="backdrop-blur-sm min-h-screen p-6 md:p-10">
+                <div className="text-center mb-6 md:mb-8">
+                  <h1 className="text-3xl md:text-5xl font-bold mb-2 md:mb-4 text-white">Today&apos;s Activities</h1>
+                  <p className="text-xl text-white/80 font-bold">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                </div>
+                <div className="max-w-2xl mx-auto">
+                  <div className="mb-6 flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <CardTitle className="text-2xl text-white">{goal.title}</CardTitle>
+                        {engagement && (engagement.currentStreak > 0 || engagement.isAtRisk) && (
+                          <StreakBadge streak={engagement.currentStreak} isAtRisk={engagement.isAtRisk} size="sm" />
+                        )}
                       </div>
-                      <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); handleDeleteGoal(goal.id, goal.title); }} className="text-red-400 hover:text-red-300 hover:bg-red-500/10" aria-label="Delete goal">
-                        <Trash2 className="w-5 h-5" />
-                      </Button>
+                      <CardDescription className="text-white/70 font-bold">Day {goalCurrentDays[goal.id] || 0} of 30</CardDescription>
                     </div>
-                    <MosaicButton size="lg" onClick={() => onSelectGoal(goal.id)} className="w-full transition-smooth hover:scale-105 mb-3">
+                    <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); handleDeleteGoal(goal.id, goal.title); }} className="text-red-400 hover:text-red-300 hover:bg-red-500/10" aria-label="Delete goal">
+                      <Trash2 className="w-5 h-5" />
+                    </Button>
+                  </div>
+                  <div className="space-y-3 mb-6">
+                    <MosaicButton size="lg" onClick={() => onSelectGoal(goal.id)} className="w-full transition-smooth hover:scale-105">
                       <Calendar className="w-5 h-5 mr-2" />View 30 Day Plan
                     </MosaicButton>
                     <MosaicButton size="lg" className="w-full transition-smooth hover:scale-105" onClick={(e) => { e.stopPropagation(); if (onViewTodayActivities) onViewTodayActivities(goal.id); else onSelectGoal(goal.id); }}>
                       <CheckCircle className="w-5 h-5 mr-2" />View Today&apos;s Activities
                     </MosaicButton>
-                  </CardHeader>
-                </MosaicCard>
-              ))}
-              {/* Stats & Achievements */}
-              {engagement && (
-                <div className="space-y-4 px-4">
-                  <StatsCard engagement={engagement} />
-                  <div className="flex justify-center">
-                    <AchievementsSheet achievements={engagement.achievements} />
                   </div>
+                  {/* Stats & Achievements */}
+                  {engagement && (
+                    <div className="space-y-4 mb-6">
+                      <StatsCard engagement={engagement} />
+                      <div className="flex justify-center">
+                        <AchievementsSheet achievements={engagement.achievements} />
+                      </div>
+                    </div>
+                  )}
+                  <MosaicButton onClick={onCreateGoal} size="lg" className="w-full transition-smooth hover:scale-105 text-lg py-4 md:py-6">
+                    <Plus className="w-6 h-6 mr-2" />Add New Goal
+                  </MosaicButton>
                 </div>
-              )}
-              <div className="pt-2 md:pt-4 pb-4 md:pb-8 px-4">
-                <MosaicButton onClick={onCreateGoal} size="lg" className="w-full transition-smooth hover:scale-105 text-lg py-4 md:py-6">
-                  <Plus className="w-6 h-6 mr-2" />Add New Goal
-                </MosaicButton>
-              </div>
-            </div>
-          </>
+              </MosaicCard>
+            ))}
+          </div>
         ) : (
-          <>
-            <div className="text-center mb-4 md:mb-8 px-4">
+          <MosaicCard seed={0} className="min-h-screen p-6 md:p-10 flex flex-col items-center justify-center">
+            <div className="text-center mb-4 md:mb-8">
               <h1 className="text-3xl md:text-5xl font-bold mb-2 md:mb-4 text-white">Set Your First Goal</h1>
               <p className="text-xl text-white/80 font-bold">Pick any goal and get a personalized 30-day plan</p>
             </div>
             <BouncingButton onClick={onCreateGoal} />
-          </>
+          </MosaicCard>
         )}
       </div>
     </div>
