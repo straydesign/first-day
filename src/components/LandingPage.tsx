@@ -273,7 +273,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                   <div
                     className="relative p-5 text-center overflow-hidden"
                     style={{
-                      backgroundColor: "#FF2D55",
+                      backgroundColor: "#FF10F0",
                       clipPath: "polygon(6% 0%, 100% 10%, 94% 100%, 0% 88%)",
                     }}
                   >
