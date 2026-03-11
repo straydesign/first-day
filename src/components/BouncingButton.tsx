@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useRef, useState } from 'react';
-import { Button } from '@/components/ui/button';
 
 interface BouncingButtonProps {
   onClick: () => void;
@@ -11,24 +10,12 @@ export function BouncingButton({ onClick }: BouncingButtonProps) {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const positionRef = useRef({ x: 200, y: 300 });
   const velocityRef = useRef({ x: 1.275, y: 1.275 });
-  const [bgColor, setBgColor] = useState('rgb(20, 184, 166)');
   const [position, setPosition] = useState({ x: 200, y: 300 });
 
   useEffect(() => {
     const speed = 40;
     let timeoutId: number;
     let isRunning = true;
-
-    const pickRandomColor = () => {
-      const colors = [
-        'rgb(20, 184, 166)',
-        'rgb(250, 82, 82)',
-        'rgb(168, 85, 247)',
-        'rgb(22, 163, 74)',
-        'rgb(59, 130, 246)',
-      ];
-      return colors[Math.floor(Math.random() * colors.length)];
-    };
 
     const update = () => {
       if (!isRunning) return;
@@ -59,15 +46,12 @@ export function BouncingButton({ onClick }: BouncingButtonProps) {
 
       let newX = positionRef.current.x + velocityRef.current.x;
       let newY = positionRef.current.y + velocityRef.current.y;
-      let colorChanged = false;
 
       if (newX + buttonWidth >= maxX || newX <= minX) {
         velocityRef.current.x *= -1;
-        colorChanged = true;
       }
       if (newY + buttonHeight >= maxY || newY <= minY) {
         velocityRef.current.y *= -1;
-        colorChanged = true;
       }
 
       newX = Math.max(minX, Math.min(newX, maxX - buttonWidth));
@@ -75,10 +59,6 @@ export function BouncingButton({ onClick }: BouncingButtonProps) {
 
       positionRef.current = { x: newX, y: newY };
       setPosition({ x: newX, y: newY });
-
-      if (colorChanged) {
-        setBgColor(pickRandomColor());
-      }
 
       timeoutId = window.setTimeout(update, speed);
     };
@@ -93,15 +73,30 @@ export function BouncingButton({ onClick }: BouncingButtonProps) {
 
   return (
     <div ref={containerRef} className="fixed inset-0 top-[44px]" style={{ overflow: 'hidden' }}>
-      <Button
+      <button
         ref={buttonRef}
         onClick={onClick}
-        size="lg"
-        className="text-white shadow-lg shadow-black/30 hover:shadow-xl transition-smooth hover:scale-105 text-lg px-8 py-6 absolute"
-        style={{ left: `${position.x}px`, top: `${position.y}px`, backgroundColor: bgColor }}
+        className="absolute shadow-lg shadow-black/30 hover:shadow-xl transition-smooth hover:scale-105 px-10 py-7 overflow-hidden bg-black"
+        style={{
+          left: `${position.x}px`,
+          top: `${position.y}px`,
+          clipPath: "polygon(2% 0%, 100% 4%, 98% 100%, 0% 96%)",
+        }}
       >
-        Create Your Goal
-      </Button>
+        <span
+          className="text-2xl md:text-3xl font-black uppercase tracking-wider"
+          style={{
+            background: "linear-gradient(90deg, #FFE633, #FF6B2B, #FF2D55, #00EAFF, #FF10F0, #FF1493, #4FC3F7, #FF4500, #FFE633)",
+            backgroundSize: "200% 100%",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+            animation: "gradient-shift 3s linear infinite",
+          }}
+        >
+          Create Your Goal
+        </span>
+      </button>
     </div>
   );
 }
