@@ -20,7 +20,7 @@ export function StatsCard({ engagement }: StatsCardProps) {
             <Target className="w-4 h-4 text-white" />
             <span className="text-xs text-white/70 font-medium">Completion</span>
           </div>
-          <p className="text-3xl font-bold text-white">{completionRate}%</p>
+          <p className="text-3xl md:text-5xl font-bold text-white">{completionRate}%</p>
         </div>
       </div>
 
@@ -32,7 +32,7 @@ export function StatsCard({ engagement }: StatsCardProps) {
             <Flame className="w-4 h-4 text-coral-500" />
             <span className="text-xs text-white/70 font-medium">Streak</span>
           </div>
-          <p className="text-3xl font-bold text-white">{currentStreak} days</p>
+          <p className="text-3xl md:text-5xl font-bold text-white">{currentStreak} days</p>
         </div>
       </div>
 
@@ -44,7 +44,7 @@ export function StatsCard({ engagement }: StatsCardProps) {
             <Zap className="w-4 h-4 text-yellow-500" />
             <span className="text-xs text-white/70 font-medium">Total XP</span>
           </div>
-          <p className="text-3xl font-bold text-white">{totalXP.toLocaleString()}</p>
+          <p className="text-3xl md:text-5xl font-bold text-white">{totalXP.toLocaleString()}</p>
         </div>
       </div>
 
@@ -56,7 +56,7 @@ export function StatsCard({ engagement }: StatsCardProps) {
             <TrendingUp className="w-4 h-4 text-indigo-500" />
             <span className="text-xs text-white/70 font-medium">Level</span>
           </div>
-          <p className="text-lg font-bold text-white">{level.name}</p>
+          <p className="text-lg md:text-3xl font-bold text-white">{level.name}</p>
           {level.nextThreshold && (
             <div className="mt-1">
               <div className="w-full h-1.5 bg-white/10 clip-progress overflow-hidden">

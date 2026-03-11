@@ -168,7 +168,7 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
             className="bg-black px-4 py-3 mb-6"
             style={{ clipPath: "polygon(0% 0%, 100% 4%, 98% 96%, 2% 100%)" }}
           >
-            <SheetTitle className="text-4xl font-black text-white text-center uppercase tracking-wide" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>Menu</SheetTitle>
+            <SheetTitle className="text-4xl md:text-6xl font-black text-white text-center uppercase tracking-wide" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>Menu</SheetTitle>
           </div>
           <SheetDescription className="sr-only">Navigation options for your goals</SheetDescription>
           <nav className="flex flex-col gap-3 px-3">
@@ -190,7 +190,7 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                     className="inline-block bg-black px-6 py-2"
                     style={{ clipPath: "polygon(2% 0%, 98% 4%, 100% 96%, 0% 100%)" }}
                   >
-                    <p className="text-xl text-white font-bold">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                    <p className="text-xl md:text-3xl text-white font-bold">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</p>
                   </div>
                 </div>
                 <div className="w-full flex-1 flex flex-col">

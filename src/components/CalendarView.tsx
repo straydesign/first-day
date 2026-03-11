@@ -122,14 +122,14 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
             )}
             {goalTitle && (<div className="text-center">
               <div className="flex items-center justify-center gap-3 mb-2">
-                <h1 className="text-3xl md:text-5xl font-bold text-white px-4">{goalTitle}</h1>
+                <h1 className="text-3xl md:text-7xl font-bold text-white px-4">{goalTitle}</h1>
                 {engagement && (engagement.currentStreak > 0 || engagement.isAtRisk) && (
                   <StreakBadge streak={engagement.currentStreak} isAtRisk={engagement.isAtRisk} />
                 )}
               </div>
               <div className="inline-flex items-center justify-center gap-2 mb-4">
                 <CalendarIcon className="w-5 h-5 text-white" />
-                <h2 className="text-lg md:text-xl text-white font-bold">Your 30-Day Plan</h2>
+                <h2 className="text-lg md:text-3xl text-white font-bold">Your 30-Day Plan</h2>
               </div>
               {engagement?.isAtRisk && (
                 <div className="mb-3 mx-auto max-w-md bg-black border border-coral-500/40 clip-tile-c px-4 py-2 flex items-center gap-2 animate-pulse">

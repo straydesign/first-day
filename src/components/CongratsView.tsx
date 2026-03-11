@@ -182,7 +182,7 @@ export function CongratsView({
               transition={{ duration: 0.5, delay: 0.85, ease: "easeOut" }}
             >
               <Zap className="w-5 h-5 text-yellow-500" />
-              <span className="text-lg font-bold text-white">+{displayXP} XP</span>
+              <span className="text-lg md:text-3xl font-bold text-white">+{displayXP} XP</span>
               <span className="text-sm text-white/50">
                 ({xp.base} base
                 {xp.activities > 0 && ` + ${xp.activities} activities`}

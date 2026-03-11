@@ -234,7 +234,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                     <div className="clip-diamond inline-flex items-center justify-center w-14 h-14 bg-black/20 mb-3">
                       <Flame className="w-7 h-7 text-black" />
                     </div>
-                    <h3 className="text-xl font-bold text-black mb-1">Daily Streaks</h3>
+                    <h3 className="text-xl md:text-3xl font-bold text-black mb-1">Daily Streaks</h3>
                     <p className="text-black/80 text-sm mb-4">Keep your streak alive by showing up every day. The longer you go, the more bonus XP you earn.</p>
                     <div className="clip-badge-a inline-flex items-center gap-1.5 bg-black/20 text-black px-5 py-1.5 font-bold text-lg">
                       <Flame className="w-5 h-5" />
@@ -254,7 +254,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                     <div className="clip-diamond inline-flex items-center justify-center w-14 h-14 bg-black/20 mb-3">
                       <Zap className="w-7 h-7 text-black" />
                     </div>
-                    <h3 className="text-xl font-bold text-black mb-1">Earn XP</h3>
+                    <h3 className="text-xl md:text-3xl font-bold text-black mb-1">Earn XP</h3>
                     <p className="text-black/80 text-sm mb-4">Earn points for every activity you complete, every reflection you write, and every streak day.</p>
                     <div className="space-y-2 max-w-[180px] mx-auto">
                       <div className="flex justify-between text-sm">
@@ -279,7 +279,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                     <div className="clip-diamond inline-flex items-center justify-center w-14 h-14 bg-black/20 mb-3">
                       <Trophy className="w-7 h-7 text-black" />
                     </div>
-                    <h3 className="text-xl font-bold text-black mb-1">Unlock Badges</h3>
+                    <h3 className="text-xl md:text-3xl font-bold text-black mb-1">Unlock Badges</h3>
                     <p className="text-black/80 text-sm mb-4">Hit milestones and earn achievements. Can you collect them all before day 30?</p>
                     <div className="flex justify-center gap-2">
                       {["First Step", "On Fire", "Perfect Week", "???"].map((label, i) => (
@@ -309,7 +309,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                       <Target className="w-3.5 h-3.5 text-black" />
                       <span className="text-xs text-black/70 font-medium">Rate</span>
                     </div>
-                    <p className="text-3xl font-bold text-black">87%</p>
+                    <p className="text-3xl md:text-5xl font-bold text-black">87%</p>
                   </div>
                   <div
                     className="text-center py-4 px-2"
@@ -319,7 +319,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                       <Flame className="w-3.5 h-3.5 text-black" />
                       <span className="text-xs text-black/70 font-medium">Streak</span>
                     </div>
-                    <p className="text-3xl font-bold text-black">12</p>
+                    <p className="text-3xl md:text-5xl font-bold text-black">12</p>
                   </div>
                   <div
                     className="text-center py-4 px-2"
@@ -329,7 +329,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                       <Trophy className="w-3.5 h-3.5 text-black" />
                       <span className="text-xs text-black/70 font-medium">Badges</span>
                     </div>
-                    <p className="text-3xl font-bold text-black">5/8</p>
+                    <p className="text-3xl md:text-5xl font-bold text-black">5/8</p>
                   </div>
                 </div>
               </div>

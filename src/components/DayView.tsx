@@ -96,8 +96,8 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
         >
           <div className="inline-flex items-center justify-center gap-2">
             <Calendar className="w-8 h-8 text-white" />
-            <h1 className="text-3xl md:text-4xl font-bold text-white">{isToday ? `Today (Day ${day.number})` : `Day ${day.number}`}</h1>
-            {day.dateDisplay && <span className="text-xl text-white/80 font-bold ml-2">&bull; {day.dateDisplay}</span>}
+            <h1 className="text-3xl md:text-6xl font-bold text-white">{isToday ? `Today (Day ${day.number})` : `Day ${day.number}`}</h1>
+            {day.dateDisplay && <span className="text-xl md:text-3xl text-white/80 font-bold ml-2">&bull; {day.dateDisplay}</span>}
           </div>
         </motion.div>
 
@@ -170,7 +170,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
                   {/* How did today go? — merged into activities card */}
                   <div className="mt-6">
                     <div className="bg-black px-5 py-3 inline-block mb-3" style={{ clipPath: "polygon(0% 0%, 98% 4%, 100% 96%, 2% 100%)" }}>
-                      <h3 className="text-xl font-black text-white uppercase tracking-wide">How did today go?</h3>
+                      <h3 className="text-xl md:text-3xl font-black text-white uppercase tracking-wide">How did today go?</h3>
                     </div>
                     <div className="bg-black p-3 md:p-5" style={{ clipPath: "polygon(1% 0%, 100% 2%, 99% 100%, 0% 98%)" }}>
                       <Textarea value={feedback} onChange={(e) => !isCompleted && setFeedback(e.target.value)} placeholder="Share your thoughts, challenges, or wins from today..." className="min-h-32 text-lg border-0 focus-visible:ring-0 bg-transparent text-white placeholder:text-white/40 resize-none" disabled={isCompleted} />

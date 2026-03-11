@@ -84,10 +84,10 @@ export function SimpleGoalCreation({ onComplete, onCancel }: SimpleGoalCreationP
           <div className="p-4 md:p-12">
             <div className="text-center mb-6 md:mb-10">
               <div className="inline-block bg-black px-8 py-3 mb-3" style={{ clipPath: "polygon(1% 0%, 100% 3%, 99% 97%, 0% 100%)" }}>
-                <h1 className="text-3xl md:text-4xl font-bold text-white">Let&apos;s Create Your Goal</h1>
+                <h1 className="text-3xl md:text-6xl font-bold text-white">Let&apos;s Create Your Goal</h1>
               </div>
               <div className="inline-block bg-black px-6 py-2" style={{ clipPath: "polygon(2% 0%, 98% 4%, 100% 96%, 0% 100%)" }}>
-                <p className="text-lg text-white font-bold">Tell us what you want to achieve</p>
+                <p className="text-lg md:text-2xl text-white font-bold">Tell us what you want to achieve</p>
               </div>
             </div>
             <AnimatePresence>

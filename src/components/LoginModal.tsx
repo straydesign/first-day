@@ -137,7 +137,7 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4 max-w-md w-full">
+          <form onSubmit={handleSubmit} className="space-y-4 max-w-md w-full mx-auto">
             {!isLogin && (
               <div className="bg-black overflow-hidden" style={{ clipPath: "polygon(1% 0%, 100% 2%, 99% 100%, 0% 97%)" }}>
                 <Label htmlFor="name" className="block px-4 pt-3 pb-1 text-white/60 text-xs font-bold uppercase tracking-wider">Name</Label>
