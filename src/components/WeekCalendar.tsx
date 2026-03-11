@@ -67,10 +67,10 @@ export function WeekCalendar({ weekNumber, days, progress = {}, onDayClick, plan
                 ...dayData,
               })
             }
-            className={`w-full bg-[#1a1a3e]/80 backdrop-blur-sm rounded-none border-l-4 ${borderColor} p-3 md:p-4 flex items-center gap-3 md:gap-4 transition-smooth hover:bg-white/10 active:scale-[0.98] md:hover:scale-[1.01] border border-white/10`}
+            className={`w-full bg-[#1a1a3e]/80 backdrop-blur-sm clip-tile-c border-l-4 ${borderColor} p-3 md:p-4 flex items-center gap-3 md:gap-4 transition-smooth hover:bg-white/10 active:scale-[0.98] md:hover:scale-[1.01] border border-white/10`}
           >
             <div
-              className={`w-9 h-9 md:w-10 md:h-10 rounded-full flex items-center justify-center flex-shrink-0 text-sm md:text-base font-bold ${badgeBg}`}
+              className={`w-9 h-9 md:w-10 md:h-10 clip-diamond flex items-center justify-center flex-shrink-0 text-sm md:text-base font-bold ${badgeBg}`}
             >
               {day.dayNumber}
             </div>
@@ -97,7 +97,7 @@ export function WeekCalendar({ weekNumber, days, progress = {}, onDayClick, plan
             </div>
 
             {day.isToday && (
-              <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-teal-500 rounded-full animate-pulse" />
+              <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-teal-500 clip-diamond animate-pulse" />
             )}
           </button>
         );

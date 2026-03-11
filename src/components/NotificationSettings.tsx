@@ -19,7 +19,7 @@ export function NotificationSettings({ notificationsEnabled, onToggle, onClose }
           <span className="text-xl font-bold text-white">Notification Settings</span>
         </DialogTitle>
         <div className="space-y-4">
-          <div className="flex items-center justify-between p-4 bg-[#12122e] rounded-none border border-white/10">
+          <div className="flex items-center justify-between p-4 bg-[#12122e] clip-tile-c border border-white/10">
             <div>
               <p className="font-medium text-white">Daily Reminders</p>
               <p className="text-sm text-white/80">Get reminded about your daily activities</p>

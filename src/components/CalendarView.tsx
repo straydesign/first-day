@@ -1,7 +1,7 @@
 "use client";
 import { Calendar as CalendarIcon, BookOpen, Edit2, ChevronUp, ChevronDown, AlertTriangle } from "lucide-react";
 import { BackButton } from "@/components/ui/back-button";
-import { Card } from "@/components/ui/card";
+import { MosaicCard } from "./MosaicCard";
 import { Button } from "@/components/ui/button";
 import { WeekCalendar } from "./WeekCalendar";
 import Aurora from "./Aurora";
@@ -115,7 +115,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
                 <h2 className="text-lg md:text-xl text-teal-400">Your 30-Day Plan</h2>
               </div>
               {engagement?.isAtRisk && (
-                <div className="mb-3 mx-auto max-w-md bg-[#242450] border border-coral-500/40 rounded-none px-4 py-2 flex items-center gap-2 animate-pulse">
+                <div className="mb-3 mx-auto max-w-md bg-[#242450] border border-coral-500/40 clip-tile-c px-4 py-2 flex items-center gap-2 animate-pulse">
                   <AlertTriangle className="w-4 h-4 text-coral-400 flex-shrink-0" />
                   <p className="text-sm text-coral-300 font-medium">Your {engagement.currentStreak}-day streak is at risk! Complete today to keep it alive.</p>
                 </div>
@@ -141,14 +141,14 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
                 <div className="mb-3 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <h3 className="text-lg md:text-xl font-bold text-teal-300">Week {week.weekNumber}: {week.label}</h3>
-                    {!week.isUnlocked && <span className="text-xs md:text-sm text-purple-300 bg-purple-900/40 px-3 py-1 rounded-full font-medium">Locked</span>}
+                    {!week.isUnlocked && <span className="text-xs md:text-sm text-purple-300 bg-purple-900/40 px-3 py-1 clip-badge-a font-medium">Locked</span>}
                   </div>
                 </div>
-                <Card className={`p-3 md:p-6 border border-white/10 rounded-none transition-smooth ${week.isUnlocked ? 'bg-[#1a1a3e]/90 backdrop-blur-sm hover:bg-[#1a1a3e]' : 'bg-[#12122e] opacity-60 cursor-not-allowed'}`}>
+                <MosaicCard seed={weekIndex} tileVariant={(["a", "b", "c", "d"] as const)[weekIndex % 4]} className={`p-3 md:p-6 transition-smooth ${week.isUnlocked ? 'bg-[#1a1a3e]/90 backdrop-blur-sm hover:bg-[#1a1a3e]' : 'bg-[#12122e] opacity-60 cursor-not-allowed'}`}>
                   {week.isUnlocked ? (
                     <div className="space-y-3 md:space-y-4">
                       {week.weeklyBook && (
-                        <div className="bg-gradient-to-br from-[#242450] to-[#2a2a55] rounded-none border-2 border-yellow-600/30 overflow-hidden">
+                        <div className="bg-gradient-to-br from-[#242450] to-[#2a2a55] clip-tile-b border-2 border-yellow-600/30 overflow-hidden">
                           <button onClick={() => toggleWeekBook(week.weekNumber)} className="w-full p-3 md:p-4 flex items-center justify-between hover:bg-white/10 transition-colors">
                             <div className="flex items-center gap-2"><BookOpen className="w-4 h-4 md:w-5 md:h-5 text-yellow-400" /><h3 className="text-xs md:text-sm text-yellow-200 font-medium">Week {week.weekNumber} Reading</h3></div>
                             {expandedWeeks.has(week.weekNumber) ? <ChevronUp className="w-4 h-4 text-yellow-400" /> : <ChevronDown className="w-4 h-4 text-yellow-400" />}
@@ -166,12 +166,12 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
                     </div>
                   ) : (
                     <div className="text-center py-6 md:py-12">
-                      <div className="inline-flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-purple-900/40"><BookOpen className="w-8 h-8 text-purple-400" /></div>
+                      <div className="inline-flex items-center justify-center w-16 h-16 mb-4 clip-diamond bg-purple-900/40"><BookOpen className="w-8 h-8 text-purple-400" /></div>
                       <h4 className="text-lg font-semibold text-white/80 mb-2">Week {week.weekNumber} Coming Soon!</h4>
                       <p className="text-sm text-white/80 max-w-md mx-auto mb-3">Complete Week {week.weekNumber - 1} to unlock this week.</p>
                     </div>
                   )}
-                </Card>
+                </MosaicCard>
               </motion.div>
             ))}
           </div>

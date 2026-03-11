@@ -5,12 +5,11 @@ interface BackButtonProps {
   onClick: () => void;
   label?: string;
   disabled?: boolean;
-  /** "fixed" for overlay screens (CalendarView, DayView), default for page screens */
   variant?: "fixed" | "default";
 }
 
 export function BackButton({ onClick, label = "Back", disabled, variant = "default" }: BackButtonProps) {
-  const baseClasses = "flex items-center gap-2 px-4 py-2 rounded-none border-2 border-white/10 text-white hover:bg-white/10 transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed";
+  const baseClasses = "clip-btn-b flex items-center gap-2 px-6 py-2 rounded-none border-2 border-white/10 text-white hover-geo transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed focus-geo";
 
   if (variant === "fixed") {
     return (

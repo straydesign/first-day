@@ -12,13 +12,15 @@ export function FirstDayLogoMark({
   className = "",
 }: FirstDayLogoMarkProps) {
   return (
-    <Image
-      src="/logo-mark.png"
-      alt="First Day — sunrise between mountains over water"
-      width={size}
-      height={size}
-      className={`rounded-none ${className}`}
-      priority
-    />
+    <div className={`clip-tile-a inline-block ${className}`}>
+      <Image
+        src="/logo-mark.png"
+        alt="First Day — sunrise between mountains over water"
+        width={size}
+        height={size}
+        className="rounded-none"
+        priority
+      />
+    </div>
   );
 }

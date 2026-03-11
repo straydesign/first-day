@@ -10,7 +10,7 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
 
   return (
     <div
-      className={`flex flex-col items-center text-center p-3 rounded-none border transition-smooth ${
+      className={`flex flex-col items-center text-center p-3 clip-tile-c border transition-smooth ${
         unlocked
           ? "bg-[#1a1a3e] border-lime-300"
           : "bg-[#12122e] border-white/10 opacity-50 grayscale"

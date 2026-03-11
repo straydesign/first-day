@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
+import { MosaicCard } from "./MosaicCard";
 import { Textarea } from "@/components/ui/textarea";
 import Aurora from "./Aurora";
 import { AURORA_COLORS } from "@/constants";
@@ -128,7 +129,7 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
       <div className="min-h-screen relative bg-black flex items-center justify-center">
         <div className="fixed inset-0 z-0 w-full h-full"><Aurora colorStops={[...AURORA_COLORS]} /></div>
         <div className="fixed top-0 left-0 right-0 z-20 h-1">
-          <div className="h-full bg-teal-400 rounded-r-full animate-shimmer" style={{ width: '60%', animation: 'loadingBar 1.5s ease-in-out infinite' }} />
+          <div className="h-full bg-teal-400 animate-shimmer" style={{ width: '60%', animation: 'loadingBar 1.5s ease-in-out infinite', clipPath: 'polygon(0 0, 100% 0, 96% 100%, 0 100%)' }} />
         </div>
         <div className="relative z-10">
           <p className="text-lg text-white/80 font-medium">Loading your goals...</p>
@@ -142,7 +143,7 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
       <div className="sticky top-0 z-50 flex justify-end px-4 py-2">
         <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
           <SheetTrigger asChild>
-            <Button variant="outline" size="sm" className="bg-transparent border-2 border-teal-600 text-teal-600 hover:bg-white/10 px-3 py-2 rounded-none" aria-label="Menu">
+            <Button variant="outline" size="sm" className="clip-btn-c hover-geo bg-transparent border-2 border-teal-600 text-teal-600 hover:bg-white/10 px-5 py-2" aria-label="Menu">
               <Menu className="w-5 h-5" />
             </Button>
           </SheetTrigger>
@@ -168,7 +169,7 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
             </div>
             <div className="animate-fadeIn space-y-4">
               {goals.map(goal => (
-                <Card key={goal.id} className="bg-[#1a1a3e]/90 backdrop-blur-sm border border-white/10 rounded-none">
+                <MosaicCard key={goal.id} seed={goals.indexOf(goal)} className="bg-[#1a1a3e]/90 backdrop-blur-sm">
                   <CardHeader>
                     <div className="mb-4 flex items-start justify-between">
                       <div className="flex-1">
@@ -191,7 +192,7 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                       <CheckCircle className="w-5 h-5 mr-2" />View Today&apos;s Activities
                     </Button>
                   </CardHeader>
-                </Card>
+                </MosaicCard>
               ))}
               {/* Stats & Achievements */}
               {engagement && (
@@ -203,7 +204,7 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                 </div>
               )}
               <div className="pt-2 md:pt-4 pb-4 md:pb-8 px-4">
-                <Button onClick={onCreateGoal} size="lg" variant="outline" className="w-full bg-transparent border-2 border-teal-600 text-teal-600 hover:bg-white/10 transition-smooth hover:scale-105 text-lg py-4 md:py-6 rounded-none">
+                <Button onClick={onCreateGoal} size="lg" variant="outline" className="w-full bg-transparent border-2 border-teal-600 text-teal-600 hover:bg-white/10 transition-smooth hover:scale-105 text-lg py-4 md:py-6 clip-btn-a">
                   <Plus className="w-6 h-6 mr-2" />Add New Goal
                 </Button>
               </div>

@@ -27,7 +27,7 @@ export function NavigationMenu({
   ];
 
   return (
-    <div className="hidden md:flex justify-between items-center w-full">
+    <div className="hidden md:flex justify-between items-center w-full clip-tile-a">
       <div className="flex gap-2">
         {menuItems.map((item) => {
           const Icon = item.icon;

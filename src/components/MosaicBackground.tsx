@@ -1,5 +1,5 @@
 "use client";
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 
 const ACCENT_COLORS = [
   "#cc5533",
@@ -13,6 +13,8 @@ interface MosaicBackgroundProps {
   density?: number;
   opacity?: number;
   className?: string;
+  seed?: number;
+  colorSubset?: string[];
 }
 
 function seededRandom(seed: number) {
@@ -20,11 +22,15 @@ function seededRandom(seed: number) {
   return x - Math.floor(x);
 }
 
-export function MosaicBackground({
+function MosaicBackgroundInner({
   density = 8,
   opacity = 0.04,
   className = "",
+  seed = 0,
+  colorSubset,
 }: MosaicBackgroundProps) {
+  const colors = colorSubset ?? ACCENT_COLORS;
+
   const triangles = useMemo(() => {
     const result: Array<{
       points: string;
@@ -39,21 +45,20 @@ export function MosaicBackground({
       for (let col = 0; col < density; col++) {
         const x = col * cellW;
         const y = row * cellH;
-        const seed = row * density + col;
+        const cellSeed = seed + row * density + col;
 
-        // Each cell splits into 2 triangles along the diagonal
         const jitter = (s: number) => seededRandom(s) * cellW * 0.3;
 
-        const tl = `${x + jitter(seed)},${y + jitter(seed + 1)}`;
-        const tr = `${x + cellW + jitter(seed + 2)},${y + jitter(seed + 3)}`;
-        const bl = `${x + jitter(seed + 4)},${y + cellH + jitter(seed + 5)}`;
-        const br = `${x + cellW + jitter(seed + 6)},${y + cellH + jitter(seed + 7)}`;
+        const tl = `${x + jitter(cellSeed)},${y + jitter(cellSeed + 1)}`;
+        const tr = `${x + cellW + jitter(cellSeed + 2)},${y + jitter(cellSeed + 3)}`;
+        const bl = `${x + jitter(cellSeed + 4)},${y + cellH + jitter(cellSeed + 5)}`;
+        const br = `${x + cellW + jitter(cellSeed + 6)},${y + cellH + jitter(cellSeed + 7)}`;
 
-        const color1 = ACCENT_COLORS[Math.floor(seededRandom(seed + 10) * ACCENT_COLORS.length)];
-        const color2 = ACCENT_COLORS[Math.floor(seededRandom(seed + 20) * ACCENT_COLORS.length)];
+        const color1 = colors[Math.floor(seededRandom(cellSeed + 10) * colors.length)];
+        const color2 = colors[Math.floor(seededRandom(cellSeed + 20) * colors.length)];
 
-        const triOpacity1 = 0.3 + seededRandom(seed + 30) * 0.7;
-        const triOpacity2 = 0.3 + seededRandom(seed + 40) * 0.7;
+        const triOpacity1 = 0.3 + seededRandom(cellSeed + 30) * 0.7;
+        const triOpacity2 = 0.3 + seededRandom(cellSeed + 40) * 0.7;
 
         result.push(
           { points: `${tl} ${tr} ${br}`, fill: color1, opacity: triOpacity1 },
@@ -63,7 +68,7 @@ export function MosaicBackground({
     }
 
     return result;
-  }, [density]);
+  }, [density, seed, colors]);
 
   return (
     <svg
@@ -84,3 +89,5 @@ export function MosaicBackground({
     </svg>
   );
 }
+
+export const MosaicBackground = memo(MosaicBackgroundInner);

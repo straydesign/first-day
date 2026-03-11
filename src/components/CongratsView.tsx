@@ -110,7 +110,7 @@ export function CongratsView({
         {confettiPieces.map((piece) => (
           <motion.div
             key={piece.id}
-            className="absolute w-2 h-2 rounded-sm"
+            className="absolute w-2 h-2 clip-diamond"
             style={{ backgroundColor: piece.color, left: "50%", top: "40%" }}
             initial={{ opacity: 1, x: 0, y: 0, rotate: 0, scale: 0 }}
             animate={{
@@ -129,7 +129,7 @@ export function CongratsView({
         <div className="max-w-2xl w-full text-center">
           {/* Milestone Icon */}
           <motion.div
-            className={`inline-flex items-center justify-center ${iconSize} rounded-full ${iconBg} mb-4 md:mb-6 shadow-lg`}
+            className={`inline-flex items-center justify-center ${iconSize} clip-diamond ${iconBg} mb-4 md:mb-6 shadow-lg`}
             initial={{ scale: 0, rotate: -20 }}
             animate={{ scale: 1, rotate: 0 }}
             transition={{ type: "spring", stiffness: 260, damping: 18, delay: 0.1 }}
@@ -175,7 +175,7 @@ export function CongratsView({
           {/* 3. XP count-up */}
           {xp && xp.total > 0 && (
             <motion.div
-              className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-5 py-2 mb-4 shadow-md"
+              className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm clip-badge-a px-6 py-2 mb-4 shadow-md"
               initial={{ opacity: 0, scale: 0.8, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.85, ease: "easeOut" }}
@@ -217,7 +217,7 @@ export function CongratsView({
                       damping: 15,
                     }}
                   >
-                    <div className="absolute -inset-1 bg-gradient-to-r from-yellow-400 via-lime-400 to-teal-400 rounded-none opacity-50 blur-sm animate-pulse" />
+                    <div className="absolute -inset-1 bg-gradient-to-r from-yellow-400 via-lime-400 to-teal-400 clip-tile-b opacity-50 blur-sm animate-pulse" />
                     <div className="relative">
                       <AchievementCard achievement={a} />
                     </div>

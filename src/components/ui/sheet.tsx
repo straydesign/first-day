@@ -5,6 +5,7 @@ import { XIcon } from "lucide-react"
 import { Dialog as SheetPrimitive } from "radix-ui"
 
 import { cn } from "@/lib/utils"
+import { MosaicBackground } from "@/components/MosaicBackground"
 
 function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>) {
   return <SheetPrimitive.Root data-slot="sheet" {...props} />
@@ -44,6 +45,13 @@ function SheetOverlay({
   )
 }
 
+const SHEET_CLIP = {
+  right: "clip-sheet-right",
+  left: "clip-sheet-left",
+  top: "clip-section-top",
+  bottom: "clip-section-bottom",
+} as const;
+
 function SheetContent({
   className,
   children,
@@ -60,6 +68,7 @@ function SheetContent({
       <SheetPrimitive.Content
         data-slot="sheet-content"
         className={cn(
+          SHEET_CLIP[side],
           "bg-[#1a1a3e] data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 flex flex-col gap-4 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500",
           side === "right" &&
             "data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right inset-y-0 right-0 h-full w-3/4 border-l sm:max-w-sm",
@@ -73,9 +82,12 @@ function SheetContent({
         )}
         {...props}
       >
-        {children}
+        <MosaicBackground density={6} opacity={0.04} seed={77} />
+        <div className="relative z-10 flex flex-col gap-4 flex-1">
+          {children}
+        </div>
         {showCloseButton && (
-          <SheetPrimitive.Close className="ring-offset-background focus:ring-ring data-[state=open]:bg-secondary absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none">
+          <SheetPrimitive.Close className="clip-diamond ring-offset-background focus-geo data-[state=open]:bg-secondary absolute top-4 right-4 z-20 rounded-xs opacity-70 transition-opacity hover:opacity-100 disabled:pointer-events-none">
             <XIcon className="size-4" />
             <span className="sr-only">Close</span>
           </SheetPrimitive.Close>

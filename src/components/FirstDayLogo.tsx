@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
-import { FirstDayLogoMark } from "./FirstDayLogoMark";
+import { memo } from "react";
+import { MosaicBackground } from "./MosaicBackground";
 
 interface FirstDayLogoProps {
   className?: string;
@@ -12,128 +12,138 @@ interface FirstDayLogoProps {
   size?: "default" | "hero";
 }
 
-// Aurora + badge palette
-const COLORS = {
-  green: "#7cff67",
-  cyan: "#00c7fc",
-  purple: "#5227FF",
-  coral: "#ff6b6b",
+// Per-letter tile colors from accent palette
+const LETTER_TILES = [
+  { letter: "F", color: "#7cff67", tile: "a", rotate: -1.5 },
+  { letter: "I", color: "#00c7fc", tile: "b", rotate: 1.2 },
+  { letter: "R", color: "#5227FF", tile: "c", rotate: -0.8 },
+  { letter: "S", color: "#cc5533", tile: "d", rotate: 1.8 },
+  { letter: "T", color: "#b5a6ff", tile: "a", rotate: -1.2 },
+] as const;
+
+const DAY_TILES = [
+  { letter: "D", color: "#ff6b6b", tile: "b", rotate: 1.5 },
+  { letter: "A", color: "#c8ffbe", tile: "c", rotate: -2 },
+  { letter: "Y", color: "#a3e2fd", tile: "d", rotate: 0.8 },
+] as const;
+
+const TILE_CLIP: Record<string, string> = {
+  a: "polygon(2% 0%, 100% 0%, 98% 100%, 0% 100%)",
+  b: "polygon(0% 0%, 97% 2%, 100% 100%, 3% 98%)",
+  c: "polygon(1% 3%, 100% 0%, 99% 97%, 0% 100%)",
+  d: "polygon(0% 1%, 98% 0%, 100% 99%, 2% 100%)",
 };
 
-export function FirstDayLogo({
-  className = "",
-  width = 300,
-  height = 150,
-  showTagline = true,
-  layout = "horizontal",
-  size = "default",
-}: FirstDayLogoProps) {
-  const isVertical = layout === "vertical";
-  const isHero = size === "hero";
+interface LetterTileProps {
+  letter: string;
+  color: string;
+  tile: string;
+  rotate: number;
+  fontSize: string;
+  seed: number;
+  showMosaic: boolean;
+}
 
-  // Hero: massive white wordmark over full-screen image
-  if (isHero) {
-    return (
-      <div className={`flex flex-col items-center ${className}`}>
-        {/* Giant wordmark — all white */}
-        <div className="flex items-baseline gap-3 md:gap-5 drop-shadow-[0_2px_16px_rgba(0,0,0,0.6)]">
-          <span
-            style={{
-              fontSize: "clamp(3.5rem, 10vw, 7rem)",
-              fontWeight: 900,
-              letterSpacing: -3,
-              lineHeight: 1,
-              color: "#ffffff",
-            }}
-          >
-            FIRST
-          </span>
-          <span
-            style={{
-              fontSize: "clamp(3.5rem, 10vw, 7rem)",
-              fontWeight: 900,
-              letterSpacing: -3,
-              lineHeight: 1,
-              color: "#ffffff",
-            }}
-          >
-            DAY
-          </span>
-        </div>
-
-        {/* Tagline — white */}
-        {showTagline && (
-          <span
-            className="mt-2 drop-shadow-[0_1px_8px_rgba(0,0,0,0.5)]"
-            style={{
-              fontSize: "clamp(0.85rem, 2vw, 1.15rem)",
-              fontWeight: 600,
-              color: "#ffffff",
-              letterSpacing: 3,
-              textTransform: "uppercase" as const,
-            }}
-          >
-            of the rest of your life
-          </span>
-        )}
-      </div>
-    );
-  }
-
-  // Default sizes
-  const iconSize = isVertical ? Math.min(width, height) * 0.5 : Math.min(width * 0.2, 40);
-  const fontSize = isVertical ? Math.max(width * 0.12, 22) : Math.max(width * 0.14, 24);
-  const taglineSize = isVertical ? Math.max(width * 0.055, 12) : Math.max(width * 0.06, 13);
-
+function LetterTile({ letter, color, tile, rotate, fontSize, seed, showMosaic }: LetterTileProps) {
   return (
     <div
-      className={`flex items-center ${isVertical ? "flex-col gap-3" : "gap-3"} ${className}`}
+      className="relative inline-flex items-center justify-center"
+      style={{
+        clipPath: TILE_CLIP[tile],
+        transform: `rotate(${rotate}deg)`,
+        backgroundColor: `${color}15`,
+        border: `1px solid ${color}30`,
+      }}
     >
-      <Image
-        src="/app-icon.png"
-        alt="First Day"
-        width={iconSize}
-        height={iconSize}
-        className="rounded-full drop-shadow-md"
-        priority
-      />
-      <div className={`flex flex-col ${isVertical ? "items-center gap-1" : "gap-0"}`}>
-        <div style={{ lineHeight: 1.1 }}>
-          <span
-            style={{
-              fontSize,
-              fontWeight: 900,
-              letterSpacing: -1,
-              color: COLORS.cyan,
-            }}
-          >
-            FIRST{" "}
-          </span>
-          <span
-            style={{
-              fontSize,
-              fontWeight: 900,
-              letterSpacing: -1,
-              color: COLORS.green,
-            }}
-          >
-            DAY
-          </span>
-        </div>
-        {showTagline && (
-          <span
-            style={{
-              fontSize: taglineSize,
-              fontWeight: 500,
-              color: COLORS.purple,
-              letterSpacing: 0.5,
-              textTransform: "uppercase" as const,
-            }}
-          >
-            of the rest of your life
-          </span>
-        )}
-      </div>
+      {showMosaic && (
+        <MosaicBackground
+          density={4}
+          opacity={0.2}
+          seed={seed}
+          colorSubset={[color]}
+        />
+      )}
+      <span
+        className="relative z-10 block leading-none"
+        style={{
+          fontFamily: "var(--font-bebas), system-ui, sans-serif",
+          fontSize,
+          fontWeight: 400,
+          color,
+          textShadow: `0 0 20px ${color}40`,
+          padding: "0.1em 0.15em",
+        }}
+      >
+        {letter}
+      </span>
     </div>
   );
 }
+
+function FirstDayLogoInner({
+  className = "",
+  showTagline = true,
+  size = "default",
+}: FirstDayLogoProps) {
+  const isHero = size === "hero";
+  const letterSize = isHero ? "clamp(3.5rem, 10vw, 7rem)" : "clamp(1.5rem, 4vw, 2.2rem)";
+
+  return (
+    <div className={`flex flex-col items-center ${className}`}>
+      {/* FIRST row */}
+      <div
+        className="flex items-center drop-shadow-[0_2px_16px_rgba(0,0,0,0.6)]"
+        style={{ gap: isHero ? "4px" : "2px", marginLeft: isHero ? "-2px" : "0" }}
+      >
+        {LETTER_TILES.map((lt, i) => (
+          <LetterTile
+            key={lt.letter}
+            {...lt}
+            fontSize={letterSize}
+            seed={i * 7}
+            showMosaic={isHero}
+          />
+        ))}
+      </div>
+
+      {/* DAY row */}
+      <div
+        className="flex items-center drop-shadow-[0_2px_16px_rgba(0,0,0,0.6)]"
+        style={{
+          gap: isHero ? "4px" : "2px",
+          marginTop: isHero ? "-6px" : "-3px",
+          marginRight: isHero ? "-4px" : "0",
+        }}
+      >
+        {DAY_TILES.map((lt, i) => (
+          <LetterTile
+            key={lt.letter}
+            {...lt}
+            fontSize={letterSize}
+            seed={(i + 5) * 11}
+            showMosaic={isHero}
+          />
+        ))}
+      </div>
+
+      {/* Tagline */}
+      {showTagline && (
+        <span
+          className="mt-2 drop-shadow-[0_1px_8px_rgba(0,0,0,0.5)]"
+          style={{
+            fontSize: isHero ? "clamp(0.85rem, 2vw, 1.15rem)" : "clamp(0.6rem, 1.5vw, 0.75rem)",
+            fontWeight: 500,
+            color: "rgba(255,255,255,0.7)",
+            letterSpacing: 3,
+            textTransform: "uppercase" as const,
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
+          }}
+        >
+          Your first day starts now
+        </span>
+      )}
+    </div>
+  );
+}
+
+export const FirstDayLogo = memo(FirstDayLogoInner);

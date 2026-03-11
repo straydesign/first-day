@@ -3,7 +3,8 @@ import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
+import { CardHeader, CardContent, CardTitle } from "@/components/ui/card";
+import { MosaicCard } from "./MosaicCard";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CheckCircle2, Calendar, Youtube, ExternalLink, Zap } from "lucide-react";
 import { BackButton } from "@/components/ui/back-button";
@@ -67,7 +68,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
             initial={{ opacity: 0, y: 20, filter: "blur(4px)" }}
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{ duration: 0.4, ease: "easeOut" }}
-            className="mb-4 md:mb-6 p-4 bg-lime-600 text-white rounded-none text-center border border-white/10"
+            className="mb-4 md:mb-6 p-4 bg-lime-600 text-white clip-tile-a text-center border border-white/10"
           >
             <div className="flex items-center justify-center gap-2">
               <CheckCircle2 className="w-6 h-6" />
@@ -96,50 +97,52 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{ duration: 0.4, delay: 0.15, ease: "easeOut" }}
           >
-            <Card className="mb-4 md:mb-6 border border-white/10 rounded-none bg-white/10 backdrop-blur-md">
-              <CardHeader><CardTitle className="text-2xl text-white">Your Activities</CardTitle></CardHeader>
-              <CardContent className="space-y-4">
-                {activities.map((activity: string | Activity, index: number) => {
-                  const activityText = typeof activity === 'string' ? activity : activity.text;
-                  const resources = typeof activity === 'object' ? activity.resources : null;
-                  return (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, y: 20, filter: "blur(4px)" }}
-                      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                      transition={{ duration: 0.4, delay: 0.25 + index * 0.1, ease: "easeOut" }}
-                      className="space-y-2"
-                    >
-                      <div className={`flex items-start gap-2 md:gap-4 p-2 md:p-4 rounded-none border-2 transition-smooth ${completedActivities[index] ? 'border-lime-500 bg-lime-500/10' : 'border-white/20 hover:border-teal-400'} ${isCompleted ? 'opacity-75' : ''}`}>
-                        <Checkbox checked={completedActivities[index] || false} onCheckedChange={() => !isCompleted && toggleActivity(index)} id={`activity-${index}`} className="mt-1 flex-shrink-0 size-6 border-2 border-white/40 data-[state=checked]:border-lime-500 data-[state=checked]:bg-lime-500 rounded-md" disabled={isCompleted} />
-                        <label htmlFor={`activity-${index}`} className="flex-1 min-w-0 cursor-pointer">
-                          <div className="text-base md:text-lg leading-relaxed select-text text-white/90">{activityText}</div>
-                          {resources && resources.length > 0 && (
-                            <div className="mt-3 space-y-2">
-                              {resources.map((resource: ActivityResource, rIndex: number) => (
-                                <div key={rIndex} onClick={(e) => e.preventDefault()}>
-                                  {resource.type === 'youtube' && (
-                                    <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent(resource.query ?? '')}`} target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-2 text-sm hover:underline ${completedActivities[index] ? 'text-lime-400 hover:text-lime-300' : 'text-teal-400 hover:text-teal-300'}`} onClick={(e) => e.stopPropagation()}>
-                                      <Youtube className="w-4 h-4" />Search YouTube: {resource.query}
-                                    </a>
-                                  )}
-                                  {resource.type === 'link' && (
-                                    <a href={resource.url} target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-2 text-sm hover:underline ${completedActivities[index] ? 'text-lime-400 hover:text-lime-300' : 'text-teal-400 hover:text-teal-300'}`} onClick={(e) => e.stopPropagation()}>
-                                      <ExternalLink className="w-4 h-4" />{resource.title || resource.url}
-                                    </a>
-                                  )}
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </label>
-                        {completedActivities[index] && <CheckCircle2 className="w-6 h-6 text-lime-500 flex-shrink-0 animate-scaleIn" />}
-                      </div>
-                    </motion.div>
-                  );
-                })}
-              </CardContent>
-            </Card>
+            <div className="mb-4 md:mb-6">
+              <MosaicCard seed={1} className="bg-white/10 backdrop-blur-md border border-white/10">
+                <CardHeader><CardTitle className="text-2xl text-white">Your Activities</CardTitle></CardHeader>
+                <CardContent className="space-y-4">
+                  {activities.map((activity: string | Activity, index: number) => {
+                    const activityText = typeof activity === 'string' ? activity : activity.text;
+                    const resources = typeof activity === 'object' ? activity.resources : null;
+                    return (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: 20, filter: "blur(4px)" }}
+                        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                        transition={{ duration: 0.4, delay: 0.25 + index * 0.1, ease: "easeOut" }}
+                        className="space-y-2"
+                      >
+                        <div className={`flex items-start gap-2 md:gap-4 p-2 md:p-4 clip-tile-c border-2 transition-smooth ${completedActivities[index] ? 'border-lime-500 bg-lime-500/10' : 'border-white/20 hover:border-teal-400'} ${isCompleted ? 'opacity-75' : ''}`}>
+                          <Checkbox checked={completedActivities[index] || false} onCheckedChange={() => !isCompleted && toggleActivity(index)} id={`activity-${index}`} className="mt-1 flex-shrink-0 size-6 border-2 border-white/40 data-[state=checked]:border-lime-500 data-[state=checked]:bg-lime-500" disabled={isCompleted} />
+                          <label htmlFor={`activity-${index}`} className="flex-1 min-w-0 cursor-pointer">
+                            <div className="text-base md:text-lg leading-relaxed select-text text-white/90">{activityText}</div>
+                            {resources && resources.length > 0 && (
+                              <div className="mt-3 space-y-2">
+                                {resources.map((resource: ActivityResource, rIndex: number) => (
+                                  <div key={rIndex} onClick={(e) => e.preventDefault()}>
+                                    {resource.type === 'youtube' && (
+                                      <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent(resource.query ?? '')}`} target="_blank" rel="noopener noreferrer" className={`clip-badge-b inline-flex items-center gap-2 text-sm hover:underline ${completedActivities[index] ? 'text-lime-400 hover:text-lime-300' : 'text-teal-400 hover:text-teal-300'}`} onClick={(e) => e.stopPropagation()}>
+                                        <Youtube className="w-4 h-4" />Search YouTube: {resource.query}
+                                      </a>
+                                    )}
+                                    {resource.type === 'link' && (
+                                      <a href={resource.url} target="_blank" rel="noopener noreferrer" className={`clip-badge-b inline-flex items-center gap-2 text-sm hover:underline ${completedActivities[index] ? 'text-lime-400 hover:text-lime-300' : 'text-teal-400 hover:text-teal-300'}`} onClick={(e) => e.stopPropagation()}>
+                                        <ExternalLink className="w-4 h-4" />{resource.title || resource.url}
+                                      </a>
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </label>
+                          {completedActivities[index] && <CheckCircle2 className="w-6 h-6 text-lime-500 flex-shrink-0 animate-scaleIn" />}
+                        </div>
+                      </motion.div>
+                    );
+                  })}
+                </CardContent>
+              </MosaicCard>
+            </div>
           </motion.div>
         ) : (
           <motion.div
@@ -147,12 +150,14 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{ duration: 0.4, delay: 0.15, ease: "easeOut" }}
           >
-            <Card className="mb-4 md:mb-6 border border-white/10 rounded-none bg-white/10 backdrop-blur-md">
-              <CardContent className="py-8 text-center">
-                <p className="text-white/60 text-lg">Activities for this day are not available yet.</p>
-                <p className="text-white/40 text-sm mt-2">Check back later or contact support if this persists.</p>
-              </CardContent>
-            </Card>
+            <div className="mb-4 md:mb-6">
+              <MosaicCard seed={2} className="bg-white/10 backdrop-blur-md border border-white/10">
+                <CardContent className="py-8 text-center">
+                  <p className="text-white/60 text-lg">Activities for this day are not available yet.</p>
+                  <p className="text-white/40 text-sm mt-2">Check back later or contact support if this persists.</p>
+                </CardContent>
+              </MosaicCard>
+            </div>
           </motion.div>
         )}
 
@@ -161,13 +166,15 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{ duration: 0.4, delay: 0.35 + (hasActivities ? activities.length * 0.1 : 0), ease: "easeOut" }}
         >
-          <Card className="mb-4 md:mb-6 border border-white/10 rounded-none bg-white/10 backdrop-blur-md">
-            <CardHeader><CardTitle className="text-2xl text-white">How did today go?</CardTitle></CardHeader>
-            <CardContent>
-              <Textarea value={feedback} onChange={(e) => !isCompleted && setFeedback(e.target.value)} placeholder="Share your thoughts, challenges, or wins from today..." className="min-h-32 text-lg border-white/20 focus:border-teal-400 bg-white/5 text-white placeholder:text-white/40" disabled={isCompleted} />
-              {!isCompleted && <p className="text-sm text-white/50 mt-2">Reflect on your progress -- what went well and what you can improve.</p>}
-            </CardContent>
-          </Card>
+          <div className="mb-4 md:mb-6">
+            <MosaicCard seed={3} className="bg-white/10 backdrop-blur-md border border-white/10">
+              <CardHeader><CardTitle className="text-2xl text-white">How did today go?</CardTitle></CardHeader>
+              <CardContent>
+                <Textarea value={feedback} onChange={(e) => !isCompleted && setFeedback(e.target.value)} placeholder="Share your thoughts, challenges, or wins from today..." className="min-h-32 text-lg border-white/20 focus:border-teal-400 bg-white/5 text-white placeholder:text-white/40" disabled={isCompleted} />
+                {!isCompleted && <p className="text-sm text-white/50 mt-2">Reflect on your progress -- what went well and what you can improve.</p>}
+              </CardContent>
+            </MosaicCard>
+          </div>
         </motion.div>
 
         {!isCompleted && (

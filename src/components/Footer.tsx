@@ -8,7 +8,7 @@ interface FooterProps {
 export function Footer({ onPrivacyClick, onTermsClick }: FooterProps) {
   const currentYear = new Date().getFullYear();
   return (
-    <footer className="bg-[#12122e] py-6 mt-auto border-t border-white/10">
+    <footer className="bg-[#12122e] py-6 mt-auto border-t border-white/10 clip-section-top">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex flex-wrap gap-4 justify-center mb-4">
           {onPrivacyClick ? (

@@ -14,7 +14,7 @@ export function StreakBadge({ streak, isAtRisk, size = "md" }: StreakBadgeProps)
 
   return (
     <div
-      className={`inline-flex items-center gap-1 rounded-full font-bold ${
+      className={`inline-flex items-center gap-1 clip-badge-a font-bold ${
         isAtRisk
           ? "bg-coral-500/20 text-coral-400 animate-pulse"
           : "bg-lime-500/20 text-lime-400"
