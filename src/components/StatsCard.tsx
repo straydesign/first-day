@@ -1,6 +1,7 @@
 "use client";
 import type { EngagementState } from "@/types";
 import { Flame, Zap, TrendingUp, Target } from "lucide-react";
+import { VoronoiMosaic } from "./VoronoiMosaic";
 
 interface StatsCardProps {
   engagement: EngagementState;
@@ -11,8 +12,9 @@ export function StatsCard({ engagement }: StatsCardProps) {
 
   return (
     <div className="grid grid-cols-2 gap-3">
-      <div className="mosaic-card relative backdrop-blur-sm clip-tile-a p-3 border border-white/15 overflow-hidden">
-        <div className="absolute inset-0 bg-[#0a0a1e]/50 z-[1]" />
+      <div className="relative backdrop-blur-sm clip-tile-a p-3 border border-white/15 overflow-hidden bg-[#0a0a1e]">
+        <VoronoiMosaic seed={100} tileCount={20} margin={4} gap={2} className="absolute inset-0 w-full h-full" />
+        <div className="absolute inset-0 bg-[#0a0a1e]/45 z-[1]" />
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-1">
             <Target className="w-4 h-4 text-white" />
@@ -22,8 +24,9 @@ export function StatsCard({ engagement }: StatsCardProps) {
         </div>
       </div>
 
-      <div className="mosaic-card relative backdrop-blur-sm clip-tile-b p-3 border border-white/15 overflow-hidden">
-        <div className="absolute inset-0 bg-[#0a0a1e]/50 z-[1]" />
+      <div className="relative backdrop-blur-sm clip-tile-b p-3 border border-white/15 overflow-hidden bg-[#0a0a1e]">
+        <VoronoiMosaic seed={101} tileCount={20} margin={4} gap={2} className="absolute inset-0 w-full h-full" />
+        <div className="absolute inset-0 bg-[#0a0a1e]/45 z-[1]" />
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-1">
             <Flame className="w-4 h-4 text-coral-500" />
@@ -33,8 +36,9 @@ export function StatsCard({ engagement }: StatsCardProps) {
         </div>
       </div>
 
-      <div className="mosaic-card relative backdrop-blur-sm clip-tile-c p-3 border border-white/15 overflow-hidden">
-        <div className="absolute inset-0 bg-[#0a0a1e]/50 z-[1]" />
+      <div className="relative backdrop-blur-sm clip-tile-c p-3 border border-white/15 overflow-hidden bg-[#0a0a1e]">
+        <VoronoiMosaic seed={102} tileCount={20} margin={4} gap={2} className="absolute inset-0 w-full h-full" />
+        <div className="absolute inset-0 bg-[#0a0a1e]/45 z-[1]" />
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-1">
             <Zap className="w-4 h-4 text-yellow-500" />
@@ -44,8 +48,9 @@ export function StatsCard({ engagement }: StatsCardProps) {
         </div>
       </div>
 
-      <div className="mosaic-card relative backdrop-blur-sm clip-tile-d p-3 border border-white/15 overflow-hidden">
-        <div className="absolute inset-0 bg-[#0a0a1e]/50 z-[1]" />
+      <div className="relative backdrop-blur-sm clip-tile-d p-3 border border-white/15 overflow-hidden bg-[#0a0a1e]">
+        <VoronoiMosaic seed={103} tileCount={20} margin={4} gap={2} className="absolute inset-0 w-full h-full" />
+        <div className="absolute inset-0 bg-[#0a0a1e]/45 z-[1]" />
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-1">
             <TrendingUp className="w-4 h-4 text-indigo-500" />

@@ -1,5 +1,6 @@
 "use client";
 import { memo } from "react";
+import { VoronoiMosaic } from "./VoronoiMosaic";
 import { MosaicBackground, type SafeZone } from "./MosaicBackground";
 import { cn } from "@/lib/utils";
 
@@ -27,11 +28,11 @@ const DEFAULT_SAFE_ZONE: SafeZone = {
 function MosaicCardInner({
   children,
   tileVariant,
-  mosaicOpacity = 0.85,
   mosaicDensity = 12,
   seed = 0,
   showMosaic = false,
   colorSubset,
+  mosaicOpacity = 0.85,
   safeZone,
   className,
 }: MosaicCardProps) {
@@ -42,12 +43,20 @@ function MosaicCardInner({
     <div
       className={cn(
         `clip-tile-${variant}`,
-        "mosaic-card relative overflow-hidden border border-white/15 focus-geo",
+        "relative overflow-hidden border border-white/15 bg-[#0a0a1e] focus-geo",
         className
       )}
     >
-      {/* Dark scrim overlay for text readability */}
-      <div className="absolute inset-0 bg-[#0a0a1e]/50 z-[1]" />
+      {/* Voronoi mosaic background */}
+      <VoronoiMosaic
+        seed={seed}
+        tileCount={55}
+        margin={8}
+        gap={3}
+        className="absolute inset-0 w-full h-full"
+      />
+      {/* Dark scrim for text readability */}
+      <div className="absolute inset-0 bg-[#0a0a1e]/45 z-[1]" />
       {showMosaic && (
         <MosaicBackground
           density={mosaicDensity}
