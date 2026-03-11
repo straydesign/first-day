@@ -176,7 +176,8 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 onClick={onGetStarted}
-                className="text-white font-black text-sm tracking-wide uppercase hover:opacity-70 transition-opacity flex-shrink-0"
+                className="bg-black px-6 py-3 text-white font-black text-sm tracking-wide uppercase hover:scale-105 transition-transform flex-shrink-0"
+                style={{ clipPath: "polygon(0% 8%, 97% 0%, 100% 88%, 3% 100%)" }}
               >
                 Get Started
               </motion.button>
