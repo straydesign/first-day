@@ -126,7 +126,7 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
 
         <div className="mb-4 sm:mb-6 text-center">
           <div className="mb-2 flex justify-center animate-fadeIn">
-            <FirstDayLogo width={200} height={100} className="text-gray-900 max-w-full" />
+            <FirstDayLogo width={200} height={100} layout="horizontal" showTagline={false} className="text-gray-900 max-w-full" />
           </div>
           <p className="text-gray-600 mt-2 text-sm sm:text-base animate-slideInUp" style={{ animationDelay: '0.1s' }}>
             {isLogin ? 'Welcome back!' : 'Start your journey today'}

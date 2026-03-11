@@ -52,7 +52,7 @@ export function LoadingScreen({ showProgress = false, estimatedDuration = 15000 
         <Aurora colorStops={[...AURORA_COLORS]} />
       </div>
       <div className="absolute inset-0 z-[105] flex flex-col items-center justify-center gap-8 px-6">
-        <FirstDayLogo width={300} height={150} showTagline={true} />
+        <FirstDayLogo width={300} height={150} showTagline={true} layout="vertical" />
 
         {showProgress && (
           <div className="w-full max-w-md space-y-4 animate-fadeIn">

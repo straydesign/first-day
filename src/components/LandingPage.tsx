@@ -126,10 +126,10 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                 aria-label="First Day - Home"
               >
                 <FirstDayLogo
-                  width={240}
-                  height={96}
-                  showTagline={false}
-                  className="text-teal-600"
+                  width={280}
+                  height={48}
+                  showTagline={true}
+                  layout="horizontal"
                 />
               </button>
             </motion.div>

@@ -61,7 +61,7 @@ export function ResetPasswordView({ token, onSuccess }: ResetPasswordViewProps) 
     <div className="min-h-screen flex items-center justify-center bg-white p-4 md:p-8">
       <div className="max-w-md w-full space-y-6">
         <div className="text-center">
-          <FirstDayLogo width={200} height={100} />
+          <FirstDayLogo width={200} height={100} layout="horizontal" showTagline={false} />
           <h2 className="text-2xl font-bold text-slate-800 mt-4">Reset Your Password</h2>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
