@@ -311,6 +311,10 @@ html {
 .mosaic-card:hover {
   background-image: url('/buttons/mosaic-card-hover.png');
 }
+.mosaic-card:active {
+  background-image: url('/buttons/mosaic-card-pressed.png');
+  transform: scale(0.99);
+}
 
 /* ============================================
    MOSAIC BUTTON — Image-based states
