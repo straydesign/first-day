@@ -103,17 +103,17 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
             >
               Log In
             </ShardButton>
-            <Button
+            <ShardButton
               onClick={onGetStarted}
-              size="sm"
-              className="bg-white/90 text-[#060B18] hover:bg-white shadow-md hover:shadow-lg transition-smooth px-6 py-2 clip-btn-a"
+              seed={3}
+              shardCount={3}
             >
               Get Started
-            </Button>
+            </ShardButton>
           </div>
 
-          {/* Hero content */}
-          <div className="relative z-10 flex flex-col items-center text-center px-4 pt-16">
+          {/* Hero content — at top, above the sunset image */}
+          <div className="absolute top-28 left-0 right-0 z-20 flex justify-center px-4">
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
