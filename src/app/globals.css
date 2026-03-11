@@ -10,15 +10,15 @@
   --foreground: #ffffff;
   --card: #060B18;
   --card-foreground: #ffffff;
-  --popover: #1A0A5E;
+  --popover: #FF1493;
   --popover-foreground: #ffffff;
   --primary: #cc5533;
   --primary-foreground: #ffffff;
-  --secondary: #1A0A5E;
+  --secondary: #FF1493;
   --secondary-foreground: #ffffff;
   --muted: #060B18;
   --muted-foreground: rgba(255, 255, 255, 0.5);
-  --accent: #1A0A5E;
+  --accent: #FF1493;
   --accent-foreground: #ffffff;
   --destructive: #FF2D55;
   --destructive-foreground: #ffffff;
@@ -39,7 +39,7 @@
   --sidebar-foreground: #ffffff;
   --sidebar-primary: #cc5533;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #1A0A5E;
+  --sidebar-accent: #FF1493;
   --sidebar-accent-foreground: #ffffff;
   --sidebar-border: rgba(255, 255, 255, 0.1);
   --sidebar-ring: #cc5533;
@@ -76,13 +76,13 @@
   /*
    * DESIGN SYSTEM — COLOR ROLES (Sunset Voronoi Mosaic Theme)
    *
-   * Backgrounds: #060B18 (Midnight Navy), #1A0A5E (Indigo Blue elevated)
+   * Backgrounds: #060B18 (Midnight Navy), #FF1493 (Indigo Blue elevated)
    * Borders: white/10 universally
    *
    * Primary CTA: #cc5533 (warm orange) — buttons, focus rings, progress bars.
    * Light palette: #FFE633 (Golden Peach), #FF6B2B (Warm Apricot),
    *                #FF2D55 (Soft Coral), #00EAFF (Rose Pink)
-   * Dark palette: #5227FF (Deep Violet), #1A0A5E (Indigo Blue),
+   * Dark palette: #5227FF (Deep Violet), #FF1493 (Indigo Blue),
    *               #0D1120 (Burnt Magenta), #060B18 (Midnight Navy)
    *
    * Text: #ffffff (primary), white/80 (secondary), white/50 (muted).
@@ -261,7 +261,7 @@ html {
 
   .animate-shimmer {
     animation: shimmer 2s infinite linear;
-    background: linear-gradient(to right, #060B18 0%, #1A0A5E 20%, #060B18 40%, #060B18 100%);
+    background: linear-gradient(to right, #060B18 0%, #FF1493 20%, #060B18 40%, #060B18 100%);
     background-size: 1000px 100%;
   }
 

@@ -49,7 +49,7 @@ export function WeekCalendar({ weekNumber, days, progress = {}, onDayClick, plan
             ? "bg-white/20 text-white font-bold"
             : isPast && !isCompleted
               ? "bg-coral-400 text-white"
-              : "bg-[#1A0A5E] text-white/80";
+              : "bg-[#FF1493] text-white/80";
 
         return (
           <button

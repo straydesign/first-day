@@ -64,7 +64,7 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
         </div>
         <MosaicCard seed={1} className="p-4 md:p-6 mb-4 md:mb-6 backdrop-blur-sm">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 clip-diamond bg-[#1A0A5E] border border-white/20 flex items-center justify-center"><User className="w-5 h-5 text-white" /></div>
+            <div className="w-10 h-10 clip-diamond bg-[#FF1493] border border-white/20 flex items-center justify-center"><User className="w-5 h-5 text-white" /></div>
             <h2 className="text-xl font-semibold text-white">Account Information</h2>
           </div>
           <div className="space-y-3">
@@ -74,7 +74,7 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
         </MosaicCard>
         <MosaicCard seed={2} className="p-4 md:p-6 mb-4 md:mb-6 backdrop-blur-sm">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 clip-diamond bg-[#1A0A5E] border border-white/20 flex items-center justify-center"><Shield className="w-5 h-5 text-white" /></div>
+            <div className="w-10 h-10 clip-diamond bg-[#FF1493] border border-white/20 flex items-center justify-center"><Shield className="w-5 h-5 text-white" /></div>
             <h2 className="text-xl font-semibold text-white">Privacy</h2>
           </div>
           <div className="text-white/80 text-sm space-y-2 mb-4">
@@ -85,7 +85,7 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
         </MosaicCard>
         <MosaicCard seed={3} className="p-4 md:p-6 mb-4 md:mb-6 backdrop-blur-sm">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 clip-diamond bg-[#1A0A5E] border border-white/20 flex items-center justify-center"><Bell className="w-5 h-5 text-white" /></div>
+            <div className="w-10 h-10 clip-diamond bg-[#FF1493] border border-white/20 flex items-center justify-center"><Bell className="w-5 h-5 text-white" /></div>
             <h2 className="text-xl font-semibold text-white">Email Notifications</h2>
           </div>
           <div className="text-white/80 text-sm space-y-2 mb-4">

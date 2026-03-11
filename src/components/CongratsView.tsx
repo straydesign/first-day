@@ -176,7 +176,7 @@ export function CongratsView({
           {/* 3. XP count-up */}
           {xp && xp.total > 0 && (
             <motion.div
-              className="inline-flex items-center gap-2 bg-[#1A0A5E] backdrop-blur-sm clip-badge-a px-6 py-2 mb-4 shadow-md border border-white/15"
+              className="inline-flex items-center gap-2 bg-[#FF1493] backdrop-blur-sm clip-badge-a px-6 py-2 mb-4 shadow-md border border-white/15"
               initial={{ opacity: 0, scale: 0.8, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.85, ease: "easeOut" }}
