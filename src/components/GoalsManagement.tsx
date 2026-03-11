@@ -170,10 +170,10 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
           <div className="animate-fadeIn">
             {goals.map(goal => (
               <MosaicCard key={goal.id} seed={goals.indexOf(goal)} className="backdrop-blur-sm min-h-screen pt-0 px-6 pb-6 md:px-10 md:pb-10">
-                <div className="text-center mb-6 md:mb-8 -mx-6 md:-mx-10">
+                <div className="text-center mb-6 md:mb-8 pt-4">
                   <div
-                    className="bg-black px-6 py-2"
-                    style={{ clipPath: "polygon(0% 0%, 100% 4%, 99% 96%, 1% 100%)" }}
+                    className="inline-block bg-black px-6 py-2"
+                    style={{ clipPath: "polygon(2% 0%, 98% 4%, 100% 96%, 0% 100%)" }}
                   >
                     <p className="text-xl text-white font-bold">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</p>
                   </div>
@@ -204,10 +204,13 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                   <div className="mb-6">
                     <button
                       onClick={onCreateGoal}
-                      className="w-full bg-black text-white py-4 md:py-6 text-lg font-black uppercase tracking-wide hover:scale-105 transition-transform flex items-center justify-center gap-2"
-                      style={{ clipPath: "polygon(2% 0%, 100% 4%, 98% 100%, 0% 96%)" }}
+                      className="w-full bg-black py-4 md:py-6 text-lg font-black uppercase tracking-wide hover:scale-105 transition-transform flex items-center justify-center gap-1"
+                      style={{ clipPath: "polygon(2% 0%, 100% 4%, 98% 100%, 0% 96%)", fontFamily: "var(--font-bebas), system-ui, sans-serif", letterSpacing: 3 }}
                     >
-                      <Plus className="w-6 h-6" />Add New Goal
+                      <Plus className="w-6 h-6 text-white" />
+                      {"ADD NEW GOAL".split("").map((char, i) => (
+                        <span key={i} style={{ color: char === " " ? "transparent" : ["#FFE633","#FF6B2B","#FF2D55","#00EAFF","#FF10F0","#FF1493","#4FC3F7","#FF4500"][i % 8], width: char === " " ? "0.35em" : undefined, display: "inline-block" }}>{char}</span>
+                      ))}
                     </button>
                   </div>
                   {/* Stats & Achievements */}
