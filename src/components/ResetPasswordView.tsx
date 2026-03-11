@@ -59,9 +59,9 @@ export function ResetPasswordView({ token, onSuccess }: ResetPasswordViewProps) 
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0B132B] p-4 md:p-8 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center bg-[#060B18] p-4 md:p-8 relative overflow-hidden">
       <VoronoiMosaic seed={55} tileCount={40} margin={10} gap={3} className="absolute inset-0 w-full h-full" />
-      <div className="absolute inset-0 bg-[#0B132B]/50" />
+      <div className="absolute inset-0 bg-[#060B18]/50" />
       <div className="relative z-10 max-w-md w-full space-y-6">
         <div className="text-center">
           <FirstDayLogo width={200} height={100} layout="horizontal" showTagline={false} />
@@ -70,11 +70,11 @@ export function ResetPasswordView({ token, onSuccess }: ResetPasswordViewProps) 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <Label htmlFor="new-password" className="text-white/80">New Password</Label>
-            <Input id="new-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} disabled={loading} className="bg-[#0B132B] border-white/10" />
+            <Input id="new-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} disabled={loading} className="bg-[#060B18] border-white/10" />
           </div>
           <div>
             <Label htmlFor="confirm-new-password" className="text-white/80">Confirm Password</Label>
-            <Input id="confirm-new-password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} disabled={loading} className="bg-[#0B132B] border-white/10" />
+            <Input id="confirm-new-password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} disabled={loading} className="bg-[#060B18] border-white/10" />
           </div>
           <Button type="submit" className="w-full transition-smooth hover:scale-105 disabled:hover:scale-100" disabled={loading}>
             {loading ? 'Resetting...' : 'Reset Password'}

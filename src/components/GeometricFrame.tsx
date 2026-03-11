@@ -2,8 +2,8 @@
 import { memo, useMemo } from "react";
 
 const DEFAULT_ACCENT_COLORS = [
-  "#FFD166", "#FF9E7A", "#FF6F91", "#FFB3C6",
-  "#5227FF", "#3A0CA3", "#1B1B3A", "#0B132B",
+  "#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF",
+  "#5227FF", "#1A0A5E", "#0D1120", "#060B18",
 ];
 
 interface GeometricFrameProps {

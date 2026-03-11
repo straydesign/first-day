@@ -696,7 +696,7 @@ export default function Home() {
 
   // All authenticated views
   return (
-    <div className="min-h-screen relative bg-[#0B132B]">
+    <div className="min-h-screen relative bg-[#060B18]">
       <div className="fixed inset-0 z-0 w-full h-full">
         <Aurora colorStops={[...AURORA_COLORS]} />
       </div>

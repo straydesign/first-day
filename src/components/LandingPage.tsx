@@ -74,7 +74,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
     <div className="min-h-screen relative bg-black">
       {/* Aurora Background */}
       <div className="fixed inset-0 z-0 w-full h-full">
-        <Aurora colorStops={["#FFD166", "#FF6F91", "#5227FF"]} />
+        <Aurora colorStops={["#FFE633", "#FF2D55", "#5227FF"]} />
       </div>
 
       {/* Content */}
@@ -106,7 +106,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
             <Button
               onClick={onGetStarted}
               size="sm"
-              className="bg-white/90 text-[#0B132B] hover:bg-white shadow-md hover:shadow-lg transition-smooth px-6 py-2 clip-btn-a"
+              className="bg-white/90 text-[#060B18] hover:bg-white shadow-md hover:shadow-lg transition-smooth px-6 py-2 clip-btn-a"
             >
               Get Started
             </Button>
@@ -195,9 +195,9 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
         {/* How It Works */}
         <AnimatedSection>
           <section id="how-it-works" className="w-full py-8 md:py-16 px-0 md:px-4">
-            <div className="clip-section-both relative bg-[#0B132B] backdrop-blur-xl border-y md:border border-white/10 overflow-hidden">
+            <div className="clip-section-both relative bg-[#060B18] backdrop-blur-xl border-y md:border border-white/10 overflow-hidden">
               <VoronoiMosaic seed={200} tileCount={35} margin={10} gap={3} palette={VORONOI_DARK} className="absolute inset-0 w-full h-full" />
-              <div className="absolute inset-0 bg-[#0B132B]/60" />
+              <div className="absolute inset-0 bg-[#060B18]/60" />
               <div className="relative z-10 px-6 md:px-10 pt-8 md:pt-12 pb-4 text-center">
                 <h2 className="text-3xl md:text-5xl font-bold text-white mb-2">How It Works</h2>
                 <p className="text-white/80">Three simple steps to your best month</p>
@@ -207,7 +207,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                 {/* Step 1 */}
                 <MosaicCard seed={10} tileVariant="a" className="p-5 md:p-8">
                   <div className="flex gap-5 items-start">
-                    <div className="clip-diamond w-14 h-14 bg-[#3A0CA3] text-white flex items-center justify-center shadow-md text-xl font-bold flex-shrink-0">
+                    <div className="clip-diamond w-14 h-14 bg-[#1A0A5E] text-white flex items-center justify-center shadow-md text-xl font-bold flex-shrink-0">
                       1
                     </div>
                     <div className="flex-1">
@@ -279,9 +279,9 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
         {/* Stay Motivated */}
         <AnimatedSection>
           <section className="w-full py-8 md:py-16 px-0 md:px-4">
-            <div className="clip-section-both relative bg-[#0B132B] backdrop-blur-xl border-y md:border border-white/10 overflow-hidden">
+            <div className="clip-section-both relative bg-[#060B18] backdrop-blur-xl border-y md:border border-white/10 overflow-hidden">
               <VoronoiMosaic seed={300} tileCount={35} margin={10} gap={3} palette={VORONOI_DARK} className="absolute inset-0 w-full h-full" />
-              <div className="absolute inset-0 bg-[#0B132B]/60" />
+              <div className="absolute inset-0 bg-[#060B18]/60" />
               <div className="relative z-10 px-6 md:px-10 pt-8 md:pt-12 pb-4 text-center">
                 <h2 className="text-3xl md:text-5xl font-bold text-white mb-2">Stay Motivated</h2>
                 <p className="text-white/80">Built-in streaks, XP, and achievements keep you coming back</p>
@@ -341,7 +341,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                           className={`clip-diamond w-10 h-10 flex items-center justify-center text-lg ${
                             badge.locked
                               ? "bg-white/5 border border-dashed border-white/10 grayscale opacity-50"
-                              : "bg-[#3A0CA3] border border-white/10"
+                              : "bg-[#1A0A5E] border border-white/10"
                           }`}
                           title={badge.label}
                         >
@@ -354,21 +354,21 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
 
                 {/* Stat bar */}
                 <div className="mt-6 grid grid-cols-3 gap-3 max-w-lg mx-auto">
-                  <div className="clip-badge-a text-center bg-[#3A0CA3]/80 py-3 px-2 border border-white/10">
+                  <div className="clip-badge-a text-center bg-[#1A0A5E]/80 py-3 px-2 border border-white/10">
                     <div className="flex items-center justify-center gap-1 mb-0.5">
                       <Target className="w-3.5 h-3.5 text-white" />
                       <span className="text-xs text-white/70 font-medium">Rate</span>
                     </div>
                     <p className="text-3xl font-bold text-white">87%</p>
                   </div>
-                  <div className="clip-badge-a text-center bg-[#3A0CA3]/80 py-3 px-2 border border-white/10">
+                  <div className="clip-badge-a text-center bg-[#1A0A5E]/80 py-3 px-2 border border-white/10">
                     <div className="flex items-center justify-center gap-1 mb-0.5">
                       <Flame className="w-3.5 h-3.5 text-orange-500" />
                       <span className="text-xs text-white/70 font-medium">Streak</span>
                     </div>
                     <p className="text-3xl font-bold text-white">12</p>
                   </div>
-                  <div className="clip-badge-a text-center bg-[#3A0CA3]/80 py-3 px-2 border border-white/10">
+                  <div className="clip-badge-a text-center bg-[#1A0A5E]/80 py-3 px-2 border border-white/10">
                     <div className="flex items-center justify-center gap-1 mb-0.5">
                       <Trophy className="w-3.5 h-3.5 text-purple-500" />
                       <span className="text-xs text-white/70 font-medium">Badges</span>
@@ -384,9 +384,9 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
         {/* What Your Plan Looks Like */}
         <AnimatedSection>
           <section className="w-full py-8 md:py-16 px-0 md:px-4">
-            <div className="clip-section-both relative bg-[#0B132B] backdrop-blur-xl border-y md:border border-white/10 overflow-hidden">
+            <div className="clip-section-both relative bg-[#060B18] backdrop-blur-xl border-y md:border border-white/10 overflow-hidden">
               <VoronoiMosaic seed={400} tileCount={35} margin={10} gap={3} palette={VORONOI_DARK} className="absolute inset-0 w-full h-full" />
-              <div className="absolute inset-0 bg-[#0B132B]/60" />
+              <div className="absolute inset-0 bg-[#060B18]/60" />
               <div className="relative z-10 px-6 md:px-10 pt-8 md:pt-12 pb-4 text-center">
                 <h2 className="text-3xl md:text-5xl font-bold text-white mb-2">What Your Plan Looks Like</h2>
                 <p className="text-white/80">Real screens from &quot;Learn to play guitar&quot;</p>

@@ -54,7 +54,7 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
   };
 
   return (
-    <div className="min-h-screen bg-[#0B132B] relative overflow-hidden">
+    <div className="min-h-screen bg-[#060B18] relative overflow-hidden">
       <div className="fixed inset-0 z-0 w-full h-full"><Aurora colorStops={[...AURORA_COLORS]} /></div>
       <div className="relative z-10 max-w-4xl mx-auto px-4 py-6 md:py-12">
         <BackButton onClick={onBack} />
@@ -64,7 +64,7 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
         </div>
         <MosaicCard seed={1} className="p-4 md:p-6 mb-4 md:mb-6 backdrop-blur-sm">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 clip-diamond bg-[#3A0CA3] border border-white/20 flex items-center justify-center"><User className="w-5 h-5 text-white" /></div>
+            <div className="w-10 h-10 clip-diamond bg-[#1A0A5E] border border-white/20 flex items-center justify-center"><User className="w-5 h-5 text-white" /></div>
             <h2 className="text-xl font-semibold text-white">Account Information</h2>
           </div>
           <div className="space-y-3">
@@ -74,7 +74,7 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
         </MosaicCard>
         <MosaicCard seed={2} className="p-4 md:p-6 mb-4 md:mb-6 backdrop-blur-sm">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 clip-diamond bg-[#3A0CA3] border border-white/20 flex items-center justify-center"><Shield className="w-5 h-5 text-white" /></div>
+            <div className="w-10 h-10 clip-diamond bg-[#1A0A5E] border border-white/20 flex items-center justify-center"><Shield className="w-5 h-5 text-white" /></div>
             <h2 className="text-xl font-semibold text-white">Privacy</h2>
           </div>
           <div className="text-white/80 text-sm space-y-2 mb-4">
@@ -85,7 +85,7 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
         </MosaicCard>
         <MosaicCard seed={3} className="p-4 md:p-6 mb-4 md:mb-6 backdrop-blur-sm">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 clip-diamond bg-[#3A0CA3] border border-white/20 flex items-center justify-center"><Bell className="w-5 h-5 text-white" /></div>
+            <div className="w-10 h-10 clip-diamond bg-[#1A0A5E] border border-white/20 flex items-center justify-center"><Bell className="w-5 h-5 text-white" /></div>
             <h2 className="text-xl font-semibold text-white">Email Notifications</h2>
           </div>
           <div className="text-white/80 text-sm space-y-2 mb-4">
@@ -103,19 +103,19 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
           <p className="text-white/80 text-sm mb-4">Permanently delete your account and all associated data. This action cannot be undone.</p>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button variant="outline" className="border-red-400 text-red-600 hover:bg-red-950/50 hover:text-red-400 bg-[#0B132B] transition-smooth hover:scale-105"><Trash2 className="w-4 h-4 mr-2" />Delete My Account</Button>
+              <Button variant="outline" className="border-red-400 text-red-600 hover:bg-red-950/50 hover:text-red-400 bg-[#060B18] transition-smooth hover:scale-105"><Trash2 className="w-4 h-4 mr-2" />Delete My Account</Button>
             </AlertDialogTrigger>
-            <AlertDialogContent className="bg-[#0B132B] border border-white/10">
+            <AlertDialogContent className="bg-[#060B18] border border-white/10">
               <AlertDialogHeader>
                 <AlertDialogTitle className="text-white">Are you absolutely sure?</AlertDialogTitle>
                 <AlertDialogDescription className="text-white/80">This action cannot be undone. This will permanently delete your account and remove all your data.</AlertDialogDescription>
               </AlertDialogHeader>
               <div className="my-4">
                 <label className="text-sm text-white/80 mb-2 block">Type <span className="font-bold text-red-600">DELETE</span> to confirm:</label>
-                <Input type="text" value={confirmText} onChange={(e) => setConfirmText(e.target.value)} className="bg-[#0B132B] border-white/10 text-white focus:ring-2 focus:ring-red-500" placeholder="Type DELETE" />
+                <Input type="text" value={confirmText} onChange={(e) => setConfirmText(e.target.value)} className="bg-[#060B18] border-white/10 text-white focus:ring-2 focus:ring-red-500" placeholder="Type DELETE" />
               </div>
               <AlertDialogFooter>
-                <AlertDialogCancel onClick={() => setConfirmText("")} className="bg-[#0B132B] border-2 border-white/10 text-white/80 hover:bg-white/10">Cancel</AlertDialogCancel>
+                <AlertDialogCancel onClick={() => setConfirmText("")} className="bg-[#060B18] border-2 border-white/10 text-white/80 hover:bg-white/10">Cancel</AlertDialogCancel>
                 <AlertDialogAction onClick={handleDeleteAccount} disabled={isDeleting || confirmText !== "DELETE"} className="bg-red-600 text-white hover:bg-red-700 disabled:opacity-50">{isDeleting ? "Deleting..." : "Delete Account"}</AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>

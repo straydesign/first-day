@@ -122,9 +122,9 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="w-screen h-screen max-w-none m-0 p-4 md:p-8 bg-[#0B132B] border-0 animate-scaleIn shadow-none overflow-y-auto">
+      <DialogContent className="w-screen h-screen max-w-none m-0 p-4 md:p-8 bg-[#060B18] border-0 animate-scaleIn shadow-none overflow-y-auto">
         <VoronoiMosaic seed={99} tileCount={40} margin={10} gap={3} className="absolute inset-0 w-full h-full" />
-        <div className="absolute inset-0 bg-[#0B132B]/50" />
+        <div className="absolute inset-0 bg-[#060B18]/50" />
         <div className="relative z-10">
           <DialogTitle className="sr-only">{isLogin ? 'Log in to First Day' : 'Sign up for First Day'}</DialogTitle>
           <DialogDescription className="sr-only">{isLogin ? 'Enter your email and password' : 'Create an account'}</DialogDescription>
@@ -142,12 +142,12 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
             {!isLogin && (
               <div>
                 <Label htmlFor="name" className="text-white/80">Name</Label>
-                <Input id="name" type="text" placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} disabled={loading} className="bg-[#0B132B] border-white/10 text-white placeholder:text-white/50" />
+                <Input id="name" type="text" placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} disabled={loading} className="bg-[#060B18] border-white/10 text-white placeholder:text-white/50" />
               </div>
             )}
             <div>
               <Label htmlFor="email" className="text-white/80">Email</Label>
-              <Input id="email" type="email" placeholder="your@email.com" value={email} onChange={(e) => setEmail(e.target.value)} disabled={loading} className="bg-[#0B132B] border-white/10 text-white placeholder:text-white/50" />
+              <Input id="email" type="email" placeholder="your@email.com" value={email} onChange={(e) => setEmail(e.target.value)} disabled={loading} className="bg-[#060B18] border-white/10 text-white placeholder:text-white/50" />
             </div>
             <div>
               <div className="flex items-center justify-between mb-1">
@@ -156,12 +156,12 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
                   <button type="button" onClick={() => setShowForgotPassword(true)} className="text-xs text-white/80 hover:text-white hover:underline font-medium" disabled={loading}>Forgot password?</button>
                 )}
               </div>
-              <Input id="password" type="password" placeholder={isLogin ? 'Enter password' : 'Create password'} value={password} onChange={(e) => setPassword(e.target.value)} disabled={loading} className="bg-[#0B132B] border-white/10 text-white placeholder:text-white/50" />
+              <Input id="password" type="password" placeholder={isLogin ? 'Enter password' : 'Create password'} value={password} onChange={(e) => setPassword(e.target.value)} disabled={loading} className="bg-[#060B18] border-white/10 text-white placeholder:text-white/50" />
             </div>
             {!isLogin && (
               <div>
                 <Label htmlFor="confirmPassword" className="text-white/80">Confirm Password</Label>
-                <Input id="confirmPassword" type="password" placeholder="Re-enter password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} disabled={loading} className="bg-[#0B132B] border-white/10 text-white placeholder:text-white/50" />
+                <Input id="confirmPassword" type="password" placeholder="Re-enter password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} disabled={loading} className="bg-[#060B18] border-white/10 text-white placeholder:text-white/50" />
               </div>
             )}
             {!isLogin && (
@@ -178,13 +178,20 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
             </MosaicButton>
           </form>
 
-          <div className="mt-4 text-center space-y-2 max-w-md mx-auto">
+          <div className="mt-4 text-center space-y-3 max-w-md mx-auto">
             <div className="clip-badge-b inline-block">
-              <button onClick={() => { setIsLogin(!isLogin); setName(''); setEmail(''); setPassword(''); setConfirmPassword(''); }} className="text-white/80 hover:text-white hover:underline text-sm sm:text-base font-medium" disabled={loading}>
+              <button onClick={() => { setIsLogin(!isLogin); setName(''); setEmail(''); setPassword(''); setConfirmPassword(''); }} className="text-white/80 hover:text-white hover:underline text-sm sm:text-base font-bold" disabled={loading}>
                 {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Log in'}
               </button>
             </div>
-            {isLogin && <p className="text-xs text-white/80 px-2">First time here? Create an account to get started</p>}
+            <div>
+              <a
+                href="/preview"
+                className="inline-flex items-center gap-2 text-[#00EAFF] hover:text-white font-bold text-sm sm:text-base transition-colors"
+              >
+                Try the demo — no account needed
+              </a>
+            </div>
           </div>
         </div>
       </DialogContent>
