@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { FirstDayLogoMark } from "./FirstDayLogoMark";
 
 interface FirstDayLogoProps {
   className?: string;
@@ -30,26 +31,12 @@ export function FirstDayLogo({
   const isVertical = layout === "vertical";
   const isHero = size === "hero";
 
-  // Hero: massive wordmark, icon as accent
+  // Hero: massive wordmark, logo mark as accent
   if (isHero) {
     return (
       <div className={`flex flex-col items-center ${className}`}>
-        {/* Icon with colored ring */}
-        <div
-          className="rounded-full p-1 mb-4 drop-shadow-lg"
-          style={{
-            background: `linear-gradient(135deg, ${COLORS.green}, ${COLORS.cyan}, ${COLORS.purple})`,
-          }}
-        >
-          <Image
-            src="/app-icon.png"
-            alt="First Day"
-            width={64}
-            height={64}
-            className="rounded-full"
-            priority
-          />
-        </div>
+        {/* Logo mark — mountains + sun */}
+        <FirstDayLogoMark size={160} className="mb-4 drop-shadow-lg" />
 
         {/* Giant wordmark — each word its own color */}
         <div className="flex items-baseline gap-3 md:gap-5">
@@ -84,7 +71,7 @@ export function FirstDayLogo({
             style={{
               fontSize: "clamp(0.85rem, 2vw, 1.15rem)",
               fontWeight: 600,
-              color: COLORS.green,
+              color: COLORS.purple,
               letterSpacing: 3,
               textTransform: "uppercase" as const,
             }}
@@ -141,7 +128,7 @@ export function FirstDayLogo({
             style={{
               fontSize: taglineSize,
               fontWeight: 500,
-              color: COLORS.green,
+              color: COLORS.purple,
               letterSpacing: 0.5,
               textTransform: "uppercase" as const,
             }}
