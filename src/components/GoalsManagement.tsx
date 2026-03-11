@@ -198,7 +198,7 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                     <button
                       onClick={(e) => { e.stopPropagation(); handleDeleteGoal(goal.id, goal.title); }}
                       aria-label="Delete goal"
-                      className="bg-red-500 text-white p-3 hover:scale-105 transition-transform flex-shrink-0"
+                      className="bg-black text-white p-3 hover:scale-105 transition-transform flex-shrink-0"
                       style={{ clipPath: "polygon(0% 5%, 97% 0%, 100% 95%, 3% 100%)" }}
                     >
                       <Trash2 className="w-5 h-5" />
