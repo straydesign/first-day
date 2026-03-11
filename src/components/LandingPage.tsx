@@ -74,7 +74,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
     <div className="min-h-screen relative bg-black">
       {/* Aurora Background */}
       <div className="fixed inset-0 z-0 w-full h-full">
-        <Aurora colorStops={["#FFE633", "#FF2D55", "#5227FF"]} />
+        <Aurora colorStops={["#FFE633", "#FF2D55", "#7C4DFF"]} />
       </div>
 
       {/* Content */}

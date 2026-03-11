@@ -10,7 +10,7 @@ export const VORONOI_LIGHT = [
 
 /** Sunset Sky — Dark palette (deep backgrounds, shadows) */
 export const VORONOI_DARK = [
-  "#5227FF", // Deep Violet
+  "#7C4DFF", // Bright Lavender
   "#FF1493", // Hot Pink
   "#4FC3F7", // Carolina Blue
   "#FF4500", // Orange Red
@@ -20,7 +20,7 @@ export const VORONOI_DARK = [
 export const VORONOI_PALETTE = [...VORONOI_LIGHT, ...VORONOI_DARK] as const;
 
 /** Aurora gradient background colors (sunset accents). */
-export const AURORA_COLORS = ["#FFE633", "#FF2D55", "#5227FF"] as const;
+export const AURORA_COLORS = ["#FFE633", "#FF2D55", "#7C4DFF"] as const;
 
 /** Goal category type for color mapping. */
 export type GoalCategory = "fitness" | "creative" | "professional" | "lifestyle";

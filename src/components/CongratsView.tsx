@@ -30,7 +30,7 @@ interface CongratsViewProps {
   newAchievements?: Achievement[];
 }
 
-const CONFETTI_COLORS = ["#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF", "#5227FF"];
+const CONFETTI_COLORS = ["#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF", "#7C4DFF"];
 
 export function CongratsView({
   onViewCalendar,

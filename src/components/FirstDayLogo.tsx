@@ -140,11 +140,12 @@ function FirstDayLogoInner({
         <span
           className={`${showLetters ? "mt-2" : ""} drop-shadow-[0_1px_8px_rgba(0,0,0,0.5)] flex flex-wrap justify-center`}
           style={{
-            fontSize: isHero ? "clamp(2.5rem, 7vw, 5rem)" : "clamp(0.6rem, 1.5vw, 0.75rem)",
+            fontSize: isHero ? "clamp(1.4rem, 4.5vw, 4rem)" : "clamp(0.6rem, 1.5vw, 0.75rem)",
             fontWeight: 900,
-            letterSpacing: 3,
+            letterSpacing: 2,
             textTransform: "uppercase" as const,
             fontFamily: "var(--font-bebas), system-ui, sans-serif",
+            whiteSpace: "nowrap" as const,
           }}
         >
           {"first day of the rest of your life".split("").map((char, i) => (
@@ -152,7 +153,7 @@ function FirstDayLogoInner({
               key={i}
               style={{
                 color: char === " " ? "transparent" : VORONOI_PALETTE[i % VORONOI_PALETTE.length],
-                width: char === " " ? "0.4em" : undefined,
+                width: char === " " ? "0.3em" : undefined,
               }}
             >
               {char}

@@ -5,7 +5,7 @@ interface AuroraProps {
   colorStops?: string[];
 }
 
-export default function Aurora({ colorStops = ['#FFE633', '#FF2D55', '#5227FF'] }: AuroraProps) {
+export default function Aurora({ colorStops = ['#FFE633', '#FF2D55', '#7C4DFF'] }: AuroraProps) {
   const [mounted, setMounted] = useState(false);
   useEffect(() => { setMounted(true); }, []);
 
