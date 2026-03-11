@@ -10,6 +10,7 @@ import { API_BASE } from "@/lib/supabase/client";
 import Aurora from "./Aurora";
 import { AURORA_COLORS } from "@/constants";
 import { MosaicCard } from "./MosaicCard";
+import { MosaicButton } from "./MosaicButton";
 
 interface SettingsProps {
   accessToken: string;
@@ -59,11 +60,11 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
         <BackButton onClick={onBack} />
         <div className="mb-4 md:mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">Account Settings</h1>
-          <p className="text-teal-700">Manage your account and data preferences</p>
+          <p className="text-white/80 font-bold">Manage your account and data preferences</p>
         </div>
         <MosaicCard seed={1} className="p-4 md:p-6 mb-4 md:mb-6 backdrop-blur-sm">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 clip-diamond bg-teal-100 border border-teal-300 flex items-center justify-center"><User className="w-5 h-5 text-teal-600" /></div>
+            <div className="w-10 h-10 clip-diamond bg-[#242450] border border-white/20 flex items-center justify-center"><User className="w-5 h-5 text-white" /></div>
             <h2 className="text-xl font-semibold text-white">Account Information</h2>
           </div>
           <div className="space-y-3">
@@ -73,7 +74,7 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
         </MosaicCard>
         <MosaicCard seed={2} className="p-4 md:p-6 mb-4 md:mb-6 backdrop-blur-sm">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 clip-diamond bg-teal-100 border border-teal-300 flex items-center justify-center"><Shield className="w-5 h-5 text-teal-600" /></div>
+            <div className="w-10 h-10 clip-diamond bg-[#242450] border border-white/20 flex items-center justify-center"><Shield className="w-5 h-5 text-white" /></div>
             <h2 className="text-xl font-semibold text-white">Privacy</h2>
           </div>
           <div className="text-white/80 text-sm space-y-2 mb-4">
@@ -84,15 +85,15 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
         </MosaicCard>
         <MosaicCard seed={3} className="p-4 md:p-6 mb-4 md:mb-6 backdrop-blur-sm">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 clip-diamond bg-blue-100 border border-blue-300 flex items-center justify-center"><Bell className="w-5 h-5 text-blue-600" /></div>
+            <div className="w-10 h-10 clip-diamond bg-[#242450] border border-white/20 flex items-center justify-center"><Bell className="w-5 h-5 text-white" /></div>
             <h2 className="text-xl font-semibold text-white">Email Notifications</h2>
           </div>
           <div className="text-white/80 text-sm space-y-2 mb-4">
             <p>Daily reminder emails are automatically sent based on your goal&apos;s preferred time slot.</p>
           </div>
-          <Button onClick={handleSendTestEmail} disabled={isSendingTestEmail} variant="outline" className="border-2 border-teal-600 text-teal-600 hover:bg-white/10 transition-smooth hover:scale-105 disabled:hover:scale-100 bg-[#1a1a3e]">
+          <MosaicButton onClick={handleSendTestEmail} disabled={isSendingTestEmail} size="sm" className="transition-smooth hover:scale-105 disabled:hover:scale-100">
             <Bell className="w-4 h-4 mr-2" />{isSendingTestEmail ? "Sending..." : "Send Test Email"}
-          </Button>
+          </MosaicButton>
         </MosaicCard>
         <MosaicCard seed={4} className="p-4 md:p-6 bg-red-950/30 backdrop-blur-sm" colorSubset={["#ff6b6b"]}>
           <div className="flex items-center gap-3 mb-4">

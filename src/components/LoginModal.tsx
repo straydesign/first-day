@@ -11,6 +11,7 @@ import { ForgotPasswordModal } from './ForgotPasswordModal';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { validatePassword } from '@/lib/validation';
 import { MosaicBackground } from "./MosaicBackground";
+import { MosaicButton } from "./MosaicButton";
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -151,7 +152,7 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
               <div className="flex items-center justify-between mb-1">
                 <Label htmlFor="password" className="text-white/80">Password</Label>
                 {isLogin && (
-                  <button type="button" onClick={() => setShowForgotPassword(true)} className="text-xs text-teal-600 hover:underline" disabled={loading}>Forgot password?</button>
+                  <button type="button" onClick={() => setShowForgotPassword(true)} className="text-xs text-white/80 hover:text-white hover:underline font-medium" disabled={loading}>Forgot password?</button>
                 )}
               </div>
               <Input id="password" type="password" placeholder={isLogin ? 'Enter password' : 'Create password'} value={password} onChange={(e) => setPassword(e.target.value)} disabled={loading} className="bg-[#1a1a3e] border-white/10 text-white placeholder:text-white/50" />
@@ -167,18 +168,18 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
                 <Checkbox id="terms" checked={agreeToTerms} onCheckedChange={(checked) => setAgreeToTerms(checked === true)} className="mt-1 flex-shrink-0" />
                 <div className="flex flex-col text-white/80 text-sm">
                   <span>I agree to the</span>
-                  <button type="button" className="text-teal-600 hover:underline text-left" onClick={onShowTerms}>terms and conditions</button>
+                  <button type="button" className="text-white hover:underline text-left font-medium" onClick={onShowTerms}>terms and conditions</button>
                 </div>
               </div>
             )}
-            <Button type="submit" className="w-full transition-smooth hover:scale-105 disabled:hover:scale-100 bg-[#5227FF] text-white hover:bg-[#5227FF]/90" disabled={loading}>
+            <MosaicButton type="submit" className="w-full transition-smooth hover:scale-105 disabled:hover:scale-100" disabled={loading}>
               {loading ? 'Please wait...' : isLogin ? 'Log In' : 'Sign Up'}
-            </Button>
+            </MosaicButton>
           </form>
 
           <div className="mt-4 text-center space-y-2 max-w-md mx-auto">
             <div className="clip-badge-b inline-block">
-              <button onClick={() => { setIsLogin(!isLogin); setName(''); setEmail(''); setPassword(''); setConfirmPassword(''); }} className="text-teal-600 hover:underline text-sm sm:text-base" disabled={loading}>
+              <button onClick={() => { setIsLogin(!isLogin); setName(''); setEmail(''); setPassword(''); setConfirmPassword(''); }} className="text-white/80 hover:text-white hover:underline text-sm sm:text-base font-medium" disabled={loading}>
                 {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Log in'}
               </button>
             </div>

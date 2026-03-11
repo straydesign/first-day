@@ -8,6 +8,7 @@ import { MosaicCard } from "./MosaicCard";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CheckCircle2, Calendar, Youtube, ExternalLink, Zap } from "lucide-react";
 import { BackButton } from "@/components/ui/back-button";
+import { MosaicButton } from "./MosaicButton";
 import { previewDayXP } from "@/lib/engagement";
 import Aurora from "./Aurora";
 import { AURORA_COLORS } from "@/constants";
@@ -85,9 +86,9 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
           className="text-center mb-4 md:mb-8"
         >
           <div className="inline-flex items-center justify-center gap-2">
-            <Calendar className="w-8 h-8 text-teal-400" />
+            <Calendar className="w-8 h-8 text-white" />
             <h1 className="text-3xl md:text-4xl font-bold text-white">{isToday ? `Today (Day ${day.number})` : `Day ${day.number}`}</h1>
-            {day.dateDisplay && <span className="text-xl text-teal-300 ml-2">&bull; {day.dateDisplay}</span>}
+            {day.dateDisplay && <span className="text-xl text-white/80 font-bold ml-2">&bull; {day.dateDisplay}</span>}
           </div>
         </motion.div>
 
@@ -112,7 +113,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
                         transition={{ duration: 0.4, delay: 0.25 + index * 0.1, ease: "easeOut" }}
                         className="space-y-2"
                       >
-                        <div className={`flex items-start gap-2 md:gap-4 p-2 md:p-4 clip-tile-c border-2 transition-smooth ${completedActivities[index] ? 'border-[#7cff67] bg-[#7cff67]/10' : 'border-white/20 hover:border-teal-400'} ${isCompleted ? 'opacity-75' : ''}`}>
+                        <div className={`flex items-start gap-2 md:gap-4 p-2 md:p-4 clip-tile-c border-2 transition-smooth ${completedActivities[index] ? 'border-[#7cff67] bg-[#7cff67]/10' : 'border-white/20 hover:border-white/40'} ${isCompleted ? 'opacity-75' : ''}`}>
                           <Checkbox checked={completedActivities[index] || false} onCheckedChange={() => !isCompleted && toggleActivity(index)} id={`activity-${index}`} className="mt-1 flex-shrink-0 size-6 border-2 border-white/40 data-[state=checked]:border-lime-500 data-[state=checked]:bg-lime-500" disabled={isCompleted} />
                           <label htmlFor={`activity-${index}`} className="flex-1 min-w-0 cursor-pointer">
                             <div className="text-base md:text-lg leading-relaxed select-text text-white/90">{activityText}</div>
@@ -121,12 +122,12 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
                                 {resources.map((resource: ActivityResource, rIndex: number) => (
                                   <div key={rIndex} onClick={(e) => e.preventDefault()}>
                                     {resource.type === 'youtube' && (
-                                      <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent(resource.query ?? '')}`} target="_blank" rel="noopener noreferrer" className={`clip-badge-b inline-flex items-center gap-2 text-sm hover:underline ${completedActivities[index] ? 'text-lime-400 hover:text-lime-300' : 'text-teal-400 hover:text-teal-300'}`} onClick={(e) => e.stopPropagation()}>
+                                      <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent(resource.query ?? '')}`} target="_blank" rel="noopener noreferrer" className={`clip-badge-b inline-flex items-center gap-2 text-sm hover:underline ${completedActivities[index] ? 'text-lime-400 hover:text-lime-300' : 'text-white/80 hover:text-white font-medium'}`} onClick={(e) => e.stopPropagation()}>
                                         <Youtube className="w-4 h-4" />Search YouTube: {resource.query}
                                       </a>
                                     )}
                                     {resource.type === 'link' && (
-                                      <a href={resource.url} target="_blank" rel="noopener noreferrer" className={`clip-badge-b inline-flex items-center gap-2 text-sm hover:underline ${completedActivities[index] ? 'text-lime-400 hover:text-lime-300' : 'text-teal-400 hover:text-teal-300'}`} onClick={(e) => e.stopPropagation()}>
+                                      <a href={resource.url} target="_blank" rel="noopener noreferrer" className={`clip-badge-b inline-flex items-center gap-2 text-sm hover:underline ${completedActivities[index] ? 'text-lime-400 hover:text-lime-300' : 'text-white/80 hover:text-white font-medium'}`} onClick={(e) => e.stopPropagation()}>
                                         <ExternalLink className="w-4 h-4" />{resource.title || resource.url}
                                       </a>
                                     )}
@@ -170,7 +171,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
             <MosaicCard seed={3} className="backdrop-blur-md">
               <CardHeader><CardTitle className="text-2xl text-white">How did today go?</CardTitle></CardHeader>
               <CardContent>
-                <Textarea value={feedback} onChange={(e) => !isCompleted && setFeedback(e.target.value)} placeholder="Share your thoughts, challenges, or wins from today..." className="min-h-32 text-lg border-white/20 focus:border-teal-400 bg-white/5 text-white placeholder:text-white/40" disabled={isCompleted} />
+                <Textarea value={feedback} onChange={(e) => !isCompleted && setFeedback(e.target.value)} placeholder="Share your thoughts, challenges, or wins from today..." className="min-h-32 text-lg border-white/20 focus:border-white/40 bg-white/5 text-white placeholder:text-white/40" disabled={isCompleted} />
                 {!isCompleted && <p className="text-sm text-white/50 mt-2">Reflect on your progress -- what went well and what you can improve.</p>}
               </CardContent>
             </MosaicCard>
@@ -184,20 +185,20 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
             transition={{ duration: 0.4, delay: 0.45 + (hasActivities ? activities.length * 0.1 : 0), ease: "easeOut" }}
           >
             <div className="flex justify-center">
-              <Button onClick={handleSubmit} disabled={!canSubmit} variant={canSubmit ? "vivid" : "default"} className="px-6 py-5 md:px-8 md:py-6 text-base md:text-lg border border-white/10 disabled:opacity-50 transition-smooth hover:scale-105 disabled:hover:scale-100">Complete Day</Button>
+              <MosaicButton onClick={handleSubmit} disabled={!canSubmit} size="lg" className="px-6 py-5 md:px-8 md:py-6 text-base md:text-lg disabled:opacity-50 transition-smooth hover:scale-105 disabled:hover:scale-100">Complete Day</MosaicButton>
             </div>
             {canSubmit && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3 }}
-                className="flex items-center justify-center gap-2 mt-3 text-sm text-teal-300"
+                className="flex items-center justify-center gap-2 mt-3 text-sm text-white/80 font-medium"
               >
                 <Zap className="w-4 h-4 text-yellow-400" />
                 <span>You&apos;ll earn ~<strong>{xpPreview.total} XP</strong></span>
               </motion.div>
             )}
-            {!canSubmit && <p className="text-center text-sm text-teal-400 mt-4">Check at least one activity or add a reflection to continue</p>}
+            {!canSubmit && <p className="text-center text-sm text-white/60 font-medium mt-4">Check at least one activity or add a reflection to continue</p>}
           </motion.div>
         )}
       </div>

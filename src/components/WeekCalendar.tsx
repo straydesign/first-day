@@ -38,7 +38,7 @@ export function WeekCalendar({ weekNumber, days, progress = {}, onDayClick, plan
         const borderColor = isCompleted
           ? "border-l-lime-500"
           : day.isToday
-            ? "border-l-teal-500"
+            ? "border-l-white/50"
             : isPast && !isCompleted
               ? "border-l-coral-400"
               : "border-l-white/10";
@@ -46,7 +46,7 @@ export function WeekCalendar({ weekNumber, days, progress = {}, onDayClick, plan
         const badgeBg = isCompleted
           ? "bg-[#7cff67] text-[#0a0a1e]"
           : day.isToday
-            ? "bg-teal-500 text-white"
+            ? "bg-white/20 text-white font-bold"
             : isPast && !isCompleted
               ? "bg-coral-400 text-white"
               : "bg-[#242450] text-white/80";
@@ -90,14 +90,14 @@ export function WeekCalendar({ weekNumber, days, progress = {}, onDayClick, plan
               ) : (
                 <Circle
                   className={`w-5 h-5 md:w-6 md:h-6 ${
-                    day.isToday ? "text-teal-500" : isPast ? "text-coral-400" : "text-white/30"
+                    day.isToday ? "text-white" : isPast ? "text-coral-400" : "text-white/30"
                   }`}
                 />
               )}
             </div>
 
             {day.isToday && (
-              <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-teal-500 clip-diamond animate-pulse" />
+              <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-white/30 clip-diamond animate-pulse" />
             )}
           </button>
         );

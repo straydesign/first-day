@@ -12,23 +12,23 @@ export function Footer({ onPrivacyClick, onTermsClick }: FooterProps) {
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex flex-wrap gap-4 justify-center mb-4">
           {onPrivacyClick ? (
-            <button onClick={onPrivacyClick} className="text-white/80 hover:text-teal-400 underline text-sm transition-colors">Privacy Policy</button>
+            <button onClick={onPrivacyClick} className="text-white/80 hover:text-white underline text-sm transition-colors">Privacy Policy</button>
           ) : (
-            <a href="/privacy" className="text-white/80 hover:text-teal-400 underline text-sm transition-colors">Privacy Policy</a>
+            <a href="/privacy" className="text-white/80 hover:text-white underline text-sm transition-colors">Privacy Policy</a>
           )}
           {onTermsClick ? (
-            <button onClick={onTermsClick} className="text-white/80 hover:text-teal-400 underline text-sm transition-colors">Terms of Service</button>
+            <button onClick={onTermsClick} className="text-white/80 hover:text-white underline text-sm transition-colors">Terms of Service</button>
           ) : (
-            <a href="/terms" className="text-white/80 hover:text-teal-400 underline text-sm transition-colors">Terms of Service</a>
+            <a href="/terms" className="text-white/80 hover:text-white underline text-sm transition-colors">Terms of Service</a>
           )}
         </div>
         <div className="pt-4 text-center text-white/80 text-xs">
           <p>&copy; {currentYear} First Day. All rights reserved.</p>
           <p className="mt-0.5">
-            Contact: <a href="mailto:support@firstday.life" className="text-teal-400 underline hover:text-teal-300">support@firstday.life</a>
+            Contact: <a href="mailto:support@firstday.life" className="text-white underline hover:text-white/80 font-medium">support@firstday.life</a>
           </p>
           <p className="mt-0.5">
-            Built by <a href="https://straydesign.co" target="_blank" rel="noopener noreferrer" className="text-teal-400 underline hover:text-teal-300">Stray Design</a>
+            Built by <a href="https://straydesign.co" target="_blank" rel="noopener noreferrer" className="text-white underline hover:text-white/80 font-medium">Stray Design</a>
           </p>
         </div>
       </div>

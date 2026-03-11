@@ -8,6 +8,7 @@ import Aurora from "./Aurora";
 import { AURORA_COLORS } from "@/constants";
 import { useState } from "react";
 import { StreakBadge } from "./StreakBadge";
+import { MosaicButton } from "./MosaicButton";
 import { motion } from "framer-motion";
 import type { Plan, ProgressMap, EngagementState, SelectedDay } from "@/types";
 
@@ -111,8 +112,8 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
                 )}
               </div>
               <div className="inline-flex items-center justify-center gap-2 mb-4">
-                <CalendarIcon className="w-5 h-5 text-teal-600" />
-                <h2 className="text-lg md:text-xl text-teal-400">Your 30-Day Plan</h2>
+                <CalendarIcon className="w-5 h-5 text-white" />
+                <h2 className="text-lg md:text-xl text-white font-bold">Your 30-Day Plan</h2>
               </div>
               {engagement?.isAtRisk && (
                 <div className="mb-3 mx-auto max-w-md bg-[#242450] border border-coral-500/40 clip-tile-c px-4 py-2 flex items-center gap-2 animate-pulse">
@@ -122,9 +123,9 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
               )}
               {onEditGoal && (
                 <div className="flex justify-center mb-3">
-                  <Button onClick={onEditGoal} variant="outline" size="sm" className="border-2 border-teal-600 text-teal-400 hover:bg-white/10 transition-smooth hover:scale-105">
+                  <MosaicButton onClick={onEditGoal} size="sm" className="transition-smooth hover:scale-105">
                     <Edit2 className="w-4 h-4 mr-1" />Edit Goal
-                  </Button>
+                  </MosaicButton>
                 </div>
               )}
             </div>)}
@@ -140,7 +141,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
               >
                 <div className="mb-3 flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <h3 className="text-xl md:text-2xl font-bold text-teal-300">Week {week.weekNumber}: {week.label}</h3>
+                    <h3 className="text-xl md:text-2xl font-bold text-white">Week {week.weekNumber}: {week.label}</h3>
                     {!week.isUnlocked && <span className="text-xs md:text-sm text-purple-300 bg-purple-900/40 px-3 py-1 clip-badge-a font-medium">Locked</span>}
                   </div>
                 </div>

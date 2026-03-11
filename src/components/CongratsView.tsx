@@ -6,6 +6,7 @@ import { Calendar, ArrowRight, Zap } from "lucide-react";
 import Aurora from "./Aurora";
 import { AURORA_COLORS } from "@/constants";
 import { AchievementCard } from "./AchievementCard";
+import { MosaicButton } from "./MosaicButton";
 import type { Milestone, XPBreakdown, Achievement } from "@/types";
 
 interface ConfettiPiece {
@@ -154,7 +155,7 @@ export function CongratsView({
 
           {goalTitle && (
             <motion.p
-              className="text-lg md:text-2xl text-teal-800 font-semibold mb-4 px-4"
+              className="text-lg md:text-2xl text-white/80 font-bold mb-4 px-4"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.6, ease: "easeOut" }}
@@ -164,7 +165,7 @@ export function CongratsView({
           )}
 
           <motion.p
-            className="text-base md:text-xl text-teal-700 mb-2 max-w-lg mx-auto px-4"
+            className="text-base md:text-xl text-white/70 font-medium mb-2 max-w-lg mx-auto px-4"
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.7, ease: "easeOut" }}
@@ -199,7 +200,7 @@ export function CongratsView({
               animate={{ opacity: 1 }}
               transition={{ duration: 0.4, delay: 0.7 }}
             >
-              <p className="text-sm font-semibold text-yellow-700 mb-2">
+              <p className="text-sm font-semibold text-yellow-400 mb-2">
                 New Achievement{newAchievements.length > 1 ? "s" : ""} Unlocked!
               </p>
               <div className="flex justify-center gap-3 flex-wrap">
@@ -239,7 +240,7 @@ export function CongratsView({
           )}
           {daysRemaining === 0 && (
             <motion.p
-              className="text-sm md:text-base text-lime-700 font-semibold mb-6 md:mb-12"
+              className="text-sm md:text-base text-lime-400 font-semibold mb-6 md:mb-12"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 1.0, ease: "easeOut" }}
@@ -255,20 +256,20 @@ export function CongratsView({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 1.1, ease: "easeOut" }}
           >
-            <Button
+            <MosaicButton
               onClick={onViewCalendar}
-              variant="vivid"
-              className="px-6 py-5 md:px-8 md:py-6 text-base md:text-lg shadow-lg hover:shadow-xl transition-smooth hover:scale-105 bg-[#00c7fc] text-[#0a0a1e]"
+              size="lg"
+              className="px-6 py-5 md:px-8 md:py-6 text-base md:text-lg shadow-lg hover:shadow-xl transition-smooth hover:scale-105"
             >
               <Calendar className="mr-2 w-5 h-5 flex-shrink-0" />View Calendar
-            </Button>
-            <Button
+            </MosaicButton>
+            <MosaicButton
               onClick={onDoMore}
-              variant="outline"
-              className="px-6 py-5 md:px-8 md:py-6 text-base md:text-lg border-2 border-white/20 text-white hover:bg-[#242450] shadow-md hover:shadow-lg transition-smooth hover:scale-105 bg-[#0a0a1e]"
+              size="lg"
+              className="px-6 py-5 md:px-8 md:py-6 text-base md:text-lg shadow-md hover:shadow-lg transition-smooth hover:scale-105"
             >
               <ArrowRight className="mr-2 w-5 h-5 flex-shrink-0" />Back to Goals
-            </Button>
+            </MosaicButton>
           </motion.div>
         </div>
       </div>

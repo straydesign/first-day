@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { API_BASE } from '@/lib/supabase/client';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { MosaicButton } from './MosaicButton';
 
 interface ForgotPasswordModalProps {
   isOpen: boolean;
@@ -72,12 +73,12 @@ export function ForgotPasswordModal({ isOpen, onClose }: ForgotPasswordModalProp
               <Label htmlFor="reset-email" className="text-white/80">Email</Label>
               <Input id="reset-email" type="email" placeholder="your@email.com" value={email} onChange={(e) => setEmail(e.target.value)} disabled={loading} className="bg-[#12122e] border-white/10" />
             </div>
-            <Button type="submit" className="w-full transition-smooth hover:scale-105 disabled:hover:scale-100" disabled={loading}>
+            <MosaicButton type="submit" className="w-full transition-smooth hover:scale-105 disabled:hover:scale-100" disabled={loading}>
               {loading ? 'Sending...' : 'Send Reset Link'}
-            </Button>
+            </MosaicButton>
           </form>
         ) : (
-          <Button onClick={onClose} className="w-full mt-4 transition-smooth hover:scale-105">Done</Button>
+          <MosaicButton onClick={onClose} className="w-full mt-4 transition-smooth hover:scale-105">Done</MosaicButton>
         )}
       </DialogContent>
     </Dialog>

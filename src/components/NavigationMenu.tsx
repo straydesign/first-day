@@ -38,7 +38,7 @@ export function NavigationMenu({
               onClick={item.onClick}
               variant={isActive ? "default" : "outline"}
               size="sm"
-              className={`transition-smooth hover:scale-105 ${isActive ? "" : "bg-transparent border-2 border-teal-600 text-teal-600 hover:bg-white/10"}`}
+              className={`transition-smooth hover:scale-105 ${isActive ? "" : "bg-transparent border-2 border-white font-bold text-white hover:bg-white/10"}`}
             >
               <Icon className="w-4 h-4 mr-2" />
               {item.label}

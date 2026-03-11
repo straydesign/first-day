@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Bell } from "lucide-react";
+import { MosaicButton } from "./MosaicButton";
 
 interface NotificationSettingsProps {
   notificationsEnabled: boolean;
@@ -15,7 +16,7 @@ export function NotificationSettings({ notificationsEnabled, onToggle, onClose }
     <Dialog open onOpenChange={onClose}>
       <DialogContent className="bg-[#1a1a3e] border border-white/10 max-w-md">
         <DialogTitle className="flex items-center gap-3">
-          <Bell className="w-6 h-6 text-teal-600" />
+          <Bell className="w-6 h-6 text-white" />
           <span className="text-xl font-bold text-white">Notification Settings</span>
         </DialogTitle>
         <div className="space-y-4">
@@ -27,11 +28,11 @@ export function NotificationSettings({ notificationsEnabled, onToggle, onClose }
             <Switch
               checked={notificationsEnabled}
               onCheckedChange={onToggle}
-              className="data-[state=checked]:bg-teal-600"
+              className="data-[state=checked]:bg-[#7cff67]"
             />
           </div>
         </div>
-        <Button onClick={onClose} className="w-full mt-2 transition-smooth hover:scale-105">Done</Button>
+        <MosaicButton onClick={onClose} className="w-full mt-2 transition-smooth hover:scale-105">Done</MosaicButton>
       </DialogContent>
     </Dialog>
   );

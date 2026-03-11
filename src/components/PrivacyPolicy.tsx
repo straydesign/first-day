@@ -70,7 +70,7 @@ export function PrivacyPolicy({ onBack, onNavigate }: PrivacyPolicyProps) {
           <p className="text-white/80">We may update this privacy policy from time to time. We will notify you of any material changes by posting the new policy on this page and updating the &quot;Last updated&quot; date.</p>
 
           <h2 className="text-2xl font-semibold text-white">10. Contact</h2>
-          <p className="text-white/80">For questions about this privacy policy or to exercise your data rights, contact us at <a href="mailto:support@firstday.life" className="text-teal-600 hover:underline">support@firstday.life</a>.</p>
+          <p className="text-white/80">For questions about this privacy policy or to exercise your data rights, contact us at <a href="mailto:support@firstday.life" className="text-white font-bold hover:underline">support@firstday.life</a>.</p>
         </div>
       </div>
       <Footer onTermsClick={() => onNavigate?.("terms")} />

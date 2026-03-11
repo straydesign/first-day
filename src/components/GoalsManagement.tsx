@@ -9,6 +9,7 @@ import { AURORA_COLORS } from "@/constants";
 import { Target, Plus, Trash2, Calendar, CheckCircle, Menu, LogOut } from "lucide-react";
 import { createClient, API_BASE } from "@/lib/supabase/client";
 import { BouncingButton } from "./BouncingButton";
+import { MosaicButton } from "./MosaicButton";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { toast } from "sonner";
 import { StreakBadge } from "./StreakBadge";
@@ -129,7 +130,7 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
       <div className="min-h-screen relative bg-black flex items-center justify-center">
         <div className="fixed inset-0 z-0 w-full h-full"><Aurora colorStops={[...AURORA_COLORS]} /></div>
         <div className="fixed top-0 left-0 right-0 z-20 h-1">
-          <div className="h-full bg-teal-400 animate-shimmer" style={{ width: '60%', animation: 'loadingBar 1.5s ease-in-out infinite', clipPath: 'polygon(0 0, 100% 0, 96% 100%, 0 100%)' }} />
+          <div className="h-full bg-white/60 animate-shimmer" style={{ width: '60%', animation: 'loadingBar 1.5s ease-in-out infinite', clipPath: 'polygon(0 0, 100% 0, 96% 100%, 0 100%)' }} />
         </div>
         <div className="relative z-10">
           <p className="text-lg text-white/80 font-medium">Loading your goals...</p>
@@ -143,7 +144,7 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
       <div className="sticky top-0 z-50 flex justify-end px-4 py-2">
         <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
           <SheetTrigger asChild>
-            <Button variant="outline" size="sm" className="clip-btn-c hover-geo bg-transparent border-2 border-teal-600 text-teal-600 hover:bg-white/10 px-5 py-2" aria-label="Menu">
+            <Button variant="outline" size="sm" className="clip-btn-c hover-geo bg-transparent border-2 border-white font-bold text-white hover:bg-white/10 px-5 py-2" aria-label="Menu">
               <Menu className="w-5 h-5" />
             </Button>
           </SheetTrigger>
@@ -165,7 +166,7 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
           <>
             <div className="text-center mb-4 md:mb-8 px-4">
               <h1 className="text-3xl md:text-5xl font-bold mb-2 md:mb-4 text-white">Today&apos;s Activities</h1>
-              <p className="text-xl text-teal-700">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</p>
+              <p className="text-xl text-white/80 font-bold">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</p>
             </div>
             <div className="animate-fadeIn space-y-4">
               {goals.map(goal => (
@@ -179,18 +180,18 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                             <StreakBadge streak={engagement.currentStreak} isAtRisk={engagement.isAtRisk} size="sm" />
                           )}
                         </div>
-                        <CardDescription className="text-teal-600">Day {goalCurrentDays[goal.id] || 0} of 30</CardDescription>
+                        <CardDescription className="text-white/70 font-bold">Day {goalCurrentDays[goal.id] || 0} of 30</CardDescription>
                       </div>
                       <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); handleDeleteGoal(goal.id, goal.title); }} className="text-red-400 hover:text-red-300 hover:bg-red-500/10" aria-label="Delete goal">
                         <Trash2 className="w-5 h-5" />
                       </Button>
                     </div>
-                    <Button size="lg" onClick={() => onSelectGoal(goal.id)} variant="outline" className="w-full bg-transparent border-2 border-teal-600 text-teal-600 hover:bg-white/10 transition-smooth hover:scale-105 mb-3">
+                    <MosaicButton size="lg" onClick={() => onSelectGoal(goal.id)} className="w-full transition-smooth hover:scale-105 mb-3">
                       <Calendar className="w-5 h-5 mr-2" />View 30 Day Plan
-                    </Button>
-                    <Button size="lg" className="w-full transition-smooth hover:scale-105" onClick={(e) => { e.stopPropagation(); if (onViewTodayActivities) onViewTodayActivities(goal.id); else onSelectGoal(goal.id); }}>
+                    </MosaicButton>
+                    <MosaicButton size="lg" className="w-full transition-smooth hover:scale-105" onClick={(e) => { e.stopPropagation(); if (onViewTodayActivities) onViewTodayActivities(goal.id); else onSelectGoal(goal.id); }}>
                       <CheckCircle className="w-5 h-5 mr-2" />View Today&apos;s Activities
-                    </Button>
+                    </MosaicButton>
                   </CardHeader>
                 </MosaicCard>
               ))}
@@ -204,9 +205,9 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                 </div>
               )}
               <div className="pt-2 md:pt-4 pb-4 md:pb-8 px-4">
-                <Button onClick={onCreateGoal} size="lg" variant="outline" className="w-full bg-transparent border-2 border-teal-600 text-teal-600 hover:bg-white/10 transition-smooth hover:scale-105 text-lg py-4 md:py-6 clip-btn-a">
+                <MosaicButton onClick={onCreateGoal} size="lg" className="w-full transition-smooth hover:scale-105 text-lg py-4 md:py-6">
                   <Plus className="w-6 h-6 mr-2" />Add New Goal
-                </Button>
+                </MosaicButton>
               </div>
             </div>
           </>
@@ -214,7 +215,7 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
           <>
             <div className="text-center mb-4 md:mb-8 px-4">
               <h1 className="text-3xl md:text-5xl font-bold mb-2 md:mb-4 text-white">Set Your First Goal</h1>
-              <p className="text-xl text-teal-700">Pick any goal and get a personalized 30-day plan</p>
+              <p className="text-xl text-white/80 font-bold">Pick any goal and get a personalized 30-day plan</p>
             </div>
             <BouncingButton onClick={onCreateGoal} />
           </>

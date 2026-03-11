@@ -60,7 +60,7 @@ export function TermsOfService({ onBack, onNavigate }: TermsOfServiceProps) {
           <p className="text-white/80">We may update these terms from time to time. We will notify you of material changes by posting the updated terms on this page. Continued use of the service after changes constitutes acceptance of the new terms.</p>
 
           <h2 className="text-2xl font-semibold text-white">11. Contact</h2>
-          <p className="text-white/80">For questions about these terms, contact us at <a href="mailto:support@firstday.life" className="text-teal-600 hover:underline">support@firstday.life</a>.</p>
+          <p className="text-white/80">For questions about these terms, contact us at <a href="mailto:support@firstday.life" className="text-white font-bold hover:underline">support@firstday.life</a>.</p>
         </div>
       </div>
       <Footer onPrivacyClick={() => onNavigate?.("privacy")} />

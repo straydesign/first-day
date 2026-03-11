@@ -315,8 +315,9 @@ html {
   filter: brightness(1.05);
 }
 .mosaic-btn:active {
+  background-image: url('/buttons/mosaic-btn-pressed.png');
   transform: scale(0.97);
-  filter: brightness(0.9);
+  filter: brightness(0.95);
 }
 .mosaic-btn:focus-visible {
   outline: none;

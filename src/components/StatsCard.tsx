@@ -13,7 +13,7 @@ export function StatsCard({ engagement }: StatsCardProps) {
     <div className="grid grid-cols-2 gap-3">
       <div className="bg-[#1a1a3e] backdrop-blur-sm clip-tile-a p-3 border border-white/15">
         <div className="flex items-center gap-2 mb-1">
-          <Target className="w-4 h-4 text-teal-400" />
+          <Target className="w-4 h-4 text-white" />
           <span className="text-xs text-white/70 font-medium">Completion</span>
         </div>
         <p className="text-3xl font-bold text-white">{completionRate}%</p>

@@ -204,7 +204,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                 {/* Step 1 */}
                 <MosaicCard seed={10} tileVariant="a" mosaicOpacity={0.85} className="p-5 md:p-8">
                   <div className="flex gap-5 items-start">
-                    <div className="clip-diamond w-14 h-14 bg-teal-600 text-white flex items-center justify-center shadow-md text-xl font-bold flex-shrink-0">
+                    <div className="clip-diamond w-14 h-14 bg-[#242450] text-white flex items-center justify-center shadow-md text-xl font-bold flex-shrink-0">
                       1
                     </div>
                     <div className="flex-1">
@@ -351,7 +351,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                 <div className="mt-6 grid grid-cols-3 gap-3 max-w-lg mx-auto">
                   <div className="clip-badge-a text-center bg-[#242450]/80 py-3 px-2 border border-white/10">
                     <div className="flex items-center justify-center gap-1 mb-0.5">
-                      <Target className="w-3.5 h-3.5 text-teal-400" />
+                      <Target className="w-3.5 h-3.5 text-white" />
                       <span className="text-xs text-white/70 font-medium">Rate</span>
                     </div>
                     <p className="text-3xl font-bold text-white">87%</p>
