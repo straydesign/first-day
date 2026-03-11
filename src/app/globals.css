@@ -306,6 +306,10 @@ html {
    ============================================ */
 .mosaic-card {
   background: url('/buttons/mosaic-card-bg.png') center / cover no-repeat;
+  transition: background-image 0.3s ease;
+}
+.mosaic-card:hover {
+  background-image: url('/buttons/mosaic-card-hover.png');
 }
 
 /* ============================================
