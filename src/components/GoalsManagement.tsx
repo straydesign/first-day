@@ -193,34 +193,19 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                     <p className="text-xl text-white font-bold">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</p>
                   </div>
                 </div>
-                <div className="max-w-2xl mx-auto flex-1 flex flex-col w-full">
-                  <div className="mb-6 flex items-start justify-between">
-                    <div className="flex-1">
+                <div className="w-full flex-1 flex flex-col">
+                  {/* Top bar: Day X + streak + trash */}
+                  <div className="flex items-center justify-between mb-4 px-2">
+                    <div className="flex items-center gap-2">
                       <div
-                        className="inline-flex items-center gap-2 mb-1 bg-black px-5 py-2"
-                        style={{ clipPath: "polygon(1% 0%, 100% 3%, 98% 100%, 0% 96%)" }}
-                      >
-                        <CardTitle className="text-2xl">
-                          {monotone ? (
-                            <span className="text-white">{goal.title}</span>
-                          ) : (
-                            goal.title.split(" ").map((word, i) => (
-                              <span key={i} style={{ color: ["#FFE633","#FF6B2B","#FF2D55","#00EAFF","#FF10F0","#FF1493","#4FC3F7","#FF4500"][i % 8] }}>
-                                {word}{i < goal.title.split(" ").length - 1 ? " " : ""}
-                              </span>
-                            ))
-                          )}
-                        </CardTitle>
-                        {engagement && (engagement.currentStreak > 0 || engagement.isAtRisk) && (
-                          <StreakBadge streak={engagement.currentStreak} isAtRisk={engagement.isAtRisk} size="sm" />
-                        )}
-                      </div>
-                      <div
-                        className="inline-block bg-black px-4 py-1.5 mt-1"
+                        className="inline-block bg-black px-4 py-1.5"
                         style={{ clipPath: "polygon(0% 0%, 97% 5%, 100% 95%, 3% 100%)" }}
                       >
                         <CardDescription className="text-white font-bold">Day {goalCurrentDays[goal.id] || 0} of 30</CardDescription>
                       </div>
+                      {engagement && (engagement.currentStreak > 0 || engagement.isAtRisk) && (
+                        <StreakBadge streak={engagement.currentStreak} isAtRisk={engagement.isAtRisk} size="sm" />
+                      )}
                     </div>
                     <button
                       onClick={(e) => { e.stopPropagation(); handleDeleteGoal(goal.id, goal.title); }}
@@ -231,9 +216,31 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                       <Trash2 className="w-5 h-5" />
                     </button>
                   </div>
+                  {/* Giant goal title — word by word, filling the screen */}
+                  <div className="flex-1 flex items-center justify-center px-4 md:px-8">
+                    <div
+                      className="bg-black px-6 py-8 md:px-10 md:py-12 w-full"
+                      style={{ clipPath: "polygon(1% 0%, 100% 2%, 99% 98%, 0% 100%)" }}
+                    >
+                      <h1
+                        className="text-center font-black uppercase leading-[0.95] break-words"
+                        style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif", fontSize: "clamp(4rem, 15vw, 10rem)" }}
+                      >
+                        {monotone ? (
+                          <span className="text-white">{goal.title}</span>
+                        ) : (
+                          goal.title.split(" ").map((word, i) => (
+                            <span key={i} className="block" style={{ color: ["#FFE633","#FF6B2B","#FF2D55","#00EAFF","#FF10F0","#FF1493","#4FC3F7","#FF4500"][i % 8] }}>
+                              {word}
+                            </span>
+                          ))
+                        )}
+                      </h1>
+                    </div>
+                  </div>
                   {/* Stats & Achievements */}
                   {engagement && (
-                    <div className="space-y-4 mb-6">
+                    <div className="space-y-4 my-6 px-6 md:px-10">
                       <StatsCard engagement={engagement} />
                       <div className="flex justify-center">
                         <AchievementsSheet achievements={engagement.achievements} />
