@@ -144,9 +144,13 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
       <div className="sticky top-0 z-50 flex justify-end px-4 py-2">
         <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
           <SheetTrigger asChild>
-            <ShardButton seed={10} size="sm" aria-label="Menu">
+            <button
+              aria-label="Menu"
+              className="bg-black text-white p-3 hover:scale-105 transition-transform"
+              style={{ clipPath: "polygon(3% 0%, 100% 5%, 97% 100%, 0% 92%)" }}
+            >
               <Menu className="w-5 h-5" />
-            </ShardButton>
+            </button>
           </SheetTrigger>
           <SheetContent side="right" className="w-[168px] backdrop-blur-xl border-l-2 border-white/10 pt-12">
             <SheetTitle className="text-lg font-bold text-white mb-4 pt-8 text-center">Menu</SheetTitle>
@@ -165,17 +169,17 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
         {goals.length > 0 ? (
           <div className="animate-fadeIn">
             {goals.map(goal => (
-              <MosaicCard key={goal.id} seed={goals.indexOf(goal)} className="backdrop-blur-sm min-h-screen p-6 md:p-10">
-                <div className="text-center mb-6 md:mb-8 space-y-3">
+              <MosaicCard key={goal.id} seed={goals.indexOf(goal)} className="backdrop-blur-sm min-h-screen pt-0 px-6 pb-6 md:px-10 md:pb-10">
+                <div className="text-center mb-6 md:mb-8 space-y-2 -mx-6 md:-mx-10">
                   <div
-                    className="inline-block bg-black px-8 py-3"
-                    style={{ clipPath: "polygon(1% 0%, 100% 3%, 99% 97%, 0% 100%)" }}
+                    className="bg-black px-8 py-4"
+                    style={{ clipPath: "polygon(0% 0%, 100% 0%, 99% 97%, 1% 100%)" }}
                   >
                     <h1 className="text-3xl md:text-5xl font-bold text-white">Today&apos;s Activities</h1>
                   </div>
                   <div
-                    className="inline-block bg-black px-6 py-2"
-                    style={{ clipPath: "polygon(2% 0%, 98% 4%, 100% 96%, 0% 100%)" }}
+                    className="bg-black px-6 py-2"
+                    style={{ clipPath: "polygon(0% 0%, 100% 4%, 99% 96%, 1% 100%)" }}
                   >
                     <p className="text-xl text-white font-bold">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</p>
                   </div>
@@ -200,7 +204,25 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                       <Trash2 className="w-5 h-5" />
                     </Button>
                   </div>
-                  <div className="space-y-3 mb-6">
+                  <div className="mb-6">
+                    <button
+                      onClick={onCreateGoal}
+                      className="w-full bg-black text-white py-4 md:py-6 text-lg font-black uppercase tracking-wide hover:scale-105 transition-transform flex items-center justify-center gap-2"
+                      style={{ clipPath: "polygon(2% 0%, 100% 4%, 98% 100%, 0% 96%)" }}
+                    >
+                      <Plus className="w-6 h-6" />Add New Goal
+                    </button>
+                  </div>
+                  {/* Stats & Achievements */}
+                  {engagement && (
+                    <div className="space-y-4 mb-6">
+                      <StatsCard engagement={engagement} />
+                      <div className="flex justify-center">
+                        <AchievementsSheet achievements={engagement.achievements} />
+                      </div>
+                    </div>
+                  )}
+                  <div className="space-y-3">
                     <button
                       onClick={() => onSelectGoal(goal.id)}
                       className="w-full bg-black text-white py-4 text-lg font-black uppercase tracking-wide hover:scale-105 transition-transform flex items-center justify-center gap-2"
@@ -216,22 +238,6 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                       <CheckCircle className="w-5 h-5" />View Today&apos;s Activities
                     </button>
                   </div>
-                  {/* Stats & Achievements */}
-                  {engagement && (
-                    <div className="space-y-4 mb-6">
-                      <StatsCard engagement={engagement} />
-                      <div className="flex justify-center">
-                        <AchievementsSheet achievements={engagement.achievements} />
-                      </div>
-                    </div>
-                  )}
-                  <button
-                    onClick={onCreateGoal}
-                    className="w-full bg-black text-white py-4 md:py-6 text-lg font-black uppercase tracking-wide hover:scale-105 transition-transform flex items-center justify-center gap-2"
-                    style={{ clipPath: "polygon(2% 0%, 100% 4%, 98% 100%, 0% 96%)" }}
-                  >
-                    <Plus className="w-6 h-6" />Add New Goal
-                  </button>
                 </div>
               </MosaicCard>
             ))}
