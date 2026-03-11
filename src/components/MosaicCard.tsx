@@ -30,7 +30,7 @@ function MosaicCardInner({
   mosaicOpacity = 0.85,
   mosaicDensity = 12,
   seed = 0,
-  showMosaic = true,
+  showMosaic = false,
   colorSubset,
   safeZone,
   className,
@@ -42,7 +42,7 @@ function MosaicCardInner({
     <div
       className={cn(
         `clip-tile-${variant}`,
-        "relative overflow-hidden border border-white/15 bg-[#0a0a1e] focus-geo",
+        "relative overflow-hidden border border-white/15 bg-[#1a1a3e] focus-geo",
         className
       )}
     >

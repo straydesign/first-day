@@ -67,7 +67,7 @@ function DialogContent({
         )}
         {...props}
       >
-        <MosaicBackground density={8} opacity={0.4} seed={42} safeZone={{ yStart: 0.15, yEnd: 0.85, bleedProbability: 0.15 }} />
+        {/* mosaic removed — clean surface */}
         <div className="relative z-10 grid gap-4">
           {children}
         </div>

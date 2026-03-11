@@ -82,7 +82,7 @@ function SheetContent({
         )}
         {...props}
       >
-        <MosaicBackground density={8} opacity={0.35} seed={77} safeZone={{ yStart: 0.10, yEnd: 0.90, bleedProbability: 0.15 }} />
+        {/* mosaic removed — clean surface */}
         <div className="relative z-10 flex flex-col gap-4 flex-1">
           {children}
         </div>

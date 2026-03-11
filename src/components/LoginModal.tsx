@@ -122,7 +122,7 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="w-screen h-screen max-w-none m-0 p-4 md:p-8 bg-[#1a1a3e] border-0 animate-scaleIn shadow-none overflow-y-auto">
-        <MosaicBackground density={8} opacity={0.5} seed={55} safeZone={{ yStart: 0.15, yEnd: 0.85, bleedProbability: 0.15 }} />
+        {/* mosaic removed — clean surface */}
         <div className="relative z-10">
           <DialogTitle className="sr-only">{isLogin ? 'Log in to First Day' : 'Sign up for First Day'}</DialogTitle>
           <DialogDescription className="sr-only">{isLogin ? 'Enter your email and password' : 'Create an account'}</DialogDescription>
