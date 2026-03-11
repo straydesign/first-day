@@ -134,9 +134,6 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
             >
               <FirstDayLogo size="hero" showTagline={true} showLetters={false} className="w-full" />
             </div>
-            <p className="text-black/70 mt-3 text-sm sm:text-base text-center animate-slideInUp" style={{ animationDelay: '0.1s' }}>
-              {isLogin ? 'Welcome back!' : 'Start your journey today'}
-            </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto">
@@ -178,25 +175,32 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
                 </div>
               </div>
             )}
-            <ShardButton seed={3} size="lg" type="submit" className="w-full transition-smooth hover:scale-105 disabled:hover:scale-100 text-xl font-black uppercase tracking-wide" disabled={loading}>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-black text-white py-4 text-xl font-black uppercase tracking-wide hover:scale-105 transition-transform disabled:hover:scale-100"
+              style={{ clipPath: "polygon(1% 0%, 100% 4%, 99% 96%, 0% 100%)" }}
+            >
               {loading ? 'Please wait...' : isLogin ? 'Log In' : 'Sign Up'}
-            </ShardButton>
+            </button>
           </form>
 
-          <div className="mt-6 text-center space-y-4 max-w-md mx-auto">
-            <div>
-              <button onClick={() => { setIsLogin(!isLogin); setName(''); setEmail(''); setPassword(''); setConfirmPassword(''); }} className="text-black hover:underline text-lg font-black uppercase tracking-wide" disabled={loading}>
-                {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Log in'}
-              </button>
-            </div>
-            <div>
-              <a
-                href="/preview"
-                className="inline-flex items-center gap-2 text-black hover:underline font-black text-lg uppercase tracking-wide transition-colors"
-              >
-                Try the demo — no account needed
-              </a>
-            </div>
+          <div className="mt-auto pt-8 pb-4 flex flex-col items-center gap-3 max-w-md mx-auto">
+            <button
+              onClick={() => { setIsLogin(!isLogin); setName(''); setEmail(''); setPassword(''); setConfirmPassword(''); }}
+              disabled={loading}
+              className="bg-black text-white px-6 py-3 font-black text-sm uppercase tracking-wide hover:scale-105 transition-transform"
+              style={{ clipPath: "polygon(2% 0%, 98% 5%, 100% 95%, 0% 100%)" }}
+            >
+              {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Log in'}
+            </button>
+            <a
+              href="/preview"
+              className="bg-black text-white px-6 py-3 font-black text-sm uppercase tracking-wide hover:scale-105 transition-transform inline-block"
+              style={{ clipPath: "polygon(0% 5%, 97% 0%, 100% 100%, 3% 95%)" }}
+            >
+              Try the demo — no account needed
+            </a>
           </div>
         </div>
       </DialogContent>
