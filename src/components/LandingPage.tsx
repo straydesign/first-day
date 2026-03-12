@@ -93,12 +93,16 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
             <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
           </div>
 
-          {/* Top corners — Log In shard / Get Started text */}
+          {/* Top corners — Log In shard / Get Started — color on scroll */}
           <div className="absolute top-[100px] left-4 z-50">
             <button
               onClick={onLogin || onGetStarted}
-              className="bg-black px-8 py-4 text-white font-black text-lg tracking-wide uppercase hover:scale-105 transition-transform btn-shake"
-              style={{ clipPath: "polygon(3% 0%, 100% 8%, 97% 100%, 0% 88%)" }}
+              className="px-8 py-4 font-black text-lg tracking-wide uppercase hover:scale-105 transition-all duration-300 btn-shake"
+              style={{
+                backgroundColor: isNavSticky ? "#FFE633" : "#000000",
+                color: isNavSticky ? "#000000" : "#ffffff",
+                clipPath: "polygon(3% 0%, 100% 8%, 97% 100%, 0% 88%)",
+              }}
             >
               Log In
             </button>
@@ -106,8 +110,12 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
           <div className="absolute top-[100px] right-4 z-50">
             <button
               onClick={onGetStarted}
-              className="bg-black px-8 py-4 text-white font-black text-lg tracking-wide uppercase hover:scale-105 transition-transform btn-shake"
-              style={{ clipPath: "polygon(0% 8%, 97% 0%, 100% 88%, 3% 100%)" }}
+              className="px-8 py-4 font-black text-lg tracking-wide uppercase hover:scale-105 transition-all duration-300 btn-shake"
+              style={{
+                backgroundColor: isNavSticky ? "#FF2D55" : "#000000",
+                color: isNavSticky ? "#000000" : "#ffffff",
+                clipPath: "polygon(0% 8%, 97% 0%, 100% 88%, 3% 100%)",
+              }}
             >
               Get Started
             </button>
