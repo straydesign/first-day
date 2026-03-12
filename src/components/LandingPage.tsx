@@ -347,15 +347,15 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
               <div className="max-w-5xl lg:max-w-7xl mx-auto">
               <div className="text-center mb-6 lg:mb-10">
                 <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-2">What Your Plan Looks Like</h2>
-                <p className="text-white/80 md:text-lg lg:text-xl">Your personalized 30-day journey</p>
+                <p className="text-white/80 md:text-lg lg:text-xl">Your personalized weekly sprint</p>
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5 lg:gap-8">
                 {[
-                  { icon: "📅", label: "Your Weekly Sprint", desc: "A personalized 30-day plan broken into weekly sprints", color: "#FFE633", clip: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" },
+                  { icon: "📅", label: "Your Weekly Sprint", desc: "A personalized plan broken into 7-day sprints", color: "#FFE633", clip: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" },
                   { icon: "✅", label: "Daily Activities", desc: "Curated tasks, videos, and resources for each day", color: "#FF6B2B", clip: "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)" },
                   { icon: "⚡", label: "Earn XP & Level Up", desc: "Points for every activity, reflection, and streak day", color: "#FF2D55", clip: "polygon(1% 0%, 100% 2%, 99% 100%, 0% 98%)" },
-                  { icon: "🏆", label: "Complete Your Goal", desc: "30 days later — you did it. Badges, trophies, and proof", color: "#00EAFF", clip: "polygon(3% 2%, 100% 0%, 97% 98%, 0% 100%)" },
+                  { icon: "🏆", label: "Complete Your Goal", desc: "You did it. Badges, trophies, and proof", color: "#00EAFF", clip: "polygon(3% 2%, 100% 0%, 97% 98%, 0% 100%)" },
                 ].map((card) => (
                   <div
                     key={card.label}
