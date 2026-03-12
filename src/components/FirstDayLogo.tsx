@@ -13,10 +13,10 @@ const TAGLINE_PALETTE = [
 
 /** Tagline rows — pairs of words cascading top-left → bottom-right */
 const TAGLINE_ROWS = [
-  { words: ["FIRST", "DAY"],   offset: 0  },
-  { words: ["OF", "THE"],      offset: 15 },
-  { words: ["REST", "OF"],     offset: 30 },
-  { words: ["YOUR", "LIFE"],   offset: 45 },
+  { words: ["FIRST", "DAY"],   offset: 10 },
+  { words: ["OF", "THE"],      offset: 22 },
+  { words: ["REST", "OF"],     offset: 34 },
+  { words: ["YOUR", "LIFE"],   offset: 46 },
 ] as const;
 
 /** Shard clip-path variants for tagline word chips */
