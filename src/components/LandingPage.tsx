@@ -102,7 +102,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
           </div>
 
           {/* Top corners — Log In shard / Get Started text */}
-          <div className="absolute top-[60px] left-4 z-50">
+          <div className="absolute top-[100px] left-4 z-50">
             <button
               onClick={onLogin || onGetStarted}
               className="bg-black px-8 py-4 text-white font-black text-lg tracking-wide uppercase hover:scale-105 transition-transform"
@@ -111,7 +111,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
               Log In
             </button>
           </div>
-          <div className="absolute top-[60px] right-4 z-50">
+          <div className="absolute top-[100px] right-4 z-50">
             <button
               onClick={onGetStarted}
               className="bg-black px-8 py-4 text-white font-black text-lg tracking-wide uppercase hover:scale-105 transition-transform"
