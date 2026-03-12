@@ -59,7 +59,7 @@ export function ResetPasswordView({ token, onSuccess }: ResetPasswordViewProps) 
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black p-4 md:p-8 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center bg-black px-4 pt-[84px] pb-4 md:px-8 md:pb-8 relative overflow-hidden">
       <VoronoiMosaic seed={55} tileCount={40} margin={10} gap={3} className="absolute inset-0 w-full h-full" />
       {/* No scrim — full brightness */}
       <div className="relative z-10 max-w-md w-full space-y-6">

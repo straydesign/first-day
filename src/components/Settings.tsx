@@ -56,7 +56,7 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
       <div className="fixed inset-0 z-0 w-full h-full"><Aurora colorStops={[...AURORA_COLORS]} /></div>
-      <div className="relative z-10 max-w-4xl mx-auto px-4 py-6 md:py-12">
+      <div className="relative z-10 max-w-4xl mx-auto px-4 pt-[84px] pb-6 md:pb-12">
         <BackButton onClick={onBack} />
         <div className="mb-4 md:mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">Account Settings</h1>

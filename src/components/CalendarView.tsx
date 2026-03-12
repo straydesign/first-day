@@ -149,7 +149,6 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
               <button
                 onClick={onBack}
                 className="inline-flex items-center gap-2 mb-8 h-10 px-6 text-sm font-bold text-white bg-black hover:scale-105 transition-transform"
-                style={{ clipPath: "polygon(0% 5%, 92% 0%, 98% 92%, 3% 95%)" }}
               >
                 <ArrowLeft className="w-5 h-5" />Back
               </button>
