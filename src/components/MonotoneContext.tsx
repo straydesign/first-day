@@ -25,7 +25,11 @@ export function MonotoneProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <MonotoneContext.Provider value={{ monotone, toggleMonotone }}>
-      {children}
+      <div
+        style={monotone ? { filter: "grayscale(1)", WebkitFilter: "grayscale(1)" } : undefined}
+      >
+        {children}
+      </div>
     </MonotoneContext.Provider>
   );
 }
