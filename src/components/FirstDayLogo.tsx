@@ -251,16 +251,19 @@ function FirstDayLogoInner({
             >
               {row.words.map((word, wordIdx) => {
                 const globalIdx = rowIdx * 2 + wordIdx;
+                const c = monotone ? "#ffffff" : TAGLINE_PALETTE[globalIdx % TAGLINE_PALETTE.length];
                 return (
                   <span
                     key={word + wordIdx}
-                    className="inline-block bg-black px-3 py-1 md:px-6 md:py-2"
+                    className="inline-block px-3 py-1 md:px-6 md:py-2"
                     style={{
                       fontFamily: "var(--font-bebas), system-ui, sans-serif",
                       fontSize: isHero ? "clamp(1.6rem, 4.5vw, 4.5rem)" : "clamp(1.2rem, 4vw, 2.2rem)",
                       fontWeight: 900,
                       letterSpacing: 3,
-                      color: monotone ? "#ffffff" : TAGLINE_PALETTE[globalIdx % TAGLINE_PALETTE.length],
+                      color: c,
+                      backgroundColor: `${c}10`,
+                      border: `1px solid ${c}25`,
                       clipPath: SHARD_CLIPS_TAGLINE[globalIdx % SHARD_CLIPS_TAGLINE.length],
                       transform: `rotate(${TAGLINE_ROTATIONS[globalIdx]}deg)`,
                       whiteSpace: "nowrap" as const,
