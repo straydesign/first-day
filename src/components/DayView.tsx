@@ -10,8 +10,7 @@ import { CheckCircle2, Calendar, Youtube, ExternalLink, Zap } from "lucide-react
 import { BackButton } from "@/components/ui/back-button";
 import { ShardButton } from "./ShardButton";
 import { previewDayXP } from "@/lib/engagement";
-import Aurora from "./Aurora";
-import { AURORA_COLORS, HERO_PALETTE } from "@/constants";
+import { HERO_PALETTE } from "@/constants";
 import { useMonotone } from "./MonotoneContext";
 import type { SelectedDay, DayProgress, Activity, ActivityResource } from "@/types";
 
@@ -69,9 +68,8 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
 
   return (
     <div className="min-h-screen relative bg-black">
-      <div className="fixed inset-0 z-0 w-full h-full">
-        <Aurora colorStops={[...AURORA_COLORS]} />
-      </div>
+      {/* Full-screen mosaic background — extends to top edge */}
+      <MosaicCard seed={99} className="fixed inset-0 z-0 w-full h-full">{null}</MosaicCard>
       <div className="relative z-10 p-4 md:p-8 pt-[120px] md:pt-[120px]">
         {onBack && <BackButton onClick={onBack} />}
 
@@ -110,7 +108,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
             transition={{ duration: 0.4, delay: 0.15, ease: "easeOut" }}
           >
             <div className="mb-4 md:mb-6 -mx-4 md:-mx-8">
-              <MosaicCard seed={1} className="backdrop-blur-md min-h-screen px-4 md:px-8">
+              <MosaicCard seed={1} className="backdrop-blur-md min-h-screen px-2 md:px-6">
                 <CardHeader>
                   <div className="bg-black px-6 py-4 inline-block" style={{ clipPath: "polygon(1% 0%, 100% 3%, 99% 97%, 0% 100%)" }}>
                     <h2 className="text-4xl md:text-6xl font-black italic uppercase tracking-wide whitespace-nowrap" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>
@@ -133,11 +131,11 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
                         className="space-y-2"
                       >
                         <div className={`flex items-start gap-2 md:gap-4 p-3 md:p-5 bg-black transition-smooth ${completedActivities[index] ? 'ring-2 ring-[#FFE633]/40' : ''} ${isCompleted ? 'opacity-75' : ''}`} style={{ clipPath: ["polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)", "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)", "polygon(1% 0%, 100% 2%, 99% 100%, 0% 98%)"][index % 3] }}>
-                          <div className="mt-0.5 flex-shrink-0 relative">
-                            <Checkbox checked={completedActivities[index] || false} onCheckedChange={() => !isCompleted && toggleActivity(index)} id={`activity-${index}`} className="size-10 border-[3px] border-[#fcd02a] rounded-none data-[state=checked]:border-[#fcd02a] data-[state=checked]:bg-[#fcd02a]" disabled={isCompleted} />
+                          <div className="mt-1 flex-shrink-0 relative">
+                            <Checkbox checked={completedActivities[index] || false} onCheckedChange={() => !isCompleted && toggleActivity(index)} id={`activity-${index}`} className="size-14 md:size-16 border-[3px] border-white rounded-none data-[state=checked]:border-white data-[state=checked]:bg-white" disabled={isCompleted} />
                             {completedActivities[index] && (
                               <motion.div initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0, opacity: 0 }} transition={{ type: "spring", stiffness: 500, damping: 20 }} className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                                <svg viewBox="0 0 24 24" className="w-7 h-7 text-black" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+                                <svg viewBox="0 0 24 24" className="w-10 h-10 md:w-12 md:h-12 text-black" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
                                   <motion.path d="M5 12l5 5L19 7" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.3, delay: 0.1 }} />
                                 </svg>
                               </motion.div>
