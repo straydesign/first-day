@@ -1,9 +1,7 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Bell } from "lucide-react";
-import { ShardButton } from "./ShardButton";
 
 interface NotificationSettingsProps {
   notificationsEnabled: boolean;

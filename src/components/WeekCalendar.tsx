@@ -1,15 +1,10 @@
 "use client";
 import { CheckCircle2, Circle } from "lucide-react";
 import { useMonotone } from "./MonotoneContext";
+import { SHARD_CLIPS } from "@/constants";
 import type { Plan, ProgressMap, SelectedDay } from "@/types";
 
 const DAY_COLORS = ["#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF", "#FF10F0", "#4FC3F7", "#FF4500", "#2979FF"];
-const DAY_CLIPS = [
-  "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)",
-  "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)",
-  "polygon(1% 0%, 100% 2%, 99% 100%, 0% 98%)",
-  "polygon(3% 2%, 100% 0%, 97% 98%, 0% 100%)",
-];
 
 interface WeekCalendarProps {
   weekNumber: number;
@@ -62,7 +57,7 @@ export function WeekCalendar({ weekNumber, days, progress = {}, onDayClick, plan
               : "bg-black text-white/80";
 
         const shardColor = monotone ? "#333333" : DAY_COLORS[(day.dayNumber - 1) % DAY_COLORS.length];
-        const shardClip = DAY_CLIPS[(day.dayNumber - 1) % DAY_CLIPS.length];
+        const shardClip = SHARD_CLIPS[(day.dayNumber - 1) % SHARD_CLIPS.length];
 
         return (
           <button

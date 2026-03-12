@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { VORONOI_LIGHT } from "@/constants";
+import { VORONOI_LIGHT, SHARD_CLIPS } from "@/constants";
 
 interface BeastModeProps {
   onComplete: () => void;
@@ -9,12 +9,6 @@ interface BeastModeProps {
 
 const SHARD_COUNT = 24;
 
-const SHARD_CLIPS = [
-  "polygon(2% 0%, 100% 4%, 97% 100%, 0% 96%)",
-  "polygon(0% 3%, 98% 0%, 100% 97%, 3% 100%)",
-  "polygon(1% 0%, 100% 2%, 99% 100%, 0% 98%)",
-  "polygon(3% 2%, 100% 0%, 97% 98%, 0% 100%)",
-];
 
 export function BeastMode({ onComplete }: BeastModeProps) {
   const [loop, setLoop] = useState(0);

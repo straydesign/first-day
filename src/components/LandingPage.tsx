@@ -4,11 +4,10 @@ import { useState, useRef, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import Image from "next/image";
 import { Flame, Zap, Trophy, Target } from "lucide-react";
-import Aurora from "./Aurora";
 import { FirstDayLogo } from "./FirstDayLogo";
 import { Footer } from "./Footer";
 import { GeometricFrame } from "./GeometricFrame";
-import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, VORONOI_LIGHT, VORONOI_PALETTE } from "@/constants";
+import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, BRIGHT_COLORS, SCROLL_SPEEDS } from "@/constants";
 import { useMonotone } from "./MonotoneContext";
 
 interface LandingPageProps {
@@ -50,13 +49,10 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const BRIGHT_COLORS = ["#FFE633", "#2979FF", "#FF2D55", "#39FF14", "#FF10F0", "#00EAFF", "#FF4500", "#4FC3F7", "#FF6B2B", "#FFD38A"];
   const getGoalBgColor = (_goal: string, index: number) => {
     // Scattered step avoids adjacent same-hue colors, feels infinite
     return BRIGHT_COLORS[(index * 7 + 3) % BRIGHT_COLORS.length];
   };
-
-  const SCROLL_SPEEDS = ["20s", "30s", "25s"];
 
   const renderScrollRow = (goals: string[], direction: "left" | "right", rowIndex: number) => (
     <div className="overflow-hidden select-none">
@@ -81,10 +77,6 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
 
   return (
     <div className="min-h-screen relative bg-black">
-      {/* Aurora Background */}
-      <div className="fixed inset-0 z-0 w-full h-full">
-        <Aurora colorStops={["#FFE633", "#FF2D55", "#2979FF"]} />
-      </div>
 
       {/* Content */}
       <div className="relative z-10">

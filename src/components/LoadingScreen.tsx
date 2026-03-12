@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { FirstDayLogo } from "./FirstDayLogo";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, BookOpen, Calendar, Lightbulb, Sparkles } from "lucide-react";
-import { VORONOI_LIGHT } from "@/constants";
+import { VORONOI_LIGHT, SHARD_CLIPS } from "@/constants";
 
 interface LoadingScreenProps {
   showProgress?: boolean;
@@ -20,12 +20,6 @@ const PROGRESS_STEPS = [
 
 const SHARD_COUNT = 20;
 
-const SHARD_CLIPS = [
-  "polygon(2% 0%, 100% 4%, 97% 100%, 0% 96%)",
-  "polygon(0% 3%, 98% 0%, 100% 97%, 3% 100%)",
-  "polygon(1% 0%, 100% 2%, 99% 100%, 0% 98%)",
-  "polygon(3% 2%, 100% 0%, 97% 98%, 0% 100%)",
-];
 
 const MESSAGE_SHARD_CLIP = "polygon(2% 0%, 98% 3%, 100% 97%, 0% 100%)";
 

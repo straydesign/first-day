@@ -1,6 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
+
+interface UseAuthOptions {
+  /** Called when Supabase fires a SIGNED_IN auth state change. */
+  onSignIn?: () => void;
+  /** Called after checking the initial session (whether or not it exists). */
+  onSessionChecked?: (hasSession: boolean) => void;
+}
 
 interface UseAuthReturn {
   isAuthenticated: boolean;
@@ -12,12 +19,18 @@ interface UseAuthReturn {
   logout: () => Promise<void>;
 }
 
-export function useAuth(): UseAuthReturn {
+export function useAuth(options: UseAuthOptions = {}): UseAuthReturn {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Refs to avoid stale closures in the auth listener
+  const onSignInRef = useRef(options.onSignIn);
+  const onSessionCheckedRef = useRef(options.onSessionChecked);
+  onSignInRef.current = options.onSignIn;
+  onSessionCheckedRef.current = options.onSessionChecked;
 
   useEffect(() => {
     const supabase = createClient();
@@ -30,11 +43,14 @@ export function useAuth(): UseAuthReturn {
           setUserId(session.user.id);
           setUserEmail(session.user.email ?? null);
           setIsAuthenticated(true);
+          onSessionCheckedRef.current?.(true);
         } else {
           setIsAuthenticated(false);
+          onSessionCheckedRef.current?.(false);
         }
       } catch {
         setIsAuthenticated(false);
+        onSessionCheckedRef.current?.(false);
       } finally {
         setIsLoading(false);
       }
@@ -48,20 +64,21 @@ export function useAuth(): UseAuthReturn {
         setUserId(session.user.id);
         setUserEmail(session.user.email ?? null);
         setIsAuthenticated(true);
+        onSignInRef.current?.();
       }
     });
 
     return () => { subscription.unsubscribe(); };
   }, []);
 
-  const login = (token: string, uid: string, email?: string) => {
+  const login = useCallback((token: string, uid: string, email?: string) => {
     setAccessToken(token);
     setUserId(uid);
     if (email) setUserEmail(email);
     setIsAuthenticated(true);
-  };
+  }, []);
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     try {
       setIsAuthenticated(false);
       setAccessToken(null);
@@ -72,7 +89,7 @@ export function useAuth(): UseAuthReturn {
     } catch {
       toast.error("Failed to logout");
     }
-  };
+  }, []);
 
   return { isAuthenticated, accessToken, userId, userEmail, isLoading, login, logout };
 }

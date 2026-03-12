@@ -4,20 +4,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { ArrowRight, Loader2, AlertCircle, ChevronDown, ChevronUp, Check } from 'lucide-react';
 import { BackButton } from '@/components/ui/back-button';
-import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, AURORA_COLORS } from '@/constants';
+import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, BRIGHT_COLORS, SHARD_CLIPS, SCROLL_SPEEDS } from '@/constants';
 import { motion, AnimatePresence } from 'framer-motion';
-import Aurora from './Aurora';
 import { useMonotone } from './MonotoneContext';
 import type { GoalFormData } from '@/types';
 
-const BRIGHT_COLORS = ["#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF", "#FF10F0", "#4FC3F7", "#FF4500", "#2979FF", "#FFD38A", "#39FF14"];
-
-const SHARD_CLIPS = [
-  "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)",
-  "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)",
-  "polygon(1% 0%, 100% 2%, 99% 100%, 0% 98%)",
-  "polygon(3% 2%, 100% 0%, 97% 98%, 0% 100%)",
-];
 
 const FIELD_COLORS = ["#FFE633", "#FF6B2B", "#2979FF", "#FF10F0"];
 const EXP_COLORS = ["#FFE633", "#FF2D55", "#00EAFF"]; // beginner, intermediate, advanced
@@ -61,8 +52,6 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
     onComplete({ goal: goal.trim(), why: why.trim(), experienceLevel, priorExperience: priorExperience.trim(), preferredTactics: preferredTactics.trim(), contextAnswers: { why: why.trim(), experienceLevel, priorExperience: priorExperience.trim(), preferredTactics: preferredTactics.trim() }, timestamp: Date.now() });
   };
 
-  const SCROLL_SPEEDS = ["20s", "30s", "25s"];
-
   const renderScrollRow = (goals: string[], direction: 'left' | 'right', rowIndex: number) => (
     <div className="overflow-hidden select-none">
       <div
@@ -91,7 +80,6 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
 
   return (
     <div className="min-h-screen relative bg-black">
-      <div className="fixed inset-0 z-0 w-full h-full"><Aurora colorStops={[...AURORA_COLORS]} /></div>
       <div className="relative z-10">
       <div className="pt-[120px] pl-6">
         <BackButton onClick={onCancel} disabled={isGenerating} />

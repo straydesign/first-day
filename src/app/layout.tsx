@@ -1,15 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans, Inter, Bebas_Neue } from "next/font/google";
+import { Inter, Bebas_Neue } from "next/font/google";
 import { Toaster } from "sonner";
 import { MonotoneProvider } from "@/components/MonotoneContext";
 import "./globals.css";
-
-const plusJakartaSans = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  variable: "--font-plus-jakarta-sans",
-  display: "swap",
-});
 
 const inter = Inter({
   subsets: ["latin"],
@@ -28,7 +21,7 @@ const bebasNeue = Bebas_Neue({
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#0d9488",
+  themeColor: "#cc5533",
 };
 
 export const metadata: Metadata = {
@@ -60,7 +53,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${plusJakartaSans.variable} ${inter.variable} ${bebasNeue.variable}`}>
+    <html lang="en" className={`${inter.variable} ${bebasNeue.variable}`}>
       <body className="antialiased bg-black">
         <MonotoneProvider>
           {children}

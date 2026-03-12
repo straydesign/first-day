@@ -6,7 +6,6 @@ import { MosaicCard } from "./MosaicCard";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CheckCircle2, Calendar, Youtube, ExternalLink, Zap } from "lucide-react";
 import { BackButton } from "@/components/ui/back-button";
-import { ShardButton } from "./ShardButton";
 import { previewDayXP } from "@/lib/engagement";
 import { HERO_PALETTE } from "@/constants";
 import { useMonotone } from "./MonotoneContext";

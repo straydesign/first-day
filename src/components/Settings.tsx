@@ -7,10 +7,7 @@ import { Input } from "@/components/ui/input";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 import { API_BASE } from "@/lib/supabase/client";
-import Aurora from "./Aurora";
-import { AURORA_COLORS } from "@/constants";
 import { MosaicCard } from "./MosaicCard";
-import { ShardButton } from "./ShardButton";
 
 interface SettingsProps {
   accessToken: string;
@@ -55,7 +52,6 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
 
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
-      <div className="fixed inset-0 z-0 w-full h-full"><Aurora colorStops={[...AURORA_COLORS]} /></div>
       <div className="relative z-10 max-w-4xl mx-auto px-4 pt-[84px] pb-6 md:pb-12">
         <BackButton onClick={onBack} />
         <div className="mb-4 md:mb-8">

@@ -25,7 +25,7 @@ export async function getAuthToken(): Promise<string | null> {
 }
 
 /** Authenticated fetch wrapper. Returns the Response or throws. */
-async function authFetch(path: string, options: RequestInit = {}): Promise<Response> {
+export async function authFetch(path: string, options: RequestInit = {}): Promise<Response> {
   const token = await getAuthToken();
   if (!token) {
     throw new Error("Session expired");
