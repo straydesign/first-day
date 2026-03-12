@@ -1,22 +1,19 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
+import { CardDescription } from "@/components/ui/card";
 import { MosaicCard } from "./MosaicCard";
-import { Textarea } from "@/components/ui/textarea";
-import Aurora from "./Aurora";
-import { AURORA_COLORS, VORONOI_LIGHT } from "@/constants";
-import { Target, Plus, Trash2, Calendar, CheckCircle, Menu, LogOut, Palette } from "lucide-react";
-import { createClient, API_BASE } from "@/lib/supabase/client";
+import { VORONOI_LIGHT } from "@/constants";
+import { Target, Plus, Trash2, Calendar, Menu, LogOut, Palette } from "lucide-react";
+import { api } from "@/lib/api";
 import { BouncingButton } from "./BouncingButton";
-import { ShardButton } from "./ShardButton";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { toast } from "sonner";
 import { StreakBadge } from "./StreakBadge";
 import { StatsCard } from "./StatsCard";
 import { AchievementsSheet } from "./AchievementsSheet";
 import { useMonotone } from "./MonotoneContext";
-import type { EngagementState } from "@/types";
+import { ShardRewardGrid } from "./ShardRewardGrid";
+import type { EngagementState, ProgressMap } from "@/types";
 
 interface Goal {
   id: string;
@@ -27,17 +24,8 @@ interface Goal {
   totalDays: number;
 }
 
-interface DayActivity {
-  title: string;
-  date: string;
-  completed: boolean;
-  reflection?: string;
-  activities: Array<{ text: string; resources?: Array<{ type: string; url?: string; title?: string; query?: string }> }>;
-  tip: string;
-}
-
 interface GoalsManagementProps {
-  accessToken: string;
+  accessToken?: string;
   onCreateGoal: () => void;
   onSelectGoal: (goalId: string) => void;
   onEditGoal: (goalId: string) => void;
@@ -46,14 +34,11 @@ interface GoalsManagementProps {
   engagement?: EngagementState | null;
 }
 
-export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEditGoal, onViewTodayActivities, onLogout, engagement }: GoalsManagementProps) {
+export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onViewTodayActivities, onLogout, engagement }: GoalsManagementProps) {
   const [goals, setGoals] = useState<Goal[]>([]);
-  const [expandedGoalId, setExpandedGoalId] = useState<string | null>(null);
-  const [goalActivities, setGoalActivities] = useState<Record<string, DayActivity>>({});
   const [goalCurrentDays, setGoalCurrentDays] = useState<Record<string, number>>({});
+  const [goalProgress, setGoalProgress] = useState<Record<string, ProgressMap>>({});
   const [loading, setLoading] = useState(true);
-  const [reflections, setReflections] = useState<Record<string, string>>({});
-  const [submitting, setSubmitting] = useState<Record<string, boolean>>({});
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { monotone, toggleMonotone } = useMonotone();
 
@@ -73,66 +58,60 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
         const dayNumber = Math.max(1, Math.min(diffDays + 1, 30));
         setGoalCurrentDays(prev => ({ ...prev, [goal.id]: dayNumber }));
       });
+
+      // Fetch progress for each goal in parallel
+      Promise.allSettled(
+        goals.map(goal =>
+          api.goals.get(goal.id).then((data: { progress?: ProgressMap }) => ({
+            id: goal.id,
+            progress: data.progress || {},
+          }))
+        )
+      ).then(results => {
+        const progressMap: Record<string, ProgressMap> = {};
+        for (const result of results) {
+          if (result.status === "fulfilled") {
+            progressMap[result.value.id] = result.value.progress;
+          }
+        }
+        setGoalProgress(progressMap);
+      });
+
       setLoading(false);
     }
   }, [goals]);
 
   const loadGoals = async () => {
     try {
-      const supabase = createClient();
-      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-      if (!sessionData?.session) { toast.error("Please log in to continue."); setLoading(false); onLogout(); return; }
-      if (sessionError || !sessionData?.session?.access_token) {
-        if (sessionData?.session?.refresh_token) {
-          const { data: refreshData, error: refreshError } = await supabase.auth.refreshSession();
-          if (refreshError || !refreshData?.session?.access_token) { toast.error("Session expired. Please log in again."); setLoading(false); onLogout(); return; }
-        } else { toast.error("Session expired. Please log in again."); setLoading(false); onLogout(); return; }
+      const data = await api.goals.list();
+      if (data.goals && data.goals.length > 0) setGoals(data.goals);
+      else setLoading(false);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Unknown error";
+      if (message.includes("Session expired")) {
+        toast.error("Session expired. Please log in again.");
+        setLoading(false);
+        onLogout();
+        return;
       }
-      const freshToken = sessionData.session.access_token;
-      const response = await fetch(`${API_BASE}/api/goals`, { headers: { 'Authorization': `Bearer ${freshToken}` } });
-      if (response.ok) {
-        const data = await response.json();
-        if (data.goals && data.goals.length > 0) setGoals(data.goals);
-        else setLoading(false);
-      } else {
-        if (response.status === 401) { toast.error("Session expired. Please log in again."); setLoading(false); onLogout(); return; }
-        toast.error("Failed to load your goals"); setLoading(false);
-      }
-    } catch (error: any) { toast.error(`Failed to load your goals: ${error.message}`); setLoading(false); }
+      toast.error(`Failed to load your goals: ${message}`);
+      setLoading(false);
+    }
   };
 
   const handleDeleteGoal = async (goalId: string, goalTitle: string) => {
     const confirmed = window.confirm(`Are you sure you want to delete "${goalTitle}"? This action cannot be undone.`);
     if (!confirmed) return;
     try {
-      const response = await fetch(`${API_BASE}/api/goals/${goalId}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${accessToken}` } });
-      if (response.ok) {
-        toast.success("Goal deleted successfully");
-        setGoals(prev => prev.filter(g => g.id !== goalId));
-        if (expandedGoalId === goalId) { setExpandedGoalId(null); }
-      } else { toast.error("Failed to delete goal"); }
+      await api.goals.delete(goalId);
+      toast.success("Goal deleted successfully");
+      setGoals(prev => prev.filter(g => g.id !== goalId));
     } catch { toast.error("Failed to delete goal"); }
-  };
-
-  const handleSubmitProgress = async (goalId: string) => {
-    if (!reflections[goalId]?.trim()) { toast.error("Please share how your day went"); return; }
-    setSubmitting(prev => ({ ...prev, [goalId]: true }));
-    try {
-      const response = await fetch(`${API_BASE}/api/goals/${goalId}/progress`, {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ progress: { [goalCurrentDays[goalId]]: { completed: true, reflection: reflections[goalId], completedAt: new Date().toISOString() } } }),
-      });
-      if (response.ok) { toast.success("Great work! Progress saved"); setReflections(prev => ({ ...prev, [goalId]: "" })); }
-      else toast.error("Failed to save progress");
-    } catch { toast.error("Failed to save progress"); }
-    finally { setSubmitting(prev => ({ ...prev, [goalId]: false })); }
   };
 
   if (loading) {
     return (
       <div className="min-h-screen relative bg-black flex items-center justify-center">
-        <div className="fixed inset-0 z-0 w-full h-full"><Aurora colorStops={[...AURORA_COLORS]} /></div>
         <div className="relative z-10 flex flex-col items-center gap-6 px-6 w-full max-w-md">
           {/* Shard progress bar */}
           <div className="flex gap-[2px] h-3 w-full">
@@ -242,6 +221,12 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                   >
                     <Trash2 className="w-5 h-5" />
                   </button>
+                  {/* Shard reward grid */}
+                  {goalProgress[goal.id] && (
+                    <div className="mt-2 flex justify-center">
+                      <ShardRewardGrid progress={goalProgress[goal.id]} />
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

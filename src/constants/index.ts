@@ -40,60 +40,40 @@ export const VORONOI_DARK = [
 /** Combined palette — default for VoronoiMosaic */
 export const VORONOI_PALETTE = [...VORONOI_LIGHT, ...VORONOI_DARK] as const;
 
-/** Aurora gradient background colors (sunset accents). */
-export const AURORA_COLORS = ["#fcd02a", "#f31b5e", "#212bbd"] as const;
+/** Vibrant accent colors for goal pills, shard fills, and decorative elements. */
+export const BRIGHT_COLORS = [
+  "#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF", "#FF10F0",
+  "#4FC3F7", "#FF4500", "#2979FF", "#FFD38A", "#39FF14",
+] as const;
 
-/** Goal category type for color mapping. */
-export type GoalCategory = "fitness" | "creative" | "professional" | "lifestyle";
+/** Irregular clip-paths for shard-style UI elements. */
+export const SHARD_CLIPS = [
+  "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)",
+  "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)",
+  "polygon(1% 0%, 100% 2%, 99% 100%, 0% 98%)",
+  "polygon(3% 2%, 100% 0%, 97% 98%, 0% 100%)",
+] as const;
 
-/** Maps goal suggestion strings to categories for color-coding. */
-export const GOAL_CATEGORY_MAP: Record<string, GoalCategory> = {
-  // Fitness / health (green)
-  "Get in shape": "fitness",
-  "Build a morning routine": "fitness",
-  "Do 50 pushups a day": "fitness",
-  "Walk 10,000 steps daily": "fitness",
-  "Stretch for 15 min daily": "fitness",
-  "Drink more water daily": "fitness",
+/**
+ * Brick-wall clip-paths for a 7-shard week square.
+ * Row 1: 3 shards (top third)  |  Row 2: 1 wide shard (middle)  |  Row 3: 3 shards (bottom third)
+ * Each polygon has slight skew for shard aesthetic.
+ */
+export const SHARD_SQUARE_CLIPS = [
+  // Row 1 — three shards across top third
+  "polygon(0% 0%, 34% 0%, 33% 34%, 1% 33%)",
+  "polygon(34% 0%, 67% 0%, 66% 33%, 33% 34%)",
+  "polygon(67% 0%, 100% 0%, 99% 33%, 66% 34%)",
+  // Row 2 — one wide shard across middle third
+  "polygon(1% 34%, 99% 33%, 100% 67%, 0% 68%)",
+  // Row 3 — three shards across bottom third
+  "polygon(0% 68%, 33% 67%, 34% 100%, 1% 100%)",
+  "polygon(33% 67%, 66% 68%, 67% 100%, 34% 100%)",
+  "polygon(66% 68%, 100% 67%, 99% 100%, 67% 100%)",
+] as const;
 
-  // Lifestyle / mindfulness (coral)
-  "Start a meditation practice": "lifestyle",
-  "Cook a new recipe every week": "lifestyle",
-  "Journal every morning": "lifestyle",
-  "Read for 30 min before bed": "lifestyle",
-  "Declutter one room a week": "lifestyle",
-  "Practice gratitude daily": "lifestyle",
-  "Sleep by 10pm every night": "lifestyle",
-  "Spend less time on my phone": "lifestyle",
-
-  // Creative / learning (blue)
-  "Learn Spanish basics": "creative",
-  "Learn to play guitar": "creative",
-  "Write a short story": "creative",
-  "Learn photography basics": "creative",
-  "Read a book a week": "creative",
-  "Draw something every day": "creative",
-  "Start a daily writing habit": "creative",
-  "Learn sign language basics": "creative",
-
-  // Professional / technical (purple)
-  "Learn to code": "professional",
-  "Start a side project": "professional",
-  "Build a personal website": "professional",
-  "Learn video editing": "professional",
-  "Master public speaking": "professional",
-  "Start a YouTube channel": "professional",
-  "Launch a newsletter": "professional",
-  "Learn graphic design basics": "professional",
-};
-
-/** Tailwind class sets for each goal category — uses sunset light palette. */
-export const GOAL_CATEGORY_COLORS: Record<GoalCategory, string> = {
-  fitness: "border-[#FFE633] bg-[#FFE633]/25 hover:bg-[#FFE633]/40 hover:border-[#FFE633]",
-  creative: "border-[#FF6B2B] bg-[#FF6B2B]/25 hover:bg-[#FF6B2B]/40 hover:border-[#FF6B2B]",
-  professional: "border-[#FF2D55] bg-[#FF2D55]/25 hover:bg-[#FF2D55]/40 hover:border-[#FF2D55]",
-  lifestyle: "border-[#00EAFF] bg-[#00EAFF]/25 hover:bg-[#00EAFF]/40 hover:border-[#00EAFF]",
-};
+/** Animation durations for scrolling goal suggestion rows. */
+export const SCROLL_SPEEDS = ["20s", "30s", "25s"] as const;
 
 /** Scrolling goal suggestion rows for SimpleGoalCreation and LandingPage. */
 export const GOAL_SUGGESTIONS_ROW_1 = [

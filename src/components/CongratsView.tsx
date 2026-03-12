@@ -1,13 +1,10 @@
 "use client";
 import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
 import { Calendar, ArrowRight, Zap } from "lucide-react";
-import Aurora from "./Aurora";
-import { AURORA_COLORS } from "@/constants";
 import { AchievementCard } from "./AchievementCard";
-import { ShardButton } from "./ShardButton";
-import type { Milestone, XPBreakdown, Achievement } from "@/types";
+import { ShardSquare } from "./ShardSquare";
+import type { Milestone, XPBreakdown, Achievement, ProgressMap } from "@/types";
 
 interface ConfettiPiece {
   id: number;
@@ -28,6 +25,7 @@ interface CongratsViewProps {
   milestone?: Milestone | null;
   xp?: XPBreakdown | null;
   newAchievements?: Achievement[];
+  progress?: ProgressMap;
 }
 
 import { useMonotone } from "./MonotoneContext";
@@ -43,6 +41,7 @@ export function CongratsView({
   milestone,
   xp,
   newAchievements = [],
+  progress,
 }: CongratsViewProps) {
   const { monotone } = useMonotone();
   const daysRemaining = dayNumber ? totalDays - dayNumber : null;
@@ -105,9 +104,6 @@ export function CongratsView({
 
   return (
     <div className="min-h-screen relative bg-black overflow-hidden">
-      <div className="fixed inset-0 z-0 w-full h-full">
-        <Aurora colorStops={[...AURORA_COLORS]} />
-      </div>
 
       {/* Confetti layer */}
       <div className="fixed inset-0 z-20 pointer-events-none overflow-hidden">
@@ -175,6 +171,25 @@ export function CongratsView({
           >
             {message}
           </motion.p>
+
+          {/* Shard week square */}
+          {progress && dayNumber && (
+            <motion.div
+              className="flex justify-center mb-4"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.75, ease: "easeOut" }}
+            >
+              <ShardSquare
+                weekNumber={Math.ceil(dayNumber / 7)}
+                progress={progress}
+                startDay={(Math.ceil(dayNumber / 7) - 1) * 7 + 1}
+                shardCount={Math.min(7, totalDays - (Math.ceil(dayNumber / 7) - 1) * 7)}
+                animatingDay={dayNumber}
+                size={96}
+              />
+            </motion.div>
+          )}
 
           {/* 3. XP count-up */}
           {xp && xp.total > 0 && (

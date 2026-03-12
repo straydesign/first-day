@@ -11,6 +11,29 @@ const TAGLINE_PALETTE = [
   "#FF10F0", "#FF1493", "#4FC3F7", "#FF4500",
 ] as const;
 
+/** Words of the tagline, each on its own shard chip */
+const TAGLINE_WORDS = ["FIRST", "DAY", "OF", "THE", "REST", "OF", "YOUR", "LIFE"] as const;
+
+/** Shard clip-path variants for tagline word chips */
+const SHARD_CLIPS_TAGLINE = [
+  "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)",
+  "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)",
+  "polygon(1% 0%, 100% 2%, 99% 100%, 0% 98%)",
+  "polygon(3% 2%, 100% 0%, 97% 98%, 0% 100%)",
+] as const;
+
+/** Diagonal scatter positions — top-left flowing to bottom-right */
+const TAGLINE_POSITIONS = [
+  { x: 2,  y: 0,  r: -1.5 },  // FIRST
+  { x: 28, y: 4,  r: 1.2 },   // DAY
+  { x: 52, y: 1,  r: -0.8 },  // OF
+  { x: 10, y: 30, r: 1.8 },   // THE
+  { x: 38, y: 34, r: -1.2 },  // REST
+  { x: 62, y: 28, r: 0.6 },   // OF
+  { x: 18, y: 62, r: -1.0 },  // YOUR
+  { x: 50, y: 66, r: 1.5 },   // LIFE
+] as const;
+
 interface FirstDayLogoProps {
   className?: string;
   width?: number;
@@ -94,16 +117,17 @@ function LetterTile({ letter, color, tile, rotate, fontSize, seed, showMosaic, m
   );
 }
 
-/** Abbreviation for sticky header: F·D·O·T·R·O·Y·L */
+/** Compact header text: FIRST DAY */
 const COMPACT_LETTERS = [
   { char: "F", color: "#FFE633" },
-  { char: "D", color: "#FF6B2B" },
-  { char: "O", color: "#FF2D55" },
-  { char: "T", color: "#00EAFF" },
-  { char: "R", color: "#FF10F0" },
-  { char: "O", color: "#FF1493" },
-  { char: "Y", color: "#4FC3F7" },
-  { char: "L", color: "#FF4500" },
+  { char: "I", color: "#FF6B2B" },
+  { char: "R", color: "#FF2D55" },
+  { char: "S", color: "#00EAFF" },
+  { char: "T", color: "#FF10F0" },
+  { char: " ", color: "transparent" },
+  { char: "D", color: "#FF1493" },
+  { char: "A", color: "#4FC3F7" },
+  { char: "Y", color: "#FF4500" },
 ] as const;
 
 function FirstDayLogoInner({
@@ -120,21 +144,25 @@ function FirstDayLogoInner({
   if (compact) {
     return (
       <div className={`flex items-center gap-0.5 ${className}`}>
-        {COMPACT_LETTERS.map((l, i) => (
-          <span
-            key={i}
-            style={{
-              color: monotone ? "#ffffff" : l.color,
-              fontFamily: "var(--font-bebas), system-ui, sans-serif",
-              fontSize: "clamp(2.5rem, 7vw, 4.5rem)",
-              fontWeight: 900,
-              transform: "scaleY(1.3)",
-              display: "inline-block",
-            }}
-          >
-            {l.char}
-          </span>
-        ))}
+        {COMPACT_LETTERS.map((l, i) =>
+          l.char === " " ? (
+            <span key={i} style={{ width: "0.3em" }} />
+          ) : (
+            <span
+              key={i}
+              style={{
+                color: monotone ? "#ffffff" : l.color,
+                fontFamily: "var(--font-bebas), system-ui, sans-serif",
+                fontSize: "clamp(2.5rem, 7vw, 4.5rem)",
+                fontWeight: 900,
+                transform: "scaleY(1.3)",
+                display: "inline-block",
+              }}
+            >
+              {l.char}
+            </span>
+          )
+        )}
       </div>
     );
   }
@@ -213,33 +241,31 @@ function FirstDayLogoInner({
       </div>
       ) : null}
 
-      {/* Tagline only (no card wrapper) */}
+      {/* Tagline only (no card wrapper) — scattered shard words */}
       {!showLetters && showTagline && (
-        <span
-          className="drop-shadow-[0_1px_8px_rgba(0,0,0,0.5)] flex flex-nowrap justify-center overflow-hidden w-full"
-          style={{
-            fontSize: isHero ? "clamp(0.55rem, 2.6vw, 4rem)" : "clamp(1rem, 5.2vw, 2rem)",
-            fontWeight: 900,
-            letterSpacing: isHero ? 2 : "0.15em",
-            textTransform: "uppercase" as const,
-            fontFamily: "var(--font-bebas), system-ui, sans-serif",
-            whiteSpace: "nowrap" as const,
-            transform: isHero ? "scaleY(1.4)" : undefined,
-            transformOrigin: "center",
-          }}
-        >
-          {"first day of the rest of your life".split("").map((char, i) => (
+        <div className="relative w-full" style={{ minHeight: isHero ? "clamp(220px, 40vw, 400px)" : "clamp(140px, 30vw, 220px)" }}>
+          {TAGLINE_WORDS.map((word, i) => (
             <span
               key={i}
+              className="absolute inline-block bg-black px-3 py-1 md:px-5 md:py-2 drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]"
               style={{
-                color: char === " " ? "transparent" : monotone ? "#ffffff" : TAGLINE_PALETTE[i % TAGLINE_PALETTE.length],
-                width: char === " " ? "0.35em" : undefined,
+                fontFamily: "var(--font-bebas), system-ui, sans-serif",
+                fontSize: isHero ? "clamp(1.2rem, 3.5vw, 3.5rem)" : "clamp(0.9rem, 2.8vw, 1.8rem)",
+                fontWeight: 900,
+                letterSpacing: 2,
+                textTransform: "uppercase" as const,
+                color: monotone ? "#ffffff" : TAGLINE_PALETTE[i % TAGLINE_PALETTE.length],
+                clipPath: SHARD_CLIPS_TAGLINE[i % SHARD_CLIPS_TAGLINE.length],
+                left: `${TAGLINE_POSITIONS[i].x}%`,
+                top: `${TAGLINE_POSITIONS[i].y}%`,
+                transform: `rotate(${TAGLINE_POSITIONS[i].r}deg)`,
+                whiteSpace: "nowrap" as const,
               }}
             >
-              {char}
+              {word}
             </span>
           ))}
-        </span>
+        </div>
       )}
     </div>
   );

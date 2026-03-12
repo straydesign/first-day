@@ -226,19 +226,9 @@ html {
     to { opacity: 1; transform: translateY(0); }
   }
 
-  @keyframes slideInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
   @keyframes scaleIn {
     from { opacity: 0; transform: scale(0.95); }
     to { opacity: 1; transform: scale(1); }
-  }
-
-  @keyframes shimmer {
-    0% { background-position: -1000px 0; }
-    100% { background-position: 1000px 0; }
   }
 
   @keyframes scroll-left {
@@ -257,14 +247,7 @@ html {
   }
 
   .animate-fadeIn { animation: fadeIn 0.5s ease-out; }
-  .animate-slideInUp { animation: slideInUp 0.6s ease-out; }
   .animate-scaleIn { animation: scaleIn 0.4s ease-out; }
-
-  .animate-shimmer {
-    animation: shimmer 2s infinite linear;
-    background: linear-gradient(to right, #000000 0%, #FFE633 20%, #000000 40%, #000000 100%);
-    background-size: 1000px 100%;
-  }
 
   .animate-scroll-left {
     animation: scroll-left 25s linear infinite;
@@ -280,10 +263,6 @@ html {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .transition-bounce {
-    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  }
-
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -291,25 +270,6 @@ html {
 
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
-  }
-
-  @keyframes floatUp {
-    0% { opacity: 1; transform: translateY(0); }
-    100% { opacity: 0; transform: translateY(-40px); }
-  }
-
-  @keyframes countUp {
-    0% { opacity: 0; transform: scale(0.5); }
-    50% { opacity: 1; transform: scale(1.2); }
-    100% { opacity: 1; transform: scale(1); }
-  }
-
-  .animate-floatUp {
-    animation: floatUp 1.5s ease-out forwards;
-  }
-
-  .animate-countUp {
-    animation: countUp 0.5s ease-out;
   }
 
   @keyframes loadingBar {
@@ -327,6 +287,12 @@ html {
   @keyframes shardPulse {
     0%, 100% { opacity: 0.3; }
     50% { opacity: 1; }
+  }
+
+  @keyframes shardGlow {
+    0% { box-shadow: 0 0 4px 1px currentColor; }
+    50% { box-shadow: 0 0 16px 6px currentColor; }
+    100% { box-shadow: 0 0 4px 1px currentColor; }
   }
 }
 
@@ -394,8 +360,6 @@ html {
 /* Button shapes — dramatic parallelograms */
 .clip-btn-a { clip-path: polygon(8% 0%, 100% 0%, 92% 100%, 0% 100%); }
 .clip-btn-b { clip-path: polygon(0% 0%, 92% 0%, 100% 100%, 8% 100%); }
-.clip-btn-c { clip-path: polygon(6% 0%, 100% 4%, 94% 100%, 0% 96%); }
-
 /* Input shapes — subtle angle */
 .clip-input { clip-path: polygon(1% 0%, 100% 0%, 99% 100%, 0% 100%); }
 
@@ -409,8 +373,6 @@ html {
 /* Section dividers — angled edges */
 .clip-section-top { clip-path: polygon(0% 4%, 100% 0%, 100% 100%, 0% 100%); }
 .clip-section-bottom { clip-path: polygon(0% 0%, 100% 0%, 100% 96%, 0% 100%); }
-.clip-section-both { clip-path: polygon(0% 3%, 100% 0%, 100% 97%, 0% 100%); }
-
 /* Dialog/modal — subtle irregular */
 .clip-dialog { clip-path: polygon(1% 0%, 100% 1%, 99% 100%, 0% 99%); }
 
@@ -448,8 +410,6 @@ html {
   .clip-tile-d { clip-path: polygon(0% 0.5%, 99% 0%, 100% 99.5%, 1% 100%); }
   .clip-btn-a { clip-path: polygon(4% 0%, 100% 0%, 96% 100%, 0% 100%); }
   .clip-btn-b { clip-path: polygon(0% 0%, 96% 0%, 100% 100%, 4% 100%); }
-  .clip-btn-c { clip-path: polygon(3% 0%, 100% 2%, 97% 100%, 0% 98%); }
   .clip-section-top { clip-path: polygon(0% 2%, 100% 0%, 100% 100%, 0% 100%); }
   .clip-section-bottom { clip-path: polygon(0% 0%, 100% 0%, 100% 98%, 0% 100%); }
-  .clip-section-both { clip-path: polygon(0% 1.5%, 100% 0%, 100% 98.5%, 0% 100%); }
 }

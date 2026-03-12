@@ -12,7 +12,7 @@ import type {
 
 // --- Helpers ---
 
-function isDayCompleted(dp: DayProgress | undefined): boolean {
+export function isDayCompleted(dp: DayProgress | undefined): boolean {
   if (!dp || !dp.completed) return false;
   if (typeof dp.completed === "boolean") return dp.completed;
   return Object.values(dp.completed).some(Boolean);
