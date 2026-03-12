@@ -245,13 +245,7 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                       style={{ clipPath: "polygon(2% 0%, 100% 4%, 98% 100%, 0% 96%)", fontFamily: "var(--font-bebas), system-ui, sans-serif", letterSpacing: 3 }}
                     >
                       <Plus className="w-5 h-5 text-white" />
-                      {monotone ? (
-                        <span className="text-white">ADD NEW GOAL</span>
-                      ) : (
-                        "ADD NEW GOAL".split("").map((char, i) => (
-                          <span key={i} style={{ color: char === " " ? "transparent" : ["#FFE633","#FF6B2B","#FF2D55","#00EAFF","#FF10F0","#FF1493","#4FC3F7","#FF4500"][i % 8], width: char === " " ? "0.35em" : undefined, display: "inline-block" }}>{char}</span>
-                        ))
-                      )}
+                      <span className="text-white">ADD NEW GOAL</span>
                     </button>
                   </div>
                 </div>

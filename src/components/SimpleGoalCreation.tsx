@@ -49,11 +49,12 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
     !!(initialData?.contextAnswers?.priorExperience || initialData?.contextAnswers?.preferredTactics)
   );
   const [error, setError] = useState<string | null>(null);
+  const [showValidation, setShowValidation] = useState(false);
 
   const handleSuggestionClick = (suggestion: string) => { setGoal(suggestion); setError(null); };
 
   const handleGenerate = () => {
-    if (!goal.trim()) { setError('Please enter a goal'); return; }
+    if (!goal.trim()) { setShowValidation(true); return; }
     setIsGenerating(true);
     setError(null);
     onComplete({ goal: goal.trim(), why: why.trim(), experienceLevel, priorExperience: priorExperience.trim(), preferredTactics: preferredTactics.trim(), contextAnswers: { why: why.trim(), experienceLevel, priorExperience: priorExperience.trim(), preferredTactics: preferredTactics.trim() }, timestamp: Date.now() });
@@ -217,6 +218,38 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
         </motion.div>
       </div>
       </div>
+      {/* Validation modal */}
+      <AnimatePresence>
+        {showValidation && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70"
+            onClick={() => setShowValidation(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 400, damping: 25 }}
+              className="bg-black p-8 mx-4 max-w-sm text-center"
+              style={{ clipPath: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <p className="text-xl text-white font-black uppercase tracking-wide mb-2">Hold up!</p>
+              <p className="text-base text-white/80 font-medium mb-6">Just fill in your goal above and we&apos;ll build your plan</p>
+              <button
+                onClick={() => setShowValidation(false)}
+                className="px-8 py-3 font-black text-black uppercase tracking-wide hover:scale-105 transition-transform"
+                style={{ backgroundColor: "#fcd02a", clipPath: "polygon(1% 0%, 100% 4%, 99% 96%, 0% 100%)" }}
+              >
+                Got It
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

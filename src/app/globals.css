@@ -403,9 +403,9 @@ html {
 /* Dialog/modal — subtle irregular */
 .clip-dialog { clip-path: polygon(1% 0%, 100% 1%, 99% 100%, 0% 99%); }
 
-/* Sheet — angled leading edge */
-.clip-sheet-right { clip-path: polygon(3% 0%, 100% 0%, 100% 100%, 0% 100%); }
-.clip-sheet-left { clip-path: polygon(0% 0%, 100% 0%, 97% 100%, 0% 100%); }
+/* Sheet — jagged shard edge */
+.clip-sheet-right { clip-path: polygon(6% 0%, 100% 0%, 100% 100%, 0% 100%, 4% 85%, 8% 70%, 2% 55%, 7% 40%, 3% 25%, 5% 12%); }
+.clip-sheet-left { clip-path: polygon(0% 0%, 94% 0%, 95% 12%, 97% 25%, 93% 40%, 98% 55%, 92% 70%, 96% 85%, 100% 100%, 0% 100%); }
 
 /* Progress bar */
 .clip-progress { clip-path: polygon(0% 15%, 100% 0%, 100% 85%, 0% 100%); }

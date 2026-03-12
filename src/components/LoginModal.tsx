@@ -1,17 +1,16 @@
 "use client";
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Check } from 'lucide-react';
 import { toast } from 'sonner';
 import { createClient, API_BASE } from '@/lib/supabase/client';
-import { Checkbox } from '@/components/ui/checkbox';
 import { FirstDayLogo } from './FirstDayLogo';
 import { ForgotPasswordModal } from './ForgotPasswordModal';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { validatePassword } from '@/lib/validation';
-import { VoronoiMosaic } from "./VoronoiMosaic";
-import { ShardButton } from "./ShardButton";
+
+const LETTER_PALETTE = ["#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF", "#FF10F0", "#4FC3F7", "#FF4500", "#2979FF"];
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -168,21 +167,41 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
               </div>
             )}
             {!isLogin && (
-              <div className="flex items-start gap-2">
-                <Checkbox id="terms" checked={agreeToTerms} onCheckedChange={(checked) => setAgreeToTerms(checked === true)} className="mt-1 flex-shrink-0" />
-                <div className="flex flex-col text-white/80 text-sm">
-                  <span>I agree to the</span>
-                  <button type="button" className="text-white hover:underline text-left font-medium" onClick={onShowTerms}>terms and conditions</button>
+              <button
+                type="button"
+                onClick={() => setAgreeToTerms(!agreeToTerms)}
+                className={`w-full flex items-center gap-4 p-4 transition-all text-left ${agreeToTerms ? 'ring-2 ring-white/30 scale-[1.01]' : 'opacity-80 hover:opacity-100'}`}
+                style={{ backgroundColor: agreeToTerms ? "#FFE633" : "#333333", clipPath: "polygon(1% 0%, 100% 3%, 99% 97%, 0% 100%)" }}
+              >
+                <div className={`w-8 h-8 flex-shrink-0 flex items-center justify-center border-2 ${agreeToTerms ? 'border-black/40 bg-black' : 'border-white/30 bg-transparent'}`}>
+                  {agreeToTerms && <Check className="w-5 h-5 text-white" strokeWidth={3} />}
                 </div>
-              </div>
+                <div className="flex flex-col">
+                  <span className={`text-sm font-bold ${agreeToTerms ? 'text-black' : 'text-white'}`}>I agree to the</span>
+                  <span
+                    className={`text-sm font-bold underline ${agreeToTerms ? 'text-black/80' : 'text-white/80'}`}
+                    onClick={(e) => { e.stopPropagation(); onShowTerms?.(); }}
+                  >
+                    terms and conditions
+                  </span>
+                </div>
+              </button>
             )}
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-black text-white py-4 text-xl font-black uppercase tracking-wide hover:scale-105 transition-transform disabled:hover:scale-100"
+              className="w-full bg-black py-4 text-xl font-black uppercase tracking-wide hover:scale-105 transition-transform disabled:hover:scale-100 disabled:opacity-50"
               style={{ clipPath: "polygon(1% 0%, 100% 4%, 99% 96%, 0% 100%)" }}
             >
-              {loading ? 'Please wait...' : isLogin ? 'Log In' : 'Sign Up'}
+              {loading ? (
+                <span className="text-white">Please wait...</span>
+              ) : (
+                <span className="flex items-center justify-center">
+                  {(isLogin ? 'LOG IN' : 'SIGN UP').split('').map((char, i) => (
+                    <span key={i} style={{ color: char === ' ' ? 'transparent' : LETTER_PALETTE[i % LETTER_PALETTE.length], width: char === ' ' ? '0.3em' : undefined, display: 'inline-block' }}>{char}</span>
+                  ))}
+                </span>
+              )}
             </button>
           </form>
           </div>
