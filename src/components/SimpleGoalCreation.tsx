@@ -19,7 +19,7 @@ const SHARD_CLIPS = [
   "polygon(3% 2%, 100% 0%, 97% 98%, 0% 100%)",
 ];
 
-const FIELD_COLORS = ["#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF"];
+const FIELD_COLORS = ["#FFE633", "#FF6B2B", "#2979FF", "#FF10F0"];
 
 interface SimpleGoalCreationProps {
   onComplete: (goalData: GoalFormData) => void;
