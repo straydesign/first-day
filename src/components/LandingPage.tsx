@@ -105,7 +105,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
           </div>
 
           {/* Top corners — Log In shard / Get Started text */}
-          <div className="absolute top-4 left-4 z-50">
+          <div className="absolute top-[60px] left-4 z-50">
             <button
               onClick={onLogin || onGetStarted}
               className="bg-black px-8 py-4 text-white font-black text-lg tracking-wide uppercase hover:scale-105 transition-transform"
@@ -114,7 +114,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
               Log In
             </button>
           </div>
-          <div className="absolute top-4 right-4 z-50">
+          <div className="absolute top-[60px] right-4 z-50">
             <button
               onClick={onGetStarted}
               className="bg-black px-8 py-4 text-white font-black text-lg tracking-wide uppercase hover:scale-105 transition-transform"
@@ -132,9 +132,9 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, ease: "easeOut" }}
               >
-                {/* Mobile: compact abbreviation, Desktop: full tagline */}
+                {/* Mobile: full tagline (smaller), Desktop: full tagline (hero) */}
                 <div className="block md:hidden">
-                  <FirstDayLogo compact={true} />
+                  <FirstDayLogo showTagline={true} showLetters={false} />
                 </div>
                 <div className="hidden md:block">
                   <FirstDayLogo size="hero" showTagline={true} showLetters={false} />
