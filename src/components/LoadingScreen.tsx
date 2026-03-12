@@ -32,7 +32,9 @@ const MESSAGE_SHARD_CLIP = "polygon(2% 0%, 98% 3%, 100% 97%, 0% 100%)";
 export function LoadingScreen({ showProgress = false, estimatedDuration = 15000 }: LoadingScreenProps) {
   const [progress, setProgress] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
+  const [loopProgress, setLoopProgress] = useState(0);
 
+  // Detailed progress for plan generation
   useEffect(() => {
     if (!showProgress) return;
 
@@ -55,41 +57,48 @@ export function LoadingScreen({ showProgress = false, estimatedDuration = 15000 
     return () => clearInterval(timer);
   }, [showProgress, estimatedDuration]);
 
-  const filledShards = Math.floor((progress / 100) * SHARD_COUNT);
+  // Looping animated bar for simple loading (no detailed progress)
+  useEffect(() => {
+    if (showProgress) return;
+
+    const timer = setInterval(() => {
+      setLoopProgress(prev => (prev + 1) % (SHARD_COUNT + 1));
+    }, 120);
+
+    return () => clearInterval(timer);
+  }, [showProgress]);
+
+  const filledShards = showProgress
+    ? Math.floor((progress / 100) * SHARD_COUNT)
+    : loopProgress;
 
   return (
     <div className="fixed inset-0 z-[100] bg-black overflow-hidden">
       <div className="absolute inset-0 z-[105] flex flex-col items-center justify-center gap-8 px-6">
-        {/* Mobile: compact abbreviation, Desktop: full tagline */}
-        <div className="block md:hidden">
-          <FirstDayLogo compact={true} />
-        </div>
-        <div className="hidden md:block w-full">
-          <FirstDayLogo size="hero" showTagline={true} showLetters={false} className="w-full" />
-        </div>
+        <FirstDayLogo size="hero" showTagline={true} showLetters={false} className="w-full" />
 
-        {showProgress && (
-          <div className="w-full max-w-md space-y-6 animate-fadeIn">
-            {/* Shard progress bar */}
-            <div className="flex gap-[2px] h-3 w-full">
-              {Array.from({ length: SHARD_COUNT }, (_, i) => {
-                const isFilled = i <= filledShards;
-                const color = VORONOI_LIGHT[i % VORONOI_LIGHT.length];
-                return (
-                  <div
-                    key={i}
-                    className="flex-1 transition-all duration-200"
-                    style={{
-                      backgroundColor: isFilled ? color : "rgba(255,255,255,0.08)",
-                      clipPath: SHARD_CLIPS[i % SHARD_CLIPS.length],
-                      boxShadow: isFilled ? `0 0 8px ${color}60` : "none",
-                    }}
-                  />
-                );
-              })}
-            </div>
+        <div className="w-full max-w-md space-y-6 animate-fadeIn">
+          {/* Shard progress bar — always visible */}
+          <div className="flex gap-[2px] h-3 w-full">
+            {Array.from({ length: SHARD_COUNT }, (_, i) => {
+              const isFilled = i <= filledShards;
+              const color = VORONOI_LIGHT[i % VORONOI_LIGHT.length];
+              return (
+                <div
+                  key={i}
+                  className="flex-1 transition-all duration-200"
+                  style={{
+                    backgroundColor: isFilled ? color : "rgba(255,255,255,0.08)",
+                    clipPath: SHARD_CLIPS[i % SHARD_CLIPS.length],
+                    boxShadow: isFilled ? `0 0 8px ${color}60` : "none",
+                  }}
+                />
+              );
+            })}
+          </div>
 
-            {/* Step message + percentage on a shard */}
+          {/* Step messages only for detailed progress */}
+          {showProgress && (
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentStep}
@@ -119,8 +128,8 @@ export function LoadingScreen({ showProgress = false, estimatedDuration = 15000 
                 </div>
               </motion.div>
             </AnimatePresence>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

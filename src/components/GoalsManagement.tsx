@@ -171,7 +171,7 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
             <Menu className="w-6 h-6" />
           </button>
         </SheetTrigger>
-        <SheetContent side="right" className={`w-[200px] border-l-2 border-white/10 pt-4 ${monotone ? "bg-black" : "backdrop-blur-xl"}`}>
+        <SheetContent side="right" className={`w-[200px] border-l-2 border-white/10 pt-[140px] ${monotone ? "bg-black" : "backdrop-blur-xl"}`}>
           <div
             className={`px-4 py-3 mb-6 ${monotone ? "bg-white/10" : "bg-black"}`}
             style={{ clipPath: "polygon(0% 0%, 100% 4%, 98% 96%, 2% 100%)" }}

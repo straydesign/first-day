@@ -116,7 +116,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
             <Menu className="w-6 h-6" />
           </button>
         </SheetTrigger>
-        <SheetContent side="right" className={`w-[200px] border-l-2 border-white/10 pt-4 ${monotone ? "bg-black" : "backdrop-blur-xl"}`}>
+        <SheetContent side="right" className={`w-[200px] border-l-2 border-white/10 pt-[140px] ${monotone ? "bg-black" : "backdrop-blur-xl"}`}>
           <div
             className={`px-4 py-3 mb-6 ${monotone ? "bg-white/10" : "bg-black"}`}
             style={{ clipPath: "polygon(0% 0%, 100% 4%, 98% 96%, 2% 100%)" }}
@@ -193,14 +193,12 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
           {/* Weeks — no panels, separated by vertical space */}
           <div className="space-y-12 md:space-y-16">
             {weeks.map((week: WeekData, weekIndex: number) => {
-              const weekOpacity = Math.max(0.12, 1 - weekIndex * 0.22);
-
               return (
                 <motion.div
                   key={week.weekNumber}
                   className="relative"
                   initial={{ opacity: 0, y: 24, filter: "blur(4px)" }}
-                  animate={{ opacity: weekOpacity, y: 0, filter: "blur(0px)" }}
+                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                   transition={{ duration: 0.5, delay: weekIndex * 0.12, ease: "easeOut" }}
                 >
                   <div className="mb-4 flex items-center gap-3">
@@ -251,6 +249,8 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
           </div>
         </div>
       </div>
+      {/* Bottom gradient fade — weeks blend into black */}
+      <div className="fixed bottom-0 left-0 right-0 h-40 z-20 pointer-events-none bg-gradient-to-t from-black via-black/60 to-transparent" />
     </div>
   );
 }

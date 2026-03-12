@@ -88,8 +88,11 @@ function SheetContent({
           {children}
         </div>
         {showCloseButton && (
-          <SheetPrimitive.Close className="clip-diamond ring-offset-background focus-geo data-[state=open]:bg-secondary absolute top-4 right-4 z-20 rounded-xs opacity-70 transition-opacity hover:opacity-100 disabled:pointer-events-none">
-            <XIcon className="size-4" />
+          <SheetPrimitive.Close
+            className="absolute top-[100px] right-4 z-20 bg-black p-3 hover:scale-110 transition-transform"
+            style={{ clipPath: "polygon(3% 0%, 100% 5%, 97% 100%, 0% 92%)" }}
+          >
+            <XIcon className="size-5 text-white" />
             <span className="sr-only">Close</span>
           </SheetPrimitive.Close>
         )}
