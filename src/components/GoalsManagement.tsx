@@ -185,87 +185,82 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
           </nav>
         </SheetContent>
       </Sheet>
-      <div className="fixed inset-0 z-0 w-full h-full"><Aurora colorStops={[...AURORA_COLORS]} /></div>
+      {/* Fixed background — stays still while content scrolls */}
+      <MosaicCard seed={0} className="fixed inset-0 z-0 w-full h-full">{null}</MosaicCard>
       <div className="relative z-10 w-full">
         {goals.length > 0 ? (
-          <div className="animate-fadeIn">
-            {goals.map(goal => (
-              <MosaicCard key={goal.id} seed={goals.indexOf(goal)} className="backdrop-blur-sm min-h-screen pt-[120px] px-6 pb-6 md:px-10 md:pb-10 flex flex-col">
-                <div className="text-center mb-6 md:mb-8 pt-4">
+          <div className="animate-fadeIn min-h-screen px-6 pb-6 md:px-10 md:pb-10 pt-[120px]">
+            {/* Date — sticky header */}
+            <div className="sticky top-0 z-20 text-center pb-4 pt-2">
+              <div
+                className="inline-block bg-black px-6 py-2"
+                style={{ clipPath: "polygon(2% 0%, 98% 4%, 100% 96%, 0% 100%)" }}
+              >
+                <p className="text-xl md:text-3xl text-white font-bold">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</p>
+              </div>
+              {engagement && (engagement.currentStreak > 0 || engagement.isAtRisk) && (
+                <div className="flex items-center justify-center gap-2 mt-3">
+                  <StreakBadge streak={engagement.currentStreak} isAtRisk={engagement.isAtRisk} size="sm" />
+                </div>
+              )}
+            </div>
+            {/* All goals stacked */}
+            <div className="space-y-6 md:space-y-8 mb-8">
+              {goals.map((goal, goalIndex) => (
+                <div key={goal.id} className="w-full relative">
+                  {/* Day X label — attached to top of goal card */}
                   <div
-                    className="inline-block bg-black px-6 py-2"
-                    style={{ clipPath: "polygon(2% 0%, 98% 4%, 100% 96%, 0% 100%)" }}
+                    className="inline-block bg-black px-5 py-2 ml-2 mb-0 relative z-10"
+                    style={{ clipPath: "polygon(0% 0%, 97% 5%, 100% 95%, 3% 100%)" }}
                   >
-                    <p className="text-xl md:text-3xl text-white font-bold">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                    <CardDescription className="text-white font-black text-xl md:text-2xl uppercase tracking-wide" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>Day {goalCurrentDays[goal.id] || 0} of 30</CardDescription>
                   </div>
-                </div>
-                <div className="w-full flex-1 flex flex-col">
-                  {/* Streak badge */}
-                  {engagement && (engagement.currentStreak > 0 || engagement.isAtRisk) && (
-                    <div className="flex items-center gap-2 mb-4 px-2">
-                      <StreakBadge streak={engagement.currentStreak} isAtRisk={engagement.isAtRisk} size="sm" />
-                    </div>
-                  )}
-                  {/* Giant goal title with Day X attached */}
-                  <div className="flex-1 flex items-center justify-center px-4 md:px-8">
-                    <div className="w-full relative">
-                      {/* Day X label — attached to top of goal card */}
-                      <div
-                        className="inline-block bg-black px-5 py-2 ml-2 mb-0 relative z-10"
-                        style={{ clipPath: "polygon(0% 0%, 97% 5%, 100% 95%, 3% 100%)" }}
-                      >
-                        <CardDescription className="text-white font-black text-xl md:text-2xl uppercase tracking-wide" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>Day {goalCurrentDays[goal.id] || 0} of 30</CardDescription>
-                      </div>
-                      <button
-                        onClick={() => onSelectGoal(goal.id)}
-                        className="bg-black px-6 py-8 md:px-10 md:py-12 w-full hover:scale-[1.02] transition-transform cursor-pointer -mt-1"
-                        style={{ clipPath: "polygon(2% 0%, 98% 3%, 100% 15%, 99% 88%, 96% 100%, 4% 97%, 0% 85%, 1% 12%)" }}
-                      >
-                        <h1
-                          className="text-center font-black uppercase leading-[0.95] break-words"
-                          style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif", fontSize: "clamp(4rem, 15vw, 10rem)" }}
-                        >
-                          {goal.title.split(" ").map((word, i) => (
-                            <span key={i} style={{ color: monotone ? "#ffffff" : ["#FFE633","#FF6B2B","#FF2D55","#00EAFF","#FF10F0","#FF1493","#4FC3F7","#FF4500"][i % 8] }}>
-                              {word}{" "}
-                            </span>
-                          ))}
-                        </h1>
-                      </button>
-                      {/* Trash icon on each goal */}
-                      <button
-                        onClick={(e) => { e.stopPropagation(); handleDeleteGoal(goal.id, goal.title); }}
-                        aria-label="Delete goal"
-                        className="absolute bottom-2 right-2 bg-black text-white/60 p-3 hover:scale-110 hover:text-white transition-all z-10"
-                        style={{ clipPath: "polygon(0% 5%, 97% 0%, 100% 95%, 3% 100%)" }}
-                      >
-                        <Trash2 className="w-5 h-5" />
-                      </button>
-                    </div>
-                  </div>
-                  {/* Stats & Achievements */}
-                  {engagement && (
-                    <div className="space-y-4 my-6 px-6 md:px-10">
-                      <StatsCard engagement={engagement} />
-                      <div className="flex justify-center">
-                        <AchievementsSheet achievements={engagement.achievements} />
-                      </div>
-                    </div>
-                  )}
-                  {/* Add Goal */}
-                  <div className="mt-auto pt-6">
-                    <button
-                      onClick={onCreateGoal}
-                      className="w-full bg-black py-4 md:py-5 text-xl md:text-2xl font-black uppercase tracking-wide hover:scale-105 transition-transform flex items-center justify-center gap-2"
-                      style={{ clipPath: "polygon(2% 0%, 100% 4%, 98% 100%, 0% 96%)", fontFamily: "var(--font-bebas), system-ui, sans-serif", letterSpacing: 3 }}
+                  <button
+                    onClick={() => onSelectGoal(goal.id)}
+                    className="bg-black px-6 py-8 md:px-10 md:py-12 w-full hover:scale-[1.02] transition-transform cursor-pointer -mt-1"
+                    style={{ clipPath: "polygon(2% 0%, 98% 3%, 100% 15%, 99% 88%, 96% 100%, 4% 97%, 0% 85%, 1% 12%)" }}
+                  >
+                    <h1
+                      className="text-center font-black uppercase leading-[0.95] break-words"
+                      style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif", fontSize: "clamp(3rem, 12vw, 8rem)" }}
                     >
-                      <Plus className="w-5 h-5 text-white" />
-                      <span className="text-white">ADD NEW GOAL</span>
-                    </button>
-                  </div>
+                      {goal.title.split(" ").map((word, i) => (
+                        <span key={i} style={{ color: monotone ? "#ffffff" : ["#FFE633","#FF6B2B","#FF2D55","#00EAFF","#FF10F0","#FF1493","#4FC3F7","#FF4500"][(i + goalIndex * 3) % 8] }}>
+                          {word}{" "}
+                        </span>
+                      ))}
+                    </h1>
+                  </button>
+                  {/* Trash icon on each goal */}
+                  <button
+                    onClick={(e) => { e.stopPropagation(); handleDeleteGoal(goal.id, goal.title); }}
+                    aria-label="Delete goal"
+                    className="absolute bottom-2 right-2 bg-black text-white/60 p-3 hover:scale-110 hover:text-white transition-all z-10"
+                    style={{ clipPath: "polygon(0% 5%, 97% 0%, 100% 95%, 3% 100%)" }}
+                  >
+                    <Trash2 className="w-5 h-5" />
+                  </button>
                 </div>
-              </MosaicCard>
-            ))}
+              ))}
+            </div>
+            {/* Stats & Achievements — once */}
+            {engagement && (
+              <div className="space-y-4 mb-8 px-2 md:px-6">
+                <StatsCard engagement={engagement} />
+                <div className="flex justify-center">
+                  <AchievementsSheet achievements={engagement.achievements} />
+                </div>
+              </div>
+            )}
+            {/* Add Goal — once at the bottom */}
+            <button
+              onClick={onCreateGoal}
+              className="w-full bg-black py-4 md:py-5 text-xl md:text-2xl font-black uppercase tracking-wide hover:scale-105 transition-transform flex items-center justify-center gap-2"
+              style={{ clipPath: "polygon(2% 0%, 100% 4%, 98% 100%, 0% 96%)", fontFamily: "var(--font-bebas), system-ui, sans-serif", letterSpacing: 3 }}
+            >
+              <Plus className="w-5 h-5 text-white" />
+              <span className="text-white">ADD NEW GOAL</span>
+            </button>
           </div>
         ) : (
           <MosaicCard seed={0} className="min-h-screen p-6 md:p-10 flex flex-col items-center justify-center">
