@@ -5,7 +5,7 @@ import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/com
 import { MosaicCard } from "./MosaicCard";
 import { Textarea } from "@/components/ui/textarea";
 import Aurora from "./Aurora";
-import { AURORA_COLORS } from "@/constants";
+import { AURORA_COLORS, VORONOI_LIGHT } from "@/constants";
 import { Target, Plus, Trash2, Calendar, CheckCircle, Menu, LogOut, Palette } from "lucide-react";
 import { createClient, API_BASE } from "@/lib/supabase/client";
 import { BouncingButton } from "./BouncingButton";
@@ -131,11 +131,27 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
     return (
       <div className="min-h-screen relative bg-black flex items-center justify-center">
         <div className="fixed inset-0 z-0 w-full h-full"><Aurora colorStops={[...AURORA_COLORS]} /></div>
-        <div className="fixed top-0 left-0 right-0 z-20 h-1">
-          <div className="h-full bg-white/60 animate-shimmer" style={{ width: '60%', animation: 'loadingBar 1.5s ease-in-out infinite', clipPath: 'polygon(0 0, 100% 0, 96% 100%, 0 100%)' }} />
-        </div>
-        <div className="relative z-10">
-          <p className="text-lg text-white/80 font-medium">Loading your goals...</p>
+        <div className="relative z-10 flex flex-col items-center gap-6 px-6 w-full max-w-md">
+          {/* Shard progress bar */}
+          <div className="flex gap-[2px] h-3 w-full">
+            {Array.from({ length: 20 }, (_, i) => (
+              <div
+                key={i}
+                className="flex-1"
+                style={{
+                  backgroundColor: VORONOI_LIGHT[i % VORONOI_LIGHT.length],
+                  clipPath: ["polygon(2% 0%, 100% 4%, 97% 100%, 0% 96%)", "polygon(0% 3%, 98% 0%, 100% 97%, 3% 100%)", "polygon(1% 0%, 100% 2%, 99% 100%, 0% 98%)", "polygon(3% 2%, 100% 0%, 97% 98%, 0% 100%)"][i % 4],
+                  animation: `shardPulse 1.5s ease-in-out ${i * 0.08}s infinite`,
+                }}
+              />
+            ))}
+          </div>
+          <div
+            className="inline-block bg-black px-6 py-3"
+            style={{ clipPath: "polygon(2% 0%, 98% 3%, 100% 97%, 0% 100%)" }}
+          >
+            <p className="text-lg text-white font-black uppercase tracking-wide" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>Loading your goals...</p>
+          </div>
         </div>
       </div>
     );
@@ -147,7 +163,7 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
         <SheetTrigger asChild>
           <button
             aria-label="Menu"
-            className="fixed top-4 right-4 z-50 bg-black text-white p-3 hover:scale-105 transition-transform"
+            className="fixed top-[136px] right-4 z-50 bg-black text-white p-3 hover:scale-105 transition-transform"
             style={{ clipPath: "polygon(3% 0%, 100% 5%, 97% 100%, 0% 92%)" }}
           >
             <Menu className="w-5 h-5" />
@@ -184,50 +200,43 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                   </div>
                 </div>
                 <div className="w-full flex-1 flex flex-col">
-                  {/* Top bar: Day X + streak + trash */}
-                  <div className="flex items-center justify-between mb-4 px-2">
-                    <div className="flex items-center gap-2">
+                  {/* Streak badge */}
+                  {engagement && (engagement.currentStreak > 0 || engagement.isAtRisk) && (
+                    <div className="flex items-center gap-2 mb-4 px-2">
+                      <StreakBadge streak={engagement.currentStreak} isAtRisk={engagement.isAtRisk} size="sm" />
+                    </div>
+                  )}
+                  {/* Giant goal title with Day X attached */}
+                  <div className="flex-1 flex items-center justify-center px-4 md:px-8">
+                    <div className="w-full relative">
+                      {/* Day X label — attached to top of goal card */}
                       <div
-                        className="inline-block bg-black px-4 py-1.5"
+                        className="inline-block bg-black px-5 py-2 ml-2 mb-0 relative z-10"
                         style={{ clipPath: "polygon(0% 0%, 97% 5%, 100% 95%, 3% 100%)" }}
                       >
-                        <CardDescription className="text-white font-bold">Day {goalCurrentDays[goal.id] || 0} of 30</CardDescription>
+                        <CardDescription className="text-white font-black text-xl md:text-2xl uppercase tracking-wide" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>Day {goalCurrentDays[goal.id] || 0} of 30</CardDescription>
                       </div>
-                      {engagement && (engagement.currentStreak > 0 || engagement.isAtRisk) && (
-                        <StreakBadge streak={engagement.currentStreak} isAtRisk={engagement.isAtRisk} size="sm" />
-                      )}
-                    </div>
-                    <button
-                      onClick={(e) => { e.stopPropagation(); handleDeleteGoal(goal.id, goal.title); }}
-                      aria-label="Delete goal"
-                      className="bg-black text-white p-3 hover:scale-105 transition-transform flex-shrink-0"
-                      style={{ clipPath: "polygon(0% 5%, 97% 0%, 100% 95%, 3% 100%)" }}
-                    >
-                      <Trash2 className="w-5 h-5" />
-                    </button>
-                  </div>
-                  {/* Giant goal title — word by word, filling the screen */}
-                  <div className="flex-1 flex items-center justify-center px-4 md:px-8">
-                    <button
-                      onClick={() => onSelectGoal(goal.id)}
-                      className="bg-black px-6 py-8 md:px-10 md:py-12 w-full hover:scale-[1.02] transition-transform cursor-pointer"
-                      style={{ clipPath: "polygon(1% 0%, 100% 2%, 99% 98%, 0% 100%)" }}
-                    >
-                      <h1
-                        className="text-center font-black uppercase leading-[0.95] break-words"
-                        style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif", fontSize: "clamp(4rem, 15vw, 10rem)" }}
+                      <button
+                        onClick={() => onSelectGoal(goal.id)}
+                        className="bg-black px-6 py-8 md:px-10 md:py-12 w-full hover:scale-[1.02] transition-transform cursor-pointer -mt-1"
+                        style={{ clipPath: "polygon(1% 0%, 100% 2%, 99% 98%, 0% 100%)" }}
                       >
-                        {monotone ? (
-                          <span className="text-white">{goal.title}</span>
-                        ) : (
-                          goal.title.split(" ").map((word, i) => (
-                            <span key={i} className="block" style={{ color: ["#FFE633","#FF6B2B","#FF2D55","#00EAFF","#FF10F0","#FF1493","#4FC3F7","#FF4500"][i % 8] }}>
-                              {word}
-                            </span>
-                          ))
-                        )}
-                      </h1>
-                    </button>
+                        <h1
+                          className="text-center font-black uppercase leading-[0.95] break-words"
+                          style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif", fontSize: "clamp(4rem, 15vw, 10rem)" }}
+                        >
+                          {monotone ? (
+                            <span className="text-white">{goal.title}</span>
+                          ) : (
+                            goal.title.split(" ").map((word, i) => (
+                              <span key={i} className="block" style={{ color: ["#FFE633","#FF6B2B","#FF2D55","#00EAFF","#FF10F0","#FF1493","#4FC3F7","#FF4500"][i % 8] }}>
+                                {word}
+                              </span>
+                            ))
+                          )}
+                        </h1>
+                      </button>
+                    </div>
                   </div>
                   {/* Stats & Achievements */}
                   {engagement && (
@@ -238,14 +247,23 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                       </div>
                     </div>
                   )}
-                  <div className="mt-auto pt-6">
+                  {/* Bottom row: Add Goal + Trash */}
+                  <div className="mt-auto pt-6 flex items-end gap-3">
                     <button
                       onClick={onCreateGoal}
-                      className="w-full bg-black py-4 md:py-5 text-xl md:text-2xl font-black uppercase tracking-wide hover:scale-105 transition-transform flex items-center justify-center gap-2"
+                      className="flex-1 bg-black py-4 md:py-5 text-xl md:text-2xl font-black uppercase tracking-wide hover:scale-105 transition-transform flex items-center justify-center gap-2"
                       style={{ clipPath: "polygon(2% 0%, 100% 4%, 98% 100%, 0% 96%)", fontFamily: "var(--font-bebas), system-ui, sans-serif", letterSpacing: 3 }}
                     >
                       <Plus className="w-5 h-5 text-white" />
                       <span className="text-white">ADD NEW GOAL</span>
+                    </button>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); handleDeleteGoal(goal.id, goal.title); }}
+                      aria-label="Delete goal"
+                      className="bg-black text-white p-4 hover:scale-105 transition-transform flex-shrink-0"
+                      style={{ clipPath: "polygon(0% 5%, 97% 0%, 100% 95%, 3% 100%)" }}
+                    >
+                      <Trash2 className="w-6 h-6" />
                     </button>
                   </div>
                 </div>

@@ -323,6 +323,11 @@ html {
     25% { transform: translateY(-8px); }
     50% { transform: translateY(0); }
   }
+
+  @keyframes shardPulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
 }
 
 /* ============================================
