@@ -15,14 +15,13 @@ export function ShardRewardGrid({
   totalDays = 30,
   animatingDay,
 }: ShardRewardGridProps) {
+  // Always 5 full weeks — last week stays full, extra days beyond totalDays stay dark
   const weekCount = Math.ceil(totalDays / 7);
 
-  const weeks = Array.from({ length: weekCount }, (_, i) => {
-    const startDay = i * 7 + 1;
-    const remaining = totalDays - i * 7;
-    const shardCount = Math.min(7, remaining);
-    return { weekNumber: i + 1, startDay, shardCount };
-  });
+  const weeks = Array.from({ length: weekCount }, (_, i) => ({
+    weekNumber: i + 1,
+    startDay: i * 7 + 1,
+  }));
 
   return (
     <div className="flex items-end gap-3 overflow-x-auto scrollbar-hide py-2 px-1">
@@ -37,7 +36,6 @@ export function ShardRewardGrid({
             weekNumber={week.weekNumber}
             progress={progress}
             startDay={week.startDay}
-            shardCount={week.shardCount}
             animatingDay={animatingDay}
             size={64}
           />

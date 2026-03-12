@@ -184,7 +184,6 @@ export function CongratsView({
                 weekNumber={Math.ceil(dayNumber / 7)}
                 progress={progress}
                 startDay={(Math.ceil(dayNumber / 7) - 1) * 7 + 1}
-                shardCount={Math.min(7, totalDays - (Math.ceil(dayNumber / 7) - 1) * 7)}
                 animatingDay={dayNumber}
                 size={96}
               />

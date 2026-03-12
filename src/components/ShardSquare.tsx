@@ -10,7 +10,6 @@ interface ShardSquareProps {
   weekNumber: number;
   progress: ProgressMap;
   startDay: number;
-  shardCount?: number;
   animatingDay?: number;
   size?: number;
 }
@@ -19,11 +18,11 @@ export function ShardSquare({
   weekNumber,
   progress,
   startDay,
-  shardCount = 7,
   animatingDay,
   size = 80,
 }: ShardSquareProps) {
-  const days = Array.from({ length: shardCount }, (_, i) => startDay + i);
+  // Always 7 shards per week — days beyond 30 just stay dark
+  const days = Array.from({ length: 7 }, (_, i) => startDay + i);
   const allFilled = days.every((d) => isDayCompleted(progress[d]));
 
   return (

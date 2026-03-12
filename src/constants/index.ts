@@ -56,20 +56,20 @@ export const SHARD_CLIPS = [
 
 /**
  * Brick-wall clip-paths for a 7-shard week square.
- * Row 1: 3 shards (top third)  |  Row 2: 1 wide shard (middle)  |  Row 3: 3 shards (bottom third)
- * Each polygon has slight skew for shard aesthetic.
+ * Row 1 (top half): 4 bricks across
+ * Row 2 (bottom half): 3 bricks, offset by half-brick for classic brick-wall look.
+ * Slight skew on edges for shard aesthetic.
  */
 export const SHARD_SQUARE_CLIPS = [
-  // Row 1 — three shards across top third
-  "polygon(0% 0%, 34% 0%, 33% 34%, 1% 33%)",
-  "polygon(34% 0%, 67% 0%, 66% 33%, 33% 34%)",
-  "polygon(67% 0%, 100% 0%, 99% 33%, 66% 34%)",
-  // Row 2 — one wide shard across middle third
-  "polygon(1% 34%, 99% 33%, 100% 67%, 0% 68%)",
-  // Row 3 — three shards across bottom third
-  "polygon(0% 68%, 33% 67%, 34% 100%, 1% 100%)",
-  "polygon(33% 67%, 66% 68%, 67% 100%, 34% 100%)",
-  "polygon(66% 68%, 100% 67%, 99% 100%, 67% 100%)",
+  // Row 1 — four bricks across top half
+  "polygon(0% 0%, 26% 0%, 25% 52%, 1% 50%)",
+  "polygon(26% 0%, 51% 0%, 50% 50%, 25% 52%)",
+  "polygon(51% 0%, 76% 0%, 75% 52%, 50% 50%)",
+  "polygon(76% 0%, 100% 0%, 99% 50%, 75% 52%)",
+  // Row 2 — three bricks across bottom half, offset
+  "polygon(1% 52%, 34% 50%, 33% 100%, 0% 100%)",
+  "polygon(34% 50%, 67% 52%, 66% 100%, 33% 100%)",
+  "polygon(67% 52%, 99% 50%, 100% 100%, 66% 100%)",
 ] as const;
 
 /** Animation durations for scrolling goal suggestion rows. */
