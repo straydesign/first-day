@@ -72,7 +72,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
       <div className="fixed inset-0 z-0 w-full h-full">
         <Aurora colorStops={[...AURORA_COLORS]} />
       </div>
-      <div className="relative z-10 p-4 md:p-8 pt-4 md:pt-8">
+      <div className="relative z-10 p-4 md:p-8 pt-[120px] md:pt-[120px]">
         {onBack && <BackButton onClick={onBack} />}
 
         {isCompleted && (

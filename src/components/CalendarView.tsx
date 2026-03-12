@@ -3,8 +3,7 @@ import { Calendar as CalendarIcon, BookOpen, Edit2, ChevronUp, ChevronDown, Aler
 import { ArrowLeft } from "lucide-react";
 import { MosaicCard } from "./MosaicCard";
 import { WeekCalendar } from "./WeekCalendar";
-import Aurora from "./Aurora";
-import { AURORA_COLORS, VORONOI_LIGHT } from "@/constants";
+import { VORONOI_LIGHT } from "@/constants";
 import { useState } from "react";
 import { StreakBadge } from "./StreakBadge";
 import { motion } from "framer-motion";
@@ -92,11 +91,12 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
 
   return (
     <div className="min-h-screen relative bg-black">
-      <div className="fixed inset-0 z-0 w-full h-full"><Aurora colorStops={[...AURORA_COLORS]} /></div>
-      <div className="relative z-10 p-4 md:p-8 pt-4 md:pt-6">
-        <div className="max-w-7xl mx-auto space-y-4 md:space-y-8">
+      {/* Full-screen mosaic background */}
+      <MosaicCard seed={42} className="fixed inset-0 z-0 w-full h-full">{null}</MosaicCard>
+      <div className="relative z-10 p-4 md:p-8 pt-[120px] md:pt-[120px]">
+        <div className="max-w-7xl mx-auto">
           <motion.div
-            className="mb-4 md:mb-8"
+            className="mb-8 md:mb-12"
             initial={{ opacity: 0, y: 16, filter: "blur(4px)" }}
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{ duration: 0.5, ease: "easeOut" }}
@@ -163,9 +163,9 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
               )}
             </div>)}
           </motion.div>
-          <div className="space-y-4 md:space-y-6">
+          {/* Weeks — no panels, separated by vertical space */}
+          <div className="space-y-12 md:space-y-16">
             {weeks.map((week: WeekData, weekIndex: number) => {
-              // Progressive fade — week 1 fully visible, further weeks darker
               const weekOpacity = Math.max(0.12, 1 - weekIndex * 0.22);
 
               return (
@@ -176,47 +176,48 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
                   animate={{ opacity: weekOpacity, y: 0, filter: "blur(0px)" }}
                   transition={{ duration: 0.5, delay: weekIndex * 0.12, ease: "easeOut" }}
                 >
-                  <div className="mb-3 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <h3 className="text-xl md:text-2xl font-bold text-white">Week {week.weekNumber}: {week.label}</h3>
+                  <div className="mb-4 flex items-center gap-3">
+                    <div
+                      className="inline-block bg-black px-5 py-2"
+                      style={{ clipPath: "polygon(0% 0%, 97% 5%, 100% 95%, 3% 100%)" }}
+                    >
+                      <h3 className="text-xl md:text-2xl font-black text-white uppercase tracking-wide" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>Week {week.weekNumber}: {week.label}</h3>
                     </div>
                   </div>
-                  <MosaicCard seed={weekIndex} tileVariant={(["a", "b", "c", "d"] as const)[weekIndex % 4]} className={`p-3 md:p-6 transition-smooth ${week.isUnlocked ? 'backdrop-blur-sm' : 'cursor-not-allowed'}`}>
-                    {week.isUnlocked ? (
-                      <div className="space-y-3 md:space-y-4">
-                        {week.weeklyBook && (
-                          <div className="bg-black clip-tile-b overflow-hidden">
-                            <button onClick={() => toggleWeekBook(week.weekNumber)} className="w-full p-4 md:p-5 flex items-center justify-between hover:bg-white/5 transition-colors">
-                              <div className="flex items-center gap-3"><BookOpen className="w-6 h-6 md:w-7 md:h-7 text-[#fcd02a]" /><h3 className="text-2xl md:text-3xl text-[#fcd02a] font-black uppercase tracking-wide">Week {week.weekNumber} Reading</h3></div>
-                              {expandedWeeks.has(week.weekNumber) ? <ChevronUp className="w-5 h-5 text-[#fcd02a]" /> : <ChevronDown className="w-5 h-5 text-[#fcd02a]" />}
-                            </button>
-                            {expandedWeeks.has(week.weekNumber) && (
-                              <div className="px-3 md:px-4 pb-3 md:pb-4 space-y-1 md:space-y-2">
-                                <p className="text-sm md:text-base text-yellow-100 font-semibold">{week.weeklyBook.title}</p>
-                                <p className="text-xs md:text-sm text-yellow-400">by {week.weeklyBook.author}</p>
-                                <p className="text-xs text-yellow-300/80 italic mt-1 md:mt-2">{week.weeklyBook.description || week.weeklyBook.reason}</p>
-                              </div>
-                            )}
-                          </div>
-                        )}
-                        <WeekCalendar weekNumber={week.weekNumber} days={week.days} progress={progress} onDayClick={onDayClick} planData={planData} startDate={planData?.startDate} />
-                      </div>
-                    ) : (
-                      <div
-                        className="relative py-10 md:py-16"
-                        style={{
-                          backgroundColor: "#000000",
-                          clipPath: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)",
-                        }}
-                      >
-                        <div className="flex flex-col items-center justify-center gap-2">
-                          <Lock className="w-8 h-8 text-white/30" />
-                          <span className="text-2xl md:text-3xl font-black tracking-[0.3em] text-white/20 uppercase">LOCKED</span>
-                          <p className="text-xs text-white/30 mt-1">Complete Week {week.weekNumber - 1} to unlock</p>
+                  {week.isUnlocked ? (
+                    <div className="space-y-3 md:space-y-4">
+                      {week.weeklyBook && (
+                        <div className="bg-black clip-tile-b overflow-hidden">
+                          <button onClick={() => toggleWeekBook(week.weekNumber)} className="w-full p-4 md:p-5 flex items-center justify-between hover:bg-white/5 transition-colors">
+                            <div className="flex items-center gap-3"><BookOpen className="w-6 h-6 md:w-7 md:h-7 text-[#fcd02a]" /><h3 className="text-2xl md:text-3xl text-[#fcd02a] font-black uppercase tracking-wide">Week {week.weekNumber} Reading</h3></div>
+                            {expandedWeeks.has(week.weekNumber) ? <ChevronUp className="w-5 h-5 text-[#fcd02a]" /> : <ChevronDown className="w-5 h-5 text-[#fcd02a]" />}
+                          </button>
+                          {expandedWeeks.has(week.weekNumber) && (
+                            <div className="px-3 md:px-4 pb-3 md:pb-4 space-y-1 md:space-y-2">
+                              <p className="text-sm md:text-base text-yellow-100 font-semibold">{week.weeklyBook.title}</p>
+                              <p className="text-xs md:text-sm text-yellow-400">by {week.weeklyBook.author}</p>
+                              <p className="text-xs text-yellow-300/80 italic mt-1 md:mt-2">{week.weeklyBook.description || week.weeklyBook.reason}</p>
+                            </div>
+                          )}
                         </div>
+                      )}
+                      <WeekCalendar weekNumber={week.weekNumber} days={week.days} progress={progress} onDayClick={onDayClick} planData={planData} startDate={planData?.startDate} />
+                    </div>
+                  ) : (
+                    <div
+                      className="relative py-10 md:py-16"
+                      style={{
+                        backgroundColor: "#000000",
+                        clipPath: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)",
+                      }}
+                    >
+                      <div className="flex flex-col items-center justify-center gap-2">
+                        <Lock className="w-8 h-8 text-white/30" />
+                        <span className="text-2xl md:text-3xl font-black tracking-[0.3em] text-white/20 uppercase">LOCKED</span>
+                        <p className="text-xs text-white/30 mt-1">Complete Week {week.weekNumber - 1} to unlock</p>
                       </div>
-                    )}
-                  </MosaicCard>
+                    </div>
+                  )}
                 </motion.div>
               );
             })}

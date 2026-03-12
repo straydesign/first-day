@@ -24,6 +24,7 @@ const CongratsView = dynamic(() => import("@/components/CongratsView").then(m =>
 const NotificationSettings = dynamic(() => import("@/components/NotificationSettings").then(m => ({ default: m.NotificationSettings })));
 const XPAnimation = dynamic(() => import("@/components/XPAnimation").then(m => ({ default: m.XPAnimation })));
 
+
 function getSupabase() {
   return createClient();
 }
@@ -48,6 +49,7 @@ export default function Home() {
   const [resetToken, setResetToken] = useState<string | null>(null);
   const [editingGoalData, setEditingGoalData] = useState<any>(null);
   const [showFullScreenLoading, setShowFullScreenLoading] = useState(false);
+  const [loadingGoal, setLoadingGoal] = useState(false);
   const [showXPAnimation, setShowXPAnimation] = useState(false);
   const [latestDayXP, setLatestDayXP] = useState<XPBreakdown | null>(null);
   const [latestMilestone, setLatestMilestone] = useState<Milestone | null>(null);
@@ -515,7 +517,9 @@ export default function Home() {
 
   const handleSelectGoal = async (goalId: string) => {
     if (!accessToken) return;
+    setLoadingGoal(true);
     await loadGoalData(accessToken, goalId);
+    setLoadingGoal(false);
   };
 
   const handleViewTodayActivities = async (goalId: string) => {
@@ -721,7 +725,9 @@ export default function Home() {
             </div>
           )}
 
-        {currentView === "goals" && accessToken && (
+        {loadingGoal && <LoadingScreen />}
+
+        {currentView === "goals" && accessToken && !loadingGoal && (
           <GoalsManagement
             accessToken={accessToken}
             onCreateGoal={handleCreateGoal}

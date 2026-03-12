@@ -163,10 +163,10 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
         <SheetTrigger asChild>
           <button
             aria-label="Menu"
-            className="fixed top-4 right-4 z-50 bg-black text-white p-3 hover:scale-105 transition-transform"
+            className="fixed top-[130px] right-4 z-50 bg-black text-white p-4 hover:scale-105 transition-transform"
             style={{ clipPath: "polygon(3% 0%, 100% 5%, 97% 100%, 0% 92%)" }}
           >
-            <Menu className="w-5 h-5" />
+            <Menu className="w-6 h-6" />
           </button>
         </SheetTrigger>
         <SheetContent side="right" className="w-[200px] backdrop-blur-xl border-l-2 border-white/10 pt-4">
@@ -181,7 +181,7 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
             <button onClick={() => setMobileMenuOpen(false)} className="bg-black text-white py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2" style={{ clipPath: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" }}><Target className="w-4 h-4" />My Goals</button>
             <button onClick={() => { setMobileMenuOpen(false); if (goals[0]) onSelectGoal(goals[0].id); }} className="bg-black text-white py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2" style={{ clipPath: "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)" }}><Calendar className="w-4 h-4" />30 Day Plan</button>
             <button onClick={toggleMonotone} className={`py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2 mt-4 ${monotone ? "bg-white text-black" : "bg-black text-white"}`} style={{ clipPath: "polygon(1% 0%, 98% 3%, 100% 97%, 2% 100%)" }}><Palette className="w-4 h-4" />{monotone ? "Color Mode" : "Monotone"}</button>
-            <button onClick={onLogout} className="bg-black text-red-400 py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2" style={{ clipPath: "polygon(3% 0%, 100% 4%, 97% 100%, 0% 96%)" }}><LogOut className="w-4 h-4" />Logout</button>
+            <button onClick={onLogout} className={`py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2 ${monotone ? "bg-black text-white" : "bg-black text-red-400"}`} style={{ clipPath: "polygon(3% 0%, 100% 4%, 97% 100%, 0% 96%)" }}><LogOut className="w-4 h-4" />Logout</button>
           </nav>
         </SheetContent>
       </Sheet>
@@ -190,7 +190,7 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
         {goals.length > 0 ? (
           <div className="animate-fadeIn">
             {goals.map(goal => (
-              <MosaicCard key={goal.id} seed={goals.indexOf(goal)} className="backdrop-blur-sm min-h-screen pt-0 px-6 pb-6 md:px-10 md:pb-10 flex flex-col">
+              <MosaicCard key={goal.id} seed={goals.indexOf(goal)} className="backdrop-blur-sm min-h-screen pt-[120px] px-6 pb-6 md:px-10 md:pb-10 flex flex-col">
                 <div className="text-center mb-6 md:mb-8 pt-4">
                   <div
                     className="inline-block bg-black px-6 py-2"
@@ -225,16 +225,21 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                           className="text-center font-black uppercase leading-[0.95] break-words"
                           style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif", fontSize: "clamp(4rem, 15vw, 10rem)" }}
                         >
-                          {monotone ? (
-                            <span className="text-white">{goal.title}</span>
-                          ) : (
-                            goal.title.split(" ").map((word, i) => (
-                              <span key={i} className="block" style={{ color: ["#FFE633","#FF6B2B","#FF2D55","#00EAFF","#FF10F0","#FF1493","#4FC3F7","#FF4500"][i % 8] }}>
-                                {word}
-                              </span>
-                            ))
-                          )}
+                          {goal.title.split(" ").map((word, i) => (
+                            <span key={i} style={{ color: monotone ? "#ffffff" : ["#FFE633","#FF6B2B","#FF2D55","#00EAFF","#FF10F0","#FF1493","#4FC3F7","#FF4500"][i % 8] }}>
+                              {word}{" "}
+                            </span>
+                          ))}
                         </h1>
+                      </button>
+                      {/* Trash icon on each goal */}
+                      <button
+                        onClick={(e) => { e.stopPropagation(); handleDeleteGoal(goal.id, goal.title); }}
+                        aria-label="Delete goal"
+                        className="absolute bottom-2 right-2 bg-black text-white/60 p-3 hover:scale-110 hover:text-white transition-all z-10"
+                        style={{ clipPath: "polygon(0% 5%, 97% 0%, 100% 95%, 3% 100%)" }}
+                      >
+                        <Trash2 className="w-5 h-5" />
                       </button>
                     </div>
                   </div>
@@ -247,23 +252,15 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                       </div>
                     </div>
                   )}
-                  {/* Bottom row: Add Goal + Trash */}
-                  <div className="mt-auto pt-6 flex items-end gap-3">
+                  {/* Add Goal */}
+                  <div className="mt-auto pt-6">
                     <button
                       onClick={onCreateGoal}
-                      className="flex-1 bg-black py-4 md:py-5 text-xl md:text-2xl font-black uppercase tracking-wide hover:scale-105 transition-transform flex items-center justify-center gap-2"
+                      className="w-full bg-black py-4 md:py-5 text-xl md:text-2xl font-black uppercase tracking-wide hover:scale-105 transition-transform flex items-center justify-center gap-2"
                       style={{ clipPath: "polygon(2% 0%, 100% 4%, 98% 100%, 0% 96%)", fontFamily: "var(--font-bebas), system-ui, sans-serif", letterSpacing: 3 }}
                     >
                       <Plus className="w-5 h-5 text-white" />
                       <span className="text-white">ADD NEW GOAL</span>
-                    </button>
-                    <button
-                      onClick={(e) => { e.stopPropagation(); handleDeleteGoal(goal.id, goal.title); }}
-                      aria-label="Delete goal"
-                      className="bg-black text-white p-4 hover:scale-105 transition-transform flex-shrink-0"
-                      style={{ clipPath: "polygon(0% 5%, 97% 0%, 100% 95%, 3% 100%)" }}
-                    >
-                      <Trash2 className="w-6 h-6" />
                     </button>
                   </div>
                 </div>

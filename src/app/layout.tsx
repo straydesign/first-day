@@ -61,7 +61,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${plusJakartaSans.variable} ${inter.variable} ${bebasNeue.variable}`}>
-      <body className="antialiased pt-[120px] bg-black">
+      <body className="antialiased bg-black">
         <MonotoneProvider>
           {children}
         </MonotoneProvider>

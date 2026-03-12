@@ -93,7 +93,7 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
     <div className="min-h-screen relative bg-black">
       <div className="fixed inset-0 z-0 w-full h-full"><Aurora colorStops={[...AURORA_COLORS]} /></div>
       <div className="relative z-10">
-      <div className="pt-2 pl-6">
+      <div className="pt-[120px] pl-6">
         <BackButton onClick={onCancel} disabled={isGenerating} />
       </div>
       <div className="flex items-center justify-center">
