@@ -11,8 +11,13 @@ const TAGLINE_PALETTE = [
   "#FF10F0", "#FF1493", "#4FC3F7", "#FF4500",
 ] as const;
 
-/** Words of the tagline, each on its own shard chip */
-const TAGLINE_WORDS = ["FIRST", "DAY", "OF", "THE", "REST", "OF", "YOUR", "LIFE"] as const;
+/** Tagline rows — pairs of words cascading top-left → bottom-right */
+const TAGLINE_ROWS = [
+  { words: ["FIRST", "DAY"],   offset: 0  },
+  { words: ["OF", "THE"],      offset: 15 },
+  { words: ["REST", "OF"],     offset: 30 },
+  { words: ["YOUR", "LIFE"],   offset: 45 },
+] as const;
 
 /** Shard clip-path variants for tagline word chips */
 const SHARD_CLIPS_TAGLINE = [
@@ -22,17 +27,8 @@ const SHARD_CLIPS_TAGLINE = [
   "polygon(3% 2%, 100% 0%, 97% 98%, 0% 100%)",
 ] as const;
 
-/** Diagonal scatter positions — top-left flowing to bottom-right */
-const TAGLINE_POSITIONS = [
-  { x: 2,  y: 0,  r: -1.5 },  // FIRST
-  { x: 28, y: 4,  r: 1.2 },   // DAY
-  { x: 52, y: 1,  r: -0.8 },  // OF
-  { x: 10, y: 30, r: 1.8 },   // THE
-  { x: 38, y: 34, r: -1.2 },  // REST
-  { x: 62, y: 28, r: 0.6 },   // OF
-  { x: 18, y: 62, r: -1.0 },  // YOUR
-  { x: 50, y: 66, r: 1.5 },   // LIFE
-] as const;
+/** Per-word rotations for shard feel */
+const TAGLINE_ROTATIONS = [-1.5, 1.2, -0.8, 1.8, -1.2, 0.6, -1.0, 1.5] as const;
 
 interface FirstDayLogoProps {
   className?: string;
@@ -241,29 +237,40 @@ function FirstDayLogoInner({
       </div>
       ) : null}
 
-      {/* Tagline only (no card wrapper) — scattered shard words */}
+      {/* Tagline only (no card wrapper) — diagonal shard word cascade */}
       {!showLetters && showTagline && (
-        <div className="relative w-full" style={{ minHeight: isHero ? "clamp(220px, 40vw, 400px)" : "clamp(140px, 30vw, 220px)" }}>
-          {TAGLINE_WORDS.map((word, i) => (
-            <span
-              key={i}
-              className="absolute inline-block bg-black px-3 py-1 md:px-5 md:py-2 drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]"
+        <div className="flex flex-col w-full px-2 md:px-0" style={{ gap: isHero ? "6px" : "4px" }}>
+          {TAGLINE_ROWS.map((row, rowIdx) => (
+            <div
+              key={rowIdx}
+              className="flex"
               style={{
-                fontFamily: "var(--font-bebas), system-ui, sans-serif",
-                fontSize: isHero ? "clamp(1.2rem, 3.5vw, 3.5rem)" : "clamp(0.9rem, 2.8vw, 1.8rem)",
-                fontWeight: 900,
-                letterSpacing: 2,
-                textTransform: "uppercase" as const,
-                color: monotone ? "#ffffff" : TAGLINE_PALETTE[i % TAGLINE_PALETTE.length],
-                clipPath: SHARD_CLIPS_TAGLINE[i % SHARD_CLIPS_TAGLINE.length],
-                left: `${TAGLINE_POSITIONS[i].x}%`,
-                top: `${TAGLINE_POSITIONS[i].y}%`,
-                transform: `rotate(${TAGLINE_POSITIONS[i].r}deg)`,
-                whiteSpace: "nowrap" as const,
+                gap: isHero ? "8px" : "5px",
+                marginLeft: `${row.offset}%`,
               }}
             >
-              {word}
-            </span>
+              {row.words.map((word, wordIdx) => {
+                const globalIdx = rowIdx * 2 + wordIdx;
+                return (
+                  <span
+                    key={word + wordIdx}
+                    className="inline-block bg-black px-3 py-1 md:px-6 md:py-2"
+                    style={{
+                      fontFamily: "var(--font-bebas), system-ui, sans-serif",
+                      fontSize: isHero ? "clamp(1.6rem, 4.5vw, 4.5rem)" : "clamp(1.2rem, 4vw, 2.2rem)",
+                      fontWeight: 900,
+                      letterSpacing: 3,
+                      color: monotone ? "#ffffff" : TAGLINE_PALETTE[globalIdx % TAGLINE_PALETTE.length],
+                      clipPath: SHARD_CLIPS_TAGLINE[globalIdx % SHARD_CLIPS_TAGLINE.length],
+                      transform: `rotate(${TAGLINE_ROTATIONS[globalIdx]}deg)`,
+                      whiteSpace: "nowrap" as const,
+                    }}
+                  >
+                    {word}
+                  </span>
+                );
+              })}
+            </div>
           ))}
         </div>
       )}
