@@ -218,9 +218,9 @@ function FirstDayLogoInner({
         <span
           className="drop-shadow-[0_1px_8px_rgba(0,0,0,0.5)] flex flex-nowrap justify-center overflow-hidden w-full"
           style={{
-            fontSize: isHero ? "clamp(0.55rem, 2.6vw, 4rem)" : "clamp(0.76rem, 1.9vw, 0.95rem)",
+            fontSize: isHero ? "clamp(0.55rem, 2.6vw, 4rem)" : "clamp(1rem, 5.2vw, 2rem)",
             fontWeight: 900,
-            letterSpacing: isHero ? 2 : 1,
+            letterSpacing: isHero ? 2 : "0.15em",
             textTransform: "uppercase" as const,
             fontFamily: "var(--font-bebas), system-ui, sans-serif",
             whiteSpace: "nowrap" as const,
