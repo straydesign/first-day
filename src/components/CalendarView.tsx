@@ -1,12 +1,14 @@
 "use client";
-import { BookOpen, Edit2, ChevronUp, ChevronDown, AlertTriangle, Lock } from "lucide-react";
+import { BookOpen, Edit2, ChevronUp, ChevronDown, AlertTriangle, Lock, Menu, LogOut, Palette, Target } from "lucide-react";
 import { ArrowLeft } from "lucide-react";
 import { MosaicCard } from "./MosaicCard";
 import { WeekCalendar } from "./WeekCalendar";
 import { VORONOI_LIGHT } from "@/constants";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { StreakBadge } from "./StreakBadge";
 import { motion } from "framer-motion";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import { useMonotone } from "./MonotoneContext";
 import type { Plan, ProgressMap, EngagementState, SelectedDay } from "@/types";
 
 interface CalendarViewProps {
@@ -18,6 +20,7 @@ interface CalendarViewProps {
   progress?: ProgressMap;
   onBack?: () => void;
   engagement?: EngagementState | null;
+  onLogout?: () => void;
 }
 
 interface WeekDay {
@@ -39,8 +42,19 @@ interface WeekData {
   label: string;
 }
 
-export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRegeneratePlan, progress = {}, onBack, engagement }: CalendarViewProps) {
+export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRegeneratePlan, progress = {}, onBack, engagement, onLogout }: CalendarViewProps) {
   const [expandedWeeks, setExpandedWeeks] = useState(new Set<number>());
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [editColorIndex, setEditColorIndex] = useState(0);
+  const { monotone, toggleMonotone } = useMonotone();
+
+  // Discrete color cycling for Edit Goal button
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setEditColorIndex(prev => (prev + 1) % VORONOI_LIGHT.length);
+    }, 2000);
+    return () => clearInterval(timer);
+  }, []);
 
   const toggleWeekBook = (weekNumber: number) => {
     setExpandedWeeks(prev => {
@@ -91,6 +105,36 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
 
   return (
     <div className="min-h-screen relative bg-black">
+      {/* Hamburger menu */}
+      <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+        <SheetTrigger asChild>
+          <button
+            aria-label="Menu"
+            className="fixed top-[122px] right-4 z-50 bg-black text-white p-4 hover:scale-105 transition-transform"
+            style={{ clipPath: "polygon(3% 0%, 100% 5%, 97% 100%, 0% 92%)" }}
+          >
+            <Menu className="w-6 h-6" />
+          </button>
+        </SheetTrigger>
+        <SheetContent side="right" className={`w-[200px] border-l-2 border-white/10 pt-4 ${monotone ? "bg-black" : "backdrop-blur-xl"}`}>
+          <div
+            className={`px-4 py-3 mb-6 ${monotone ? "bg-white/10" : "bg-black"}`}
+            style={{ clipPath: "polygon(0% 0%, 100% 4%, 98% 96%, 2% 100%)" }}
+          >
+            <SheetTitle className="text-4xl md:text-6xl font-black text-white text-center uppercase tracking-wide" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>Menu</SheetTitle>
+          </div>
+          <SheetDescription className="sr-only">Navigation options</SheetDescription>
+          <nav className="flex flex-col gap-3 px-3">
+            {onBack && (
+              <button onClick={() => { setMobileMenuOpen(false); onBack(); }} className={`py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2 ${monotone ? "bg-white/10 text-white" : "bg-black text-white"}`} style={{ clipPath: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" }}><Target className="w-4 h-4" />My Goals</button>
+            )}
+            <button onClick={toggleMonotone} className={`py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2 mt-4 ${monotone ? "bg-white text-black" : "bg-black text-white"}`} style={{ clipPath: "polygon(1% 0%, 98% 3%, 100% 97%, 2% 100%)" }}><Palette className="w-4 h-4" />{monotone ? "Color Mode" : "Monotone"}</button>
+            {onLogout && (
+              <button onClick={onLogout} className={`py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2 ${monotone ? "bg-white/10 text-white" : "bg-black text-red-400"}`} style={{ clipPath: "polygon(3% 0%, 100% 4%, 97% 100%, 0% 96%)" }}><LogOut className="w-4 h-4" />Logout</button>
+            )}
+          </nav>
+        </SheetContent>
+      </Sheet>
       {/* Full-screen mosaic background */}
       <MosaicCard seed={42} className="fixed inset-0 z-0 w-full h-full">{null}</MosaicCard>
       <div className="relative z-10 p-4 md:p-8 pt-[120px] md:pt-[120px]">
@@ -130,19 +174,18 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
               )}
               {onEditGoal && (
                 <div className="flex justify-center mb-3">
-                  <motion.button
+                  <button
                     onClick={onEditGoal}
-                    className="relative inline-flex items-center justify-center h-10 px-6 text-sm font-bold text-black overflow-hidden hover:scale-105 transition-transform"
-                    style={{ clipPath: "polygon(4% 8%, 95% 0%, 100% 85%, 8% 100%)" }}
-                    animate={{
-                      backgroundColor: VORONOI_LIGHT as unknown as string[],
+                    className="relative inline-flex items-center justify-center h-10 px-6 text-sm font-bold text-black overflow-hidden hover:scale-105 transition-colors duration-500"
+                    style={{
+                      clipPath: "polygon(4% 8%, 95% 0%, 100% 85%, 8% 100%)",
+                      backgroundColor: VORONOI_LIGHT[editColorIndex],
                     }}
-                    transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
                   >
                     <span className="relative z-10 flex items-center gap-1.5">
                       <Edit2 className="w-4 h-4" />Edit Goal
                     </span>
-                  </motion.button>
+                  </button>
                 </div>
               )}
             </div>)}

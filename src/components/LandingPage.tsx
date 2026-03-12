@@ -132,7 +132,13 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, ease: "easeOut" }}
               >
-                <FirstDayLogo size="hero" showTagline={true} showLetters={false} />
+                {/* Mobile: compact abbreviation, Desktop: full tagline */}
+                <div className="block md:hidden">
+                  <FirstDayLogo compact={true} />
+                </div>
+                <div className="hidden md:block">
+                  <FirstDayLogo size="hero" showTagline={true} showLetters={false} />
+                </div>
               </motion.div>
             </div>
           </div>

@@ -769,6 +769,7 @@ export default function Home() {
             progress={progress}
             onBack={handleBackToGoals}
             engagement={engagement}
+            onLogout={handleLogout}
           />
         )}
 

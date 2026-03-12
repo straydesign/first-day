@@ -60,7 +60,13 @@ export function LoadingScreen({ showProgress = false, estimatedDuration = 15000 
   return (
     <div className="fixed inset-0 z-[100] bg-black overflow-hidden">
       <div className="absolute inset-0 z-[105] flex flex-col items-center justify-center gap-8 px-6">
-        <FirstDayLogo size="hero" showTagline={true} showLetters={false} className="w-full" />
+        {/* Mobile: compact abbreviation, Desktop: full tagline */}
+        <div className="block md:hidden">
+          <FirstDayLogo compact={true} />
+        </div>
+        <div className="hidden md:block w-full">
+          <FirstDayLogo size="hero" showTagline={true} showLetters={false} className="w-full" />
+        </div>
 
         {showProgress && (
           <div className="w-full max-w-md space-y-6 animate-fadeIn">
