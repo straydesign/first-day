@@ -113,23 +113,21 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
             </button>
           </div>
 
-          {/* Full-width tagline — solid black strip centered in hero */}
-          <div ref={heroNavRef} className="relative z-50 w-full bg-black py-3">
-            <div className="flex items-center justify-center">
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, ease: "easeOut" }}
-              >
-                {/* Mobile: full tagline (smaller), Desktop: full tagline (hero) */}
-                <div className="block md:hidden">
-                  <FirstDayLogo showTagline={true} showLetters={false} />
-                </div>
-                <div className="hidden md:block">
-                  <FirstDayLogo size="hero" showTagline={true} showLetters={false} />
-                </div>
-              </motion.div>
-            </div>
+          {/* Tagline — shard word chips floating over hero */}
+          <div ref={heroNavRef} className="relative z-50 w-full max-w-3xl mx-auto px-4 md:px-8">
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: "easeOut" }}
+            >
+              {/* Mobile: default size, Desktop: hero size */}
+              <div className="block md:hidden">
+                <FirstDayLogo showTagline={true} showLetters={false} />
+              </div>
+              <div className="hidden md:block">
+                <FirstDayLogo size="hero" showTagline={true} showLetters={false} />
+              </div>
+            </motion.div>
           </div>
 
           {/* Scroll indicator */}

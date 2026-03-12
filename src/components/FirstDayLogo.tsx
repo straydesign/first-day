@@ -239,13 +239,13 @@ function FirstDayLogoInner({
 
       {/* Tagline only (no card wrapper) — diagonal shard word cascade */}
       {!showLetters && showTagline && (
-        <div className="flex flex-col w-full px-2 md:px-0" style={{ gap: isHero ? "6px" : "4px" }}>
+        <div className="flex flex-col w-full" style={{ gap: isHero ? "10px" : "6px" }}>
           {TAGLINE_ROWS.map((row, rowIdx) => (
             <div
               key={rowIdx}
               className="flex"
               style={{
-                gap: isHero ? "8px" : "5px",
+                gap: isHero ? "12px" : "6px",
                 marginLeft: `${row.offset}%`,
               }}
             >
@@ -255,15 +255,15 @@ function FirstDayLogoInner({
                 return (
                   <span
                     key={word + wordIdx}
-                    className="inline-block px-3 py-1 md:px-6 md:py-2"
+                    className="inline-block px-4 py-1.5 md:px-8 md:py-3"
                     style={{
                       fontFamily: "var(--font-bebas), system-ui, sans-serif",
-                      fontSize: isHero ? "clamp(1.6rem, 4.5vw, 4.5rem)" : "clamp(1.2rem, 4vw, 2.2rem)",
+                      fontSize: isHero ? "clamp(1.8rem, 5vw, 5rem)" : "clamp(1.3rem, 4.5vw, 2.5rem)",
                       fontWeight: 900,
                       letterSpacing: 3,
                       color: c,
-                      backgroundColor: `${c}10`,
-                      border: `1px solid ${c}25`,
+                      backgroundColor: "#0a0a14",
+                      border: `1px solid ${c}30`,
                       clipPath: SHARD_CLIPS_TAGLINE[globalIdx % SHARD_CLIPS_TAGLINE.length],
                       transform: `rotate(${TAGLINE_ROTATIONS[globalIdx]}deg)`,
                       whiteSpace: "nowrap" as const,
