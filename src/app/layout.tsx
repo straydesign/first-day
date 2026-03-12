@@ -40,11 +40,13 @@ export const metadata: Metadata = {
     description: "AI-powered 30-day plans to help you achieve any goal.",
     type: "website",
     url: "https://firstday.life",
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "First Day — first day of the rest of your life" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "First Day - Goal Achievement App",
     description: "AI-powered 30-day plans to help you achieve any goal.",
+    images: ["/twitter-image"],
   },
   robots: {
     index: true,

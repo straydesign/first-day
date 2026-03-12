@@ -163,7 +163,7 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
         <SheetTrigger asChild>
           <button
             aria-label="Menu"
-            className="fixed top-[136px] right-4 z-50 bg-black text-white p-3 hover:scale-105 transition-transform"
+            className="fixed top-4 right-4 z-50 bg-black text-white p-3 hover:scale-105 transition-transform"
             style={{ clipPath: "polygon(3% 0%, 100% 5%, 97% 100%, 0% 92%)" }}
           >
             <Menu className="w-5 h-5" />
@@ -219,7 +219,7 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
                       <button
                         onClick={() => onSelectGoal(goal.id)}
                         className="bg-black px-6 py-8 md:px-10 md:py-12 w-full hover:scale-[1.02] transition-transform cursor-pointer -mt-1"
-                        style={{ clipPath: "polygon(1% 0%, 100% 2%, 99% 98%, 0% 100%)" }}
+                        style={{ clipPath: "polygon(2% 0%, 98% 3%, 100% 15%, 99% 88%, 96% 100%, 4% 97%, 0% 85%, 1% 12%)" }}
                       >
                         <h1
                           className="text-center font-black uppercase leading-[0.95] break-words"
