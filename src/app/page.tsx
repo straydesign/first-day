@@ -23,6 +23,7 @@ const SimpleGoalCreation = dynamic(() => import("@/components/SimpleGoalCreation
 const CongratsView = dynamic(() => import("@/components/CongratsView").then(m => ({ default: m.CongratsView })), { loading: () => <LoadingScreen /> });
 const NotificationSettings = dynamic(() => import("@/components/NotificationSettings").then(m => ({ default: m.NotificationSettings })));
 const XPAnimation = dynamic(() => import("@/components/XPAnimation").then(m => ({ default: m.XPAnimation })));
+const BeastMode = dynamic(() => import("@/components/BeastMode").then(m => ({ default: m.BeastMode })));
 
 
 function getSupabase() {
@@ -55,6 +56,7 @@ export default function Home() {
   const [latestMilestone, setLatestMilestone] = useState<Milestone | null>(null);
   const [newAchievements, setNewAchievements] = useState<Achievement[]>([]);
   const prevAchievementsRef = useRef<Set<string>>(new Set());
+  const [showBeastMode, setShowBeastMode] = useState(false);
 
   // Compute engagement state from progress + plan start date
   const engagement: EngagementState | null = useMemo(() => {
@@ -463,7 +465,8 @@ export default function Home() {
     // Auto-dismiss XP animation after 2.5 seconds
     setTimeout(() => setShowXPAnimation(false), 2500);
 
-    setCurrentView("congrats");
+    // Show BEAST MODE interstitial, then congrats
+    setShowBeastMode(true);
   };
 
   const handleViewCalendar = () => {
@@ -802,6 +805,13 @@ export default function Home() {
             onToggle={(enabled: boolean) => setNotificationsEnabled(enabled)}
             onClose={() => setShowNotificationSettings(false)}
           />
+        )}
+
+        {showBeastMode && (
+          <BeastMode onComplete={() => {
+            setShowBeastMode(false);
+            setCurrentView("congrats");
+          }} />
         )}
 
         {showFullScreenLoading && (

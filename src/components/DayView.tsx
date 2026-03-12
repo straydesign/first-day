@@ -3,7 +3,6 @@ import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { MosaicCard } from "./MosaicCard";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CheckCircle2, Calendar, Youtube, ExternalLink, Zap } from "lucide-react";
@@ -94,10 +93,15 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
           transition={{ duration: 0.5, delay: 0.05, ease: "easeOut" }}
           className="text-center mb-4 md:mb-8"
         >
-          <div className="inline-flex items-center justify-center gap-2">
-            <Calendar className="w-8 h-8 text-white" />
-            <h1 className="text-3xl md:text-6xl font-bold text-white">{isToday ? `Today (Day ${day.number})` : `Day ${day.number}`}</h1>
-            {day.dateDisplay && <span className="text-xl md:text-3xl text-white/80 font-bold ml-2">&bull; {day.dateDisplay}</span>}
+          <div
+            className="inline-block bg-black px-6 py-3"
+            style={{ clipPath: "polygon(2% 0%, 98% 3%, 100% 97%, 0% 100%)" }}
+          >
+            <div className="flex items-center justify-center gap-2">
+              <Calendar className="w-6 h-6 md:w-8 md:h-8 text-white" />
+              <h1 className="text-2xl md:text-5xl font-black text-white uppercase tracking-wide" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>{isToday ? `Today · Day ${day.number}` : `Day ${day.number}`}</h1>
+            </div>
+            {day.dateDisplay && <p className="text-lg md:text-2xl text-white/70 font-bold mt-1">{day.dateDisplay}</p>}
           </div>
         </motion.div>
 
@@ -107,19 +111,16 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{ duration: 0.4, delay: 0.15, ease: "easeOut" }}
           >
-            <div className="mb-4 md:mb-6 -mx-4 md:-mx-8">
-              <MosaicCard seed={1} className="backdrop-blur-md min-h-screen px-2 md:px-6">
-                <CardHeader>
-                  <div className="bg-black px-6 py-4 inline-block" style={{ clipPath: "polygon(1% 0%, 100% 3%, 99% 97%, 0% 100%)" }}>
-                    <h2 className="text-4xl md:text-6xl font-black italic uppercase tracking-wide whitespace-nowrap" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>
-                      {"Your Activities".split("").map((char, i) => (
-                        <span key={i} style={{ color: char === " " ? "transparent" : monotone ? "#ffffff" : ["#FFE633","#FF6B2B","#FF2D55","#00EAFF","#FF10F0","#FF1493","#4FC3F7","#FF4500"][i % 8], width: char === " " ? "0.3em" : undefined, display: "inline-block" }}>{char}</span>
-                      ))}
-                    </h2>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {activities.map((activity: string | Activity, index: number) => {
+            <div className="mb-4 md:mb-6">
+              <div className="bg-black px-6 py-4 inline-block mb-4" style={{ clipPath: "polygon(1% 0%, 100% 3%, 99% 97%, 0% 100%)" }}>
+                <h2 className="text-4xl md:text-6xl font-black italic uppercase tracking-wide whitespace-nowrap" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>
+                  {"Your Activities".split("").map((char, i) => (
+                    <span key={i} style={{ color: char === " " ? "transparent" : monotone ? "#ffffff" : ["#FFE633","#FF6B2B","#FF2D55","#00EAFF","#FF10F0","#FF1493","#4FC3F7","#FF4500"][i % 8], width: char === " " ? "0.3em" : undefined, display: "inline-block" }}>{char}</span>
+                  ))}
+                </h2>
+              </div>
+              <div className="space-y-4">
+                {activities.map((activity: string | Activity, index: number) => {
                     const activityText = typeof activity === 'string' ? activity : activity.text;
                     const resources = typeof activity === 'object' ? activity.resources : null;
                     return (
@@ -177,23 +178,19 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
                     </div>
                     {!isCompleted && <p className="text-sm text-white/50 mt-2">Reflect on your progress — what went well and what you can improve.</p>}
                   </div>
-                </CardContent>
-              </MosaicCard>
-            </div>
+                </div>
+              </div>
           </motion.div>
         ) : (
+
           <motion.div
             initial={{ opacity: 0, y: 20, filter: "blur(4px)" }}
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{ duration: 0.4, delay: 0.15, ease: "easeOut" }}
           >
-            <div className="mb-4 md:mb-6">
-              <MosaicCard seed={2} className="backdrop-blur-md">
-                <CardContent className="py-8 text-center">
-                  <p className="text-white/60 text-lg">Activities for this day are not available yet.</p>
-                  <p className="text-white/40 text-sm mt-2">Check back later or contact support if this persists.</p>
-                </CardContent>
-              </MosaicCard>
+            <div className="mb-4 md:mb-6 bg-black p-8 text-center" style={{ clipPath: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" }}>
+              <p className="text-white/60 text-lg">Activities for this day are not available yet.</p>
+              <p className="text-white/40 text-sm mt-2">Check back later or contact support if this persists.</p>
             </div>
           </motion.div>
         )}
