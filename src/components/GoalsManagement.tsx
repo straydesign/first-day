@@ -62,7 +62,9 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
   useEffect(() => {
     if (goals.length > 0) {
       goals.forEach(goal => {
-        const startDate = new Date(goal.startDate);
+        // Parse date as local (not UTC) to avoid timezone shift
+        const parts = goal.startDate.split('-').map(Number);
+        const startDate = new Date(parts[0], parts[1] - 1, parts[2]);
         startDate.setHours(0, 0, 0, 0);
         const today = new Date();
         today.setHours(0, 0, 0, 0);
@@ -163,25 +165,25 @@ export function GoalsManagement({ accessToken, onCreateGoal, onSelectGoal, onEdi
         <SheetTrigger asChild>
           <button
             aria-label="Menu"
-            className="fixed top-[130px] right-4 z-50 bg-black text-white p-4 hover:scale-105 transition-transform"
+            className="fixed top-[122px] right-4 z-50 bg-black text-white p-4 hover:scale-105 transition-transform"
             style={{ clipPath: "polygon(3% 0%, 100% 5%, 97% 100%, 0% 92%)" }}
           >
             <Menu className="w-6 h-6" />
           </button>
         </SheetTrigger>
-        <SheetContent side="right" className="w-[200px] backdrop-blur-xl border-l-2 border-white/10 pt-4">
+        <SheetContent side="right" className={`w-[200px] border-l-2 border-white/10 pt-4 ${monotone ? "bg-black" : "backdrop-blur-xl"}`}>
           <div
-            className="bg-black px-4 py-3 mb-6"
+            className={`px-4 py-3 mb-6 ${monotone ? "bg-white/10" : "bg-black"}`}
             style={{ clipPath: "polygon(0% 0%, 100% 4%, 98% 96%, 2% 100%)" }}
           >
             <SheetTitle className="text-4xl md:text-6xl font-black text-white text-center uppercase tracking-wide" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>Menu</SheetTitle>
           </div>
           <SheetDescription className="sr-only">Navigation options for your goals</SheetDescription>
           <nav className="flex flex-col gap-3 px-3">
-            <button onClick={() => setMobileMenuOpen(false)} className="bg-black text-white py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2" style={{ clipPath: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" }}><Target className="w-4 h-4" />My Goals</button>
-            <button onClick={() => { setMobileMenuOpen(false); if (goals[0]) onSelectGoal(goals[0].id); }} className="bg-black text-white py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2" style={{ clipPath: "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)" }}><Calendar className="w-4 h-4" />30 Day Plan</button>
+            <button onClick={() => setMobileMenuOpen(false)} className={`py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2 ${monotone ? "bg-white/10 text-white" : "bg-black text-white"}`} style={{ clipPath: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" }}><Target className="w-4 h-4" />My Goals</button>
+            <button onClick={() => { setMobileMenuOpen(false); if (goals[0]) onSelectGoal(goals[0].id); }} className={`py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2 ${monotone ? "bg-white/10 text-white" : "bg-black text-white"}`} style={{ clipPath: "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)" }}><Calendar className="w-4 h-4" />30 Day Plan</button>
             <button onClick={toggleMonotone} className={`py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2 mt-4 ${monotone ? "bg-white text-black" : "bg-black text-white"}`} style={{ clipPath: "polygon(1% 0%, 98% 3%, 100% 97%, 2% 100%)" }}><Palette className="w-4 h-4" />{monotone ? "Color Mode" : "Monotone"}</button>
-            <button onClick={onLogout} className={`py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2 ${monotone ? "bg-black text-white" : "bg-black text-red-400"}`} style={{ clipPath: "polygon(3% 0%, 100% 4%, 97% 100%, 0% 96%)" }}><LogOut className="w-4 h-4" />Logout</button>
+            <button onClick={onLogout} className={`py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2 ${monotone ? "bg-white/10 text-white" : "bg-black text-red-400"}`} style={{ clipPath: "polygon(3% 0%, 100% 4%, 97% 100%, 0% 96%)" }}><LogOut className="w-4 h-4" />Logout</button>
           </nav>
         </SheetContent>
       </Sheet>
