@@ -93,27 +93,27 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
             <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
           </div>
 
-          {/* Top corners — Log In shard / Get Started — color on scroll */}
-          <div className="absolute top-[100px] left-4 lg:left-8 z-50">
+          {/* Top corners — Log In shard / Get Started — always colored */}
+          <div className="absolute top-[100px] md:top-6 left-4 lg:left-8 z-50">
             <button
               onClick={onLogin || onGetStarted}
               className="px-8 py-4 lg:px-10 lg:py-5 font-black text-lg lg:text-xl tracking-wide uppercase hover:scale-105 transition-all duration-300 btn-shake"
               style={{
-                backgroundColor: isNavSticky ? "#FFE633" : "#000000",
-                color: isNavSticky ? "#000000" : "#ffffff",
+                backgroundColor: "#FFE633",
+                color: "#000000",
                 clipPath: "polygon(3% 0%, 100% 8%, 97% 100%, 0% 88%)",
               }}
             >
               Log In
             </button>
           </div>
-          <div className="absolute top-[100px] right-4 lg:right-8 z-50">
+          <div className="absolute top-[100px] md:top-6 right-4 lg:right-8 z-50">
             <button
               onClick={onGetStarted}
               className="px-8 py-4 lg:px-10 lg:py-5 font-black text-lg lg:text-xl tracking-wide uppercase hover:scale-105 transition-all duration-300 btn-shake"
               style={{
-                backgroundColor: isNavSticky ? "#FF2D55" : "#000000",
-                color: isNavSticky ? "#000000" : "#ffffff",
+                backgroundColor: "#FF2D55",
+                color: "#000000",
                 clipPath: "polygon(0% 8%, 97% 0%, 100% 88%, 3% 100%)",
               }}
             >
