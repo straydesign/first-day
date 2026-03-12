@@ -1,6 +1,5 @@
 "use client";
-import { BookOpen, Edit2, ChevronUp, ChevronDown, AlertTriangle, Lock, Menu, LogOut, Palette, Target } from "lucide-react";
-import { ArrowLeft } from "lucide-react";
+import { BookOpen, Edit2, ChevronUp, ChevronDown, AlertTriangle, Lock, Menu, LogOut, Palette, Target, ArrowLeft } from "lucide-react";
 import { MosaicCard } from "./MosaicCard";
 import { WeekCalendar } from "./WeekCalendar";
 import { VORONOI_LIGHT } from "@/constants";

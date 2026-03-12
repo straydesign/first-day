@@ -37,9 +37,6 @@ function AnimatedSection({ children, className, delay = 0 }: { children: React.R
 
 export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfService }: LandingPageProps) {
   const { monotone } = useMonotone();
-  const [isPausedRow1, setIsPausedRow1] = useState(false);
-  const [isPausedRow2, setIsPausedRow2] = useState(false);
-  const [isPausedRow3, setIsPausedRow3] = useState(false);
   const [isNavSticky, setIsNavSticky] = useState(false);
   const heroNavRef = useRef<HTMLDivElement>(null);
 
@@ -61,7 +58,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
 
   const SCROLL_SPEEDS = ["20s", "30s", "25s"];
 
-  const renderScrollRow = (goals: string[], direction: "left" | "right", _isPaused: boolean, _setIsPaused: (v: boolean) => void, rowIndex: number) => (
+  const renderScrollRow = (goals: string[], direction: "left" | "right", rowIndex: number) => (
     <div className="overflow-hidden select-none">
       <div
         className="flex whitespace-nowrap"
@@ -202,9 +199,9 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
           >
             <div className="py-4 overflow-hidden space-y-1.5">
               <p className="text-white text-sm font-medium mb-3 text-center px-4">Goals you can achieve in 30 days:</p>
-              {renderScrollRow(GOAL_SUGGESTIONS_ROW_1, "left", isPausedRow1, setIsPausedRow1, 0)}
-              {renderScrollRow(GOAL_SUGGESTIONS_ROW_2, "right", isPausedRow2, setIsPausedRow2, 1)}
-              {renderScrollRow(GOAL_SUGGESTIONS_ROW_3, "left", isPausedRow3, setIsPausedRow3, 2)}
+              {renderScrollRow(GOAL_SUGGESTIONS_ROW_1, "left", 0)}
+              {renderScrollRow(GOAL_SUGGESTIONS_ROW_2, "right", 1)}
+              {renderScrollRow(GOAL_SUGGESTIONS_ROW_3, "left", 2)}
             </div>
           </motion.div>
         </section>

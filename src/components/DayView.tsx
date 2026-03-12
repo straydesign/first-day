@@ -2,7 +2,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
 import { MosaicCard } from "./MosaicCard";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CheckCircle2, Calendar, Youtube, ExternalLink, Zap } from "lucide-react";

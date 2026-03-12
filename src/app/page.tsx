@@ -473,10 +473,6 @@ export default function Home() {
     setCurrentView("calendar");
   };
 
-  const handleDoMore = () => {
-    setCurrentView("day");
-  };
-
   const handleCreateGoal = () => {
     setEditingGoalData(null);
     setCurrentView("onboarding");
