@@ -144,7 +144,7 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
         <SheetTrigger asChild>
           <button
             aria-label="Menu"
-            className="fixed top-[122px] right-4 z-50 bg-black text-white p-4 hover:scale-105 transition-transform"
+            className="fixed top-[122px] right-4 z-50 bg-black text-white p-4 hover:scale-105 transition-transform btn-shake"
             style={{ clipPath: "polygon(3% 0%, 100% 5%, 97% 100%, 0% 92%)" }}
           >
             <Menu className="w-6 h-6" />

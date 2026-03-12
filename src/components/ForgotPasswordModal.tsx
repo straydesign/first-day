@@ -76,7 +76,7 @@ export function ForgotPasswordModal({ isOpen, onClose }: ForgotPasswordModalProp
             </button>
           </form>
         ) : (
-          <button onClick={onClose} className="w-full mt-4 py-3 font-black text-black uppercase tracking-wide hover:scale-105 transition-transform" style={{ backgroundColor: "#fcd02a", clipPath: "polygon(1% 0%, 100% 4%, 99% 96%, 0% 100%)" }}>Done</button>
+          <button onClick={onClose} className="w-full mt-4 py-3 font-black text-black uppercase tracking-wide hover:scale-105 transition-transform btn-shake" style={{ backgroundColor: "#fcd02a", clipPath: "polygon(1% 0%, 100% 4%, 99% 96%, 0% 100%)" }}>Done</button>
         )}
       </DialogContent>
     </Dialog>

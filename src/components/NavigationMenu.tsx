@@ -1,6 +1,8 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { LogOut, Bell, Settings as SettingsIcon, Target, Calendar } from "lucide-react";
+import { VoronoiMosaic } from "./VoronoiMosaic";
+import { VORONOI_PALETTE } from "@/constants";
 
 interface NavigationMenuProps {
   currentView: string;
@@ -27,8 +29,20 @@ export function NavigationMenu({
   ];
 
   return (
-    <div className="hidden md:flex justify-between items-center w-full clip-tile-a">
-      <div className="flex gap-2">
+    <div className="hidden md:flex justify-between items-center w-full relative overflow-visible">
+      {/* Mosaic background with organic jagged edges */}
+      <VoronoiMosaic
+        seed={42}
+        width={1200}
+        height={80}
+        tileCount={40}
+        margin={10}
+        gap={3}
+        palette={VORONOI_PALETTE}
+        hideEdgeTiles
+        className="absolute -inset-2 w-[calc(100%+16px)] h-[calc(100%+16px)] opacity-30"
+      />
+      <div className="relative z-10 flex gap-2">
         {menuItems.map((item) => {
           const Icon = item.icon;
           const isActive = currentView === item.id;
@@ -46,7 +60,7 @@ export function NavigationMenu({
           );
         })}
       </div>
-      <Button onClick={onLogout} variant="outline" size="sm" className="bg-transparent border-2 border-white/10 text-white/80 hover:bg-white/10 transition-smooth hover:scale-105">
+      <Button onClick={onLogout} variant="outline" size="sm" className="relative z-10 bg-transparent border-2 border-white/10 text-white/80 hover:bg-white/10 transition-smooth hover:scale-105">
         <LogOut className="w-4 h-4 mr-2" />
         Logout
       </Button>

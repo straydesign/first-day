@@ -238,7 +238,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
                 <p className="text-xl text-white font-black uppercase tracking-wide mb-6">Check at least one activity or add a reflection to continue</p>
                 <button
                   onClick={() => setShowValidation(false)}
-                  className="px-8 py-3 font-black text-black uppercase tracking-wide hover:scale-105 transition-transform"
+                  className="px-8 py-3 font-black text-black uppercase tracking-wide hover:scale-105 transition-transform btn-shake"
                   style={{ backgroundColor: "#fcd02a", clipPath: "polygon(1% 0%, 100% 4%, 99% 96%, 0% 100%)" }}
                 >
                   Got It

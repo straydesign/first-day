@@ -81,6 +81,22 @@ interface VoronoiMosaicProps {
   gap?: number;
   palette?: readonly string[];
   className?: string;
+  /** Hide tiles that touch the bounding box edge — creates organic jagged borders */
+  hideEdgeTiles?: boolean;
+}
+
+/** Check if a cell polygon touches the bounding box edge */
+function touchesBoundary(
+  pts: [number, number][],
+  w: number,
+  h: number,
+  tolerance = 0.5
+): boolean {
+  return pts.some(
+    ([x, y]) =>
+      x <= tolerance || x >= w - tolerance ||
+      y <= tolerance || y >= h - tolerance
+  );
 }
 
 function VoronoiMosaicInner({
@@ -92,6 +108,7 @@ function VoronoiMosaicInner({
   gap = 3,
   palette = VORONOI_PALETTE,
   className,
+  hideEdgeTiles = false,
 }: VoronoiMosaicProps) {
   const polygons = useMemo(() => {
     const rng = createRng(seed * 7919 + 31);
@@ -110,7 +127,7 @@ function VoronoiMosaicInner({
     const voronoi = delaunay.voronoi([0, 0, width, height]);
 
     // Build polygon list
-    const result: { points: string; fill: string }[] = [];
+    const result: { points: string; fill: string; isEdge: boolean }[] = [];
 
     for (let i = 0; i < tileCount; i++) {
       const cell = voronoi.cellPolygon(i);
@@ -120,6 +137,8 @@ function VoronoiMosaicInner({
       let cellPts: [number, number][] = cell
         .slice(0, -1)
         .map((p) => [p[0], p[1]] as [number, number]);
+
+      const isEdge = touchesBoundary(cellPts, width, height);
 
       // Ensure consistent winding (CW for our inset)
       if (signedArea(cellPts) > 0) {
@@ -136,7 +155,7 @@ function VoronoiMosaicInner({
         .join(" ");
       const fill = palette[Math.floor(rng() * palette.length)];
 
-      result.push({ points: pointsStr, fill });
+      result.push({ points: pointsStr, fill, isEdge });
     }
 
     return result;
@@ -151,7 +170,13 @@ function VoronoiMosaicInner({
       style={{ pointerEvents: "none" }}
     >
       {polygons.map((poly, i) => (
-        <polygon key={i} points={poly.points} fill={poly.fill} stroke="none" />
+        <polygon
+          key={i}
+          points={poly.points}
+          fill={poly.fill}
+          stroke="none"
+          opacity={hideEdgeTiles && poly.isEdge ? 0 : 1}
+        />
       ))}
     </svg>
   );

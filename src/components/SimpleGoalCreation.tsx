@@ -217,7 +217,7 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
               <button
                 onClick={onCancel}
                 disabled={isGenerating}
-                className="w-full bg-black/50 text-white/70 py-3 font-bold uppercase tracking-wide hover:scale-105 transition-transform"
+                className="w-full bg-black/50 text-white/70 py-3 font-bold uppercase tracking-wide hover:scale-105 transition-transform btn-shake"
                 style={{ clipPath: "polygon(0% 3%, 99% 0%, 100% 97%, 1% 100%)" }}
               >
                 Cancel
@@ -253,7 +253,7 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
               <p className="text-base text-white/80 font-medium mb-6">Just fill in your goal above and we&apos;ll build your plan</p>
               <button
                 onClick={() => setShowValidation(false)}
-                className="px-8 py-3 font-black text-black uppercase tracking-wide hover:scale-105 transition-transform"
+                className="px-8 py-3 font-black text-black uppercase tracking-wide hover:scale-105 transition-transform btn-shake"
                 style={{ backgroundColor: "#fcd02a", clipPath: "polygon(1% 0%, 100% 4%, 99% 96%, 0% 100%)" }}
               >
                 Got It

@@ -109,7 +109,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
         <SheetTrigger asChild>
           <button
             aria-label="Menu"
-            className="fixed top-[122px] right-4 z-50 bg-black text-white p-4 hover:scale-105 transition-transform"
+            className="fixed top-[122px] right-4 z-50 bg-black text-white p-4 hover:scale-105 transition-transform btn-shake"
             style={{ clipPath: "polygon(3% 0%, 100% 5%, 97% 100%, 0% 92%)" }}
           >
             <Menu className="w-6 h-6" />
@@ -147,7 +147,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
             {onBack && (
               <button
                 onClick={onBack}
-                className="inline-flex items-center gap-2 mb-8 h-10 px-6 text-sm font-bold text-white bg-black hover:scale-105 transition-transform"
+                className="inline-flex items-center gap-2 mb-8 h-10 px-6 text-sm font-bold text-white bg-black hover:scale-105 transition-transform btn-shake"
               >
                 <ArrowLeft className="w-5 h-5" />Back
               </button>

@@ -97,7 +97,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
           <div className="absolute top-[100px] left-4 z-50">
             <button
               onClick={onLogin || onGetStarted}
-              className="bg-black px-8 py-4 text-white font-black text-lg tracking-wide uppercase hover:scale-105 transition-transform"
+              className="bg-black px-8 py-4 text-white font-black text-lg tracking-wide uppercase hover:scale-105 transition-transform btn-shake"
               style={{ clipPath: "polygon(3% 0%, 100% 8%, 97% 100%, 0% 88%)" }}
             >
               Log In
@@ -106,7 +106,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
           <div className="absolute top-[100px] right-4 z-50">
             <button
               onClick={onGetStarted}
-              className="bg-black px-8 py-4 text-white font-black text-lg tracking-wide uppercase hover:scale-105 transition-transform"
+              className="bg-black px-8 py-4 text-white font-black text-lg tracking-wide uppercase hover:scale-105 transition-transform btn-shake"
               style={{ clipPath: "polygon(0% 8%, 97% 0%, 100% 88%, 3% 100%)" }}
             >
               Get Started
@@ -211,6 +211,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
         {/* Stay Motivated */}
         <AnimatedSection>
           <section className="w-full py-8 md:py-16 px-4 md:px-10">
+            <div className="max-w-5xl mx-auto">
               <div className="text-center mb-6">
                 <h2 className="text-3xl md:text-5xl font-bold text-white mb-2">Stay Motivated</h2>
                 <p className="text-white/80">Built-in streaks, XP, and achievements keep you coming back</p>
@@ -328,53 +329,50 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                   </div>
                 </div>
               </div>
+            </div>
           </section>
         </AnimatedSection>
 
         {/* What Your Plan Looks Like */}
         <AnimatedSection>
           <section className="w-full py-8 md:py-16 px-4 md:px-10">
+              <div className="max-w-5xl mx-auto">
               <div className="text-center mb-6">
                 <h2 className="text-3xl md:text-5xl font-bold text-white mb-2">What Your Plan Looks Like</h2>
-                <p className="text-white/80">Real screens from &quot;Learn to play guitar&quot;</p>
+                <p className="text-white/80">Your personalized 30-day journey</p>
               </div>
 
-              <div>
-                <div className="flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-4 -mx-2 px-2">
-                  {[
-                    { src: "/screenshots/calendar-view.png", label: "Your Weekly Sprint", alt: "Calendar view showing weekly plan with day cards", tile: "a" as const, frameSeed: 500 },
-                    { src: "/screenshots/day-view.png", label: "Daily Activities", alt: "Day view with checkable activities and YouTube resources", tile: "c" as const, frameSeed: 501 },
-                    { src: "/screenshots/congrats-view.png", label: "Celebrate Wins", alt: "Congratulations screen with XP breakdown and achievements", tile: "b" as const, frameSeed: 502 },
-                  ].map((screen) => (
-                    <div key={screen.label} className="flex-shrink-0 snap-center">
-                      <GeometricFrame seed={screen.frameSeed} borderWidth={8} irregularity={0.2}>
-                        <div className={`clip-tile-${screen.tile} relative w-[200px] md:w-[220px] border-[4px] border-gray-800 bg-black overflow-hidden shadow-xl`}>
-                          <Image
-                            src={screen.src}
-                            alt={screen.alt}
-                            width={375}
-                            height={812}
-                            className="w-full h-auto"
-                          />
-                        </div>
-                      </GeometricFrame>
-                      <p className="text-center text-sm font-medium text-white mt-3">{screen.label}</p>
-                    </div>
-                  ))}
-                </div>
-
-                {/* CTA */}
-                <div className="text-center mt-8 md:mt-12">
-                  <button
-                    onClick={onGetStarted}
-                    className="text-white font-black text-3xl md:text-5xl uppercase tracking-wide hover:opacity-70 transition-opacity"
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
+                {[
+                  { icon: "📅", label: "Your Weekly Sprint", desc: "A personalized 30-day plan broken into weekly sprints", color: "#FFE633", clip: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" },
+                  { icon: "✅", label: "Daily Activities", desc: "Curated tasks, videos, and resources for each day", color: "#FF6B2B", clip: "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)" },
+                  { icon: "⚡", label: "Earn XP & Level Up", desc: "Points for every activity, reflection, and streak day", color: "#FF2D55", clip: "polygon(1% 0%, 100% 2%, 99% 100%, 0% 98%)" },
+                  { icon: "🏆", label: "Complete Your Goal", desc: "30 days later — you did it. Badges, trophies, and proof", color: "#00EAFF", clip: "polygon(3% 2%, 100% 0%, 97% 98%, 0% 100%)" },
+                ].map((card) => (
+                  <div
+                    key={card.label}
+                    className="p-5 md:p-6 text-center"
+                    style={{ backgroundColor: monotone ? "#222" : `${card.color}15`, border: `1px solid ${monotone ? "rgba(255,255,255,0.1)" : card.color}30`, clipPath: card.clip }}
                   >
-                    Create Your Plan
-                  </button>
-                  <p className="text-sm text-white/70 mt-3">
-                    Every plan is unique — personalized to your goal and experience
-                  </p>
-                </div>
+                    <span className="text-3xl md:text-4xl block mb-2">{card.icon}</span>
+                    <h3 className="text-base md:text-lg font-bold text-white mb-1">{card.label}</h3>
+                    <p className="text-xs md:text-sm text-white/70">{card.desc}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* CTA */}
+              <div className="text-center mt-8 md:mt-12">
+                <button
+                  onClick={onGetStarted}
+                  className="text-white font-black text-3xl md:text-5xl uppercase tracking-wide hover:opacity-70 transition-opacity"
+                >
+                  Create Your Plan
+                </button>
+                <p className="text-sm text-white/70 mt-3">
+                  Every plan is unique — personalized to your goal and experience
+                </p>
+              </div>
               </div>
           </section>
         </AnimatedSection>

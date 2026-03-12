@@ -213,7 +213,7 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
             <button
               onClick={() => { setIsLogin(!isLogin); setName(''); setEmail(''); setPassword(''); setConfirmPassword(''); }}
               disabled={loading}
-              className="bg-black text-white px-6 py-3 font-black text-sm uppercase tracking-wide hover:scale-105 transition-transform"
+              className="bg-black text-white px-6 py-3 font-black text-sm uppercase tracking-wide hover:scale-105 transition-transform btn-shake"
               style={{ clipPath: "polygon(2% 0%, 98% 5%, 100% 95%, 0% 100%)" }}
             >
               {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Log in'}

@@ -294,6 +294,20 @@ html {
     50% { box-shadow: 0 0 16px 6px currentColor; }
     100% { box-shadow: 0 0 4px 1px currentColor; }
   }
+
+  @keyframes btnShake {
+    0% { transform: rotate(0deg) scale(1); }
+    15% { transform: rotate(2.5deg) scale(1.04); }
+    30% { transform: rotate(-2.5deg) scale(1.04); }
+    45% { transform: rotate(1.5deg) scale(1.03); }
+    60% { transform: rotate(-1deg) scale(1.03); }
+    75% { transform: rotate(0.5deg) scale(1.02); }
+    100% { transform: rotate(0deg) scale(1.02); }
+  }
+
+  .btn-shake:active {
+    animation: btnShake 0.4s ease-out forwards;
+  }
 }
 
 /* ============================================
