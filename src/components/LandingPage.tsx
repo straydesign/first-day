@@ -94,10 +94,10 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
           </div>
 
           {/* Top corners — Log In shard / Get Started — color on scroll */}
-          <div className="absolute top-[100px] left-4 z-50">
+          <div className="absolute top-[100px] left-4 lg:left-8 z-50">
             <button
               onClick={onLogin || onGetStarted}
-              className="px-8 py-4 font-black text-lg tracking-wide uppercase hover:scale-105 transition-all duration-300 btn-shake"
+              className="px-8 py-4 lg:px-10 lg:py-5 font-black text-lg lg:text-xl tracking-wide uppercase hover:scale-105 transition-all duration-300 btn-shake"
               style={{
                 backgroundColor: isNavSticky ? "#FFE633" : "#000000",
                 color: isNavSticky ? "#000000" : "#ffffff",
@@ -107,10 +107,10 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
               Log In
             </button>
           </div>
-          <div className="absolute top-[100px] right-4 z-50">
+          <div className="absolute top-[100px] right-4 lg:right-8 z-50">
             <button
               onClick={onGetStarted}
-              className="px-8 py-4 font-black text-lg tracking-wide uppercase hover:scale-105 transition-all duration-300 btn-shake"
+              className="px-8 py-4 lg:px-10 lg:py-5 font-black text-lg lg:text-xl tracking-wide uppercase hover:scale-105 transition-all duration-300 btn-shake"
               style={{
                 backgroundColor: isNavSticky ? "#FF2D55" : "#000000",
                 color: isNavSticky ? "#000000" : "#ffffff",
@@ -122,7 +122,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
           </div>
 
           {/* Tagline — shard word chips floating over hero */}
-          <div ref={heroNavRef} className="relative z-50 w-full max-w-3xl mx-auto px-4 md:px-8">
+          <div ref={heroNavRef} className="relative z-50 w-full max-w-3xl lg:max-w-5xl mx-auto px-4 md:px-8">
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -206,9 +206,9 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
 
         {/* How It Works */}
         <AnimatedSection>
-          <section id="how-it-works" className="w-full py-8 md:py-16 px-4 md:px-10 text-center">
-              <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">How It Works</h2>
-              <div className="space-y-2 text-lg md:text-2xl font-bold text-white/90">
+          <section id="how-it-works" className="w-full py-8 md:py-16 lg:py-24 px-4 md:px-10 text-center">
+              <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4 lg:mb-8">How It Works</h2>
+              <div className="space-y-2 lg:space-y-4 text-lg md:text-2xl lg:text-3xl font-bold text-white/90">
                 <p><span className="text-[#FFE633]">1.</span> Set Your Goal</p>
                 <p><span className="text-[#FF6B2B]">2.</span> Get Your Plan</p>
                 <p><span className="text-[#FF2D55]">3.</span> Show Up Daily</p>
@@ -218,28 +218,28 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
 
         {/* Stay Motivated */}
         <AnimatedSection>
-          <section className="w-full py-8 md:py-16 px-4 md:px-10">
-            <div className="max-w-5xl mx-auto">
-              <div className="text-center mb-6">
-                <h2 className="text-3xl md:text-5xl font-bold text-white mb-2">Stay Motivated</h2>
-                <p className="text-white/80">Built-in streaks, XP, and achievements keep you coming back</p>
+          <section className="w-full py-8 md:py-16 lg:py-24 px-4 md:px-10">
+            <div className="max-w-5xl lg:max-w-7xl mx-auto">
+              <div className="text-center mb-6 lg:mb-10">
+                <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-2">Stay Motivated</h2>
+                <p className="text-white/80 md:text-lg lg:text-xl">Built-in streaks, XP, and achievements keep you coming back</p>
               </div>
 
               <div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 lg:gap-10">
                   {/* Streaks — single shard */}
                   <div
-                    className="relative p-5 text-center overflow-hidden"
+                    className="relative p-5 lg:p-8 text-center overflow-hidden"
                     style={{
                       backgroundColor: monotone ? "#555555" : "#FFE633",
                       clipPath: "polygon(4% 8%, 95% 0%, 100% 85%, 8% 100%)",
                     }}
                   >
-                    <div className="clip-diamond inline-flex items-center justify-center w-14 h-14 bg-black/20 mb-3">
-                      <Flame className="w-7 h-7 text-black" />
+                    <div className="clip-diamond inline-flex items-center justify-center w-14 h-14 lg:w-18 lg:h-18 bg-black/20 mb-3">
+                      <Flame className="w-7 h-7 lg:w-9 lg:h-9 text-black" />
                     </div>
-                    <h3 className="text-xl md:text-3xl font-bold text-black mb-1">Daily Streaks</h3>
-                    <p className="text-black/80 text-sm mb-4">Keep your streak alive by showing up every day. The longer you go, the more bonus XP you earn.</p>
+                    <h3 className="text-xl md:text-3xl lg:text-4xl font-bold text-black mb-1">Daily Streaks</h3>
+                    <p className="text-black/80 text-sm lg:text-base mb-4">Keep your streak alive by showing up every day. The longer you go, the more bonus XP you earn.</p>
                     <div className="clip-badge-a inline-flex items-center gap-1.5 bg-black/20 text-black px-5 py-1.5 font-bold text-lg">
                       <Flame className="w-5 h-5" />
                       <span>12</span>
@@ -249,17 +249,17 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
 
                   {/* XP & Levels — single shard */}
                   <div
-                    className="relative p-5 text-center overflow-hidden"
+                    className="relative p-5 lg:p-8 text-center overflow-hidden"
                     style={{
                       backgroundColor: monotone ? "#444444" : "#FF6B2B",
                       clipPath: "polygon(0% 5%, 92% 0%, 98% 92%, 3% 95%)",
                     }}
                   >
-                    <div className="clip-diamond inline-flex items-center justify-center w-14 h-14 bg-black/20 mb-3">
-                      <Zap className="w-7 h-7 text-black" />
+                    <div className="clip-diamond inline-flex items-center justify-center w-14 h-14 lg:w-18 lg:h-18 bg-black/20 mb-3">
+                      <Zap className="w-7 h-7 lg:w-9 lg:h-9 text-black" />
                     </div>
-                    <h3 className="text-xl md:text-3xl font-bold text-black mb-1">Earn XP</h3>
-                    <p className="text-black/80 text-sm mb-4">Earn points for every activity you complete, every reflection you write, and every streak day.</p>
+                    <h3 className="text-xl md:text-3xl lg:text-4xl font-bold text-black mb-1">Earn XP</h3>
+                    <p className="text-black/80 text-sm lg:text-base mb-4">Earn points for every activity you complete, every reflection you write, and every streak day.</p>
                     <div className="space-y-2 max-w-[180px] mx-auto">
                       <div className="flex justify-between text-sm">
                         <span className="font-semibold text-black">Dedicated</span>
@@ -274,17 +274,17 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
 
                   {/* Achievements — single shard */}
                   <div
-                    className="relative p-5 text-center overflow-hidden"
+                    className="relative p-5 lg:p-8 text-center overflow-hidden"
                     style={{
                       backgroundColor: monotone ? "#333333" : "#FF10F0",
                       clipPath: "polygon(6% 0%, 100% 10%, 94% 100%, 0% 88%)",
                     }}
                   >
-                    <div className="clip-diamond inline-flex items-center justify-center w-14 h-14 bg-black/20 mb-3">
-                      <Trophy className="w-7 h-7 text-black" />
+                    <div className="clip-diamond inline-flex items-center justify-center w-14 h-14 lg:w-18 lg:h-18 bg-black/20 mb-3">
+                      <Trophy className="w-7 h-7 lg:w-9 lg:h-9 text-black" />
                     </div>
-                    <h3 className="text-xl md:text-3xl font-bold text-black mb-1">Unlock Badges</h3>
-                    <p className="text-black/80 text-sm mb-4">Hit milestones and earn achievements. Can you collect them all?</p>
+                    <h3 className="text-xl md:text-3xl lg:text-4xl font-bold text-black mb-1">Unlock Badges</h3>
+                    <p className="text-black/80 text-sm lg:text-base mb-4">Hit milestones and earn achievements. Can you collect them all?</p>
                     <div className="flex justify-center gap-2">
                       {["First Step", "On Fire", "Perfect Week", "???"].map((label, i) => (
                         <div
@@ -304,36 +304,36 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                 </div>
 
                 {/* Stat bar — single-color shards */}
-                <div className="mt-6 grid grid-cols-3 gap-3 max-w-lg mx-auto">
+                <div className="mt-6 lg:mt-10 grid grid-cols-3 gap-3 lg:gap-6 max-w-lg lg:max-w-3xl mx-auto">
                   <div
-                    className="text-center py-4 px-2"
+                    className="text-center py-4 lg:py-6 px-2 lg:px-4"
                     style={{ backgroundColor: monotone ? "#555555" : "#00EAFF", clipPath: "polygon(4% 8%, 95% 0%, 100% 85%, 8% 100%)" }}
                   >
                     <div className="flex items-center justify-center gap-1 mb-0.5">
-                      <Target className="w-3.5 h-3.5 text-black" />
-                      <span className="text-xs text-black/70 font-medium">Rate</span>
+                      <Target className="w-3.5 h-3.5 lg:w-5 lg:h-5 text-black" />
+                      <span className="text-xs lg:text-sm text-black/70 font-medium">Rate</span>
                     </div>
-                    <p className="text-3xl md:text-5xl font-bold text-black">87%</p>
+                    <p className="text-3xl md:text-5xl lg:text-6xl font-bold text-black">87%</p>
                   </div>
                   <div
-                    className="text-center py-4 px-2"
+                    className="text-center py-4 lg:py-6 px-2 lg:px-4"
                     style={{ backgroundColor: monotone ? "#444444" : "#FF4500", clipPath: "polygon(0% 5%, 92% 0%, 98% 92%, 3% 95%)" }}
                   >
                     <div className="flex items-center justify-center gap-1 mb-0.5">
-                      <Flame className="w-3.5 h-3.5 text-black" />
-                      <span className="text-xs text-black/70 font-medium">Streak</span>
+                      <Flame className="w-3.5 h-3.5 lg:w-5 lg:h-5 text-black" />
+                      <span className="text-xs lg:text-sm text-black/70 font-medium">Streak</span>
                     </div>
-                    <p className="text-3xl md:text-5xl font-bold text-black">12</p>
+                    <p className="text-3xl md:text-5xl lg:text-6xl font-bold text-black">12</p>
                   </div>
                   <div
-                    className="text-center py-4 px-2"
+                    className="text-center py-4 lg:py-6 px-2 lg:px-4"
                     style={{ backgroundColor: monotone ? "#333333" : "#FF2D55", clipPath: "polygon(6% 0%, 100% 10%, 94% 100%, 0% 88%)" }}
                   >
                     <div className="flex items-center justify-center gap-1 mb-0.5">
-                      <Trophy className="w-3.5 h-3.5 text-black" />
-                      <span className="text-xs text-black/70 font-medium">Badges</span>
+                      <Trophy className="w-3.5 h-3.5 lg:w-5 lg:h-5 text-black" />
+                      <span className="text-xs lg:text-sm text-black/70 font-medium">Badges</span>
                     </div>
-                    <p className="text-3xl md:text-5xl font-bold text-black">5/8</p>
+                    <p className="text-3xl md:text-5xl lg:text-6xl font-bold text-black">5/8</p>
                   </div>
                 </div>
               </div>
@@ -343,14 +343,14 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
 
         {/* What Your Plan Looks Like */}
         <AnimatedSection>
-          <section className="w-full py-8 md:py-16 px-4 md:px-10">
-              <div className="max-w-5xl mx-auto">
-              <div className="text-center mb-6">
-                <h2 className="text-3xl md:text-5xl font-bold text-white mb-2">What Your Plan Looks Like</h2>
-                <p className="text-white/80">Your personalized 30-day journey</p>
+          <section className="w-full py-8 md:py-16 lg:py-24 px-4 md:px-10">
+              <div className="max-w-5xl lg:max-w-7xl mx-auto">
+              <div className="text-center mb-6 lg:mb-10">
+                <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-2">What Your Plan Looks Like</h2>
+                <p className="text-white/80 md:text-lg lg:text-xl">Your personalized 30-day journey</p>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5 lg:gap-8">
                 {[
                   { icon: "📅", label: "Your Weekly Sprint", desc: "A personalized 30-day plan broken into weekly sprints", color: "#FFE633", clip: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" },
                   { icon: "✅", label: "Daily Activities", desc: "Curated tasks, videos, and resources for each day", color: "#FF6B2B", clip: "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)" },
@@ -359,25 +359,25 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                 ].map((card) => (
                   <div
                     key={card.label}
-                    className="p-5 md:p-6 text-center"
+                    className="p-5 md:p-6 lg:p-8 text-center"
                     style={{ backgroundColor: monotone ? "#222" : `${card.color}15`, border: `1px solid ${monotone ? "rgba(255,255,255,0.1)" : card.color}30`, clipPath: card.clip }}
                   >
-                    <span className="text-3xl md:text-4xl block mb-2">{card.icon}</span>
-                    <h3 className="text-base md:text-lg font-bold text-white mb-1">{card.label}</h3>
-                    <p className="text-xs md:text-sm text-white/70">{card.desc}</p>
+                    <span className="text-3xl md:text-4xl lg:text-5xl block mb-2">{card.icon}</span>
+                    <h3 className="text-base md:text-lg lg:text-xl font-bold text-white mb-1">{card.label}</h3>
+                    <p className="text-xs md:text-sm lg:text-base text-white/70">{card.desc}</p>
                   </div>
                 ))}
               </div>
 
               {/* CTA */}
-              <div className="text-center mt-8 md:mt-12">
+              <div className="text-center mt-8 md:mt-12 lg:mt-16">
                 <button
                   onClick={onGetStarted}
-                  className="text-white font-black text-3xl md:text-5xl uppercase tracking-wide hover:opacity-70 transition-opacity"
+                  className="text-white font-black text-3xl md:text-5xl lg:text-7xl uppercase tracking-wide hover:opacity-70 transition-opacity btn-shake"
                 >
                   Create Your Plan
                 </button>
-                <p className="text-sm text-white/70 mt-3">
+                <p className="text-sm lg:text-base text-white/70 mt-3">
                   Every plan is unique — personalized to your goal and experience
                 </p>
               </div>
