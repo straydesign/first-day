@@ -81,7 +81,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
       {/* Content */}
       <div className="relative z-10">
         {/* Hero Section */}
-        <section className="relative min-h-screen flex flex-col justify-center items-center px-0">
+        <section className="relative min-h-screen flex flex-col justify-center items-center px-0 pt-[180px]">
           {/* Full-bleed hero image */}
           <div className="absolute inset-0 z-0">
             {/* eslint-disable-next-line @next/next/no-img-element */}
