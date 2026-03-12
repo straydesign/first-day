@@ -10,17 +10,17 @@ import { AURORA_COLORS } from "@/constants";
 import { computeEngagementState, getMilestone, getLatestDayXP, calculateStreaks } from "@/lib/engagement";
 import type { EngagementState, Milestone, XPBreakdown, Achievement } from "@/types";
 
-const CalendarView = dynamic(() => import("@/components/CalendarView").then(m => ({ default: m.CalendarView })));
-const DayView = dynamic(() => import("@/components/DayView").then(m => ({ default: m.DayView })));
-const GoalsManagement = dynamic(() => import("@/components/GoalsManagement").then(m => ({ default: m.GoalsManagement })));
-const Settings = dynamic(() => import("@/components/Settings").then(m => ({ default: m.Settings })));
+const CalendarView = dynamic(() => import("@/components/CalendarView").then(m => ({ default: m.CalendarView })), { loading: () => <LoadingScreen /> });
+const DayView = dynamic(() => import("@/components/DayView").then(m => ({ default: m.DayView })), { loading: () => <LoadingScreen /> });
+const GoalsManagement = dynamic(() => import("@/components/GoalsManagement").then(m => ({ default: m.GoalsManagement })), { loading: () => <LoadingScreen /> });
+const Settings = dynamic(() => import("@/components/Settings").then(m => ({ default: m.Settings })), { loading: () => <LoadingScreen /> });
 const LoginModal = dynamic(() => import("@/components/LoginModal").then(m => ({ default: m.LoginModal })));
 const NavigationMenu = dynamic(() => import("@/components/NavigationMenu").then(m => ({ default: m.NavigationMenu })));
 const PrivacyPolicy = dynamic(() => import("@/components/PrivacyPolicy").then(m => ({ default: m.PrivacyPolicy })));
 const TermsOfService = dynamic(() => import("@/components/TermsOfService").then(m => ({ default: m.TermsOfService })));
 const ResetPasswordView = dynamic(() => import("@/components/ResetPasswordView").then(m => ({ default: m.ResetPasswordView })));
-const SimpleGoalCreation = dynamic(() => import("@/components/SimpleGoalCreation").then(m => ({ default: m.SimpleGoalCreation })));
-const CongratsView = dynamic(() => import("@/components/CongratsView").then(m => ({ default: m.CongratsView })));
+const SimpleGoalCreation = dynamic(() => import("@/components/SimpleGoalCreation").then(m => ({ default: m.SimpleGoalCreation })), { loading: () => <LoadingScreen /> });
+const CongratsView = dynamic(() => import("@/components/CongratsView").then(m => ({ default: m.CongratsView })), { loading: () => <LoadingScreen /> });
 const NotificationSettings = dynamic(() => import("@/components/NotificationSettings").then(m => ({ default: m.NotificationSettings })));
 const XPAnimation = dynamic(() => import("@/components/XPAnimation").then(m => ({ default: m.XPAnimation })));
 

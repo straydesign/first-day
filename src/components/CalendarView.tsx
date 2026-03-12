@@ -1,5 +1,5 @@
 "use client";
-import { Calendar as CalendarIcon, BookOpen, Edit2, ChevronUp, ChevronDown, AlertTriangle, Lock } from "lucide-react";
+import { BookOpen, Edit2, ChevronUp, ChevronDown, AlertTriangle, Lock } from "lucide-react";
 import { ArrowLeft } from "lucide-react";
 import { MosaicCard } from "./MosaicCard";
 import { WeekCalendar } from "./WeekCalendar";
@@ -102,34 +102,25 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
             transition={{ duration: 0.5, ease: "easeOut" }}
           >
             {onBack && (
-              <motion.button
+              <button
                 onClick={onBack}
-                className="relative inline-flex items-center gap-2 mb-8 h-10 px-6 text-sm font-bold text-white overflow-hidden hover:scale-105 transition-transform"
+                className="inline-flex items-center gap-2 mb-8 h-10 px-6 text-sm font-bold text-white bg-black hover:scale-105 transition-transform"
                 style={{ clipPath: "polygon(0% 5%, 92% 0%, 98% 92%, 3% 95%)" }}
               >
-                <motion.span
-                  className="absolute inset-0"
-                  animate={{
-                    backgroundColor: [...VORONOI_LIGHT, VORONOI_LIGHT[0]].map(c => `${c}80`),
-                  }}
-                  transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                />
-                <span className="absolute inset-0" style={{ border: "1px solid rgba(255,255,255,0.2)" }} />
-                <span className="relative z-10 flex items-center gap-2 drop-shadow-[0_1px_6px_rgba(0,0,0,0.8)]">
-                  <ArrowLeft className="w-5 h-5" />Back
-                </span>
-              </motion.button>
+                <ArrowLeft className="w-5 h-5" />Back
+              </button>
             )}
             {goalTitle && (<div className="text-center">
-              <div className="flex items-center justify-center gap-3 mb-2">
-                <h1 className="text-3xl md:text-7xl font-bold text-white px-4">{goalTitle}</h1>
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <div
+                  className="inline-block bg-black px-8 py-3"
+                  style={{ clipPath: "polygon(2% 0%, 98% 3%, 100% 97%, 0% 100%)" }}
+                >
+                  <h1 className="text-3xl md:text-7xl font-bold text-white">{goalTitle}</h1>
+                </div>
                 {engagement && (engagement.currentStreak > 0 || engagement.isAtRisk) && (
                   <StreakBadge streak={engagement.currentStreak} isAtRisk={engagement.isAtRisk} />
                 )}
-              </div>
-              <div className="inline-flex items-center justify-center gap-2 mb-4">
-                <CalendarIcon className="w-5 h-5 text-white" />
-                <h2 className="text-lg md:text-3xl text-white font-bold">Your 30-Day Plan</h2>
               </div>
               {engagement?.isAtRisk && (
                 <div className="mb-3 mx-auto max-w-md bg-black border border-coral-500/40 clip-tile-c px-4 py-2 flex items-center gap-2 animate-pulse">
@@ -141,21 +132,14 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
                 <div className="flex justify-center mb-3">
                   <motion.button
                     onClick={onEditGoal}
-                    className="relative inline-flex items-center justify-center h-10 px-6 text-sm font-bold text-white overflow-hidden hover:scale-105 transition-transform"
+                    className="relative inline-flex items-center justify-center h-10 px-6 text-sm font-bold text-black overflow-hidden hover:scale-105 transition-transform"
                     style={{ clipPath: "polygon(4% 8%, 95% 0%, 100% 85%, 8% 100%)" }}
+                    animate={{
+                      backgroundColor: VORONOI_LIGHT as unknown as string[],
+                    }}
+                    transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
                   >
-                    <motion.span
-                      className="absolute inset-0"
-                      animate={{
-                        backgroundColor: [...VORONOI_LIGHT, VORONOI_LIGHT[0]].map(c => `${c}90`),
-                      }}
-                      transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-                    />
-                    <span
-                      className="absolute inset-0"
-                      style={{ border: "1px solid rgba(255,255,255,0.2)" }}
-                    />
-                    <span className="relative z-10 flex items-center gap-1.5 drop-shadow-[0_1px_6px_rgba(0,0,0,0.8)]">
+                    <span className="relative z-10 flex items-center gap-1.5">
                       <Edit2 className="w-4 h-4" />Edit Goal
                     </span>
                   </motion.button>
