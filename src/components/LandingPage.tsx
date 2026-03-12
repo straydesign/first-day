@@ -188,7 +188,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
             className="overflow-hidden w-full"
           >
             <div className="py-4 overflow-hidden space-y-1.5">
-              <p className="text-white text-sm font-medium mb-3 text-center px-4">Goals you can achieve in 30 days:</p>
+              <p className="text-white text-sm font-medium mb-3 text-center px-4">Goals you can start this week:</p>
               {renderScrollRow(GOAL_SUGGESTIONS_ROW_1, "left", 0)}
               {renderScrollRow(GOAL_SUGGESTIONS_ROW_2, "right", 1)}
               {renderScrollRow(GOAL_SUGGESTIONS_ROW_3, "left", 2)}
@@ -275,7 +275,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                       <Trophy className="w-7 h-7 text-black" />
                     </div>
                     <h3 className="text-xl md:text-3xl font-bold text-black mb-1">Unlock Badges</h3>
-                    <p className="text-black/80 text-sm mb-4">Hit milestones and earn achievements. Can you collect them all before day 30?</p>
+                    <p className="text-black/80 text-sm mb-4">Hit milestones and earn achievements. Can you collect them all?</p>
                     <div className="flex justify-center gap-2">
                       {["First Step", "On Fire", "Perfect Week", "???"].map((label, i) => (
                         <div
@@ -342,7 +342,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
               <div>
                 <div className="flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-4 -mx-2 px-2">
                   {[
-                    { src: "/screenshots/calendar-view.png", label: "Your 30-Day Calendar", alt: "Calendar view showing weekly plan with day cards", tile: "a" as const, frameSeed: 500 },
+                    { src: "/screenshots/calendar-view.png", label: "Your Weekly Sprint", alt: "Calendar view showing weekly plan with day cards", tile: "a" as const, frameSeed: 500 },
                     { src: "/screenshots/day-view.png", label: "Daily Activities", alt: "Day view with checkable activities and YouTube resources", tile: "c" as const, frameSeed: 501 },
                     { src: "/screenshots/congrats-view.png", label: "Celebrate Wins", alt: "Congratulations screen with XP breakdown and achievements", tile: "b" as const, frameSeed: 502 },
                   ].map((screen) => (
