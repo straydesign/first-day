@@ -20,6 +20,7 @@ const SHARD_CLIPS = [
 ];
 
 const FIELD_COLORS = ["#FFE633", "#FF6B2B", "#2979FF", "#FF10F0"];
+const EXP_COLORS = ["#FFE633", "#FF2D55", "#00EAFF"]; // beginner, intermediate, advanced
 
 interface SimpleGoalCreationProps {
   onComplete: (goalData: GoalFormData) => void;
@@ -148,7 +149,7 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
             <div className="mb-4 md:mb-8">
               <label className="block text-sm font-semibold text-white/80 mb-2 md:mb-3">What&apos;s your experience level?</label>
               <div className="flex flex-col gap-3">
-                {[{ value: 'beginner' as const, label: 'Beginner', desc: 'Just starting', color: monotone ? "#555555" : FIELD_COLORS[0] }, { value: 'intermediate' as const, label: 'Intermediate', desc: 'Some experience', color: monotone ? "#555555" : FIELD_COLORS[2] }, { value: 'advanced' as const, label: 'Advanced', desc: 'Experienced', color: monotone ? "#555555" : FIELD_COLORS[3] }].map((level, index) => (
+                {[{ value: 'beginner' as const, label: 'Beginner', desc: 'Just starting', color: monotone ? "#555555" : EXP_COLORS[0] }, { value: 'intermediate' as const, label: 'Intermediate', desc: 'Some experience', color: monotone ? "#555555" : EXP_COLORS[1] }, { value: 'advanced' as const, label: 'Advanced', desc: 'Experienced', color: monotone ? "#555555" : EXP_COLORS[2] }].map((level, index) => (
                   <button
                     key={level.value}
                     onClick={() => setExperienceLevel(level.value)}
@@ -194,13 +195,36 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
               )}
             </div>
             <div className="flex flex-col gap-3">
+              {/* Generate My Plan — shard-bordered button */}
               <button
                 onClick={handleGenerate}
-                disabled={isGenerating || !goal.trim()}
-                className="w-full bg-black text-white py-4 text-xl font-black uppercase tracking-wide hover:scale-105 transition-transform disabled:hover:scale-100 disabled:opacity-50 flex items-center justify-center gap-2"
-                style={{ clipPath: "polygon(1% 0%, 100% 3%, 99% 97%, 0% 100%)" }}
+                disabled={isGenerating}
+                className="w-full relative hover:scale-105 transition-transform disabled:hover:scale-100 disabled:opacity-50 group"
               >
-                {isGenerating ? (<><Loader2 className="w-5 h-5 animate-spin" />Generating...</>) : (<>Generate My Plan<ArrowRight className="w-5 h-5" /></>)}
+                {/* Shard bar border — top */}
+                <div className="flex gap-[2px] h-2 w-full mb-0">
+                  {Array.from({ length: 12 }, (_, i) => (
+                    <div key={`t${i}`} className="flex-1" style={{ backgroundColor: monotone ? "#555" : BRIGHT_COLORS[i % BRIGHT_COLORS.length], clipPath: SHARD_CLIPS[i % SHARD_CLIPS.length] }} />
+                  ))}
+                </div>
+                {/* Main button body */}
+                <div className="bg-black py-6 md:py-8 flex items-center justify-center gap-3 overflow-hidden">
+                  {isGenerating ? (
+                    <><Loader2 className="w-8 h-8 animate-spin text-white" /><span className="text-4xl md:text-5xl font-black uppercase tracking-wide text-white" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>Generating...</span></>
+                  ) : (
+                    <span className="flex items-center" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>
+                      {"GENERATE MY PLAN".split("").map((char, i) => (
+                        <span key={i} className="text-5xl md:text-6xl font-black uppercase tracking-wide" style={{ color: char === " " ? "transparent" : monotone ? "#ffffff" : BRIGHT_COLORS[i % BRIGHT_COLORS.length], width: char === " " ? "0.3em" : undefined, display: "inline-block", animation: char === " " ? "none" : `letterWave 2s ease-in-out ${i * 0.12}s infinite` }}>{char}</span>
+                      ))}
+                    </span>
+                  )}
+                </div>
+                {/* Shard bar border — bottom */}
+                <div className="flex gap-[2px] h-2 w-full mt-0">
+                  {Array.from({ length: 12 }, (_, i) => (
+                    <div key={`b${i}`} className="flex-1" style={{ backgroundColor: monotone ? "#555" : BRIGHT_COLORS[(i + 5) % BRIGHT_COLORS.length], clipPath: SHARD_CLIPS[(i + 2) % SHARD_CLIPS.length] }} />
+                  ))}
+                </div>
               </button>
               <button
                 onClick={onCancel}

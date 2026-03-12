@@ -167,25 +167,28 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
               </div>
             )}
             {!isLogin && (
-              <button
-                type="button"
-                onClick={() => setAgreeToTerms(!agreeToTerms)}
-                className={`w-full flex items-center gap-4 p-4 transition-all text-left ${agreeToTerms ? 'ring-2 ring-white/30 scale-[1.01]' : 'opacity-80 hover:opacity-100'}`}
-                style={{ backgroundColor: agreeToTerms ? "#FFE633" : "#333333", clipPath: "polygon(1% 0%, 100% 3%, 99% 97%, 0% 100%)" }}
-              >
-                <div className={`w-8 h-8 flex-shrink-0 flex items-center justify-center border-2 ${agreeToTerms ? 'border-black/40 bg-black' : 'border-white/30 bg-transparent'}`}>
-                  {agreeToTerms && <Check className="w-5 h-5 text-white" strokeWidth={3} />}
-                </div>
-                <div className="flex flex-col">
-                  <span className={`text-sm font-bold ${agreeToTerms ? 'text-black' : 'text-white'}`}>I agree to the</span>
-                  <span
-                    className={`text-sm font-bold underline ${agreeToTerms ? 'text-black/80' : 'text-white/80'}`}
-                    onClick={(e) => { e.stopPropagation(); onShowTerms?.(); }}
-                  >
-                    terms and conditions
+              <div className="space-y-2">
+                <button
+                  type="button"
+                  onClick={() => setAgreeToTerms(!agreeToTerms)}
+                  className={`w-full flex items-center gap-5 p-5 transition-all text-left ${agreeToTerms ? 'scale-[1.02]' : 'hover:scale-[1.01]'}`}
+                  style={{ backgroundColor: agreeToTerms ? "#FFE633" : "#333333", clipPath: "polygon(1% 0%, 100% 3%, 99% 97%, 0% 100%)" }}
+                >
+                  <div className={`w-12 h-12 flex-shrink-0 flex items-center justify-center border-3 transition-all ${agreeToTerms ? 'border-black/40 bg-black' : 'border-white/30 bg-transparent'}`} style={{ clipPath: "polygon(3% 0%, 100% 4%, 97% 100%, 0% 96%)" }}>
+                    {agreeToTerms && <Check className="w-8 h-8 text-white" strokeWidth={3} />}
+                  </div>
+                  <span className={`text-lg font-black uppercase tracking-wide ${agreeToTerms ? 'text-black' : 'text-white'}`}>
+                    {agreeToTerms ? 'Terms Accepted' : 'I Agree to the Terms'}
                   </span>
-                </div>
-              </button>
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => { e.preventDefault(); onShowTerms?.(); }}
+                  className="text-xs text-white/40 hover:text-white/70 underline font-medium ml-1"
+                >
+                  View terms and conditions
+                </button>
+              </div>
             )}
             <button
               type="submit"
