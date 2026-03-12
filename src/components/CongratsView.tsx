@@ -1,10 +1,10 @@
 "use client";
-import { useState, useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { motion } from "framer-motion";
-import { Calendar, ArrowRight, Zap } from "lucide-react";
-import { AchievementCard } from "./AchievementCard";
+import { Calendar, ArrowRight } from "lucide-react";
 import { ShardSquare } from "./ShardSquare";
-import type { Milestone, XPBreakdown, Achievement, ProgressMap } from "@/types";
+import { useMonotone } from "./MonotoneContext";
+import type { ProgressMap } from "@/types";
 
 interface ConfettiPiece {
   id: number;
@@ -22,13 +22,8 @@ interface CongratsViewProps {
   goalTitle?: string;
   dayNumber?: number;
   totalDays?: number;
-  milestone?: Milestone | null;
-  xp?: XPBreakdown | null;
-  newAchievements?: Achievement[];
   progress?: ProgressMap;
 }
-
-import { useMonotone } from "./MonotoneContext";
 
 const CONFETTI_COLORS = ["#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF", "#2979FF"];
 
@@ -38,35 +33,13 @@ export function CongratsView({
   goalTitle,
   dayNumber,
   totalDays = 30,
-  milestone,
-  xp,
-  newAchievements = [],
   progress,
 }: CongratsViewProps) {
   const { monotone } = useMonotone();
   const daysRemaining = dayNumber ? totalDays - dayNumber : null;
 
-  // Milestone-aware icon and title
-  const icon = milestone?.icon ?? "🎉";
-  const title = milestone?.title ?? (dayNumber ? `Day ${dayNumber} Complete!` : "Congratulations!");
-  const message = milestone?.message ?? "Every step forward is progress toward your goal.";
-  const intensity = milestone?.intensity ?? "normal";
+  const title = dayNumber ? `Day ${dayNumber} Complete!` : "Congratulations!";
 
-  // Scale animation based on intensity
-  const iconSize =
-    intensity === "epic"
-      ? "w-20 h-20 md:w-28 md:h-28"
-      : intensity === "big"
-        ? "w-18 h-18 md:w-26 md:h-26"
-        : "w-16 h-16 md:w-24 md:h-24";
-  const iconBg =
-    intensity === "epic"
-      ? "bg-yellow-400"
-      : intensity === "big"
-        ? "bg-lime-400"
-        : "bg-lime-500";
-
-  // --- 1. Confetti burst on mount ---
   const confettiPieces: readonly ConfettiPiece[] = useMemo(
     () =>
       Array.from({ length: 25 }, (_, i) => ({
@@ -80,27 +53,6 @@ export function CongratsView({
       })),
     [],
   );
-
-  // --- 3. XP count-up animation ---
-  const [displayXP, setDisplayXP] = useState(0);
-
-  useEffect(() => {
-    if (!xp?.total) return;
-
-    const target = xp.total;
-    const duration = 1200;
-    const start = performance.now();
-
-    const tick = (now: number) => {
-      const elapsed = now - start;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
-      setDisplayXP(Math.round(eased * target));
-      if (progress < 1) requestAnimationFrame(tick);
-    };
-
-    requestAnimationFrame(tick);
-  }, [xp?.total]);
 
   return (
     <div className="min-h-screen relative bg-black overflow-hidden">
@@ -127,18 +79,9 @@ export function CongratsView({
 
       <div className="relative z-10 flex items-center justify-center p-6 pt-[120px] md:pt-[120px] min-h-[80vh] md:min-h-screen">
         <div className="max-w-2xl w-full text-center">
-          {/* Milestone Icon */}
-          <motion.div
-            className={`inline-flex items-center justify-center ${iconSize} clip-diamond ${iconBg} mb-4 md:mb-6 shadow-lg`}
-            initial={{ scale: 0, rotate: -20 }}
-            animate={{ scale: 1, rotate: 0 }}
-            transition={{ type: "spring", stiffness: 260, damping: 18, delay: 0.1 }}
-          >
-            <span className="text-4xl md:text-5xl">{icon}</span>
-          </motion.div>
 
-          {/* 2. Word-by-word headline reveal */}
-          <h1 className="text-3xl md:text-5xl font-bold mb-2 text-white">
+          {/* Word-by-word headline */}
+          <h1 className="text-3xl md:text-5xl font-bold mb-3 text-white">
             {title.split(" ").map((word, i) => (
               <motion.span
                 key={i}
@@ -154,7 +97,7 @@ export function CongratsView({
 
           {goalTitle && (
             <motion.p
-              className="text-lg md:text-2xl text-white/80 font-bold mb-4 px-4"
+              className="text-lg md:text-2xl text-white/80 font-bold mb-6 px-4"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.6, ease: "easeOut" }}
@@ -163,19 +106,10 @@ export function CongratsView({
             </motion.p>
           )}
 
-          <motion.p
-            className="text-base md:text-xl text-white/70 font-medium mb-2 max-w-lg mx-auto px-4"
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.7, ease: "easeOut" }}
-          >
-            {message}
-          </motion.p>
-
           {/* Shard week square */}
           {progress && dayNumber && (
             <motion.div
-              className="flex justify-center mb-4"
+              className="flex justify-center mb-6"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.75, ease: "easeOut" }}
@@ -190,83 +124,30 @@ export function CongratsView({
             </motion.div>
           )}
 
-          {/* 3. XP count-up */}
-          {xp && xp.total > 0 && (
-            <motion.div
-              className="inline-flex items-center gap-2 bg-black backdrop-blur-sm clip-badge-a px-6 py-2 mb-4 shadow-md border border-white/15"
-              initial={{ opacity: 0, scale: 0.8, y: 10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.85, ease: "easeOut" }}
-            >
-              <Zap className="w-5 h-5 text-yellow-500" />
-              <span className="text-lg md:text-3xl font-bold text-white">+{displayXP} XP</span>
-              <span className="text-sm text-white/50">
-                ({xp.base} base
-                {xp.activities > 0 && ` + ${xp.activities} activities`}
-                {xp.reflection > 0 && ` + ${xp.reflection} reflection`}
-                {xp.streakBonus > 0 && ` + ${xp.streakBonus} streak`})
-              </span>
-            </motion.div>
-          )}
-
-          {/* 4. Badge unlock with glow */}
-          {newAchievements.length > 0 && (
-            <motion.div
-              className="mb-4"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.4, delay: 0.7 }}
-            >
-              <p className="text-sm font-semibold text-yellow-400 mb-2">
-                New Achievement{newAchievements.length > 1 ? "s" : ""} Unlocked!
-              </p>
-              <div className="flex justify-center gap-3 flex-wrap">
-                {newAchievements.map((a, index) => (
-                  <motion.div
-                    key={a.id}
-                    className="w-32 relative"
-                    initial={{ opacity: 0, scale: 0.5 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{
-                      duration: 0.5,
-                      delay: 0.8 + index * 0.15,
-                      type: "spring",
-                      stiffness: 200,
-                      damping: 15,
-                    }}
-                  >
-                    <div className="absolute -inset-1 bg-gradient-to-r from-yellow-400 via-lime-400 to-teal-400 clip-tile-b opacity-50 blur-sm animate-pulse" />
-                    <div className="relative">
-                      <AchievementCard achievement={a} />
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          )}
-
+          {/* Come back message */}
           {daysRemaining !== null && daysRemaining > 0 && (
             <motion.p
-              className="text-sm md:text-base text-white/80 mb-6 md:mb-12"
+              className="text-base md:text-xl text-white/70 font-medium mb-8 md:mb-12 px-4"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 1.0, ease: "easeOut" }}
+              transition={{ duration: 0.4, delay: 0.9, ease: "easeOut" }}
             >
-              {daysRemaining} {daysRemaining === 1 ? "day" : "days"} remaining — come back tomorrow for Day {dayNumber! + 1}.
+              Come back tomorrow for another shard.
             </motion.p>
           )}
           {daysRemaining === 0 && (
             <motion.p
-              className="text-sm md:text-base text-lime-400 font-semibold mb-6 md:mb-12"
+              className="text-base md:text-xl text-white/70 font-medium mb-8 md:mb-12 px-4"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 1.0, ease: "easeOut" }}
+              transition={{ duration: 0.4, delay: 0.9, ease: "easeOut" }}
             >
-              You did it! All 30 days complete.
+              You did it — all 30 days complete.
             </motion.p>
           )}
-          {daysRemaining === null && <div className="mb-6 md:mb-12" />}
+          {daysRemaining === null && <div className="mb-8 md:mb-12" />}
 
+          {/* Buttons */}
           <motion.div
             className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center px-4"
             initial={{ opacity: 0, y: 16 }}

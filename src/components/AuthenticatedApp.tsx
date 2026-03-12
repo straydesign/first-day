@@ -246,9 +246,6 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
             onDoMore={handleBackToGoals}
             goalTitle={planData?.cleanedGoal || goalData?.goal}
             dayNumber={selectedDay?.number}
-            milestone={latestMilestone}
-            xp={latestDayXP}
-            newAchievements={newAchievements}
             progress={progress}
           />
         )}

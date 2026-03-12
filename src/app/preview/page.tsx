@@ -160,7 +160,7 @@ const SCREENS = [
     <DayView day={MOCK_DAY} onComplete={noop} savedProgress={{ completed: { 0: true, 1: true }, feedback: "" }} currentStreak={4} />
   )},
   { id: "congrats-view", Component: ({ noop }: { noop: () => void }) => (
-    <CongratsView onViewCalendar={noop} onDoMore={noop} goalTitle="Learn to play guitar" dayNumber={5} totalDays={30} milestone={MOCK_MILESTONE} xp={MOCK_XP} newAchievements={NEW_ACHIEVEMENTS} />
+    <CongratsView onViewCalendar={noop} onDoMore={noop} goalTitle="Learn to play guitar" dayNumber={5} totalDays={30} />
   )},
 ];
 
