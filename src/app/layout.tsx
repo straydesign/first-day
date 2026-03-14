@@ -47,6 +47,34 @@ export const metadata: Metadata = {
   },
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "First Day",
+  "url": "https://firstday.life",
+  "description": "AI-powered 30-day plans to help you achieve any goal. Personalized daily activities, progress tracking, streaks, and achievements.",
+  "applicationCategory": "LifestyleApplication",
+  "operatingSystem": "Web",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+  },
+  "featureList": [
+    "AI-generated personalized 30-day goal plans",
+    "Daily activity tracking with reflections",
+    "XP system, streaks, and achievement badges",
+    "Curated resources (videos, articles, books)",
+    "Multiple simultaneous goal management",
+    "Calendar view for progress overview",
+  ],
+  "creator": {
+    "@type": "Organization",
+    "name": "Stray Web Design",
+    "url": "https://straywebdesign.co",
+  },
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -54,6 +82,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${bebasNeue.variable}`}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className="antialiased bg-black">
         <MonotoneProvider>
           {children}

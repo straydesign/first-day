@@ -1,7 +1,12 @@
 import type { MetadataRoute } from "next";
+import { headers } from "next/headers";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://firstday.life";
+export const dynamic = "force-dynamic";
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const headersList = await headers();
+  const host = headersList.get("host") ?? "firstday.life";
+  const baseUrl = `https://${host}`;
 
   return [
     {

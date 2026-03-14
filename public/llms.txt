@@ -1,0 +1,43 @@
+# First Day
+
+> The first day of the rest of your life.
+
+## About
+
+First Day is an AI-powered goal achievement platform that helps users accomplish any goal through personalized, structured 30-day plans. Users describe a goal, and the AI generates a day-by-day action plan with activities, tips, resources, and optional weekly book recommendations — all tailored to their experience level, schedule, and preferences.
+
+- **URL**: https://firstday.life
+- **Category**: Productivity / Self-Improvement / Goal Tracking
+
+## Key Features
+
+- **AI-Generated 30-Day Plans**: Describe any goal and receive a personalized plan with daily activities, tips, and curated resources (YouTube videos, articles, books).
+- **Adaptive Scheduling**: Plans respect your time commitment, preferred time slots, and available days of the week.
+- **Activity Tracking**: Check off daily activities, write reflections, and track completion across the full 30-day journey.
+- **Engagement & Gamification**: XP system, streaks, leveling (Beginner through Master), achievements, and milestone celebrations keep users motivated.
+- **Beast Mode**: An intensive mode for users who want to push harder on their goals.
+- **Calendar View**: Visual overview of progress across the entire plan with day-by-day status.
+- **Multiple Goals**: Manage and switch between multiple active goals simultaneously.
+- **Demo Mode**: Try the full app experience without creating an account.
+- **Notification Settings**: Configurable reminders to stay on track.
+
+## How It Works
+
+1. User enters a goal (e.g., "Learn to play guitar," "Run a 5K," "Launch a side business").
+2. AI asks contextual follow-up questions based on the goal type.
+3. A personalized 30-day plan is generated with daily activities and resources.
+4. User completes activities day by day, earning XP and building streaks.
+5. Milestones, achievements, and level-ups celebrate progress along the way.
+
+## Tech Stack
+
+- **Frontend**: Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4
+- **Animation**: Framer Motion 12
+- **Backend**: Supabase (Auth + Database)
+- **UI**: Radix UI primitives, Lucide icons, Sonner toast notifications
+- **Visual Design**: Custom Voronoi mosaic backgrounds (d3-delaunay), geometric shard-based design system
+
+## Contact
+
+- **Email**: tom@straydesign.co
+- **Built by**: Stray Web Design (https://straywebdesign.co)
