@@ -61,15 +61,14 @@ export const SHARD_CLIPS = [
  * Slight skew on edges for shard aesthetic.
  */
 export const SHARD_SQUARE_CLIPS = [
-  // Row 1 — four bricks across top half
-  "polygon(0% 0%, 26% 0%, 25% 52%, 1% 50%)",
-  "polygon(26% 0%, 51% 0%, 50% 50%, 25% 52%)",
-  "polygon(51% 0%, 76% 0%, 75% 52%, 50% 50%)",
-  "polygon(76% 0%, 100% 0%, 99% 50%, 75% 52%)",
-  // Row 2 — three bricks across bottom half, offset
-  "polygon(1% 52%, 34% 50%, 33% 100%, 0% 100%)",
-  "polygon(34% 50%, 67% 52%, 66% 100%, 33% 100%)",
-  "polygon(67% 52%, 99% 50%, 100% 100%, 66% 100%)",
+  // Voronoi tessellation — 7 interlocking cells
+  "polygon(0% 0%, 29.4% 0%, 39.5% 28.8%, 0% 48.5%)",
+  "polygon(29.4% 0%, 72.7% 0%, 64.2% 27.2%, 49.1% 33.6%, 39.5% 28.8%)",
+  "polygon(72.7% 0%, 100% 0%, 100% 47.7%, 64.2% 27.2%)",
+  "polygon(0% 48.5%, 39.5% 28.8%, 49.1% 33.6%, 51.1% 68.6%, 47.8% 73.7%, 0% 54.6%)",
+  "polygon(100% 47.7%, 64.2% 27.2%, 49.1% 33.6%, 51.1% 68.6%, 100% 55.5%)",
+  "polygon(0% 54.6%, 47.8% 73.7%, 48.8% 100%, 0% 100%)",
+  "polygon(100% 55.5%, 51.1% 68.6%, 47.8% 73.7%, 48.8% 100%, 100% 100%)",
 ] as const;
 
 /** Animation durations for scrolling goal suggestion rows. */

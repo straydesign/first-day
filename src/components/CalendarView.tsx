@@ -1,6 +1,5 @@
 "use client";
 import { BookOpen, Edit2, ChevronUp, ChevronDown, AlertTriangle, Lock, Menu, LogOut, Palette, Target, ArrowLeft } from "lucide-react";
-import { MosaicCard } from "./MosaicCard";
 import { WeekCalendar } from "./WeekCalendar";
 import { VORONOI_LIGHT } from "@/constants";
 import { useState, useEffect } from "react";
@@ -134,8 +133,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
           </nav>
         </SheetContent>
       </Sheet>
-      {/* Full-screen mosaic background */}
-      <MosaicCard seed={42} className="fixed inset-0 z-0 w-full h-full">{null}</MosaicCard>
+      {/* Background mosaic provided by AuthenticatedApp */}
       <div className="relative z-10 p-4 md:p-8 pt-[120px] md:pt-[120px]">
         <div className="max-w-7xl mx-auto">
           <motion.div

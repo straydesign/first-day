@@ -1,11 +1,12 @@
 "use client";
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Check } from 'lucide-react';
 import { toast } from 'sonner';
 import { createClient, API_BASE } from '@/lib/supabase/client';
 import { FirstDayLogo } from './FirstDayLogo';
+import { HeroMosaic, type HeroMosaicHandle } from './HeroMosaic';
 import { ForgotPasswordModal } from './ForgotPasswordModal';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { validatePassword } from '@/lib/validation';
@@ -17,10 +18,11 @@ interface LoginModalProps {
   onClose: () => void;
   onAuthSuccess: (accessToken: string, userId: string) => void;
   onShowTerms?: () => void;
+  onTryDemo?: () => void;
   defaultMode?: "login" | "signup";
 }
 
-export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaultMode = "login" }: LoginModalProps) {
+export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, onTryDemo, defaultMode = "login" }: LoginModalProps) {
   const [isLogin, setIsLogin] = useState(defaultMode === "login");
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -29,6 +31,7 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
   const [loading, setLoading] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [agreeToTerms, setAgreeToTerms] = useState(false);
+  const mosaicRef = useRef<HeroMosaicHandle>(null);
 
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
@@ -121,19 +124,39 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="w-screen h-screen max-w-none m-0 p-4 md:p-8 bg-black border-0 animate-scaleIn shadow-none overflow-y-auto">
+      <DialogContent
+        className="w-screen h-screen max-w-none m-0 p-4 md:p-8 bg-black border-0 animate-scaleIn shadow-none overflow-y-auto"
+        onMouseMove={(e: React.MouseEvent) => mosaicRef.current?.updateMouse(e.clientX, e.clientY)}
+        onMouseLeave={() => mosaicRef.current?.reset()}
+      >
+        <HeroMosaic ref={mosaicRef} />
         <div className="relative z-10 flex flex-col min-h-full">
           <DialogTitle className="sr-only">{isLogin ? 'Log in to First Day' : 'Sign up for First Day'}</DialogTitle>
           <DialogDescription className="sr-only">{isLogin ? 'Enter your email and password' : 'Create an account'}</DialogDescription>
 
           <div className="flex-1 flex flex-col items-center justify-center">
-          <div className="mb-6 sm:mb-8 animate-fadeIn w-full">
-            <div
-              className="w-full bg-black py-3 flex items-center justify-center"
-              style={{ clipPath: "polygon(1% 0%, 99% 4%, 100% 96%, 0% 100%)" }}
-            >
-              <FirstDayLogo size="hero" showTagline={true} showLetters={false} className="w-full" />
+          <div className="mb-6 sm:mb-8 animate-fadeIn w-full max-w-3xl lg:max-w-5xl mx-auto px-4 md:px-8">
+            <div className="block md:hidden">
+              <FirstDayLogo showTagline={true} showLetters={false} interactive={true} />
             </div>
+            <div className="hidden md:block">
+              <FirstDayLogo size="hero" showTagline={true} showLetters={false} interactive={true} />
+            </div>
+          </div>
+
+          <div className="max-w-md w-full mx-auto mb-6">
+            <button
+              type="button"
+              onClick={() => { onTryDemo?.(); onClose(); }}
+              className="block w-full py-5 text-center text-2xl md:text-3xl font-black uppercase tracking-wide hover:scale-105 transition-transform"
+              style={{
+                background: "linear-gradient(135deg, #FFE633 0%, #FF6B2B 20%, #FF2D55 40%, #00EAFF 60%, #FF10F0 80%, #4FC3F7 100%)",
+                clipPath: "polygon(0% 5%, 97% 0%, 100% 95%, 3% 100%)",
+              }}
+            >
+              <span className="text-black drop-shadow-[0_1px_0_rgba(255,255,255,0.3)]">Try the Demo</span>
+              <span className="block text-sm text-black/60 font-bold mt-0.5">No account needed</span>
+            </button>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4 max-w-md w-full mx-auto">
@@ -218,13 +241,6 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, defaul
             >
               {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Log in'}
             </button>
-            <a
-              href="/preview"
-              className="bg-black text-white px-6 py-3 font-black text-sm uppercase tracking-wide hover:scale-105 transition-transform inline-block"
-              style={{ clipPath: "polygon(0% 5%, 97% 0%, 100% 100%, 3% 95%)" }}
-            >
-              Try the demo — no account needed
-            </a>
           </div>
         </div>
       </DialogContent>

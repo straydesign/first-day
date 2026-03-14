@@ -18,6 +18,7 @@ export default function Home() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [loginModalMode, setLoginModalMode] = useState<"login" | "signup">("login");
   const [resetToken, setResetToken] = useState<string | null>(null);
+  const [demoMode, setDemoMode] = useState(false);
 
   const { isAuthenticated, accessToken, userId, userEmail, isLoading, login, logout } = useAuth({
     onSignIn: () => {
@@ -82,6 +83,16 @@ export default function Home() {
     }
   }, [isAuthenticated, currentView]);
 
+  const handleTryDemo = useCallback(() => {
+    setDemoMode(true);
+    setShowLoginModal(false);
+  }, []);
+
+  const handleExitDemo = useCallback(async () => {
+    setDemoMode(false);
+    setCurrentView("landing");
+  }, []);
+
   const handleOpenLogin = useCallback(() => {
     setLoginModalMode("login");
     setShowLoginModal(true);
@@ -144,6 +155,20 @@ export default function Home() {
     );
   }
 
+  // Demo mode — render the real app shell with mock data
+  if (demoMode) {
+    return (
+      <AuthenticatedApp
+        accessToken="demo"
+        userId="demo"
+        userEmail={null}
+        initialView="goals"
+        onLogout={handleExitDemo}
+        demoMode
+      />
+    );
+  }
+
   // Landing page
   if (currentView === "landing" || !isAuthenticated) {
     return (
@@ -159,6 +184,7 @@ export default function Home() {
           onClose={() => setShowLoginModal(false)}
           onAuthSuccess={handleAuthSuccess}
           onShowTerms={handleShowTermsOfService}
+          onTryDemo={handleTryDemo}
           defaultMode={loginModalMode}
         />
       </>

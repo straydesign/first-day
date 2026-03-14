@@ -2,11 +2,10 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
-import Image from "next/image";
 import { Flame, Zap, Trophy, Target } from "lucide-react";
 import { FirstDayLogo } from "./FirstDayLogo";
+import { HeroMosaic, type HeroMosaicHandle } from "./HeroMosaic";
 import { Footer } from "./Footer";
-import { GeometricFrame } from "./GeometricFrame";
 import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, BRIGHT_COLORS, SCROLL_SPEEDS } from "@/constants";
 import { useMonotone } from "./MonotoneContext";
 
@@ -38,6 +37,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
   const { monotone } = useMonotone();
   const [isNavSticky, setIsNavSticky] = useState(false);
   const heroNavRef = useRef<HTMLDivElement>(null);
+  const mosaicRef = useRef<HeroMosaicHandle>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -76,22 +76,20 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
   );
 
   return (
-    <div className="min-h-screen relative bg-black">
+    <div
+      className="min-h-screen relative bg-black"
+      onMouseMove={(e) => mosaicRef.current?.updateMouse(e.clientX, e.clientY)}
+      onMouseLeave={() => mosaicRef.current?.reset()}
+    >
+      {/* Full-page interactive Voronoi mosaic background */}
+      <HeroMosaic ref={mosaicRef} />
 
       {/* Content */}
       <div className="relative z-10">
         {/* Hero Section */}
-        <section className="relative min-h-[800px] md:min-h-screen flex flex-col justify-center items-center px-0 pt-[180px]">
-          {/* Full-bleed hero image */}
-          <div className="absolute inset-0 z-0">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/hero-sunset.svg"
-              alt="Voronoi mosaic sunset over mountains and lake"
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
-          </div>
+        <section
+          className="relative min-h-[800px] md:min-h-screen flex flex-col justify-center items-center px-0 pt-[180px]"
+        >
 
           {/* Top corners — Log In shard / Get Started — always colored */}
           <div className="absolute top-[100px] md:top-6 left-4 lg:left-8 z-50">
@@ -128,12 +126,12 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
             >
-              {/* Mobile: default size, Desktop: hero size */}
+              {/* Mobile: default size, Desktop: hero size — both interactive */}
               <div className="block md:hidden">
-                <FirstDayLogo showTagline={true} showLetters={false} />
+                <FirstDayLogo showTagline={true} showLetters={false} interactive={true} />
               </div>
               <div className="hidden md:block">
-                <FirstDayLogo size="hero" showTagline={true} showLetters={false} />
+                <FirstDayLogo size="hero" showTagline={true} showLetters={false} interactive={true} />
               </div>
             </motion.div>
           </div>
@@ -360,11 +358,11 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                   <div
                     key={card.label}
                     className="p-5 md:p-6 lg:p-8 text-center"
-                    style={{ backgroundColor: monotone ? "#222" : `${card.color}15`, border: `1px solid ${monotone ? "rgba(255,255,255,0.1)" : card.color}30`, clipPath: card.clip }}
+                    style={{ backgroundColor: monotone ? "#222" : card.color, clipPath: card.clip }}
                   >
                     <span className="text-3xl md:text-4xl lg:text-5xl block mb-2">{card.icon}</span>
-                    <h3 className="text-base md:text-lg lg:text-xl font-bold text-white mb-1">{card.label}</h3>
-                    <p className="text-xs md:text-sm lg:text-base text-white/70">{card.desc}</p>
+                    <h3 className="text-base md:text-lg lg:text-xl font-bold text-black mb-1">{card.label}</h3>
+                    <p className="text-xs md:text-sm lg:text-base text-black/70">{card.desc}</p>
                   </div>
                 ))}
               </div>

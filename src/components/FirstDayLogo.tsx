@@ -1,6 +1,6 @@
 "use client";
 
-import { memo } from "react";
+import { useRef, useCallback, memo } from "react";
 import { VoronoiMosaic } from "./VoronoiMosaic";
 import { VORONOI_LIGHT } from "@/constants";
 import { useMonotone } from "./MonotoneContext";
@@ -30,6 +30,28 @@ const SHARD_CLIPS_TAGLINE = [
 /** Per-word rotations for shard feel */
 const TAGLINE_ROTATIONS = [-1.5, 1.2, -0.8, 1.8, -1.2, 0.6, -1.0, 1.5] as const;
 
+/* ─── Effect config for interactive mouse-repulsion ─── */
+
+export interface EffectConfig {
+  strength: number;
+  radius: number;
+  rotateStrength: number;
+  /** CSS transition for the push (mouse near) */
+  pushTransition: string;
+  /** CSS transition for the return (mouse away) */
+  returnTransition: string;
+}
+
+export const DEFAULT_EFFECT_CONFIG: EffectConfig = {
+  strength: 36,
+  radius: 500,
+  rotateStrength: 3,
+  pushTransition: "transform 0.5s cubic-bezier(0.22, 0.8, 0.36, 1)",
+  returnTransition: "transform 1.5s cubic-bezier(0.25, 2.5, 0.5, 1)",
+};
+
+/* ─── Props ─── */
+
 interface FirstDayLogoProps {
   className?: string;
   width?: number;
@@ -39,6 +61,8 @@ interface FirstDayLogoProps {
   layout?: "horizontal" | "vertical";
   size?: "default" | "hero";
   compact?: boolean;
+  interactive?: boolean;
+  effectConfig?: EffectConfig;
 }
 
 // Per-letter tile colors from sunset light palette
@@ -126,16 +150,73 @@ const COMPACT_LETTERS = [
   { char: "Y", color: "#FF4500" },
 ] as const;
 
+/* ─── Main component ─── */
+
 function FirstDayLogoInner({
   className = "",
   showTagline = true,
   showLetters = true,
   size = "default",
   compact = false,
+  interactive = false,
+  effectConfig,
 }: FirstDayLogoProps) {
   const { monotone } = useMonotone();
   const isHero = size === "hero";
   const letterSize = isHero ? "clamp(3.5rem, 10vw, 7rem)" : "clamp(1.5rem, 4vw, 2.2rem)";
+
+  const config = effectConfig ?? DEFAULT_EFFECT_CONFIG;
+
+  // Refs for direct DOM manipulation (interactive mode only)
+  // Wrappers stay in place for position calculation; inner spans get the transform
+  const wordWrapperRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const wordSpanRefs = useRef<(HTMLSpanElement | null)[]>([]);
+
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent) => {
+      const mx = e.clientX;
+      const my = e.clientY;
+
+      wordWrapperRefs.current.forEach((wrapper, i) => {
+        const span = wordSpanRefs.current[i];
+        if (!wrapper || !span) return;
+
+        const rect = wrapper.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        const baseRot = TAGLINE_ROTATIONS[i];
+
+        const dx = mx - cx;
+        const dy = my - cy;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < config.radius && dist > 0) {
+          const force = (1 - dist / config.radius) * config.strength;
+          const angle = Math.atan2(dy, dx);
+          const pushX = -Math.cos(angle) * force;
+          const pushY = -Math.sin(angle) * force;
+          const pushR =
+            baseRot +
+            (-Math.cos(angle) * force / config.strength) * config.rotateStrength;
+
+          span.style.transition = config.pushTransition;
+          span.style.transform = `translate(${pushX}px, ${pushY}px) rotate(${pushR}deg)`;
+        } else {
+          span.style.transition = config.returnTransition;
+          span.style.transform = `rotate(${baseRot}deg)`;
+        }
+      });
+    },
+    [config],
+  );
+
+  const handleMouseLeave = useCallback(() => {
+    wordSpanRefs.current.forEach((span, i) => {
+      if (!span) return;
+      span.style.transition = config.returnTransition;
+      span.style.transform = `rotate(${TAGLINE_ROTATIONS[i]}deg)`;
+    });
+  }, [config]);
 
   if (compact) {
     return (
@@ -239,7 +320,12 @@ function FirstDayLogoInner({
 
       {/* Tagline only (no card wrapper) — diagonal shard word cascade */}
       {!showLetters && showTagline && (
-        <div className="flex flex-col w-full" style={{ gap: isHero ? "10px" : "6px" }}>
+        <div
+          className="flex flex-col w-full"
+          style={{ gap: isHero ? "10px" : "6px" }}
+          onMouseMove={interactive ? handleMouseMove : undefined}
+          onMouseLeave={interactive ? handleMouseLeave : undefined}
+        >
           {TAGLINE_ROWS.map((row, rowIdx) => (
             <div
               key={rowIdx}
@@ -252,22 +338,46 @@ function FirstDayLogoInner({
               {row.words.map((word, wordIdx) => {
                 const globalIdx = rowIdx * 2 + wordIdx;
                 const c = monotone ? "#ffffff" : TAGLINE_PALETTE[globalIdx % TAGLINE_PALETTE.length];
+                const baseRotation = TAGLINE_ROTATIONS[globalIdx];
+                const wordStyle: React.CSSProperties = {
+                  fontFamily: "var(--font-bebas), system-ui, sans-serif",
+                  fontSize: isHero ? "clamp(1.8rem, 5vw, 5rem)" : "clamp(1.3rem, 4.5vw, 2.5rem)",
+                  fontWeight: 900,
+                  letterSpacing: 3,
+                  color: c,
+                  backgroundColor: "#0a0a14",
+                  border: `1px solid ${c}30`,
+                  clipPath: SHARD_CLIPS_TAGLINE[globalIdx % SHARD_CLIPS_TAGLINE.length],
+                  whiteSpace: "nowrap" as const,
+                  transform: `rotate(${baseRotation}deg)`,
+                };
+
+                if (interactive) {
+                  return (
+                    <div
+                      key={word + wordIdx}
+                      ref={(el) => { wordWrapperRefs.current[globalIdx] = el; }}
+                      className="inline-block"
+                    >
+                      <span
+                        ref={(el) => { wordSpanRefs.current[globalIdx] = el; }}
+                        className="inline-block px-4 py-1.5 md:px-8 md:py-3"
+                        style={{
+                          ...wordStyle,
+                          willChange: "transform",
+                        }}
+                      >
+                        {word}
+                      </span>
+                    </div>
+                  );
+                }
+
                 return (
                   <span
                     key={word + wordIdx}
                     className="inline-block px-4 py-1.5 md:px-8 md:py-3"
-                    style={{
-                      fontFamily: "var(--font-bebas), system-ui, sans-serif",
-                      fontSize: isHero ? "clamp(1.8rem, 5vw, 5rem)" : "clamp(1.3rem, 4.5vw, 2.5rem)",
-                      fontWeight: 900,
-                      letterSpacing: 3,
-                      color: c,
-                      backgroundColor: "#0a0a14",
-                      border: `1px solid ${c}30`,
-                      clipPath: SHARD_CLIPS_TAGLINE[globalIdx % SHARD_CLIPS_TAGLINE.length],
-                      transform: `rotate(${TAGLINE_ROTATIONS[globalIdx]}deg)`,
-                      whiteSpace: "nowrap" as const,
-                    }}
+                    style={wordStyle}
                   >
                     {word}
                   </span>

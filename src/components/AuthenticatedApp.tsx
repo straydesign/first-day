@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useMemo, useRef } from "react";
 import dynamic from "next/dynamic";
+import { HeroMosaic, type HeroMosaicHandle } from "./HeroMosaic";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { computeEngagementState, getMilestone, getLatestDayXP, calculateStreaks } from "@/lib/engagement";
 import { useGoalManager } from "@/hooks/useGoalManager";
@@ -23,9 +24,10 @@ interface AuthenticatedAppProps {
   userEmail: string | null;
   initialView: AppView;
   onLogout: () => Promise<void>;
+  demoMode?: boolean;
 }
 
-export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, onLogout }: AuthenticatedAppProps) {
+export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, onLogout, demoMode = false }: AuthenticatedAppProps) {
   const [currentView, setCurrentView] = useState<AppView>(initialView);
   const [showNotificationSettings, setShowNotificationSettings] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
@@ -35,8 +37,9 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
   const [newAchievements, setNewAchievements] = useState<Achievement[]>([]);
   const prevAchievementsRef = useRef<Set<string>>(new Set());
   const [showBeastMode, setShowBeastMode] = useState(false);
+  const mosaicRef = useRef<HeroMosaicHandle>(null);
 
-  const goalManager = useGoalManager(onLogout);
+  const goalManager = useGoalManager(onLogout, demoMode);
   const {
     currentGoalId,
     goalData,
@@ -152,7 +155,8 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
     // Auto-dismiss XP animation after 2.5 seconds
     setTimeout(() => setShowXPAnimation(false), 2500);
 
-    // Show BEAST MODE interstitial, then congrats
+    // Set view to congrats first (preloads the component), then show beast mode on top
+    setCurrentView("congrats");
     setShowBeastMode(true);
   };
 
@@ -162,14 +166,19 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
   };
 
   return (
-    <div className="min-h-screen relative bg-black">
+    <div
+      className="min-h-screen relative bg-black"
+      onMouseMove={(e) => mosaicRef.current?.updateMouse(e.clientX, e.clientY)}
+      onMouseLeave={() => mosaicRef.current?.reset()}
+    >
+      <HeroMosaic ref={mosaicRef} />
       <div className="relative z-10">
         {currentView !== "onboarding" && currentView !== "goals" && (
           <div className="absolute top-4 left-4 right-4 z-50 flex justify-between items-center">
             <NavigationMenu
               currentView={currentView}
               onNavigateToGoals={handleBackToGoals}
-              onNavigateToSettings={() => setCurrentView("settings")}
+              onNavigateToSettings={demoMode ? () => {} : () => setCurrentView("settings")}
               onNavigateToCalendar={
                 currentGoalId
                   ? () => { loadGoalData(currentGoalId).then(() => setCurrentView("calendar")); }
@@ -192,10 +201,11 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
             onViewTodayActivities={handleViewTodayActivities}
             onLogout={handleLogoutAndReset}
             engagement={engagement}
+            demoMode={demoMode}
           />
         )}
 
-        {currentView === "settings" && (
+        {currentView === "settings" && !demoMode && (
           <Settings
             accessToken={accessToken}
             userId={userId}
@@ -261,7 +271,6 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
         {showBeastMode && (
           <BeastMode onComplete={() => {
             setShowBeastMode(false);
-            setCurrentView("congrats");
           }} />
         )}
 

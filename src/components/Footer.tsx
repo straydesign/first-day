@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useCallback } from "react";
 import { VORONOI_LIGHT } from "@/constants";
 
 interface FooterProps {
@@ -15,8 +16,61 @@ const SHARD_CLIPS = [
   "polygon(0% 0%, 98% 3%, 100% 100%, 2% 97%)",
 ];
 
+const BASE_ROTATIONS = [1.2, -0.8, 1.5, -1.0, 0.6];
+
+const EFFECT = {
+  strength: 36,
+  radius: 500,
+  rotateStrength: 3,
+  pushTransition: "transform 0.5s cubic-bezier(0.22, 0.8, 0.36, 1)",
+  returnTransition: "transform 1.5s cubic-bezier(0.25, 2.5, 0.5, 1)",
+};
+
 export function Footer({ onPrivacyClick, onTermsClick }: FooterProps) {
   const currentYear = new Date().getFullYear();
+  const wrapperRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const shardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    const mx = e.clientX;
+    const my = e.clientY;
+
+    wrapperRefs.current.forEach((wrapper, i) => {
+      const shard = shardRefs.current[i];
+      if (!wrapper || !shard) return;
+
+      const rect = wrapper.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const baseRot = BASE_ROTATIONS[i];
+
+      const dx = mx - cx;
+      const dy = my - cy;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist < EFFECT.radius && dist > 0) {
+        const force = (1 - dist / EFFECT.radius) * EFFECT.strength;
+        const angle = Math.atan2(dy, dx);
+        const pushX = -Math.cos(angle) * force;
+        const pushY = -Math.sin(angle) * force;
+        const pushR = baseRot + (-Math.cos(angle) * force / EFFECT.strength) * EFFECT.rotateStrength;
+
+        shard.style.transition = EFFECT.pushTransition;
+        shard.style.transform = `translate(${pushX}px, ${pushY}px) rotate(${pushR}deg)`;
+      } else {
+        shard.style.transition = EFFECT.returnTransition;
+        shard.style.transform = `rotate(${baseRot}deg)`;
+      }
+    });
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    shardRefs.current.forEach((shard, i) => {
+      if (!shard) return;
+      shard.style.transition = EFFECT.returnTransition;
+      shard.style.transform = `rotate(${BASE_ROTATIONS[i]}deg)`;
+    });
+  }, []);
 
   const items = [
     {
@@ -47,18 +101,30 @@ export function Footer({ onPrivacyClick, onTermsClick }: FooterProps) {
 
   return (
     <footer className="bg-black py-8 mt-auto">
-      <div className="max-w-7xl mx-auto px-4">
+      <div
+        className="max-w-7xl mx-auto px-4"
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+      >
         <div className="flex flex-wrap gap-3 justify-center items-center">
           {items.map((item, i) => (
             <div
               key={i}
-              className="px-4 py-2 inline-flex items-center justify-center"
-              style={{
-                backgroundColor: item.color,
-                clipPath: SHARD_CLIPS[i % SHARD_CLIPS.length],
-              }}
+              ref={(el) => { wrapperRefs.current[i] = el; }}
+              className="inline-flex"
             >
-              {item.content}
+              <div
+                ref={(el) => { shardRefs.current[i] = el; }}
+                className="px-4 py-2 inline-flex items-center justify-center"
+                style={{
+                  backgroundColor: item.color,
+                  clipPath: SHARD_CLIPS[i % SHARD_CLIPS.length],
+                  transform: `rotate(${BASE_ROTATIONS[i]}deg)`,
+                  willChange: "transform",
+                }}
+              >
+                {item.content}
+              </div>
             </div>
           ))}
         </div>

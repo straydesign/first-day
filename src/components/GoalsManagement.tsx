@@ -13,6 +13,7 @@ import { StatsCard } from "./StatsCard";
 import { AchievementsSheet } from "./AchievementsSheet";
 import { useMonotone } from "./MonotoneContext";
 import { ShardRewardGrid } from "./ShardRewardGrid";
+import { DEMO_GOALS_LIST, DEMO_GOAL_DETAILS } from "@/lib/demo-data";
 import type { EngagementState, ProgressMap } from "@/types";
 
 interface Goal {
@@ -32,9 +33,10 @@ interface GoalsManagementProps {
   onViewTodayActivities?: (goalId: string) => void;
   onLogout: () => void;
   engagement?: EngagementState | null;
+  demoMode?: boolean;
 }
 
-export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onViewTodayActivities, onLogout, engagement }: GoalsManagementProps) {
+export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onViewTodayActivities, onLogout, engagement, demoMode = false }: GoalsManagementProps) {
   const [goals, setGoals] = useState<Goal[]>([]);
   const [goalCurrentDays, setGoalCurrentDays] = useState<Record<string, number>>({});
   const [goalProgress, setGoalProgress] = useState<Record<string, ProgressMap>>({});
@@ -59,6 +61,18 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
         setGoalCurrentDays(prev => ({ ...prev, [goal.id]: dayNumber }));
       });
 
+      if (demoMode) {
+        // Use demo progress directly
+        const progressMap: Record<string, ProgressMap> = {};
+        for (const goal of goals) {
+          const detail = DEMO_GOAL_DETAILS[goal.id];
+          if (detail) progressMap[goal.id] = detail.progress;
+        }
+        setGoalProgress(progressMap);
+        setLoading(false);
+        return;
+      }
+
       // Fetch progress for each goal in parallel
       Promise.allSettled(
         goals.map(goal =>
@@ -79,9 +93,13 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
 
       setLoading(false);
     }
-  }, [goals]);
+  }, [goals, demoMode]);
 
   const loadGoals = async () => {
+    if (demoMode) {
+      setGoals(DEMO_GOALS_LIST);
+      return;
+    }
     try {
       const data = await api.goals.list();
       if (data.goals && data.goals.length > 0) setGoals(data.goals);
@@ -100,6 +118,10 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
   };
 
   const handleDeleteGoal = async (goalId: string, goalTitle: string) => {
+    if (demoMode) {
+      toast("Sign up to manage goals!", { description: "Create an account to add and delete your own goals." });
+      return;
+    }
     const confirmed = window.confirm(`Are you sure you want to delete "${goalTitle}"? This action cannot be undone.`);
     if (!confirmed) return;
     try {
@@ -166,8 +188,7 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
           </nav>
         </SheetContent>
       </Sheet>
-      {/* Fixed background — stays still while content scrolls */}
-      <MosaicCard seed={0} className="fixed inset-0 z-0 w-full h-full">{null}</MosaicCard>
+      {/* Background mosaic provided by AuthenticatedApp */}
       <div className="relative z-10 w-full">
         {goals.length > 0 ? (
           <div className="animate-fadeIn min-h-screen px-6 pb-6 md:px-10 md:pb-10 pt-[120px]">

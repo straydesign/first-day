@@ -2,7 +2,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Textarea } from "@/components/ui/textarea";
-import { MosaicCard } from "./MosaicCard";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CheckCircle2, Calendar, Youtube, ExternalLink, Zap } from "lucide-react";
 import { BackButton } from "@/components/ui/back-button";
@@ -65,8 +64,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
 
   return (
     <div className="min-h-screen relative bg-black">
-      {/* Full-screen mosaic background — extends to top edge */}
-      <MosaicCard seed={99} className="fixed inset-0 z-0 w-full h-full">{null}</MosaicCard>
+      {/* Background mosaic provided by AuthenticatedApp */}
       <div className="relative z-10 p-4 md:p-8 pt-[120px] md:pt-[120px]">
         {onBack && <BackButton onClick={onBack} />}
 
