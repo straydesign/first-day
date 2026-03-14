@@ -94,7 +94,7 @@ export function Footer({ onPrivacyClick, onTermsClick }: FooterProps) {
       color: VORONOI_LIGHT[3],
     },
     {
-      content: <a href="https://straydesign.co" target="_blank" rel="noopener noreferrer" className="text-black font-bold text-xs hover:opacity-70 transition-opacity">Built by Stray Design</a>,
+      content: <a href="https://straywebdesign.co" target="_blank" rel="noopener noreferrer" className="text-black font-bold text-xs hover:opacity-70 transition-opacity">Built by Stray Web Design</a>,
       color: VORONOI_LIGHT[0],
     },
   ];
