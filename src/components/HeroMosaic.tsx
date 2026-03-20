@@ -5,13 +5,12 @@ import {
   useMemo,
   useState,
   useEffect,
-  useImperativeHandle,
-  forwardRef,
+  useCallback,
 } from "react";
 import { Delaunay } from "d3-delaunay";
 import { HERO_PALETTE } from "@/constants";
 
-/* ─── Combined bright palette: HERO_PALETTE (skip near-blacks + forest green) + word colors ─── */
+/* ─── Combined bright palette ─── */
 const BRIGHT_POOL = [
   ...HERO_PALETTE.filter(
     (c) => !["#0a1121", "#071671", "#0c144c", "#3a4637"].includes(c),
@@ -22,19 +21,15 @@ const BRIGHT_POOL = [
 
 /* ─── ~58 seed points — weighted: sparse sky, dense horizon, moderate ground ─── */
 const SEED_POINTS: [number, number][] = [
-  // Sky (sparse, ~12 points)
   [8, 5], [28, 3], [48, 7], [68, 4], [88, 8],
   [15, 18], [35, 15], [55, 20], [75, 16], [92, 19],
   [5, 30], [42, 28],
-  // Horizon band (dense, ~24 points)
   [10, 38], [22, 42], [34, 36], [46, 40], [58, 38], [70, 44], [82, 37], [94, 42],
   [6, 48], [18, 52], [30, 46], [42, 54], [54, 48], [66, 52], [78, 50], [90, 46],
   [14, 58], [26, 62], [38, 56], [50, 60], [62, 58], [74, 64], [86, 56], [96, 62],
-  // Ground (moderate, ~16 points)
   [8, 72], [24, 70], [40, 74], [56, 68], [72, 72], [88, 70],
   [12, 82], [32, 85], [52, 80], [72, 84], [92, 82],
   [6, 92], [26, 95], [46, 90], [66, 94], [86, 92],
-  // Edge coverage (~6 points)
   [2, 2], [98, 2], [2, 98], [98, 98], [50, 1], [50, 99],
 ];
 
@@ -54,19 +49,24 @@ function expandPolygon(
   });
 }
 
-/* ─── Deterministic "random" color from seed index (fallback before image loads) ─── */
 function pickColor(index: number): string {
   const scattered = (index * 7 + 3) % BRIGHT_POOL.length;
   return BRIGHT_POOL[scattered];
 }
 
-/* ─── Effect settings (user-tuned) ─── */
-const EFFECT = {
-  strength: 36,
-  radius: 500,
-  rotateStrength: 3,
-  pushTransition: "transform 0.5s cubic-bezier(0.22, 0.8, 0.36, 1)",
-  returnTransition: "transform 1.5s cubic-bezier(0.25, 2.5, 0.5, 1)",
+/* ─── Drift settings ─── */
+const DRIFT = {
+  amplitude: 6,       // px max translate
+  rotateAmp: 2,       // deg max rotation
+  baseSpeed: 0.0004,  // radians per ms — very slow, organic
+};
+
+/* ─── Click pulse settings ─── */
+const PULSE = {
+  radius: 400,        // px — how far the pulse reaches
+  strength: 28,       // px — max push distance
+  rotateStrength: 4,  // deg
+  duration: 1200,     // ms — how long the pulse lasts
 };
 
 interface CellData {
@@ -75,21 +75,30 @@ interface CellData {
   color: string;
 }
 
-interface EntranceOffset {
-  x: number;
+/* ─── Per-piece drift parameters (deterministic) ─── */
+interface DriftParams {
+  freqX: number;
+  freqY: number;
+  freqR: number;
+  phaseX: number;
+  phaseY: number;
+  phaseR: number;
+  ampX: number;
+  ampY: number;
+  ampR: number;
+}
+
+interface PulseEvent {
+  x: number;      // px relative to container
   y: number;
-  r: number;
-  delay: number;
+  startTime: number;
 }
 
-export interface HeroMosaicHandle {
-  updateMouse: (clientX: number, clientY: number) => void;
-  reset: () => void;
-}
-
-export const HeroMosaic = forwardRef<HeroMosaicHandle>(function HeroMosaic(_, ref) {
+export function HeroMosaic() {
   const containerRef = useRef<HTMLDivElement>(null);
   const pieceRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const rafRef = useRef<number>(0);
+  const pulsesRef = useRef<PulseEvent[]>([]);
   const [imageReady, setImageReady] = useState(false);
   const [assembled, setAssembled] = useState(false);
 
@@ -100,13 +109,12 @@ export const HeroMosaic = forwardRef<HeroMosaicHandle>(function HeroMosaic(_, re
     img.onload = () => setImageReady(true);
   }, []);
 
-  // Trigger assembly after image loads (or after a timeout for fallback)
+  // Trigger assembly after image loads
   useEffect(() => {
     if (imageReady) {
       const timer = setTimeout(() => setAssembled(true), 100);
       return () => clearTimeout(timer);
     }
-    // Fallback: assemble with solid colors after 3s if image fails
     const fallback = setTimeout(() => setAssembled(true), 3000);
     return () => clearTimeout(fallback);
   }, [imageReady]);
@@ -143,9 +151,8 @@ export const HeroMosaic = forwardRef<HeroMosaicHandle>(function HeroMosaic(_, re
     return result;
   }, []);
 
-  // Deterministic entrance offsets (computed once per cell set)
-  const entranceOffsets = useMemo<EntranceOffset[]>(() => {
-    // Seeded pseudo-random for deterministic scatter
+  // Deterministic entrance offsets
+  const entranceOffsets = useMemo(() => {
     let seed = 42;
     const rng = () => {
       seed = (seed * 16807 + 0) % 2147483647;
@@ -159,52 +166,129 @@ export const HeroMosaic = forwardRef<HeroMosaicHandle>(function HeroMosaic(_, re
     }));
   }, [cells]);
 
-  useImperativeHandle(ref, () => ({
-    updateMouse(clientX: number, clientY: number) {
-      if (!assembled) return;
-      const container = containerRef.current;
-      if (!container) return;
+  // Per-piece drift parameters (unique frequencies so they don't move in unison)
+  const driftParams = useMemo<DriftParams[]>(() => {
+    let seed = 137;
+    const rng = () => {
+      seed = (seed * 16807 + 0) % 2147483647;
+      return seed / 2147483647;
+    };
+    return cells.map(() => ({
+      freqX: DRIFT.baseSpeed * (0.7 + rng() * 0.6),
+      freqY: DRIFT.baseSpeed * (0.7 + rng() * 0.6),
+      freqR: DRIFT.baseSpeed * (0.5 + rng() * 0.5),
+      phaseX: rng() * Math.PI * 2,
+      phaseY: rng() * Math.PI * 2,
+      phaseR: rng() * Math.PI * 2,
+      ampX: DRIFT.amplitude * (0.5 + rng() * 0.5),
+      ampY: DRIFT.amplitude * (0.5 + rng() * 0.5),
+      ampR: DRIFT.rotateAmp * (0.5 + rng() * 0.5),
+    }));
+  }, [cells]);
 
-      const rect = container.getBoundingClientRect();
-      const mx = clientX - rect.left;
-      const my = clientY - rect.top;
+  // Click pulse handler — listen for clicks anywhere on the page
+  const handleClick = useCallback((e: MouseEvent) => {
+    const container = containerRef.current;
+    if (!container || !assembled) return;
 
-      pieceRefs.current.forEach((piece, i) => {
-        if (!piece) return;
+    const rect = container.getBoundingClientRect();
+    pulsesRef.current.push({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+      startTime: performance.now(),
+    });
+  }, [assembled]);
 
-        const [cxPct, cyPct] = cells[i].centroid;
-        const cx = (cxPct / 100) * rect.width;
-        const cy = (cyPct / 100) * rect.height;
+  // Autonomous drift animation loop + click pulse
+  useEffect(() => {
+    if (!assembled) return;
 
-        const dx = mx - cx;
-        const dy = my - cy;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-
-        if (dist < EFFECT.radius && dist > 0) {
-          const force = (1 - dist / EFFECT.radius) * EFFECT.strength;
-          const angle = Math.atan2(dy, dx);
-          const pushX = -Math.cos(angle) * force;
-          const pushY = -Math.sin(angle) * force;
-          const pushR =
-            (-Math.cos(angle) * force / EFFECT.strength) * EFFECT.rotateStrength;
-
-          piece.style.transition = EFFECT.pushTransition;
-          piece.style.transform = `translate(${pushX}px, ${pushY}px) rotate(${pushR}deg)`;
-        } else {
-          piece.style.transition = EFFECT.returnTransition;
-          piece.style.transform = "";
+    // Wait for entrance transitions to finish before starting drift
+    const startDelay = setTimeout(() => {
+      const animate = (now: number) => {
+        const container = containerRef.current;
+        if (!container) {
+          rafRef.current = requestAnimationFrame(animate);
+          return;
         }
-      });
-    },
 
-    reset() {
-      pieceRefs.current.forEach((piece) => {
-        if (!piece) return;
-        piece.style.transition = EFFECT.returnTransition;
-        piece.style.transform = "";
-      });
-    },
-  }));
+        const rect = container.getBoundingClientRect();
+
+        // Clean up expired pulses
+        pulsesRef.current = pulsesRef.current.filter(
+          (p) => now - p.startTime < PULSE.duration,
+        );
+
+        pieceRefs.current.forEach((piece, i) => {
+          if (!piece) return;
+
+          const dp = driftParams[i];
+
+          // Layered sine waves for organic drift
+          const dx =
+            Math.sin(now * dp.freqX + dp.phaseX) * dp.ampX +
+            Math.sin(now * dp.freqX * 1.7 + dp.phaseX + 1) * dp.ampX * 0.3;
+          const dy =
+            Math.sin(now * dp.freqY + dp.phaseY) * dp.ampY +
+            Math.cos(now * dp.freqY * 1.3 + dp.phaseY + 2) * dp.ampY * 0.3;
+          const dr =
+            Math.sin(now * dp.freqR + dp.phaseR) * dp.ampR;
+
+          // Add click pulse offsets
+          let pulseX = 0;
+          let pulseY = 0;
+          let pulseR = 0;
+
+          const [cxPct, cyPct] = cells[i].centroid;
+          const cx = (cxPct / 100) * rect.width;
+          const cy = (cyPct / 100) * rect.height;
+
+          for (const pulse of pulsesRef.current) {
+            const pdx = pulse.x - cx;
+            const pdy = pulse.y - cy;
+            const dist = Math.sqrt(pdx * pdx + pdy * pdy);
+
+            if (dist < PULSE.radius && dist > 0) {
+              const elapsed = now - pulse.startTime;
+              const t = elapsed / PULSE.duration;
+              // Ease out with overshoot then settle
+              const falloff = Math.pow(1 - t, 2);
+              const force = (1 - dist / PULSE.radius) * PULSE.strength * falloff;
+              const angle = Math.atan2(pdy, pdx);
+
+              pulseX += -Math.cos(angle) * force;
+              pulseY += -Math.sin(angle) * force;
+              pulseR += (-Math.cos(angle) * force / PULSE.strength) * PULSE.rotateStrength * falloff;
+            }
+          }
+
+          piece.style.transform =
+            `translate(${dx + pulseX}px, ${dy + pulseY}px) rotate(${dr + pulseR}deg)`;
+        });
+
+        rafRef.current = requestAnimationFrame(animate);
+      };
+
+      rafRef.current = requestAnimationFrame(animate);
+    }, 1800); // Wait for entrance animation to finish
+
+    // Listen for clicks
+    window.addEventListener("click", handleClick);
+
+    return () => {
+      clearTimeout(startDelay);
+      cancelAnimationFrame(rafRef.current);
+      window.removeEventListener("click", handleClick);
+    };
+  }, [assembled, cells, driftParams, handleClick]);
+
+  // Respect prefers-reduced-motion
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (mq.matches) {
+      cancelAnimationFrame(rafRef.current);
+    }
+  }, [assembled]);
 
   return (
     <div
@@ -240,4 +324,4 @@ export const HeroMosaic = forwardRef<HeroMosaicHandle>(function HeroMosaic(_, re
       })}
     </div>
   );
-});
+}

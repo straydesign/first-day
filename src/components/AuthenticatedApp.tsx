@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useMemo, useRef } from "react";
 import dynamic from "next/dynamic";
-import { HeroMosaic, type HeroMosaicHandle } from "./HeroMosaic";
+import { HeroMosaic } from "./HeroMosaic";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { computeEngagementState, getMilestone, getLatestDayXP, calculateStreaks } from "@/lib/engagement";
 import { useGoalManager } from "@/hooks/useGoalManager";
@@ -37,8 +37,6 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
   const [newAchievements, setNewAchievements] = useState<Achievement[]>([]);
   const prevAchievementsRef = useRef<Set<string>>(new Set());
   const [showBeastMode, setShowBeastMode] = useState(false);
-  const mosaicRef = useRef<HeroMosaicHandle>(null);
-
   const goalManager = useGoalManager(onLogout, demoMode);
   const {
     currentGoalId,
@@ -166,12 +164,8 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
   };
 
   return (
-    <div
-      className="min-h-screen relative bg-black"
-      onMouseMove={(e) => mosaicRef.current?.updateMouse(e.clientX, e.clientY)}
-      onMouseLeave={() => mosaicRef.current?.reset()}
-    >
-      <HeroMosaic ref={mosaicRef} />
+    <div className="min-h-screen relative bg-black">
+      <HeroMosaic />
       <div className="relative z-10">
         {currentView !== "onboarding" && currentView !== "goals" && (
           <div className="absolute top-4 left-4 right-4 z-50 flex justify-between items-center">

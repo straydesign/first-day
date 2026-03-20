@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import { Flame, Zap, Trophy, Target } from "lucide-react";
 import { FirstDayLogo } from "./FirstDayLogo";
-import { HeroMosaic, type HeroMosaicHandle } from "./HeroMosaic";
+import { HeroMosaic } from "./HeroMosaic";
 import { Footer } from "./Footer";
 import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, BRIGHT_COLORS, SCROLL_SPEEDS } from "@/constants";
 import { useMonotone } from "./MonotoneContext";
@@ -37,8 +37,6 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
   const { monotone } = useMonotone();
   const [isNavSticky, setIsNavSticky] = useState(false);
   const heroNavRef = useRef<HTMLDivElement>(null);
-  const mosaicRef = useRef<HeroMosaicHandle>(null);
-
   useEffect(() => {
     const handleScroll = () => {
       if (!heroNavRef.current) return;
@@ -76,13 +74,9 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
   );
 
   return (
-    <div
-      className="min-h-screen relative bg-black"
-      onMouseMove={(e) => mosaicRef.current?.updateMouse(e.clientX, e.clientY)}
-      onMouseLeave={() => mosaicRef.current?.reset()}
-    >
-      {/* Full-page interactive Voronoi mosaic background */}
-      <HeroMosaic ref={mosaicRef} />
+    <div className="min-h-screen relative bg-black">
+      {/* Full-page animated Voronoi mosaic background */}
+      <HeroMosaic />
 
       {/* Content */}
       <div className="relative z-10">

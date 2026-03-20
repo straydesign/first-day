@@ -1,12 +1,12 @@
 "use client";
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Check } from 'lucide-react';
 import { toast } from 'sonner';
 import { createClient, API_BASE } from '@/lib/supabase/client';
 import { FirstDayLogo } from './FirstDayLogo';
-import { HeroMosaic, type HeroMosaicHandle } from './HeroMosaic';
+import { HeroMosaic } from './HeroMosaic';
 import { ForgotPasswordModal } from './ForgotPasswordModal';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { validatePassword } from '@/lib/validation';
@@ -31,8 +31,6 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, onTryD
   const [loading, setLoading] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [agreeToTerms, setAgreeToTerms] = useState(false);
-  const mosaicRef = useRef<HeroMosaicHandle>(null);
-
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
   const handleSignup = async () => {
@@ -126,10 +124,8 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, onTryD
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
         className="w-screen h-screen max-w-none m-0 p-4 md:p-8 bg-black border-0 animate-scaleIn shadow-none overflow-y-auto"
-        onMouseMove={(e: React.MouseEvent) => mosaicRef.current?.updateMouse(e.clientX, e.clientY)}
-        onMouseLeave={() => mosaicRef.current?.reset()}
       >
-        <HeroMosaic ref={mosaicRef} />
+        <HeroMosaic />
         <div className="relative z-10 flex flex-col min-h-full">
           <DialogTitle className="sr-only">{isLogin ? 'Log in to First Day' : 'Sign up for First Day'}</DialogTitle>
           <DialogDescription className="sr-only">{isLogin ? 'Enter your email and password' : 'Create an account'}</DialogDescription>
