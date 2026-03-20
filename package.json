@@ -6,7 +6,10 @@
     "dev": "next dev -p 4720",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:e2e": "npx playwright test",
+    "test:e2e:ui": "npx playwright test --ui",
+    "test:e2e:headed": "npx playwright test --headed"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",
@@ -26,6 +29,8 @@
     "three": "^0.183.2"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.1",
+    "@playwright/test": "^1.58.2",
     "@tailwindcss/postcss": "^4",
     "@types/d3-delaunay": "^6.0.4",
     "@types/node": "^20",
