@@ -1,11 +1,20 @@
 "use client";
 import { useMemo } from "react";
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { Calendar, ArrowRight } from "lucide-react";
 import { ShardSquare } from "./ShardSquare";
 import { useMonotone } from "./MonotoneContext";
-import { BRIGHT_COLORS } from "@/constants";
+import type { TrophyVariant } from "@/constants/trophies";
 import type { ProgressMap } from "@/types";
+
+const TrophyReward = dynamic(
+  () =>
+    import("@/components/3d/TrophyReward").then((m) => ({
+      default: m.TrophyReward,
+    })),
+  { ssr: false, loading: () => <div style={{ height: 320 }} /> },
+);
 
 interface ConfettiPiece {
   id: number;
@@ -24,16 +33,10 @@ interface CongratsViewProps {
   dayNumber?: number;
   totalDays?: number;
   progress?: ProgressMap;
+  trophyVariant?: TrophyVariant;
 }
 
 const CONFETTI_COLORS = ["#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF", "#2979FF"];
-
-const SHARD_CLIPS = [
-  "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)",
-  "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)",
-  "polygon(1% 0%, 100% 2%, 99% 100%, 0% 98%)",
-  "polygon(3% 2%, 100% 0%, 97% 98%, 0% 100%)",
-];
 
 export function CongratsView({
   onViewCalendar,
@@ -42,12 +45,10 @@ export function CongratsView({
   dayNumber,
   totalDays = 30,
   progress,
+  trophyVariant = 0,
 }: CongratsViewProps) {
   const { monotone } = useMonotone();
   const daysRemaining = dayNumber ? totalDays - dayNumber : null;
-  const shardColor = dayNumber
-    ? monotone ? "#ffffff" : BRIGHT_COLORS[dayNumber % BRIGHT_COLORS.length]
-    : "#FFE633";
 
   const confettiPieces: readonly ConfettiPiece[] = useMemo(
     () =>
@@ -115,50 +116,28 @@ export function CongratsView({
             </motion.p>
           )}
 
-          {/* Big solo shard — the reward */}
-          {dayNumber && (
+          {/* 3D Trophy — shards drop into formation */}
+          {dayNumber && progress && (
             <motion.div
-              className="flex flex-col items-center mb-6"
+              className="flex flex-col items-center mb-4"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.3, delay: 0.7 }}
+              transition={{ duration: 0.3, delay: 0.5 }}
             >
               <motion.p
-                className="text-sm md:text-base text-white/50 font-bold uppercase tracking-widest mb-3"
+                className="text-sm md:text-base text-white/50 font-bold uppercase tracking-widest mb-1"
                 style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.7 }}
+                transition={{ duration: 0.4, delay: 0.5 }}
               >
-                You earned a shard
+                Shard earned
               </motion.p>
-
-              {/* The shard itself — big, colorful, animated */}
-              <motion.div
-                className="relative"
-                style={{
-                  width: 120,
-                  height: 120,
-                  backgroundColor: shardColor,
-                  clipPath: SHARD_CLIPS[dayNumber % SHARD_CLIPS.length],
-                  boxShadow: `0 0 40px ${shardColor}50, 0 0 80px ${shardColor}20`,
-                }}
-                initial={{ scale: 0, rotate: -15, opacity: 0 }}
-                animate={{ scale: 1, rotate: 0, opacity: 1 }}
-                transition={{
-                  type: "spring",
-                  stiffness: 200,
-                  damping: 15,
-                  delay: 0.8,
-                }}
-              >
-                <span
-                  className="absolute inset-0 flex items-center justify-center text-black font-black text-4xl md:text-5xl"
-                  style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}
-                >
-                  {dayNumber}
-                </span>
-              </motion.div>
+              <TrophyReward
+                dayNumber={dayNumber}
+                progress={progress}
+                trophyVariant={trophyVariant}
+              />
             </motion.div>
           )}
 

@@ -66,6 +66,7 @@ const MOCK_PROGRESS = {
   2: { completed: { 0: true, 1: true, 2: true }, feedback: "Getting the hang of it.", completedAt: "2026-03-02T19:30:00Z" },
   3: { completed: { 0: true, 1: true, 2: false }, feedback: "Tough day but pushed through.", completedAt: "2026-03-03T21:00:00Z" },
   4: { completed: { 0: true, 1: true, 2: true }, feedback: "Feeling more confident!", completedAt: "2026-03-04T18:45:00Z" },
+  5: { completed: { 0: true, 1: true, 2: true }, feedback: "Nailed it!", completedAt: "2026-03-05T19:00:00Z" },
 };
 
 const MOCK_DAY: SelectedDay = {
@@ -160,7 +161,7 @@ const SCREENS = [
     <DayView day={MOCK_DAY} onComplete={noop} savedProgress={{ completed: { 0: true, 1: true }, feedback: "" }} currentStreak={4} />
   )},
   { id: "congrats-view", Component: ({ noop }: { noop: () => void }) => (
-    <CongratsView onViewCalendar={noop} onDoMore={noop} goalTitle="Learn to play guitar" dayNumber={5} totalDays={30} />
+    <CongratsView onViewCalendar={noop} onDoMore={noop} goalTitle="Learn to play guitar" dayNumber={5} totalDays={30} progress={MOCK_PROGRESS} trophyVariant={0} />
   )},
 ];
 
