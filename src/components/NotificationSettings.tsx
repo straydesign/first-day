@@ -1,6 +1,6 @@
 "use client";
 import { Switch } from "@/components/ui/switch";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Bell } from "lucide-react";
 
 interface NotificationSettingsProps {
@@ -17,6 +17,7 @@ export function NotificationSettings({ notificationsEnabled, onToggle, onClose }
           <Bell className="w-6 h-6 text-white" />
           <span className="text-xl font-bold text-white">Notification Settings</span>
         </DialogTitle>
+        <DialogDescription className="sr-only">Configure your daily reminder notifications</DialogDescription>
         <div className="space-y-4">
           <div className="flex items-center justify-between p-4 bg-black clip-tile-c border border-white/10">
             <div>
@@ -24,8 +25,10 @@ export function NotificationSettings({ notificationsEnabled, onToggle, onClose }
               <p className="text-sm text-white/80">Get reminded about your daily activities</p>
             </div>
             <Switch
+              id="daily-reminders-toggle"
               checked={notificationsEnabled}
               onCheckedChange={onToggle}
+              aria-label="Toggle daily reminders"
               className="data-[state=checked]:bg-[#FFE633]"
             />
           </div>

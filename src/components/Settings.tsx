@@ -107,8 +107,8 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
                 <AlertDialogDescription className="text-white/80">This action cannot be undone. This will permanently delete your account and remove all your data.</AlertDialogDescription>
               </AlertDialogHeader>
               <div className="my-4">
-                <label className="text-sm text-white/80 mb-2 block">Type <span className="font-bold text-red-600">DELETE</span> to confirm:</label>
-                <Input type="text" value={confirmText} onChange={(e) => setConfirmText(e.target.value)} className="bg-black border-white/10 text-white focus:ring-2 focus:ring-red-500" placeholder="Type DELETE" />
+                <label htmlFor="delete-confirm-input" className="text-sm text-white/80 mb-2 block">Type <span className="font-bold text-red-600">DELETE</span> to confirm:</label>
+                <Input id="delete-confirm-input" type="text" value={confirmText} onChange={(e) => setConfirmText(e.target.value)} className="bg-black border-white/10 text-white focus:ring-2 focus:ring-red-500" placeholder="Type DELETE" />
               </div>
               <AlertDialogFooter>
                 <AlertDialogCancel onClick={() => setConfirmText("")} className="bg-black border-2 border-white/10 text-white/80 hover:bg-white/10">Cancel</AlertDialogCancel>

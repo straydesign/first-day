@@ -108,9 +108,9 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
                 className="overflow-hidden"
                 style={{ backgroundColor: monotone ? "#333333" : FIELD_COLORS[0], clipPath: SHARD_CLIPS[0] }}
               >
-                <label className="block px-5 pt-3 pb-1 text-black/60 text-xs font-bold uppercase tracking-wider">What&apos;s your goal?</label>
+                <label htmlFor="goal-input" className="block px-5 pt-3 pb-1 text-black/60 text-xs font-bold uppercase tracking-wider">What&apos;s your goal?</label>
                 <div className="mx-4 border-t border-black/10" />
-                <Textarea value={goal} onChange={(e) => { setGoal(e.target.value); setError(null); }} placeholder="Type your goal here..." className="px-5 py-3 bg-transparent border-0 text-black placeholder:text-black/40 text-lg focus-visible:ring-0 rounded-none resize-none min-h-[80px] md:min-h-[120px]" disabled={isGenerating} autoFocus rows={3} />
+                <Textarea id="goal-input" value={goal} onChange={(e) => { setGoal(e.target.value); setError(null); }} placeholder="Type your goal here..." className="px-5 py-3 bg-transparent border-0 text-black placeholder:text-black/40 text-lg focus-visible:ring-0 rounded-none resize-none min-h-[80px] md:min-h-[120px]" disabled={isGenerating} autoFocus rows={3} />
               </div>
             </div>
           </div>
@@ -129,19 +129,21 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
                 className="overflow-hidden"
                 style={{ backgroundColor: monotone ? "#333333" : FIELD_COLORS[1], clipPath: SHARD_CLIPS[1] }}
               >
-                <label className="block px-5 pt-3 pb-1 text-black/60 text-xs font-bold uppercase tracking-wider">Why do you want to achieve this?</label>
+                <label htmlFor="why-input" className="block px-5 pt-3 pb-1 text-black/60 text-xs font-bold uppercase tracking-wider">Why do you want to achieve this?</label>
                 <div className="mx-4 border-t border-black/10" />
-                <Textarea value={why} onChange={(e) => setWhy(e.target.value)} placeholder="Tell us what motivates you..." className="px-5 py-3 bg-transparent border-0 text-black placeholder:text-black/40 text-lg focus-visible:ring-0 rounded-none resize-none min-h-[80px] md:min-h-[120px]" disabled={isGenerating} rows={3} />
+                <Textarea id="why-input" value={why} onChange={(e) => setWhy(e.target.value)} placeholder="Tell us what motivates you..." className="px-5 py-3 bg-transparent border-0 text-black placeholder:text-black/40 text-lg focus-visible:ring-0 rounded-none resize-none min-h-[80px] md:min-h-[120px]" disabled={isGenerating} rows={3} />
               </div>
             </div>
             <div className="mb-4 md:mb-8">
-              <label className="block text-sm font-semibold text-white/80 mb-2 md:mb-3">What&apos;s your experience level?</label>
-              <div className="flex flex-col gap-3">
+              <label id="experience-level-label" className="block text-sm font-semibold text-white/80 mb-2 md:mb-3">What&apos;s your experience level?</label>
+              <div className="flex flex-col gap-3" role="radiogroup" aria-labelledby="experience-level-label">
                 {[{ value: 'beginner' as const, label: 'Beginner', desc: 'Just starting', color: monotone ? "#555555" : EXP_COLORS[0] }, { value: 'intermediate' as const, label: 'Intermediate', desc: 'Some experience', color: monotone ? "#555555" : EXP_COLORS[1] }, { value: 'advanced' as const, label: 'Advanced', desc: 'Experienced', color: monotone ? "#555555" : EXP_COLORS[2] }].map((level, index) => (
                   <button
                     key={level.value}
                     onClick={() => setExperienceLevel(level.value)}
                     disabled={isGenerating}
+                    role="radio"
+                    aria-checked={experienceLevel === level.value}
                     className={`p-4 transition-all text-left text-black font-bold flex items-center gap-4 ${experienceLevel === level.value ? 'ring-2 ring-white/40 scale-[1.02]' : 'opacity-70 hover:opacity-100'}`}
                     style={{ backgroundColor: level.color, clipPath: SHARD_CLIPS[index % SHARD_CLIPS.length] }}
                   >
@@ -157,7 +159,7 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
               </div>
             </div>
             <div className="mb-4 md:mb-8">
-              <button type="button" onClick={() => setShowOptional(!showOptional)} className="flex items-center gap-2 text-sm font-bold text-white/80 hover:text-white transition-colors" disabled={isGenerating}>
+              <button type="button" onClick={() => setShowOptional(!showOptional)} className="flex items-center gap-2 text-sm font-bold text-white/80 hover:text-white transition-colors" disabled={isGenerating} aria-expanded={showOptional}>
                 {showOptional ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                 Tell us more (optional)
               </button>
@@ -167,17 +169,17 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
                     className="overflow-hidden"
                     style={{ backgroundColor: monotone ? "#333333" : FIELD_COLORS[2], clipPath: SHARD_CLIPS[2] }}
                   >
-                    <label className="block px-5 pt-3 pb-1 text-black/60 text-xs font-bold uppercase tracking-wider">What have you tried before?</label>
+                    <label htmlFor="prior-experience-input" className="block px-5 pt-3 pb-1 text-black/60 text-xs font-bold uppercase tracking-wider">What have you tried before?</label>
                     <div className="mx-4 border-t border-black/10" />
-                    <Input type="text" value={priorExperience} onChange={(e) => setPriorExperience(e.target.value)} placeholder="e.g., Took an online course, read a book..." className="px-5 py-3 bg-transparent border-0 text-black placeholder:text-black/40 text-lg focus-visible:ring-0 rounded-none" disabled={isGenerating} />
+                    <Input id="prior-experience-input" type="text" value={priorExperience} onChange={(e) => setPriorExperience(e.target.value)} placeholder="e.g., Took an online course, read a book..." className="px-5 py-3 bg-transparent border-0 text-black placeholder:text-black/40 text-lg focus-visible:ring-0 rounded-none" disabled={isGenerating} />
                   </div>
                   <div
                     className="overflow-hidden"
                     style={{ backgroundColor: monotone ? "#333333" : FIELD_COLORS[3], clipPath: SHARD_CLIPS[3] }}
                   >
-                    <label className="block px-5 pt-3 pb-1 text-black/60 text-xs font-bold uppercase tracking-wider">How do you like to learn?</label>
+                    <label htmlFor="preferred-tactics-input" className="block px-5 pt-3 pb-1 text-black/60 text-xs font-bold uppercase tracking-wider">How do you like to learn?</label>
                     <div className="mx-4 border-t border-black/10" />
-                    <Input type="text" value={preferredTactics} onChange={(e) => setPreferredTactics(e.target.value)} placeholder="e.g., Videos, hands-on practice, reading..." className="px-5 py-3 bg-transparent border-0 text-black placeholder:text-black/40 text-lg focus-visible:ring-0 rounded-none" disabled={isGenerating} />
+                    <Input id="preferred-tactics-input" type="text" value={preferredTactics} onChange={(e) => setPreferredTactics(e.target.value)} placeholder="e.g., Videos, hands-on practice, reading..." className="px-5 py-3 bg-transparent border-0 text-black placeholder:text-black/40 text-lg focus-visible:ring-0 rounded-none" disabled={isGenerating} />
                   </div>
                 </div>
               )}
@@ -241,6 +243,9 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
             onClick={() => setShowValidation(false)}
           >
             <motion.div
+              role="alertdialog"
+              aria-modal="true"
+              aria-labelledby="validation-title"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
@@ -249,12 +254,13 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
               style={{ clipPath: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" }}
               onClick={(e) => e.stopPropagation()}
             >
-              <p className="text-xl text-white font-black uppercase tracking-wide mb-2">Hold up!</p>
+              <p id="validation-title" className="text-xl text-white font-black uppercase tracking-wide mb-2">Hold up!</p>
               <p className="text-base text-white/80 font-medium mb-6">Just fill in your goal above and we&apos;ll build your plan</p>
               <button
                 onClick={() => setShowValidation(false)}
                 className="px-8 py-3 font-black text-black uppercase tracking-wide hover:scale-105 transition-transform btn-shake"
                 style={{ backgroundColor: "#fcd02a", clipPath: "polygon(1% 0%, 100% 4%, 99% 96%, 0% 100%)" }}
+                autoFocus
               >
                 Got It
               </button>

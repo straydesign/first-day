@@ -170,7 +170,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
                       <h3 className="text-xl md:text-3xl font-black text-white uppercase tracking-wide">How did today go?</h3>
                     </div>
                     <div className="bg-black p-3 md:p-5" style={{ clipPath: "polygon(1% 0%, 100% 2%, 99% 100%, 0% 98%)" }}>
-                      <Textarea value={feedback} onChange={(e) => !isCompleted && setFeedback(e.target.value)} placeholder="Share your thoughts, challenges, or wins from today..." className="min-h-32 text-lg border-0 focus-visible:ring-0 bg-transparent text-white placeholder:text-white/40 resize-none" disabled={isCompleted} />
+                      <Textarea id="day-feedback" aria-label="How did today go?" value={feedback} onChange={(e) => !isCompleted && setFeedback(e.target.value)} placeholder="Share your thoughts, challenges, or wins from today..." className="min-h-32 text-lg border-0 focus-visible:ring-0 bg-transparent text-white placeholder:text-white/40 resize-none" disabled={isCompleted} />
                     </div>
                     {!isCompleted && <p className="text-sm text-white/50 mt-2">Reflect on your progress — what went well and what you can improve.</p>}
                   </div>
@@ -225,6 +225,9 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
               onClick={() => setShowValidation(false)}
             >
               <motion.div
+                role="alertdialog"
+                aria-modal="true"
+                aria-labelledby="day-validation-title"
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.9, opacity: 0 }}
@@ -233,11 +236,12 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
                 style={{ clipPath: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" }}
                 onClick={(e) => e.stopPropagation()}
               >
-                <p className="text-xl text-white font-black uppercase tracking-wide mb-6">Check at least one activity or add a reflection to continue</p>
+                <p id="day-validation-title" className="text-xl text-white font-black uppercase tracking-wide mb-6">Check at least one activity or add a reflection to continue</p>
                 <button
                   onClick={() => setShowValidation(false)}
                   className="px-8 py-3 font-black text-black uppercase tracking-wide hover:scale-105 transition-transform btn-shake"
                   style={{ backgroundColor: "#fcd02a", clipPath: "polygon(1% 0%, 100% 4%, 99% 96%, 0% 100%)" }}
+                  autoFocus
                 >
                   Got It
                 </button>

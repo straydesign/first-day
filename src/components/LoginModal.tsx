@@ -176,7 +176,7 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, onTryD
               <div className="flex items-center justify-between px-4 pt-3 pb-1">
                 <Label htmlFor="password" className="text-white/60 text-xs font-bold uppercase tracking-wider">Password</Label>
                 {isLogin && (
-                  <button type="button" onClick={() => setShowForgotPassword(true)} className="text-xs text-white/50 hover:text-white hover:underline font-medium" disabled={loading}>Forgot?</button>
+                  <button type="button" onClick={() => setShowForgotPassword(true)} className="text-xs text-white/50 hover:text-white hover:underline font-medium" disabled={loading} aria-label="Forgot password?">Forgot?</button>
                 )}
               </div>
               <div className="mx-3 border-t border-white/10" />
@@ -194,6 +194,9 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, onTryD
                 <button
                   type="button"
                   onClick={() => setAgreeToTerms(!agreeToTerms)}
+                  role="checkbox"
+                  aria-checked={agreeToTerms}
+                  aria-label="I agree to the terms and conditions"
                   className={`w-full flex items-center gap-5 p-5 transition-all text-left ${agreeToTerms ? 'scale-[1.02]' : 'hover:scale-[1.01]'}`}
                   style={{ backgroundColor: agreeToTerms ? "#FFE633" : "#333333", clipPath: "polygon(1% 0%, 100% 3%, 99% 97%, 0% 100%)" }}
                 >

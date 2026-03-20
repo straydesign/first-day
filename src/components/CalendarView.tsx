@@ -209,7 +209,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
                     <div className="space-y-3 md:space-y-4">
                       {week.weeklyBook && (
                         <div className="bg-black clip-tile-b overflow-hidden">
-                          <button onClick={() => toggleWeekBook(week.weekNumber)} className="w-full p-4 md:p-5 flex items-center justify-between hover:bg-white/5 transition-colors">
+                          <button onClick={() => toggleWeekBook(week.weekNumber)} className="w-full p-4 md:p-5 flex items-center justify-between hover:bg-white/5 transition-colors" aria-expanded={expandedWeeks.has(week.weekNumber)} aria-label={`Week ${week.weekNumber} reading recommendation`}>
                             <div className="flex items-center gap-3"><BookOpen className="w-6 h-6 md:w-7 md:h-7 text-[#fcd02a]" /><h3 className="text-2xl md:text-3xl text-[#fcd02a] font-black uppercase tracking-wide">Week {week.weekNumber} Reading</h3></div>
                             {expandedWeeks.has(week.weekNumber) ? <ChevronUp className="w-5 h-5 text-[#fcd02a]" /> : <ChevronDown className="w-5 h-5 text-[#fcd02a]" />}
                           </button>

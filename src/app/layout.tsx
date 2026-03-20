@@ -89,8 +89,13 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased bg-black">
+        <a href="#main-content" className="skip-to-content">
+          Skip to content
+        </a>
         <MonotoneProvider>
-          {children}
+          <main id="main-content">
+            {children}
+          </main>
         </MonotoneProvider>
         <Toaster />
       </body>

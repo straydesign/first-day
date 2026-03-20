@@ -397,6 +397,46 @@ html {
 /* Progress bar */
 .clip-progress { clip-path: polygon(0% 15%, 100% 0%, 100% 85%, 0% 100%); }
 
+/* Skip-to-content link — visible only on focus for keyboard users */
+.skip-to-content {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  padding: 0.75rem 1.5rem;
+  background: #cc5533;
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+  clip-path: polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%);
+}
+.skip-to-content:focus {
+  top: 0.5rem;
+}
+
+/* Global focus-visible — visible ring on keyboard navigation only */
+:focus-visible {
+  outline: 2px solid var(--ring, #cc5533);
+  outline-offset: 2px;
+}
+
+/* Clipped elements can't show outline, so use drop-shadow instead */
+[style*="clip-path"]:focus-visible,
+.clip-tile-a:focus-visible,
+.clip-tile-b:focus-visible,
+.clip-tile-c:focus-visible,
+.clip-tile-d:focus-visible,
+.clip-btn-a:focus-visible,
+.clip-btn-b:focus-visible,
+.clip-badge-a:focus-visible,
+.clip-badge-b:focus-visible,
+.clip-diamond:focus-visible,
+.clip-dialog:focus-visible {
+  outline: none;
+  filter: drop-shadow(0 0 3px rgba(204,85,51,0.7)) drop-shadow(0 0 6px rgba(204,85,51,0.3));
+}
+
 /* Focus and hover states for clipped elements */
 .focus-geo:focus-visible {
   outline: none;
@@ -410,10 +450,19 @@ html {
   filter: brightness(1.1);
 }
 
-/* Reduced motion — keep static shapes, disable mosaic animation */
+/* Reduced motion — disable animations, keep fades */
 @media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
   .hover-geo:hover { transform: none; }
-  .animate-scroll-left, .animate-scroll-right { animation: none; }
+  .animate-scroll-left, .animate-scroll-right { animation: none !important; }
+  .btn-shake:active { animation: none !important; }
 }
 
 /* Responsive: subtler clip-paths on mobile */
