@@ -36,7 +36,7 @@ interface CongratsViewProps {
   trophyVariant?: TrophyVariant;
 }
 
-const CONFETTI_COLORS = ["#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF", "#2979FF"];
+const CONFETTI_COLORS = ["#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF", "#FF10F0"];
 
 export function CongratsView({
   onViewCalendar,
@@ -87,7 +87,7 @@ export function CongratsView({
         ))}
       </div>
 
-      <div className="relative z-10 flex items-center justify-center p-6 pt-[120px] md:pt-[120px] min-h-[80vh] md:min-h-screen">
+      <div className="relative z-10 flex items-center justify-center p-6 pt-[120px] min-h-[80vh] md:min-h-screen">
         <div className="max-w-2xl w-full text-center">
 
           {/* Word-by-word headline */}

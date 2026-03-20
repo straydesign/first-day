@@ -1,5 +1,6 @@
 "use client";
 import type { Achievement } from "@/types";
+import { BRIGHT_COLORS } from "@/constants";
 import { VoronoiMosaic } from "./VoronoiMosaic";
 
 interface AchievementCardProps {
@@ -16,9 +17,10 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
     <div
       className={`relative flex flex-col items-center text-center p-3 clip-tile-c border transition-smooth overflow-hidden ${
         unlocked
-          ? "bg-black border-[#FFE633]"
+          ? "bg-black"
           : "bg-black border-white/10 opacity-50 grayscale"
       }`}
+      style={unlocked ? { borderColor: BRIGHT_COLORS[0] } : undefined}
     >
       {unlocked && (
         <>
