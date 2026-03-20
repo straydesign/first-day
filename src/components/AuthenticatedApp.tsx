@@ -6,7 +6,6 @@ import { LoadingScreen } from "@/components/LoadingScreen";
 import { computeEngagementState, getMilestone, getLatestDayXP, calculateStreaks } from "@/lib/engagement";
 import { useGoalManager } from "@/hooks/useGoalManager";
 import type { AppView, EngagementState, Milestone, XPBreakdown, Achievement, SelectedDay } from "@/types";
-import type { TrophyVariant } from "@/constants/trophies";
 
 const CalendarView = dynamic(() => import("@/components/CalendarView").then(m => ({ default: m.CalendarView })), { loading: () => <LoadingScreen /> });
 const DayView = dynamic(() => import("@/components/DayView").then(m => ({ default: m.DayView })), { loading: () => <LoadingScreen /> });
@@ -258,11 +257,6 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
             goalTitle={planData?.cleanedGoal || goalData?.goal}
             dayNumber={selectedDay?.number}
             progress={progress}
-            trophyVariant={
-              currentGoalId
-                ? (currentGoalId.charCodeAt(0) % 3) as TrophyVariant
-                : 0
-            }
           />
         )}
 

@@ -1,34 +1,41 @@
 "use client";
 
-import { useRef, useMemo, useImperativeHandle, forwardRef } from "react";
+import {
+  useRef,
+  useMemo,
+  useState,
+  useEffect,
+  useImperativeHandle,
+  forwardRef,
+} from "react";
 import { Delaunay } from "d3-delaunay";
 import { HERO_PALETTE } from "@/constants";
 
 /* ─── Combined bright palette: HERO_PALETTE (skip near-blacks + forest green) + word colors ─── */
 const BRIGHT_POOL = [
-  // HERO_PALETTE minus the 3 near-blacks (#0a1121, #071671, #0c144c) and forest green (#3a4637)
   ...HERO_PALETTE.filter(
     (c) => !["#0a1121", "#071671", "#0c144c", "#3a4637"].includes(c),
   ),
-  // Tagline word colors (some overlap with HERO_PALETTE, that's fine — increases their weight)
   "#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF",
   "#FF10F0", "#FF1493", "#4FC3F7", "#FF4500",
 ];
 
-/* ─── ~30 seed points for full-viewport coverage ─── */
+/* ─── ~58 seed points — weighted: sparse sky, dense horizon, moderate ground ─── */
 const SEED_POINTS: [number, number][] = [
-  // Row 1
-  [6, 6],   [22, 4],  [38, 8],  [54, 5],  [70, 7],  [86, 4],  [96, 10],
-  // Row 2
-  [10, 22], [30, 20], [48, 24], [66, 19], [84, 23],
-  // Row 3
-  [5, 38],  [24, 40], [42, 36], [60, 42], [78, 37], [95, 40],
-  // Row 4
-  [14, 56], [34, 58], [52, 54], [72, 57], [90, 55],
-  // Row 5
-  [8, 72],  [28, 74], [46, 70], [64, 75], [82, 71],
-  // Row 6
-  [12, 88], [36, 92], [56, 86], [76, 90], [94, 88],
+  // Sky (sparse, ~12 points)
+  [8, 5], [28, 3], [48, 7], [68, 4], [88, 8],
+  [15, 18], [35, 15], [55, 20], [75, 16], [92, 19],
+  [5, 30], [42, 28],
+  // Horizon band (dense, ~24 points)
+  [10, 38], [22, 42], [34, 36], [46, 40], [58, 38], [70, 44], [82, 37], [94, 42],
+  [6, 48], [18, 52], [30, 46], [42, 54], [54, 48], [66, 52], [78, 50], [90, 46],
+  [14, 58], [26, 62], [38, 56], [50, 60], [62, 58], [74, 64], [86, 56], [96, 62],
+  // Ground (moderate, ~16 points)
+  [8, 72], [24, 70], [40, 74], [56, 68], [72, 72], [88, 70],
+  [12, 82], [32, 85], [52, 80], [72, 84], [92, 82],
+  [6, 92], [26, 95], [46, 90], [66, 94], [86, 92],
+  // Edge coverage (~6 points)
+  [2, 2], [98, 2], [2, 98], [98, 98], [50, 1], [50, 99],
 ];
 
 /* ─── Expand polygon outward from centroid to eliminate hairline gaps ─── */
@@ -47,9 +54,8 @@ function expandPolygon(
   });
 }
 
-/* ─── Deterministic "random" color from seed index ─── */
+/* ─── Deterministic "random" color from seed index (fallback before image loads) ─── */
 function pickColor(index: number): string {
-  // Simple hash-like scatter to avoid adjacent cells getting similar colors
   const scattered = (index * 7 + 3) % BRIGHT_POOL.length;
   return BRIGHT_POOL[scattered];
 }
@@ -69,6 +75,13 @@ interface CellData {
   color: string;
 }
 
+interface EntranceOffset {
+  x: number;
+  y: number;
+  r: number;
+  delay: number;
+}
+
 export interface HeroMosaicHandle {
   updateMouse: (clientX: number, clientY: number) => void;
   reset: () => void;
@@ -77,6 +90,26 @@ export interface HeroMosaicHandle {
 export const HeroMosaic = forwardRef<HeroMosaicHandle>(function HeroMosaic(_, ref) {
   const containerRef = useRef<HTMLDivElement>(null);
   const pieceRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [imageReady, setImageReady] = useState(false);
+  const [assembled, setAssembled] = useState(false);
+
+  // Preload hero image
+  useEffect(() => {
+    const img = new Image();
+    img.src = "/hero-sunset.png";
+    img.onload = () => setImageReady(true);
+  }, []);
+
+  // Trigger assembly after image loads (or after a timeout for fallback)
+  useEffect(() => {
+    if (imageReady) {
+      const timer = setTimeout(() => setAssembled(true), 100);
+      return () => clearTimeout(timer);
+    }
+    // Fallback: assemble with solid colors after 3s if image fails
+    const fallback = setTimeout(() => setAssembled(true), 3000);
+    return () => clearTimeout(fallback);
+  }, [imageReady]);
 
   const cells = useMemo<CellData[]>(() => {
     const delaunay = Delaunay.from(SEED_POINTS);
@@ -97,7 +130,6 @@ export const HeroMosaic = forwardRef<HeroMosaicHandle>(function HeroMosaic(_, re
       cx /= n;
       cy /= n;
 
-      // Expand polygon slightly outward to eliminate hairline gaps between cells
       const expanded = expandPolygon(polygon, cx, cy, 0.4);
       const points = expanded.map(([x, y]) => `${x}% ${y}%`).join(", ");
 
@@ -111,8 +143,25 @@ export const HeroMosaic = forwardRef<HeroMosaicHandle>(function HeroMosaic(_, re
     return result;
   }, []);
 
+  // Deterministic entrance offsets (computed once per cell set)
+  const entranceOffsets = useMemo<EntranceOffset[]>(() => {
+    // Seeded pseudo-random for deterministic scatter
+    let seed = 42;
+    const rng = () => {
+      seed = (seed * 16807 + 0) % 2147483647;
+      return seed / 2147483647;
+    };
+    return cells.map(() => ({
+      x: (rng() - 0.5) * 120,
+      y: (rng() - 0.5) * 120,
+      r: (rng() - 0.5) * 25,
+      delay: rng() * 0.5,
+    }));
+  }, [cells]);
+
   useImperativeHandle(ref, () => ({
     updateMouse(clientX: number, clientY: number) {
+      if (!assembled) return;
       const container = containerRef.current;
       if (!container) return;
 
@@ -162,20 +211,33 @@ export const HeroMosaic = forwardRef<HeroMosaicHandle>(function HeroMosaic(_, re
       ref={containerRef}
       className="fixed inset-0 z-0 pointer-events-none"
     >
-      {cells.map((cell, i) => (
-        <div
-          key={i}
-          ref={(el) => {
-            pieceRefs.current[i] = el;
-          }}
-          className="absolute inset-0"
-          style={{
-            clipPath: cell.clipPath,
-            backgroundColor: cell.color,
-            willChange: "transform",
-          }}
-        />
-      ))}
+      {cells.map((cell, i) => {
+        const off = entranceOffsets[i];
+        return (
+          <div
+            key={i}
+            ref={(el) => {
+              pieceRefs.current[i] = el;
+            }}
+            className="absolute inset-0"
+            style={{
+              clipPath: cell.clipPath,
+              backgroundColor: cell.color,
+              backgroundImage: imageReady ? "url(/hero-sunset.png)" : undefined,
+              backgroundSize: "100% 100%",
+              backgroundPosition: "center",
+              willChange: "transform",
+              opacity: assembled ? 1 : 0,
+              transform: assembled
+                ? undefined
+                : `translate(${off.x}vw, ${off.y}vh) rotate(${off.r}deg) scale(0.85)`,
+              transition: assembled
+                ? `opacity 1.2s cubic-bezier(0.25, 1, 0.5, 1) ${off.delay}s, transform 1.2s cubic-bezier(0.25, 1, 0.5, 1) ${off.delay}s`
+                : "none",
+            }}
+          />
+        );
+      })}
     </div>
   );
 });

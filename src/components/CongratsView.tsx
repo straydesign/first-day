@@ -3,15 +3,13 @@ import { useMemo } from "react";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { Calendar, ArrowRight } from "lucide-react";
-import { ShardSquare } from "./ShardSquare";
 import { useMonotone } from "./MonotoneContext";
-import type { TrophyVariant } from "@/constants/trophies";
 import type { ProgressMap } from "@/types";
 
-const TrophyReward = dynamic(
+const ShardContainer = dynamic(
   () =>
-    import("@/components/3d/TrophyReward").then((m) => ({
-      default: m.TrophyReward,
+    import("@/components/3d/ShardContainer").then((m) => ({
+      default: m.ShardContainer,
     })),
   { ssr: false, loading: () => <div style={{ height: 320 }} /> },
 );
@@ -33,7 +31,6 @@ interface CongratsViewProps {
   dayNumber?: number;
   totalDays?: number;
   progress?: ProgressMap;
-  trophyVariant?: TrophyVariant;
 }
 
 const CONFETTI_COLORS = ["#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF", "#FF10F0"];
@@ -45,7 +42,6 @@ export function CongratsView({
   dayNumber,
   totalDays = 30,
   progress,
-  trophyVariant = 0,
 }: CongratsViewProps) {
   const { monotone } = useMonotone();
   const daysRemaining = dayNumber ? totalDays - dayNumber : null;
@@ -116,7 +112,7 @@ export function CongratsView({
             </motion.p>
           )}
 
-          {/* 3D Trophy — shards drop into formation */}
+          {/* 3D Shard Container — shards drop into glass jar */}
           {dayNumber && progress && (
             <motion.div
               className="flex flex-col items-center mb-4"
@@ -124,44 +120,7 @@ export function CongratsView({
               animate={{ opacity: 1 }}
               transition={{ duration: 0.3, delay: 0.5 }}
             >
-              <motion.p
-                className="text-sm md:text-base text-white/50 font-bold uppercase tracking-widest mb-1"
-                style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.5 }}
-              >
-                Shard earned
-              </motion.p>
-              <TrophyReward
-                dayNumber={dayNumber}
-                progress={progress}
-                trophyVariant={trophyVariant}
-              />
-            </motion.div>
-          )}
-
-          {/* Week grid — shows it building */}
-          {progress && dayNumber && (
-            <motion.div
-              className="flex flex-col items-center mb-6"
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 1.2, ease: "easeOut" }}
-            >
-              <p
-                className="text-xs text-white/40 font-bold uppercase tracking-widest mb-2"
-                style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}
-              >
-                Week {Math.ceil(dayNumber / 7)} Progress
-              </p>
-              <ShardSquare
-                weekNumber={Math.ceil(dayNumber / 7)}
-                progress={progress}
-                startDay={(Math.ceil(dayNumber / 7) - 1) * 7 + 1}
-                animatingDay={dayNumber}
-                size={140}
-              />
+              <ShardContainer dayNumber={dayNumber} progress={progress} />
             </motion.div>
           )}
 
@@ -171,7 +130,7 @@ export function CongratsView({
               className="text-base md:text-xl text-white/70 font-medium mb-8 md:mb-12 px-4"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 1.4, ease: "easeOut" }}
+              transition={{ duration: 0.4, delay: 1.2, ease: "easeOut" }}
             >
               Come back tomorrow for another shard.
             </motion.p>
@@ -181,7 +140,7 @@ export function CongratsView({
               className="text-base md:text-xl text-white/70 font-medium mb-8 md:mb-12 px-4"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 1.4, ease: "easeOut" }}
+              transition={{ duration: 0.4, delay: 1.2, ease: "easeOut" }}
             >
               You did it — all 30 days complete.
             </motion.p>
@@ -193,7 +152,7 @@ export function CongratsView({
             className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center px-4"
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 1.6, ease: "easeOut" }}
+            transition={{ duration: 0.5, delay: 1.4, ease: "easeOut" }}
           >
             <button onClick={onViewCalendar} className="flex items-center justify-center gap-2 px-8 py-5 md:px-10 md:py-6 text-base md:text-lg font-black text-black uppercase tracking-wide hover:scale-105 transition-transform btn-shake" style={{ backgroundColor: monotone ? "#666666" : "#fb7025", clipPath: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" }}>
               <Calendar className="w-5 h-5 flex-shrink-0" />View Calendar
