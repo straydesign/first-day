@@ -56,9 +56,9 @@ function pickColor(index: number): string {
 
 /* ─── Drift settings ─── */
 const DRIFT = {
-  amplitude: 24,      // px max translate
-  rotateAmp: 5,       // deg max rotation
-  baseSpeed: 0.002,   // radians per ms — visible organic drift
+  amplitude: 40,      // px max translate
+  rotateAmp: 6,       // deg max rotation
+  baseSpeed: 0.003,   // radians per ms — clearly visible drift
 };
 
 /* ─── Click pulse settings ─── */
@@ -205,6 +205,11 @@ export function HeroMosaic() {
 
     // Wait for entrance transitions to finish before starting drift
     const startDelay = setTimeout(() => {
+      // Kill CSS transitions so RAF-driven transforms apply instantly
+      pieceRefs.current.forEach((piece) => {
+        if (piece) piece.style.transition = "none";
+      });
+
       const animate = (now: number) => {
         const container = containerRef.current;
         if (!container) {
