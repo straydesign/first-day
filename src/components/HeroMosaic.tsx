@@ -56,9 +56,9 @@ function pickColor(index: number): string {
 
 /* ─── Drift settings ─── */
 const DRIFT = {
-  amplitude: 40,      // px max translate
-  rotateAmp: 6,       // deg max rotation
-  baseSpeed: 0.003,   // radians per ms — clearly visible drift
+  amplitude: 14,      // px max translate
+  rotateAmp: 3.5,     // deg max rotation
+  baseSpeed: 0.0008,  // radians per ms — slow, organic
 };
 
 /* ─── Click pulse settings ─── */
