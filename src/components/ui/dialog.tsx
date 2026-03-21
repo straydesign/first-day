@@ -52,13 +52,17 @@ function DialogContent({
   className,
   children,
   showCloseButton = true,
+  noMosaic = false,
+  overlayClassName,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Content> & {
   showCloseButton?: boolean
+  noMosaic?: boolean
+  overlayClassName?: string
 }) {
   return (
     <DialogPortal data-slot="dialog-portal">
-      <DialogOverlay />
+      <DialogOverlay className={overlayClassName} />
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(
@@ -67,8 +71,7 @@ function DialogContent({
         )}
         {...props}
       >
-        <VoronoiMosaic seed={42} tileCount={20} margin={4} gap={2} className="absolute inset-0 w-full h-full" />
-        {/* No scrim — full brightness */}
+        {!noMosaic && <VoronoiMosaic seed={42} tileCount={20} margin={4} gap={2} className="absolute inset-0 w-full h-full" />}
         <div className="relative z-10 grid gap-4">
           {children}
         </div>

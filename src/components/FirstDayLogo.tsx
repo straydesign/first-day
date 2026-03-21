@@ -13,10 +13,10 @@ const TAGLINE_PALETTE = [
 
 /** Tagline rows — pairs of words cascading top-left → bottom-right */
 const TAGLINE_ROWS = [
-  { words: ["FIRST", "DAY"],   offset: 10 },
-  { words: ["OF", "THE"],      offset: 22 },
-  { words: ["REST", "OF"],     offset: 34 },
-  { words: ["YOUR", "LIFE"],   offset: 46 },
+  { words: ["FIRST", "DAY"],   offset: 2 },
+  { words: ["OF", "THE"],      offset: 8 },
+  { words: ["REST", "OF"],     offset: 14 },
+  { words: ["YOUR", "LIFE"],   offset: 20 },
 ] as const;
 
 /** Shard clip-path variants for tagline word chips */
@@ -28,7 +28,7 @@ const SHARD_CLIPS_TAGLINE = [
 ] as const;
 
 /** Per-word rotations for shard feel */
-const TAGLINE_ROTATIONS = [-1.5, 1.2, -0.8, 1.8, -1.2, 0.6, -1.0, 1.5] as const;
+const TAGLINE_ROTATIONS = [-0.8, 0.6, -0.4, 1.0, -0.6, 0.3, -0.5, 0.8] as const;
 
 /* ─── Effect config for interactive mouse-repulsion ─── */
 
