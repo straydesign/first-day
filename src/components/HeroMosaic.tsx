@@ -94,6 +94,14 @@ interface PulseEvent {
   startTime: number;
 }
 
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+  }, []);
+  return isMobile;
+}
+
 export function HeroMosaic() {
   const containerRef = useRef<HTMLDivElement>(null);
   const pieceRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -101,6 +109,7 @@ export function HeroMosaic() {
   const pulsesRef = useRef<PulseEvent[]>([]);
   const [imageReady, setImageReady] = useState(false);
   const [assembled, setAssembled] = useState(false);
+  const isMobile = useIsMobile();
 
   // Preload hero image
   useEffect(() => {
@@ -199,9 +208,9 @@ export function HeroMosaic() {
     });
   }, [assembled]);
 
-  // Autonomous drift animation loop + click pulse
+  // Autonomous drift animation loop + click pulse (desktop only)
   useEffect(() => {
-    if (!assembled) return;
+    if (!assembled || isMobile) return;
 
     // Wait for entrance transitions to finish before starting drift
     const startDelay = setTimeout(() => {
@@ -285,7 +294,7 @@ export function HeroMosaic() {
       cancelAnimationFrame(rafRef.current);
       window.removeEventListener("click", handleClick);
     };
-  }, [assembled, cells, driftParams, handleClick]);
+  }, [assembled, isMobile, cells, driftParams, handleClick]);
 
   // Respect prefers-reduced-motion
   useEffect(() => {
@@ -315,13 +324,17 @@ export function HeroMosaic() {
               backgroundImage: imageReady ? "url(/hero-sunset.png)" : undefined,
               backgroundSize: "100% 100%",
               backgroundPosition: "center",
-              willChange: "transform",
+              willChange: isMobile ? "auto" : "transform",
               opacity: assembled ? 1 : 0,
               transform: assembled
                 ? undefined
-                : `translate(${off.x}vw, ${off.y}vh) rotate(${off.r}deg) scale(0.85)`,
+                : isMobile
+                  ? undefined
+                  : `translate(${off.x}vw, ${off.y}vh) rotate(${off.r}deg) scale(0.85)`,
               transition: assembled
-                ? `opacity 1.2s cubic-bezier(0.25, 1, 0.5, 1) ${off.delay}s, transform 1.2s cubic-bezier(0.25, 1, 0.5, 1) ${off.delay}s`
+                ? isMobile
+                  ? `opacity 0.6s ease ${off.delay * 0.5}s`
+                  : `opacity 1.2s cubic-bezier(0.25, 1, 0.5, 1) ${off.delay}s, transform 1.2s cubic-bezier(0.25, 1, 0.5, 1) ${off.delay}s`
                 : "none",
             }}
           />
