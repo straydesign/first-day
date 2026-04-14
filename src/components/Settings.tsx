@@ -51,7 +51,7 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div className="min-h-screen relative overflow-hidden pb-20 md:pb-0">
       <div className="relative z-10 max-w-4xl mx-auto px-4 pt-[84px] pb-6 md:pb-12">
         <BackButton onClick={onBack} />
         <div className="mb-4 md:mb-8">

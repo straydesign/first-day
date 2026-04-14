@@ -66,7 +66,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
   const dailyChallenge = useMemo(() => getDailyChallenge(day.number), [day.number]);
 
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-screen relative pb-20 md:pb-0">
       {/* Background mosaic provided by AuthenticatedApp */}
       <div className="relative z-10 p-4 md:p-8 pt-[120px] md:pt-[120px]">
         {onBack && <BackButton onClick={onBack} />}
@@ -228,7 +228,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
                 className="flex items-center justify-center gap-2 mt-3 text-sm text-white/80 font-medium"
               >
                 <Zap className="w-4 h-4 text-yellow-400" />
-                <span>You&apos;ll earn ~<strong>{xpPreview.total} XP</strong></span>
+                <span>You&apos;ll earn ~<strong>{xpPreview.total} XP</strong>{dailyMultiplier > 1 && <span className="text-yellow-400 ml-1">({dailyMultiplier}x)</span>}</span>
               </motion.div>
             )}
           </motion.div>
