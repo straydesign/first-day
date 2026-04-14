@@ -1,13 +1,12 @@
 "use client";
-import { BookOpen, Edit2, ChevronUp, ChevronDown, AlertTriangle, Lock, Menu, LogOut, Palette, Target, ArrowLeft } from "lucide-react";
+import { BookOpen, Edit2, ChevronUp, ChevronDown, AlertTriangle, Lock, ArrowLeft } from "lucide-react";
 import { WeekCalendar } from "./WeekCalendar";
-import { VORONOI_LIGHT, SHARD_CLIPS, LABEL_CLIPS, BUTTON_CLIPS, MENU_CLIPS, getClip } from "@/constants";
+import { VORONOI_LIGHT, SHARD_CLIPS, LABEL_CLIPS, BUTTON_CLIPS, getClip } from "@/constants";
 import { useState, useEffect } from "react";
 import { StreakBadge } from "./StreakBadge";
 import { motion } from "framer-motion";
-import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useMonotone } from "./MonotoneContext";
-import { staggerContainerSlow, tileEnter, contentReveal, slideInLeft, SPRING } from "@/lib/animations";
+import { staggerContainerSlow, tileEnter, contentReveal } from "@/lib/animations";
 import type { Plan, ProgressMap, EngagementState, SelectedDay } from "@/types";
 
 interface CalendarViewProps {
@@ -43,9 +42,8 @@ interface WeekData {
 
 export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRegeneratePlan, progress = {}, onBack, engagement, onLogout }: CalendarViewProps) {
   const [expandedWeeks, setExpandedWeeks] = useState(new Set<number>());
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [editColorIndex, setEditColorIndex] = useState(0);
-  const { monotone, toggleMonotone } = useMonotone();
+  const { monotone } = useMonotone();
 
   // Discrete color cycling for Edit Goal button
   useEffect(() => {
@@ -103,38 +101,8 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
   }
 
   return (
-    <div className="min-h-screen relative">
-      {/* Hamburger menu */}
-      <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-        <SheetTrigger asChild>
-          <button
-            aria-label="Menu"
-            className="fixed top-[122px] right-4 z-50 bg-black text-white p-4 hover:scale-105 transition-transform btn-shake"
-            style={{ clipPath: getClip(MENU_CLIPS, 0) }}
-          >
-            <Menu className="w-6 h-6" />
-          </button>
-        </SheetTrigger>
-        <SheetContent side="right" className={`w-[200px] border-l-2 border-white/10 pt-[140px] ${monotone ? "bg-black" : "backdrop-blur-xl"}`}>
-          <div
-            className={`px-4 py-3 mb-6 ${monotone ? "bg-white/10" : "bg-black"}`}
-            style={{ clipPath: getClip(LABEL_CLIPS, 0) }}
-          >
-            <SheetTitle className="text-4xl md:text-6xl font-black text-white text-center uppercase tracking-wide" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>Menu</SheetTitle>
-          </div>
-          <SheetDescription className="sr-only">Navigation options</SheetDescription>
-          <nav className="flex flex-col gap-3 px-3">
-            {onBack && (
-              <button onClick={() => { setMobileMenuOpen(false); onBack(); }} className={`py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2 ${monotone ? "bg-white/10 text-white" : "bg-black text-white"}`} style={{ clipPath: getClip(MENU_CLIPS, 0) }}><Target className="w-4 h-4" />My Goals</button>
-            )}
-            <button onClick={toggleMonotone} className={`py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2 mt-4 ${monotone ? "bg-white text-black" : "bg-black text-white"}`} style={{ clipPath: getClip(MENU_CLIPS, 1) }}><Palette className="w-4 h-4" />{monotone ? "Color Mode" : "Monotone"}</button>
-            {onLogout && (
-              <button onClick={onLogout} className={`py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2 ${monotone ? "bg-white/10 text-white" : "bg-black text-red-400"}`} style={{ clipPath: getClip(MENU_CLIPS, 2) }}><LogOut className="w-4 h-4" />Logout</button>
-            )}
-          </nav>
-        </SheetContent>
-      </Sheet>
-      {/* Background mosaic provided by AuthenticatedApp */}
+    <div className="min-h-screen relative pb-20 md:pb-0">
+      {/* Navigation handled by BottomNav (mobile) and NavigationMenu (desktop) in AuthenticatedApp */}
       <div className="relative z-10 p-4 md:p-8 pt-[120px] md:pt-[120px]">
         <div className="max-w-7xl mx-auto">
           <motion.div

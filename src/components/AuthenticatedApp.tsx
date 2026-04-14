@@ -12,6 +12,7 @@ const DayView = dynamic(() => import("@/components/DayView").then(m => ({ defaul
 const GoalsManagement = dynamic(() => import("@/components/GoalsManagement").then(m => ({ default: m.GoalsManagement })), { loading: () => <LoadingScreen /> });
 const Settings = dynamic(() => import("@/components/Settings").then(m => ({ default: m.Settings })), { loading: () => <LoadingScreen /> });
 const NavigationMenu = dynamic(() => import("@/components/NavigationMenu").then(m => ({ default: m.NavigationMenu })));
+const BottomNav = dynamic(() => import("@/components/BottomNav").then(m => ({ default: m.BottomNav })));
 const SimpleGoalCreation = dynamic(() => import("@/components/SimpleGoalCreation").then(m => ({ default: m.SimpleGoalCreation })), { loading: () => <LoadingScreen /> });
 const CongratsView = dynamic(() => import("@/components/CongratsView").then(m => ({ default: m.CongratsView })), { loading: () => <LoadingScreen /> });
 const NotificationSettings = dynamic(() => import("@/components/NotificationSettings").then(m => ({ default: m.NotificationSettings })));
@@ -167,7 +168,7 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
     <div className="min-h-screen relative bg-black">
       <HeroMosaic />
       <div className="relative z-10">
-        {currentView !== "onboarding" && currentView !== "goals" && (
+        {currentView !== "onboarding" && currentView !== "congrats" && (
           <div className="absolute top-4 left-4 right-4 z-50 flex justify-between items-center">
             <NavigationMenu
               currentView={currentView}
@@ -270,6 +271,20 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
 
         {showFullScreenLoading && (
           <LoadingScreen showProgress={true} />
+        )}
+
+        {/* Mobile bottom navigation — persistent across main views */}
+        {currentView !== "onboarding" && currentView !== "congrats" && !showFullScreenLoading && !showBeastMode && (
+          <BottomNav
+            currentView={currentView}
+            onNavigateToGoals={handleBackToGoals}
+            onNavigateToCalendar={
+              currentGoalId
+                ? () => { loadGoalData(currentGoalId).then(() => setCurrentView("calendar")); }
+                : undefined
+            }
+            onNavigateToSettings={demoMode ? () => {} : () => setCurrentView("settings")}
+          />
         )}
 
         {latestDayXP && (

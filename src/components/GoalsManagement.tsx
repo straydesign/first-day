@@ -3,11 +3,10 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { CardDescription } from "@/components/ui/card";
 import { MosaicCard } from "./MosaicCard";
-import { VORONOI_LIGHT, SHARD_CLIPS, LABEL_CLIPS, BUTTON_CLIPS, MENU_CLIPS, getClip } from "@/constants";
-import { Target, Plus, Trash2, Calendar, Menu, LogOut, Palette } from "lucide-react";
+import { VORONOI_LIGHT, SHARD_CLIPS, LABEL_CLIPS, BUTTON_CLIPS, getClip } from "@/constants";
+import { Plus, Trash2 } from "lucide-react";
 import { api } from "@/lib/api";
 import { BouncingButton } from "./BouncingButton";
-import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { toast } from "sonner";
 import { StreakBadge } from "./StreakBadge";
 import { StatsCard } from "./StatsCard";
@@ -15,7 +14,7 @@ import { AchievementsSheet } from "./AchievementsSheet";
 import { useMonotone } from "./MonotoneContext";
 import { ShardRewardGrid } from "./ShardRewardGrid";
 import { DEMO_GOALS_LIST, DEMO_GOAL_DETAILS } from "@/lib/demo-data";
-import { staggerContainer, tileEnter, contentReveal, scaleReveal } from "@/lib/animations";
+import { staggerContainer, tileEnter, contentReveal } from "@/lib/animations";
 import type { EngagementState, ProgressMap } from "@/types";
 
 interface Goal {
@@ -43,8 +42,7 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
   const [goalCurrentDays, setGoalCurrentDays] = useState<Record<string, number>>({});
   const [goalProgress, setGoalProgress] = useState<Record<string, ProgressMap>>({});
   const [loading, setLoading] = useState(true);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { monotone, toggleMonotone } = useMonotone();
+  const { monotone } = useMonotone();
 
   useEffect(() => { loadGoals(); }, []);
 
@@ -163,34 +161,8 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
   }
 
   return (
-    <div className="min-h-screen relative">
-      <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-        <SheetTrigger asChild>
-          <button
-            aria-label="Menu"
-            className="fixed top-[122px] right-4 z-50 bg-black text-white p-4 hover:scale-105 transition-transform btn-shake"
-            style={{ clipPath: getClip(BUTTON_CLIPS, 0) }}
-          >
-            <Menu className="w-6 h-6" />
-          </button>
-        </SheetTrigger>
-        <SheetContent side="right" className={`w-[200px] border-l-2 border-white/10 pt-[140px] ${monotone ? "bg-black" : "backdrop-blur-xl"}`}>
-          <div
-            className={`px-4 py-3 mb-6 ${monotone ? "bg-white/10" : "bg-black"}`}
-            style={{ clipPath: getClip(LABEL_CLIPS, 0) }}
-          >
-            <SheetTitle className="text-4xl md:text-6xl font-black text-white text-center uppercase tracking-wide" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>Menu</SheetTitle>
-          </div>
-          <SheetDescription className="sr-only">Navigation options for your goals</SheetDescription>
-          <nav className="flex flex-col gap-3 px-3">
-            <button onClick={() => setMobileMenuOpen(false)} className={`py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2 ${monotone ? "bg-white/10 text-white" : "bg-black text-white"}`} style={{ clipPath: getClip(MENU_CLIPS, 0) }}><Target className="w-4 h-4" />My Goals</button>
-            <button onClick={() => { setMobileMenuOpen(false); if (goals[0]) onSelectGoal(goals[0].id); }} className={`py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2 ${monotone ? "bg-white/10 text-white" : "bg-black text-white"}`} style={{ clipPath: getClip(MENU_CLIPS, 1) }}><Calendar className="w-4 h-4" />30 Day Plan</button>
-            <button onClick={toggleMonotone} className={`py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2 mt-4 ${monotone ? "bg-white text-black" : "bg-black text-white"}`} style={{ clipPath: getClip(MENU_CLIPS, 2) }}><Palette className="w-4 h-4" />{monotone ? "Color Mode" : "Monotone"}</button>
-            <button onClick={onLogout} className={`py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2 ${monotone ? "bg-white/10 text-white" : "bg-black text-red-400"}`} style={{ clipPath: getClip(MENU_CLIPS, 3) }}><LogOut className="w-4 h-4" />Logout</button>
-          </nav>
-        </SheetContent>
-      </Sheet>
-      {/* Background mosaic provided by AuthenticatedApp */}
+    <div className="min-h-screen relative pb-20 md:pb-0">
+      {/* Navigation handled by BottomNav (mobile) and NavigationMenu (desktop) in AuthenticatedApp */}
       <div className="relative z-10 w-full">
         {goals.length > 0 ? (
           <motion.div variants={staggerContainer} initial="hidden" animate="visible" className="min-h-screen px-6 pb-6 md:px-10 md:pb-10 pt-[120px]">
