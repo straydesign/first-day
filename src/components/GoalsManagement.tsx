@@ -225,6 +225,26 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
                 </motion.div>
               ))}
             </div>
+            {/* Hook mechanics — daily teaser */}
+            {engagement && (
+              <motion.div variants={tileEnter} className="flex flex-wrap items-center justify-center gap-3 mb-6">
+                {engagement.dailyMultiplier > 1 && (
+                  <div className="bg-yellow-500/20 border border-yellow-500/40 px-5 py-3 text-base font-black text-yellow-300 uppercase tracking-wider" style={{ clipPath: getClip(SHARD_CLIPS, 0) }}>
+                    Today: {engagement.dailyMultiplier}x XP
+                  </div>
+                )}
+                {engagement.streakFreezes > 0 && (
+                  <div className="bg-cyan-500/15 border border-cyan-500/30 px-5 py-3 text-sm font-bold text-cyan-300" style={{ clipPath: getClip(SHARD_CLIPS, 1) }}>
+                    {engagement.streakFreezes} Streak Freeze{engagement.streakFreezes > 1 ? "s" : ""}
+                  </div>
+                )}
+                {engagement.isComeback && (
+                  <div className="bg-orange-500/20 border border-orange-500/40 px-5 py-3 text-sm font-bold text-orange-300 uppercase tracking-wider" style={{ clipPath: getClip(SHARD_CLIPS, 2) }}>
+                    Welcome Back Bonus Active
+                  </div>
+                )}
+              </motion.div>
+            )}
             {/* Stats & Achievements — once */}
             {engagement && (
               <motion.div variants={tileEnter} className="space-y-4 mb-8 px-2 md:px-6">

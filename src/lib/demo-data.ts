@@ -375,4 +375,8 @@ export const DEMO_ENGAGEMENT: EngagementState = {
   achievements: DEMO_ACHIEVEMENTS,
   completionRate: 0.17,
   totalDaysCompleted: 5,
+  streakFreezes: 0,
+  dailyMultiplier: 1.5,
+  dailyChallenge: { id: "all_activities", description: "Complete every activity", bonusXP: 75, checkKey: "all_activities" },
+  isComeback: false,
 };

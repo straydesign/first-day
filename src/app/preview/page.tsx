@@ -111,6 +111,10 @@ const MOCK_ENGAGEMENT: EngagementState = {
   achievements: MOCK_ACHIEVEMENTS,
   completionRate: 0.13,
   totalDaysCompleted: 4,
+  streakFreezes: 0,
+  dailyMultiplier: 2.0,
+  dailyChallenge: { id: "reflect_50", description: "Write a 50+ word reflection", bonusXP: 50, checkKey: "reflect_50" },
+  isComeback: false,
 };
 
 const MOCK_MILESTONE: Milestone = {
@@ -126,7 +130,10 @@ const MOCK_XP: XPBreakdown = {
   activities: 20,
   reflection: 25,
   streakBonus: 25,
-  total: 170,
+  multiplier: 2.0,
+  challengeBonus: 50,
+  comebackBonus: 0,
+  total: 340,
 };
 
 const NEW_ACHIEVEMENTS: Achievement[] = [

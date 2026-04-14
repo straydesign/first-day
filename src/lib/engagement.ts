@@ -8,6 +8,7 @@ import type {
   Achievement,
   Milestone,
   MilestoneIntensity,
+  DailyChallenge,
 } from "@/types";
 
 // --- Helpers ---
@@ -84,41 +85,59 @@ export function calculateStreaks(
 
 export function calculateDayXP(
   dayProgress: DayProgress | undefined,
-  streakAtDay: number
+  streakAtDay: number,
+  dayNumber: number = 1,
+  totalActivities: number = 0,
+  progressMap: ProgressMap = {}
 ): XPBreakdown {
   if (!isDayCompleted(dayProgress)) {
-    return { base: 0, activities: 0, reflection: 0, streakBonus: 0, total: 0 };
+    return { base: 0, activities: 0, reflection: 0, streakBonus: 0, multiplier: 1, challengeBonus: 0, comebackBonus: 0, total: 0 };
   }
 
   const base = 100;
   const activities = countCheckedActivities(dayProgress) * 10;
   const reflection = hasReflection(dayProgress) ? 25 : 0;
   const streakBonus = streakAtDay * 5;
-  return { base, activities, reflection, streakBonus, total: base + activities + reflection + streakBonus };
+
+  // Daily challenge bonus
+  const challenge = getDailyChallenge(dayNumber);
+  const challengeBonus = isDailyChallengeMet(challenge, dayProgress, totalActivities) ? challenge.bonusXP : 0;
+
+  // Comeback bonus: 50% more base XP on return after gap
+  const comebackBonus = isComeback(progressMap, dayNumber) ? Math.round(base * 0.5) : 0;
+
+  // Daily multiplier applied to subtotal
+  const multiplier = getDailyMultiplier(dayNumber);
+  const subtotal = base + activities + reflection + streakBonus + challengeBonus + comebackBonus;
+  const total = Math.round(subtotal * multiplier);
+
+  return { base, activities, reflection, streakBonus, multiplier, challengeBonus, comebackBonus, total };
 }
 
 /** Preview XP for a day before completing (live preview on DayView). */
 export function previewDayXP(
   checkedCount: number,
   hasReflectionText: boolean,
-  currentStreak: number
+  currentStreak: number,
+  dayNumber: number = 1
 ): XPBreakdown {
   const base = 100;
   const activities = checkedCount * 10;
   const reflection = hasReflectionText ? 25 : 0;
-  // After completing, streak will be currentStreak + 1
   const streakBonus = (currentStreak + 1) * 5;
-  return { base, activities, reflection, streakBonus, total: base + activities + reflection + streakBonus };
+  const multiplier = getDailyMultiplier(dayNumber);
+  const subtotal = base + activities + reflection + streakBonus;
+  const total = Math.round(subtotal * multiplier);
+  return { base, activities, reflection, streakBonus, multiplier, challengeBonus: 0, comebackBonus: 0, total };
 }
 
-export function calculateTotalXP(progress: ProgressMap, planStartDate: string): number {
+export function calculateTotalXP(progress: ProgressMap, _planStartDate: string): number {
   let total = 0;
-  // Rebuild streak at each day to calculate accurate streak bonus
   let runningStreak = 0;
   for (let d = 1; d <= 30; d++) {
     if (isDayCompleted(progress[d])) {
       runningStreak++;
-      const xp = calculateDayXP(progress[d], runningStreak);
+      const xp = calculateDayXP(progress[d], runningStreak, d, 0, progress);
       total += xp.total;
     } else {
       runningStreak = 0;
@@ -132,13 +151,12 @@ export function getLatestDayXP(
   progress: ProgressMap,
   dayNumber: number
 ): XPBreakdown {
-  // Calculate the streak length AT this day
   let streak = 0;
   for (let d = dayNumber; d >= 1; d--) {
     if (isDayCompleted(progress[d])) streak++;
     else break;
   }
-  return calculateDayXP(progress[dayNumber], streak);
+  return calculateDayXP(progress[dayNumber], streak, dayNumber, 0, progress);
 }
 
 // --- Levels ---
@@ -312,6 +330,90 @@ export function getMilestone(
   return null;
 }
 
+// --- Streak Freezes ---
+
+/** Count streak freezes earned: 1 per 7-streak milestone hit, max 3. */
+export function calculateStreakFreezes(progress: ProgressMap): number {
+  let maxStreak = 0;
+  let run = 0;
+  for (let d = 1; d <= 30; d++) {
+    if (isDayCompleted(progress[d])) {
+      run++;
+      if (run > maxStreak) maxStreak = run;
+    } else {
+      run = 0;
+    }
+  }
+  // 1 freeze at 7, 2 at 14, 3 at 21
+  return Math.min(3, Math.floor(maxStreak / 7));
+}
+
+// --- Daily Multiplier ---
+
+/** Deterministic daily multiplier based on day number (1.0x to 3.0x). */
+export function getDailyMultiplier(dayNumber: number): number {
+  // Simple hash: prime multiplication mod 5 gives 0-4, map to 1.0-3.0
+  const hash = ((dayNumber * 7919) + 13) % 5;
+  return 1.0 + hash * 0.5;
+}
+
+// --- Daily Challenges ---
+
+const DAILY_CHALLENGES: Omit<DailyChallenge, "checkKey">[] = [
+  { id: "reflect_50", description: "Write a 50+ word reflection", bonusXP: 50 },
+  { id: "all_activities", description: "Complete every activity", bonusXP: 75 },
+  { id: "reflect_deep", description: "Write a 100+ word reflection", bonusXP: 100 },
+  { id: "reflect_any", description: "Include a reflection today", bonusXP: 30 },
+];
+
+/** Get today's rotating challenge based on day number. */
+export function getDailyChallenge(dayNumber: number): DailyChallenge {
+  const challenge = DAILY_CHALLENGES[dayNumber % DAILY_CHALLENGES.length];
+  return { ...challenge, checkKey: challenge.id };
+}
+
+/** Check if a daily challenge was met for a given day's progress. */
+export function isDailyChallengeMet(
+  challenge: DailyChallenge,
+  dayProgress: DayProgress | undefined,
+  totalActivities: number
+): boolean {
+  if (!dayProgress) return false;
+  const feedback = dayProgress.feedback?.trim() || dayProgress.reflection?.trim() || "";
+  const wordCount = feedback.split(/\s+/).filter(Boolean).length;
+
+  switch (challenge.id) {
+    case "reflect_50":
+      return wordCount >= 50;
+    case "all_activities": {
+      if (!dayProgress.completed || typeof dayProgress.completed === "boolean") return false;
+      const checked = Object.values(dayProgress.completed).filter(Boolean).length;
+      return totalActivities > 0 && checked >= totalActivities;
+    }
+    case "reflect_deep":
+      return wordCount >= 100;
+    case "reflect_any":
+      return wordCount > 0;
+    default:
+      return false;
+  }
+}
+
+// --- Comeback Detection ---
+
+/** Check if completing this day is a "comeback" (gap exists before it). */
+export function isComeback(progress: ProgressMap, dayNumber: number): boolean {
+  if (dayNumber <= 1) return false;
+  // Check if the previous day was NOT completed but there's history before the gap
+  const prevDone = isDayCompleted(progress[dayNumber - 1]);
+  if (prevDone) return false;
+  // Look for any completed day before the gap
+  for (let d = dayNumber - 2; d >= 1; d--) {
+    if (isDayCompleted(progress[d])) return true;
+  }
+  return false;
+}
+
 // --- Main Computation ---
 
 export function computeEngagementState(
@@ -323,6 +425,7 @@ export function computeEngagementState(
   const level = getLevel(totalXP);
   const levelProgress = getLevelProgress(totalXP);
   const achievements = calculateAchievements(progress, streaks);
+  const streakFreezes = calculateStreakFreezes(progress);
 
   let totalDaysCompleted = 0;
   for (let d = 1; d <= 30; d++) {
@@ -331,6 +434,9 @@ export function computeEngagementState(
 
   const todayDay = getTodayDayNumber(planStartDate);
   const completionRate = todayDay > 0 ? Math.round((totalDaysCompleted / todayDay) * 100) : 0;
+  const dailyMultiplier = getDailyMultiplier(todayDay);
+  const dailyChallenge = getDailyChallenge(todayDay);
+  const comebackCheck = isComeback(progress, todayDay);
 
   return {
     currentStreak: streaks.current,
@@ -342,5 +448,9 @@ export function computeEngagementState(
     achievements,
     completionRate,
     totalDaysCompleted,
+    streakFreezes,
+    dailyMultiplier,
+    dailyChallenge,
+    isComeback: comebackCheck,
   };
 }

@@ -104,7 +104,19 @@ export interface XPBreakdown {
   activities: number;
   reflection: number;
   streakBonus: number;
+  multiplier: number;
+  challengeBonus: number;
+  comebackBonus: number;
   total: number;
+}
+
+export interface DailyChallenge {
+  id: string;
+  description: string;
+  /** Bonus XP awarded when challenge is met */
+  bonusXP: number;
+  /** Function name to check if challenge is met (computed in engagement.ts) */
+  checkKey: string;
 }
 
 export type MilestoneIntensity = "normal" | "big" | "epic";
@@ -135,4 +147,12 @@ export interface EngagementState {
   achievements: Achievement[];
   completionRate: number;
   totalDaysCompleted: number;
+  /** Number of streak freezes earned (1 per 7-streak milestone, max 3) */
+  streakFreezes: number;
+  /** Today's XP multiplier (1.0 - 3.0, deterministic per day) */
+  dailyMultiplier: number;
+  /** Today's bonus challenge */
+  dailyChallenge: DailyChallenge;
+  /** Whether today is a comeback day (returning after a gap) */
+  isComeback: boolean;
 }

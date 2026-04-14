@@ -30,11 +30,14 @@ const totalVariants = {
 };
 
 export function XPAnimation({ xp, show }: XPAnimationProps) {
-  const lines: { label: string; value: number }[] = [];
+  const lines: { label: string; value: number; highlight?: boolean }[] = [];
   if (xp.base > 0) lines.push({ label: "Day complete", value: xp.base });
   if (xp.activities > 0) lines.push({ label: "Activities", value: xp.activities });
   if (xp.reflection > 0) lines.push({ label: "Reflection", value: xp.reflection });
   if (xp.streakBonus > 0) lines.push({ label: "Streak bonus", value: xp.streakBonus });
+  if (xp.challengeBonus > 0) lines.push({ label: "Challenge bonus", value: xp.challengeBonus, highlight: true });
+  if (xp.comebackBonus > 0) lines.push({ label: "Comeback bonus", value: xp.comebackBonus, highlight: true });
+  const hasMultiplier = xp.multiplier > 1;
 
   return (
     <AnimatePresence>
@@ -58,7 +61,7 @@ export function XPAnimation({ xp, show }: XPAnimationProps) {
                   className="flex justify-between text-white/80 text-sm"
                 >
                   <span>{line.label}</span>
-                  <span className="font-semibold text-lime-400">+{line.value}</span>
+                  <span className={`font-semibold ${line.highlight ? 'text-yellow-400' : 'text-lime-400'}`}>+{line.value}</span>
                 </motion.div>
               ))}
             </div>
@@ -69,9 +72,16 @@ export function XPAnimation({ xp, show }: XPAnimationProps) {
               exit="exit"
               className="pt-3"
             >
-              <div className="flex items-center justify-center gap-2">
-                <Zap className="w-6 h-6 text-yellow-400" />
-                <span className="text-3xl font-bold text-white">+{xp.total} XP</span>
+              <div className="flex flex-col items-center gap-1">
+                {hasMultiplier && (
+                  <span className="text-xs font-bold text-yellow-400 uppercase tracking-wider">
+                    {xp.multiplier}x Multiplier Day
+                  </span>
+                )}
+                <div className="flex items-center justify-center gap-2">
+                  <Zap className="w-6 h-6 text-yellow-400" />
+                  <span className="text-3xl font-bold text-white">+{xp.total} XP</span>
+                </div>
               </div>
             </motion.div>
           </div>

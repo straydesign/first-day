@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CheckCircle2, Calendar, Youtube, ExternalLink, Zap } from "lucide-react";
 import { BackButton } from "@/components/ui/back-button";
-import { previewDayXP } from "@/lib/engagement";
+import { previewDayXP, getDailyMultiplier, getDailyChallenge } from "@/lib/engagement";
 import { HERO_PALETTE, SHARD_CLIPS, LABEL_CLIPS, BUTTON_CLIPS, getClip } from "@/constants";
 import { useMonotone } from "./MonotoneContext";
 import { staggerContainer, tileEnter, contentReveal, popIn, SPRING } from "@/lib/animations";
@@ -59,9 +59,11 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
 
   const checkedCount = Object.values(completedActivities).filter(Boolean).length;
   const xpPreview = useMemo(
-    () => previewDayXP(checkedCount, hasFeedback, currentStreak),
-    [checkedCount, hasFeedback, currentStreak]
+    () => previewDayXP(checkedCount, hasFeedback, currentStreak, day.number),
+    [checkedCount, hasFeedback, currentStreak, day.number]
   );
+  const dailyMultiplier = useMemo(() => getDailyMultiplier(day.number), [day.number]);
+  const dailyChallenge = useMemo(() => getDailyChallenge(day.number), [day.number]);
 
   return (
     <div className="min-h-screen relative">
@@ -81,6 +83,25 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
               <span className="text-lg">Day Completed{savedProgress?.completedAt ? ` on ${new Date(savedProgress.completedAt).toLocaleDateString()}` : ''}</span>
             </div>
             <p className="text-sm text-lime-100 mt-1">Your activities and notes are saved below.</p>
+          </motion.div>
+        )}
+
+        {/* Daily multiplier + challenge banner */}
+        {!isCompleted && (
+          <motion.div
+            variants={contentReveal}
+            initial="hidden"
+            animate="visible"
+            className="mb-4 flex flex-wrap items-center justify-center gap-3"
+          >
+            {dailyMultiplier > 1 && (
+              <div className="bg-yellow-500/20 border border-yellow-500/40 px-4 py-2 text-sm font-bold text-yellow-300 uppercase tracking-wider" style={{ clipPath: getClip(SHARD_CLIPS, 0) }}>
+                {dailyMultiplier}x XP Day
+              </div>
+            )}
+            <div className="bg-white/5 border border-white/10 px-4 py-2 text-sm font-medium text-white/70" style={{ clipPath: getClip(SHARD_CLIPS, 1) }}>
+              Challenge: {dailyChallenge.description} (+{dailyChallenge.bonusXP} XP)
+            </div>
           </motion.div>
         )}
 
