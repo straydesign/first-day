@@ -7,78 +7,116 @@ import {
   useEffect,
   useCallback,
 } from "react";
-import { Delaunay } from "d3-delaunay";
-import { HERO_PALETTE } from "@/constants";
 
-/* ─── Combined bright palette ─── */
-const BRIGHT_POOL = [
-  ...HERO_PALETTE.filter(
-    (c) => !["#0a1121", "#071671", "#0c144c", "#3a4637"].includes(c),
-  ),
-  "#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF",
-  "#FF10F0", "#FF1493", "#4FC3F7", "#FF4500",
+/**
+ * Hand-traced tile shapes from the hero-sunset.png stained-glass artwork.
+ * Each tile follows the natural visual boundaries of the image —
+ * mountain ridges, sky sections, water reflections, sun glow.
+ * Coordinates are percentages (0-100).
+ */
+const IMAGE_TILES: { id: string; name: string; polygon: [number, number][] }[] = [
+  {
+    id: "sky-upper-left",
+    name: "Upper-left sky",
+    polygon: [[0,0],[32,0],[28,8],[22,16],[12,22],[0,28]],
+  },
+  {
+    id: "sky-upper-center-left",
+    name: "Pink sky left of center",
+    polygon: [[32,0],[48,0],[46,12],[38,18],[28,8]],
+  },
+  {
+    id: "sky-upper-center-right",
+    name: "Red sky right of center",
+    polygon: [[48,0],[68,0],[72,8],[62,18],[54,12]],
+  },
+  {
+    id: "sky-upper-right",
+    name: "Upper-right sky",
+    polygon: [[68,0],[100,0],[100,28],[88,22],[78,16],[72,8]],
+  },
+  {
+    id: "mountain-left",
+    name: "Left mountain mass",
+    polygon: [[0,28],[12,22],[22,16],[28,8],[38,18],[32,32],[22,42],[10,48],[0,52]],
+  },
+  {
+    id: "mountain-right",
+    name: "Right mountain mass",
+    polygon: [[62,18],[72,8],[78,16],[88,22],[100,28],[100,52],[90,48],[78,42],[68,32]],
+  },
+  {
+    id: "sun-glow",
+    name: "Central sun and glow",
+    polygon: [[38,18],[46,12],[54,12],[62,18],[68,32],[58,42],[50,46],[42,42],[32,32]],
+  },
+  {
+    id: "water-reflection-center",
+    name: "Golden water reflection",
+    polygon: [[42,42],[50,46],[58,42],[62,56],[56,68],[50,72],[44,68],[38,56]],
+  },
+  {
+    id: "water-left",
+    name: "Left water section",
+    polygon: [[0,52],[10,48],[22,42],[32,50],[38,56],[32,72],[18,78],[0,82]],
+  },
+  {
+    id: "water-right",
+    name: "Right water section",
+    polygon: [[62,56],[68,50],[78,42],[90,48],[100,52],[100,82],[82,78],[68,72]],
+  },
 ];
 
-/* ─── ~120 seed points — dense mosaic for shattered glass effect ─── */
-const SEED_POINTS: [number, number][] = (() => {
-  const points: [number, number][] = [];
-  // Deterministic quasi-random distribution using golden ratio
-  const PHI = (1 + Math.sqrt(5)) / 2;
-  const count = 120;
-  for (let i = 0; i < count; i++) {
-    // Halton-like sequence for good coverage
-    const x = ((i * PHI * 61.803) % 96) + 2;
-    const y = ((i * PHI * 37.919) % 96) + 2;
-    points.push([x, y]);
-  }
-  // Ensure corners and edges are covered
-  points.push([1, 1], [99, 1], [1, 99], [99, 99], [50, 0.5], [50, 99.5], [0.5, 50], [99.5, 50]);
-  return points;
-})();
+/**
+ * Remaining image area — filled by the base image layer.
+ * These are the bottom sections and gaps between the main tiles.
+ */
+const BOTTOM_TILES: { polygon: [number, number][] }[] = [
+  { polygon: [[0,82],[18,78],[32,72],[44,68],[50,72],[56,68],[68,72],[82,78],[100,82],[100,100],[0,100]] },
+];
 
-/* ─── Expand polygon outward from centroid to eliminate hairline gaps ─── */
-function expandPolygon(
+/* ─── Shrink polygon inward to create visible gap ─── */
+function shrinkPolygon(
   polygon: [number, number][],
-  cx: number,
-  cy: number,
   amount: number,
 ): [number, number][] {
+  // Compute centroid
+  let cx = 0, cy = 0;
+  for (const [x, y] of polygon) { cx += x; cy += y; }
+  cx /= polygon.length;
+  cy /= polygon.length;
+
   return polygon.map(([x, y]) => {
     const dx = x - cx;
     const dy = y - cy;
     const len = Math.sqrt(dx * dx + dy * dy);
     if (len === 0) return [x, y] as [number, number];
-    return [x + (dx / len) * amount, y + (dy / len) * amount] as [number, number];
+    return [
+      x - (dx / len) * amount,
+      y - (dy / len) * amount,
+    ] as [number, number];
   });
 }
 
-function pickColor(index: number): string {
-  const scattered = (index * 7 + 3) % BRIGHT_POOL.length;
-  return BRIGHT_POOL[scattered];
+function polygonToClipPath(polygon: [number, number][]): string {
+  return `polygon(${polygon.map(([x, y]) => `${x}% ${y}%`).join(", ")})`;
 }
 
-/* ─── Drift settings ─── */
+/* ─── Drift settings — subtle breathing for floating tiles ─── */
 const DRIFT = {
-  amplitude: 4,       // px max translate (was 14 — too distracting)
-  rotateAmp: 1.0,     // deg max rotation (was 3.5)
-  baseSpeed: 0.0005,  // radians per ms — very slow, breathing
+  amplitude: 3,
+  rotateAmp: 0.6,
+  baseSpeed: 0.0003,
 };
 
-/* ─── Click pulse settings ─── */
+/* ─── Click pulse ─── */
 const PULSE = {
-  radius: 300,        // px — how far the pulse reaches
-  strength: 10,       // px — max push distance (was 28)
-  rotateStrength: 1.5,// deg (was 4)
-  duration: 1000,     // ms — how long the pulse lasts
+  radius: 350,
+  strength: 8,
+  rotateStrength: 1,
+  duration: 900,
 };
 
-interface CellData {
-  clipPath: string;
-  centroid: [number, number];
-  color: string;
-}
-
-/* ─── Per-piece drift parameters (deterministic) ─── */
 interface DriftParams {
   freqX: number;
   freqY: number;
@@ -92,7 +130,7 @@ interface DriftParams {
 }
 
 interface PulseEvent {
-  x: number;      // px relative to container
+  x: number;
   y: number;
   startTime: number;
 }
@@ -131,62 +169,49 @@ export function HeroMosaic() {
     return () => clearTimeout(fallback);
   }, [imageReady]);
 
-  const cells = useMemo<CellData[]>(() => {
-    const delaunay = Delaunay.from(SEED_POINTS);
-    const voronoi = delaunay.voronoi([0, 0, 100, 100]);
-    const result: CellData[] = [];
+  // Precompute tile clip-paths (full + gapped versions)
+  const tileData = useMemo(() =>
+    IMAGE_TILES.map((tile) => {
+      const centroid: [number, number] = [
+        tile.polygon.reduce((s, p) => s + p[0], 0) / tile.polygon.length,
+        tile.polygon.reduce((s, p) => s + p[1], 0) / tile.polygon.length,
+      ];
+      return {
+        ...tile,
+        centroid,
+        clipPath: polygonToClipPath(tile.polygon),
+        gapClipPath: polygonToClipPath(shrinkPolygon(tile.polygon, 0.4)),
+      };
+    }),
+  []);
 
-    for (let i = 0; i < SEED_POINTS.length; i++) {
-      const polygon = voronoi.cellPolygon(i);
-      if (!polygon) continue;
+  const bottomClipPaths = useMemo(() =>
+    BOTTOM_TILES.map((t) => polygonToClipPath(t.polygon)),
+  []);
 
-      const n = polygon.length - 1;
-      let cx = 0;
-      let cy = 0;
-      for (let j = 0; j < n; j++) {
-        cx += polygon[j][0];
-        cy += polygon[j][1];
-      }
-      cx /= n;
-      cy /= n;
-
-      // Shrink polygons slightly to create visible dark gaps between tiles
-      const expanded = expandPolygon(polygon, cx, cy, -0.15);
-      const points = expanded.map(([x, y]) => `${x}% ${y}%`).join(", ");
-
-      result.push({
-        clipPath: `polygon(${points})`,
-        centroid: [cx, cy],
-        color: pickColor(i),
-      });
-    }
-
-    return result;
-  }, []);
-
-  // Deterministic entrance offsets
+  // Entrance offsets for floating tiles
   const entranceOffsets = useMemo(() => {
     let seed = 42;
     const rng = () => {
       seed = (seed * 16807 + 0) % 2147483647;
       return seed / 2147483647;
     };
-    return cells.map(() => ({
-      x: (rng() - 0.5) * 120,
-      y: (rng() - 0.5) * 120,
-      r: (rng() - 0.5) * 25,
-      delay: rng() * 0.5,
+    return tileData.map(() => ({
+      x: (rng() - 0.5) * 100,
+      y: (rng() - 0.5) * 100,
+      r: (rng() - 0.5) * 20,
+      delay: rng() * 0.6,
     }));
-  }, [cells]);
+  }, [tileData]);
 
-  // Per-piece drift parameters (unique frequencies so they don't move in unison)
+  // Drift params
   const driftParams = useMemo<DriftParams[]>(() => {
     let seed = 137;
     const rng = () => {
       seed = (seed * 16807 + 0) % 2147483647;
       return seed / 2147483647;
     };
-    return cells.map(() => ({
+    return tileData.map(() => ({
       freqX: DRIFT.baseSpeed * (0.7 + rng() * 0.6),
       freqY: DRIFT.baseSpeed * (0.7 + rng() * 0.6),
       freqR: DRIFT.baseSpeed * (0.5 + rng() * 0.5),
@@ -197,13 +222,12 @@ export function HeroMosaic() {
       ampY: DRIFT.amplitude * (0.5 + rng() * 0.5),
       ampR: DRIFT.rotateAmp * (0.5 + rng() * 0.5),
     }));
-  }, [cells]);
+  }, [tileData]);
 
-  // Click pulse handler — listen for clicks anywhere on the page
+  // Click pulse handler
   const handleClick = useCallback((e: MouseEvent) => {
     const container = containerRef.current;
     if (!container || !assembled) return;
-
     const rect = container.getBoundingClientRect();
     pulsesRef.current.push({
       x: e.clientX - rect.left,
@@ -212,13 +236,11 @@ export function HeroMosaic() {
     });
   }, [assembled]);
 
-  // Autonomous drift animation loop + click pulse (desktop only)
+  // Drift animation loop (desktop only)
   useEffect(() => {
     if (!assembled || isMobile) return;
 
-    // Wait for entrance transitions to finish before starting drift
     const startDelay = setTimeout(() => {
-      // Kill CSS transitions so RAF-driven transforms apply instantly
       pieceRefs.current.forEach((piece) => {
         if (piece) piece.style.transition = "none";
       });
@@ -229,35 +251,26 @@ export function HeroMosaic() {
           rafRef.current = requestAnimationFrame(animate);
           return;
         }
-
         const rect = container.getBoundingClientRect();
 
-        // Clean up expired pulses
         pulsesRef.current = pulsesRef.current.filter(
           (p) => now - p.startTime < PULSE.duration,
         );
 
         pieceRefs.current.forEach((piece, i) => {
           if (!piece) return;
-
           const dp = driftParams[i];
 
-          // Layered sine waves for organic drift
           const dx =
             Math.sin(now * dp.freqX + dp.phaseX) * dp.ampX +
             Math.sin(now * dp.freqX * 1.7 + dp.phaseX + 1) * dp.ampX * 0.3;
           const dy =
             Math.sin(now * dp.freqY + dp.phaseY) * dp.ampY +
             Math.cos(now * dp.freqY * 1.3 + dp.phaseY + 2) * dp.ampY * 0.3;
-          const dr =
-            Math.sin(now * dp.freqR + dp.phaseR) * dp.ampR;
+          const dr = Math.sin(now * dp.freqR + dp.phaseR) * dp.ampR;
 
-          // Add click pulse offsets
-          let pulseX = 0;
-          let pulseY = 0;
-          let pulseR = 0;
-
-          const [cxPct, cyPct] = cells[i].centroid;
+          let pulseX = 0, pulseY = 0, pulseR = 0;
+          const [cxPct, cyPct] = tileData[i].centroid;
           const cx = (cxPct / 100) * rect.width;
           const cy = (cyPct / 100) * rect.height;
 
@@ -265,15 +278,12 @@ export function HeroMosaic() {
             const pdx = pulse.x - cx;
             const pdy = pulse.y - cy;
             const dist = Math.sqrt(pdx * pdx + pdy * pdy);
-
             if (dist < PULSE.radius && dist > 0) {
               const elapsed = now - pulse.startTime;
               const t = elapsed / PULSE.duration;
-              // Ease out with overshoot then settle
               const falloff = Math.pow(1 - t, 2);
               const force = (1 - dist / PULSE.radius) * PULSE.strength * falloff;
               const angle = Math.atan2(pdy, pdx);
-
               pulseX += -Math.cos(angle) * force;
               pulseY += -Math.sin(angle) * force;
               pulseR += (-Math.cos(angle) * force / PULSE.strength) * PULSE.rotateStrength * falloff;
@@ -288,46 +298,69 @@ export function HeroMosaic() {
       };
 
       rafRef.current = requestAnimationFrame(animate);
-    }, 1800); // Wait for entrance animation to finish
+    }, 1800);
 
-    // Listen for clicks
     window.addEventListener("click", handleClick);
-
     return () => {
       clearTimeout(startDelay);
       cancelAnimationFrame(rafRef.current);
       window.removeEventListener("click", handleClick);
     };
-  }, [assembled, isMobile, cells, driftParams, handleClick]);
+  }, [assembled, isMobile, tileData, driftParams, handleClick]);
 
   // Respect prefers-reduced-motion
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (mq.matches) {
-      cancelAnimationFrame(rafRef.current);
-    }
+    if (mq.matches) cancelAnimationFrame(rafRef.current);
   }, [assembled]);
+
+  const bgStyle = imageReady
+    ? { backgroundImage: "url(/hero-sunset.png)", backgroundSize: "100% 100%", backgroundPosition: "center" }
+    : {};
 
   return (
     <div
       ref={containerRef}
       className="fixed inset-0 z-0 pointer-events-none"
     >
-      {cells.map((cell, i) => {
+      {/* Layer 1: Full base image (static, slightly dimmed) */}
+      <div
+        className="absolute inset-0"
+        style={{
+          ...bgStyle,
+          backgroundColor: "#0a0a0a",
+          opacity: assembled ? 0.5 : 0,
+          transition: "opacity 1s ease",
+        }}
+      />
+
+      {/* Layer 2: Bottom fill tiles (static, no animation) */}
+      {BOTTOM_TILES.map((tile, i) => (
+        <div
+          key={`bottom-${i}`}
+          className="absolute inset-0"
+          style={{
+            clipPath: bottomClipPaths[i],
+            ...bgStyle,
+            backgroundColor: "#0a0a14",
+            opacity: assembled ? 1 : 0,
+            transition: `opacity 0.8s ease 0.3s`,
+          }}
+        />
+      ))}
+
+      {/* Layer 3: The 10 main tiles — hand-traced from the image's natural shapes */}
+      {tileData.map((tile, i) => {
         const off = entranceOffsets[i];
         return (
           <div
-            key={i}
-            ref={(el) => {
-              pieceRefs.current[i] = el;
-            }}
+            key={tile.id}
+            ref={(el) => { pieceRefs.current[i] = el; }}
             className="absolute inset-0"
             style={{
-              clipPath: cell.clipPath,
-              backgroundColor: cell.color,
-              backgroundImage: imageReady ? "url(/hero-sunset.png)" : undefined,
-              backgroundSize: "100% 100%",
-              backgroundPosition: "center",
+              clipPath: tile.gapClipPath,
+              ...bgStyle,
+              backgroundColor: "#0a0a14",
               willChange: isMobile ? "auto" : "transform",
               opacity: assembled ? 1 : 0,
               transform: assembled
@@ -340,6 +373,7 @@ export function HeroMosaic() {
                   ? `opacity 0.6s ease ${off.delay * 0.5}s`
                   : `opacity 1.2s cubic-bezier(0.25, 1, 0.5, 1) ${off.delay}s, transform 1.2s cubic-bezier(0.25, 1, 0.5, 1) ${off.delay}s`
                 : "none",
+              filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.5))",
             }}
           />
         );
