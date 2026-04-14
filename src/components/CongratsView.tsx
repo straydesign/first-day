@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Calendar, ArrowRight } from "lucide-react";
 import { useMonotone } from "./MonotoneContext";
 import { wordReveal, scaleReveal, tileEnter, SPRING } from "@/lib/animations";
+import { BUTTON_CLIPS, getClip } from "@/constants";
 import type { ProgressMap } from "@/types";
 
 const ShardContainer = dynamic(
@@ -156,10 +157,10 @@ export function CongratsView({
             animate={{ opacity: 1, y: 0 }}
             transition={{ ...SPRING.gentle, delay: 1.2 }}
           >
-            <button onClick={onViewCalendar} className="flex items-center justify-center gap-2 px-8 py-5 md:px-10 md:py-6 text-base md:text-lg font-black text-black uppercase tracking-wide hover:scale-105 transition-transform btn-shake" style={{ backgroundColor: monotone ? "#666666" : "#fb7025", clipPath: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" }}>
+            <button onClick={onViewCalendar} className="flex items-center justify-center gap-2 px-8 py-5 md:px-10 md:py-6 text-base md:text-lg font-black text-black uppercase tracking-wide hover:scale-105 transition-transform btn-shake" style={{ backgroundColor: monotone ? "#666666" : "#fb7025", clipPath: getClip(BUTTON_CLIPS, 0) }}>
               <Calendar className="w-5 h-5 flex-shrink-0" />View Calendar
             </button>
-            <button onClick={onDoMore} className="flex items-center justify-center gap-2 px-8 py-5 md:px-10 md:py-6 text-base md:text-lg font-black text-black uppercase tracking-wide hover:scale-105 transition-transform btn-shake" style={{ backgroundColor: monotone ? "#444444" : "#f31b5e", clipPath: "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)" }}>
+            <button onClick={onDoMore} className="flex items-center justify-center gap-2 px-8 py-5 md:px-10 md:py-6 text-base md:text-lg font-black text-black uppercase tracking-wide hover:scale-105 transition-transform btn-shake" style={{ backgroundColor: monotone ? "#444444" : "#f31b5e", clipPath: getClip(BUTTON_CLIPS, 1) }}>
               <ArrowRight className="w-5 h-5 flex-shrink-0" />Back to Goals
             </button>
           </motion.div>

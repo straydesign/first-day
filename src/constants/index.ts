@@ -54,6 +54,35 @@ export const SHARD_CLIPS = [
   "polygon(3% 2%, 100% 0%, 97% 98%, 0% 100%)",
 ] as const;
 
+/** Label/header chip clip-paths — slightly more angular for inline badges. */
+export const LABEL_CLIPS = [
+  "polygon(0% 0%, 97% 5%, 100% 95%, 3% 100%)",
+  "polygon(2% 0%, 98% 3%, 100% 97%, 0% 100%)",
+  "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)",
+  "polygon(1% 0%, 100% 2%, 99% 100%, 0% 98%)",
+] as const;
+
+/** Button clip-paths — bolder asymmetry for CTAs. */
+export const BUTTON_CLIPS = [
+  "polygon(2% 0%, 100% 4%, 98% 100%, 0% 96%)",
+  "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)",
+  "polygon(1% 0%, 100% 3%, 99% 97%, 0% 100%)",
+  "polygon(4% 8%, 95% 0%, 100% 85%, 8% 100%)",
+] as const;
+
+/** Menu item clip-paths — wider asymmetry for nav items. */
+export const MENU_CLIPS = [
+  "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)",
+  "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)",
+  "polygon(1% 0%, 98% 3%, 100% 97%, 2% 100%)",
+  "polygon(3% 0%, 100% 4%, 97% 100%, 0% 96%)",
+] as const;
+
+/** Get a clip-path by index from any clip array, rotating deterministically. */
+export function getClip(clips: readonly string[], index: number): string {
+  return clips[index % clips.length];
+}
+
 /**
  * Brick-wall clip-paths for a 7-shard week square.
  * Row 1 (top half): 4 bricks across

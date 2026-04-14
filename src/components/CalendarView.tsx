@@ -1,7 +1,7 @@
 "use client";
 import { BookOpen, Edit2, ChevronUp, ChevronDown, AlertTriangle, Lock, Menu, LogOut, Palette, Target, ArrowLeft } from "lucide-react";
 import { WeekCalendar } from "./WeekCalendar";
-import { VORONOI_LIGHT } from "@/constants";
+import { VORONOI_LIGHT, SHARD_CLIPS, LABEL_CLIPS, BUTTON_CLIPS, MENU_CLIPS, getClip } from "@/constants";
 import { useState, useEffect } from "react";
 import { StreakBadge } from "./StreakBadge";
 import { motion } from "framer-motion";
@@ -110,7 +110,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
           <button
             aria-label="Menu"
             className="fixed top-[122px] right-4 z-50 bg-black text-white p-4 hover:scale-105 transition-transform btn-shake"
-            style={{ clipPath: "polygon(3% 0%, 100% 5%, 97% 100%, 0% 92%)" }}
+            style={{ clipPath: getClip(MENU_CLIPS, 0) }}
           >
             <Menu className="w-6 h-6" />
           </button>
@@ -118,18 +118,18 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
         <SheetContent side="right" className={`w-[200px] border-l-2 border-white/10 pt-[140px] ${monotone ? "bg-black" : "backdrop-blur-xl"}`}>
           <div
             className={`px-4 py-3 mb-6 ${monotone ? "bg-white/10" : "bg-black"}`}
-            style={{ clipPath: "polygon(0% 0%, 100% 4%, 98% 96%, 2% 100%)" }}
+            style={{ clipPath: getClip(LABEL_CLIPS, 0) }}
           >
             <SheetTitle className="text-4xl md:text-6xl font-black text-white text-center uppercase tracking-wide" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>Menu</SheetTitle>
           </div>
           <SheetDescription className="sr-only">Navigation options</SheetDescription>
           <nav className="flex flex-col gap-3 px-3">
             {onBack && (
-              <button onClick={() => { setMobileMenuOpen(false); onBack(); }} className={`py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2 ${monotone ? "bg-white/10 text-white" : "bg-black text-white"}`} style={{ clipPath: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" }}><Target className="w-4 h-4" />My Goals</button>
+              <button onClick={() => { setMobileMenuOpen(false); onBack(); }} className={`py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2 ${monotone ? "bg-white/10 text-white" : "bg-black text-white"}`} style={{ clipPath: getClip(MENU_CLIPS, 0) }}><Target className="w-4 h-4" />My Goals</button>
             )}
-            <button onClick={toggleMonotone} className={`py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2 mt-4 ${monotone ? "bg-white text-black" : "bg-black text-white"}`} style={{ clipPath: "polygon(1% 0%, 98% 3%, 100% 97%, 2% 100%)" }}><Palette className="w-4 h-4" />{monotone ? "Color Mode" : "Monotone"}</button>
+            <button onClick={toggleMonotone} className={`py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2 mt-4 ${monotone ? "bg-white text-black" : "bg-black text-white"}`} style={{ clipPath: getClip(MENU_CLIPS, 1) }}><Palette className="w-4 h-4" />{monotone ? "Color Mode" : "Monotone"}</button>
             {onLogout && (
-              <button onClick={onLogout} className={`py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2 ${monotone ? "bg-white/10 text-white" : "bg-black text-red-400"}`} style={{ clipPath: "polygon(3% 0%, 100% 4%, 97% 100%, 0% 96%)" }}><LogOut className="w-4 h-4" />Logout</button>
+              <button onClick={onLogout} className={`py-3 px-4 font-bold text-sm uppercase tracking-wide hover:scale-105 transition-transform flex items-center gap-2 ${monotone ? "bg-white/10 text-white" : "bg-black text-red-400"}`} style={{ clipPath: getClip(MENU_CLIPS, 2) }}><LogOut className="w-4 h-4" />Logout</button>
             )}
           </nav>
         </SheetContent>
@@ -155,7 +155,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
               <div className="flex items-center justify-center gap-3 mb-4">
                 <div
                   className="inline-block bg-black px-8 py-3"
-                  style={{ clipPath: "polygon(2% 0%, 98% 3%, 100% 97%, 0% 100%)" }}
+                  style={{ clipPath: getClip(LABEL_CLIPS, 1) }}
                 >
                   <h1 className="text-3xl md:text-7xl font-bold text-white">{goalTitle}</h1>
                 </div>
@@ -175,7 +175,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
                     onClick={onEditGoal}
                     className="relative inline-flex items-center justify-center h-10 px-6 text-sm font-bold text-black overflow-hidden hover:scale-105 transition-colors duration-500"
                     style={{
-                      clipPath: "polygon(4% 8%, 95% 0%, 100% 85%, 8% 100%)",
+                      clipPath: getClip(BUTTON_CLIPS, 0),
                       backgroundColor: VORONOI_LIGHT[editColorIndex],
                     }}
                   >
@@ -199,7 +199,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
                   <div className="mb-4 flex items-center gap-3">
                     <div
                       className="inline-block bg-black px-5 py-2"
-                      style={{ clipPath: "polygon(0% 0%, 97% 5%, 100% 95%, 3% 100%)" }}
+                      style={{ clipPath: getClip(LABEL_CLIPS, 2) }}
                     >
                       <h3 className="text-xl md:text-2xl font-black text-white uppercase tracking-wide" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>Week {week.weekNumber}: {week.label}</h3>
                     </div>
@@ -228,7 +228,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
                       className="relative py-10 md:py-16"
                       style={{
                         backgroundColor: "#000000",
-                        clipPath: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)",
+                        clipPath: getClip(SHARD_CLIPS, week.weekNumber),
                       }}
                     >
                       <div className="flex flex-col items-center justify-center gap-2">

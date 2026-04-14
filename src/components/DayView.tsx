@@ -6,7 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { CheckCircle2, Calendar, Youtube, ExternalLink, Zap } from "lucide-react";
 import { BackButton } from "@/components/ui/back-button";
 import { previewDayXP } from "@/lib/engagement";
-import { HERO_PALETTE } from "@/constants";
+import { HERO_PALETTE, SHARD_CLIPS, LABEL_CLIPS, BUTTON_CLIPS, getClip } from "@/constants";
 import { useMonotone } from "./MonotoneContext";
 import { staggerContainer, tileEnter, contentReveal, popIn, SPRING } from "@/lib/animations";
 import type { SelectedDay, DayProgress, Activity, ActivityResource } from "@/types";
@@ -92,7 +92,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
         >
           <div
             className="inline-block bg-black px-6 py-3"
-            style={{ clipPath: "polygon(2% 0%, 98% 3%, 100% 97%, 0% 100%)" }}
+            style={{ clipPath: getClip(LABEL_CLIPS, 1) }}
           >
             <div className="flex items-center justify-center gap-2">
               <Calendar className="w-6 h-6 md:w-8 md:h-8 text-white" />
@@ -109,7 +109,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
             animate="visible"
           >
             <div className="mb-4 md:mb-6">
-              <motion.div variants={contentReveal} className="bg-black px-6 py-4 inline-block mb-4" style={{ clipPath: "polygon(1% 0%, 100% 3%, 99% 97%, 0% 100%)" }}>
+              <motion.div variants={contentReveal} className="bg-black px-6 py-4 inline-block mb-4" style={{ clipPath: getClip(LABEL_CLIPS, 3) }}>
                 <h2 className="text-4xl md:text-6xl font-black italic uppercase tracking-wide whitespace-nowrap" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>
                   {"Your Activities".split("").map((char, i) => (
                     <span key={i} style={{ color: char === " " ? "transparent" : monotone ? "#ffffff" : ["#FFE633","#FF6B2B","#FF2D55","#00EAFF","#FF10F0","#FF1493","#4FC3F7","#FF4500"][i % 8], width: char === " " ? "0.3em" : undefined, display: "inline-block" }}>{char}</span>
@@ -126,7 +126,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
                         variants={tileEnter}
                         className="space-y-2"
                       >
-                        <div className={`flex items-start gap-2 md:gap-4 p-3 md:p-5 bg-black transition-smooth ${completedActivities[index] ? 'ring-2 ring-[#FFE633]/40' : ''} ${isCompleted ? 'opacity-75' : ''}`} style={{ clipPath: ["polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)", "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)", "polygon(1% 0%, 100% 2%, 99% 100%, 0% 98%)"][index % 3] }}>
+                        <div className={`flex items-start gap-2 md:gap-4 p-3 md:p-5 bg-black transition-smooth ${completedActivities[index] ? 'ring-2 ring-[#FFE633]/40' : ''} ${isCompleted ? 'opacity-75' : ''}`} style={{ clipPath: getClip(SHARD_CLIPS, index) }}>
                           <div className="mt-1 flex-shrink-0 relative">
                             <Checkbox checked={completedActivities[index] || false} onCheckedChange={() => !isCompleted && toggleActivity(index)} id={`activity-${index}`} className="size-14 md:size-16 border-[3px] border-white rounded-none data-[state=checked]:border-white data-[state=checked]:bg-white" disabled={isCompleted} />
                             {completedActivities[index] && (
@@ -165,10 +165,10 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
                   })}
                   {/* How did today go? — merged into activities card */}
                   <div className="mt-6">
-                    <div className="bg-black px-5 py-3 inline-block mb-3" style={{ clipPath: "polygon(0% 0%, 98% 4%, 100% 96%, 2% 100%)" }}>
+                    <div className="bg-black px-5 py-3 inline-block mb-3" style={{ clipPath: getClip(LABEL_CLIPS, 0) }}>
                       <h3 className="text-xl md:text-3xl font-black text-white uppercase tracking-wide">How did today go?</h3>
                     </div>
-                    <div className="bg-black p-3 md:p-5" style={{ clipPath: "polygon(1% 0%, 100% 2%, 99% 100%, 0% 98%)" }}>
+                    <div className="bg-black p-3 md:p-5" style={{ clipPath: getClip(SHARD_CLIPS, 2) }}>
                       <Textarea id="day-feedback" aria-label="How did today go?" value={feedback} onChange={(e) => !isCompleted && setFeedback(e.target.value)} placeholder="Share your thoughts, challenges, or wins from today..." className="min-h-32 text-lg border-0 focus-visible:ring-0 bg-transparent text-white placeholder:text-white/40 resize-none" disabled={isCompleted} />
                     </div>
                     {!isCompleted && <p className="text-sm text-white/50 mt-2">Reflect on your progress — what went well and what you can improve.</p>}
@@ -183,7 +183,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
             initial="hidden"
             animate="visible"
           >
-            <div className="mb-4 md:mb-6 bg-black p-8 text-center" style={{ clipPath: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" }}>
+            <div className="mb-4 md:mb-6 bg-black p-8 text-center" style={{ clipPath: getClip(SHARD_CLIPS, 0) }}>
               <p className="text-white/60 text-lg">Activities for this day are not available yet.</p>
               <p className="text-white/40 text-sm mt-2">Check back later or contact support if this persists.</p>
             </div>
@@ -197,7 +197,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
             animate="visible"
           >
             <div className="flex justify-center">
-              <button onClick={handleSubmit} className="px-10 py-5 md:px-14 md:py-6 text-lg md:text-xl font-black text-white uppercase tracking-wide hover:scale-105 transition-all duration-500" style={{ backgroundColor: btnColors[btnColorIdx], clipPath: "polygon(2% 0%, 100% 4%, 98% 100%, 0% 96%)" }}>Complete Day</button>
+              <button onClick={handleSubmit} className="px-10 py-5 md:px-14 md:py-6 text-lg md:text-xl font-black text-white uppercase tracking-wide hover:scale-105 transition-all duration-500" style={{ backgroundColor: btnColors[btnColorIdx], clipPath: getClip(BUTTON_CLIPS, 0) }}>Complete Day</button>
             </div>
             {canSubmit && (
               <motion.div
@@ -232,14 +232,14 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
                 exit={{ scale: 0.9, opacity: 0 }}
                 transition={SPRING.snappy}
                 className="bg-black p-8 mx-4 max-w-sm text-center"
-                style={{ clipPath: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" }}
+                style={{ clipPath: getClip(SHARD_CLIPS, 0) }}
                 onClick={(e) => e.stopPropagation()}
               >
                 <p id="day-validation-title" className="text-xl text-white font-black uppercase tracking-wide mb-6">Check at least one activity or add a reflection to continue</p>
                 <button
                   onClick={() => setShowValidation(false)}
                   className="px-8 py-3 font-black text-black uppercase tracking-wide hover:scale-105 transition-transform btn-shake"
-                  style={{ backgroundColor: "#fcd02a", clipPath: "polygon(1% 0%, 100% 4%, 99% 96%, 0% 100%)" }}
+                  style={{ backgroundColor: "#fcd02a", clipPath: getClip(BUTTON_CLIPS, 2) }}
                   autoFocus
                 >
                   Got It
