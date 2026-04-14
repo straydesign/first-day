@@ -133,7 +133,7 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
 
   if (loading) {
     return (
-      <div className="min-h-screen relative bg-black flex items-center justify-center">
+      <div className="min-h-screen relative flex items-center justify-center">
         <div className="relative z-10 flex flex-col items-center gap-6 px-6 w-full max-w-md">
           {/* Shard progress bar */}
           <div className="flex gap-[2px] h-3 w-full">
@@ -161,7 +161,7 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
   }
 
   return (
-    <div className="min-h-screen relative bg-black">
+    <div className="min-h-screen relative">
       <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
         <SheetTrigger asChild>
           <button

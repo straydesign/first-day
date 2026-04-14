@@ -9,8 +9,11 @@ import { FirstDayLogo } from './FirstDayLogo';
 import { ForgotPasswordModal } from './ForgotPasswordModal';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { validatePassword } from '@/lib/validation';
+import { SHARD_CLIPS } from '@/constants';
 
 const LETTER_PALETTE = ["#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF", "#FF10F0", "#4FC3F7", "#FF4500", "#2979FF"];
+
+const DEMO_SHARDS = ["TRY", "THE", "DEMO"];
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -148,14 +151,31 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, onTryD
             <button
               type="button"
               onClick={() => { onTryDemo?.(); onClose(); }}
-              className="block w-full py-5 text-center text-2xl md:text-3xl font-black uppercase tracking-wide hover:scale-105 transition-transform"
-              style={{
-                background: "linear-gradient(135deg, #FFE633 0%, #FF6B2B 20%, #FF2D55 40%, #00EAFF 60%, #FF10F0 80%, #4FC3F7 100%)",
-                clipPath: "polygon(0% 5%, 97% 0%, 100% 95%, 3% 100%)",
-              }}
+              className="group w-full flex flex-col items-center gap-1"
             >
-              <span className="text-black drop-shadow-[0_1px_0_rgba(255,255,255,0.3)]">Try the Demo</span>
-              <span className="block text-sm text-black/60 font-bold mt-0.5">No account needed</span>
+              <div className="flex items-center gap-2 group-hover:gap-3 transition-all">
+                {DEMO_SHARDS.map((word, i) => (
+                  <span
+                    key={word}
+                    style={{
+                      fontFamily: "var(--font-bebas), system-ui, sans-serif",
+                      fontSize: "clamp(1.3rem, 4vw, 2.2rem)",
+                      fontWeight: 900,
+                      letterSpacing: 3,
+                      color: LETTER_PALETTE[i * 2],
+                      backgroundColor: "#0a0a14",
+                      border: `1px solid ${LETTER_PALETTE[i * 2]}30`,
+                      clipPath: SHARD_CLIPS[i % SHARD_CLIPS.length],
+                    }}
+                    className="inline-block px-5 py-2"
+                  >
+                    {word}
+                  </span>
+                ))}
+              </div>
+              <span className="text-xs text-white/40 font-bold uppercase tracking-wider">
+                No account needed
+              </span>
             </button>
           </div>
 

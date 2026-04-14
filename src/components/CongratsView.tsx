@@ -61,7 +61,7 @@ export function CongratsView({
   );
 
   return (
-    <div className="min-h-screen relative bg-black overflow-hidden">
+    <div className="min-h-screen relative overflow-hidden">
 
       {/* Confetti layer */}
       <div className="fixed inset-0 z-20 pointer-events-none overflow-hidden">

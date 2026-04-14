@@ -63,7 +63,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
   );
 
   return (
-    <div className="min-h-screen relative bg-black">
+    <div className="min-h-screen relative">
       {/* Background mosaic provided by AuthenticatedApp */}
       <div className="relative z-10 p-4 md:p-8 pt-[120px] md:pt-[120px]">
         {onBack && <BackButton onClick={onBack} />}

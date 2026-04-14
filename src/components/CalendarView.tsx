@@ -102,7 +102,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
   }
 
   return (
-    <div className="min-h-screen relative bg-black">
+    <div className="min-h-screen relative">
       {/* Hamburger menu */}
       <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
         <SheetTrigger asChild>
