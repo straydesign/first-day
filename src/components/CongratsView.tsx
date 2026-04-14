@@ -80,7 +80,7 @@ export function CongratsView({
               rotate: piece.rotation * 3,
               scale: [0, piece.scale * 1.3, piece.scale],
             }}
-            transition={{ duration: 2.5, delay: piece.delay, type: "spring", stiffness: 80, damping: 12 }}
+            transition={{ duration: 2.5, delay: piece.delay, ease: [0.25, 0.46, 0.45, 0.94] }}
           />
         ))}
       </div>

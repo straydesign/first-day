@@ -19,19 +19,22 @@ const BRIGHT_POOL = [
   "#FF10F0", "#FF1493", "#4FC3F7", "#FF4500",
 ];
 
-/* ─── ~58 seed points — weighted: sparse sky, dense horizon, moderate ground ─── */
-const SEED_POINTS: [number, number][] = [
-  [8, 5], [28, 3], [48, 7], [68, 4], [88, 8],
-  [15, 18], [35, 15], [55, 20], [75, 16], [92, 19],
-  [5, 30], [42, 28],
-  [10, 38], [22, 42], [34, 36], [46, 40], [58, 38], [70, 44], [82, 37], [94, 42],
-  [6, 48], [18, 52], [30, 46], [42, 54], [54, 48], [66, 52], [78, 50], [90, 46],
-  [14, 58], [26, 62], [38, 56], [50, 60], [62, 58], [74, 64], [86, 56], [96, 62],
-  [8, 72], [24, 70], [40, 74], [56, 68], [72, 72], [88, 70],
-  [12, 82], [32, 85], [52, 80], [72, 84], [92, 82],
-  [6, 92], [26, 95], [46, 90], [66, 94], [86, 92],
-  [2, 2], [98, 2], [2, 98], [98, 98], [50, 1], [50, 99],
-];
+/* ─── ~120 seed points — dense mosaic for shattered glass effect ─── */
+const SEED_POINTS: [number, number][] = (() => {
+  const points: [number, number][] = [];
+  // Deterministic quasi-random distribution using golden ratio
+  const PHI = (1 + Math.sqrt(5)) / 2;
+  const count = 120;
+  for (let i = 0; i < count; i++) {
+    // Halton-like sequence for good coverage
+    const x = ((i * PHI * 61.803) % 96) + 2;
+    const y = ((i * PHI * 37.919) % 96) + 2;
+    points.push([x, y]);
+  }
+  // Ensure corners and edges are covered
+  points.push([1, 1], [99, 1], [1, 99], [99, 99], [50, 0.5], [50, 99.5], [0.5, 50], [99.5, 50]);
+  return points;
+})();
 
 /* ─── Expand polygon outward from centroid to eliminate hairline gaps ─── */
 function expandPolygon(
@@ -56,17 +59,17 @@ function pickColor(index: number): string {
 
 /* ─── Drift settings ─── */
 const DRIFT = {
-  amplitude: 14,      // px max translate
-  rotateAmp: 3.5,     // deg max rotation
-  baseSpeed: 0.0008,  // radians per ms — slow, organic
+  amplitude: 4,       // px max translate (was 14 — too distracting)
+  rotateAmp: 1.0,     // deg max rotation (was 3.5)
+  baseSpeed: 0.0005,  // radians per ms — very slow, breathing
 };
 
 /* ─── Click pulse settings ─── */
 const PULSE = {
-  radius: 400,        // px — how far the pulse reaches
-  strength: 28,       // px — max push distance
-  rotateStrength: 4,  // deg
-  duration: 1200,     // ms — how long the pulse lasts
+  radius: 300,        // px — how far the pulse reaches
+  strength: 10,       // px — max push distance (was 28)
+  rotateStrength: 1.5,// deg (was 4)
+  duration: 1000,     // ms — how long the pulse lasts
 };
 
 interface CellData {
@@ -147,7 +150,8 @@ export function HeroMosaic() {
       cx /= n;
       cy /= n;
 
-      const expanded = expandPolygon(polygon, cx, cy, 0.4);
+      // Shrink polygons slightly to create visible dark gaps between tiles
+      const expanded = expandPolygon(polygon, cx, cy, -0.15);
       const points = expanded.map(([x, y]) => `${x}% ${y}%`).join(", ");
 
       result.push({
