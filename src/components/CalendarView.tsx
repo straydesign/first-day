@@ -101,7 +101,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
   }
 
   return (
-    <div className="min-h-screen relative pb-20 md:pb-0">
+    <div className="min-h-screen relative pb-20 md:pb-0" role="main" aria-label="30-day plan calendar">
       {/* Navigation handled by BottomNav (mobile) and NavigationMenu (desktop) in AuthenticatedApp */}
       <div className="relative z-10 p-4 md:p-8 pt-[120px] md:pt-[120px]">
         <div className="max-w-7xl mx-auto">

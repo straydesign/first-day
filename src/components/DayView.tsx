@@ -66,7 +66,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
   const dailyChallenge = useMemo(() => getDailyChallenge(day.number), [day.number]);
 
   return (
-    <div className="min-h-screen relative pb-20 md:pb-0">
+    <div className="min-h-screen relative pb-20 md:pb-0" role="main" aria-label="Day activities">
       {/* Background mosaic provided by AuthenticatedApp */}
       <div className="relative z-10 p-4 md:p-8 pt-[120px] md:pt-[120px]">
         {onBack && <BackButton onClick={onBack} />}
@@ -95,11 +95,11 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
             className="mb-4 flex flex-wrap items-center justify-center gap-3"
           >
             {dailyMultiplier > 1 && (
-              <div className="bg-yellow-500/20 border border-yellow-500/40 px-4 py-2 text-sm font-bold text-yellow-300 uppercase tracking-wider" style={{ clipPath: getClip(SHARD_CLIPS, 0) }}>
+              <div className="bg-black border-2 border-yellow-500/60 px-4 py-2 text-sm font-bold text-yellow-300 uppercase tracking-wider" style={{ clipPath: getClip(SHARD_CLIPS, 0) }}>
                 {dailyMultiplier}x XP Day
               </div>
             )}
-            <div className="bg-white/5 border border-white/10 px-4 py-2 text-sm font-medium text-white/70" style={{ clipPath: getClip(SHARD_CLIPS, 1) }}>
+            <div className="bg-black border border-white/20 px-4 py-2 text-sm font-medium text-white/70" style={{ clipPath: getClip(SHARD_CLIPS, 1) }}>
               Challenge: {dailyChallenge.description} (+{dailyChallenge.bonusXP} XP)
             </div>
           </motion.div>

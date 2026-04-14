@@ -161,7 +161,7 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
   }
 
   return (
-    <div className="min-h-screen relative pb-20 md:pb-0">
+    <div className="min-h-screen relative pb-20 md:pb-0" role="main" aria-label="Your goals">
       {/* Navigation handled by BottomNav (mobile) and NavigationMenu (desktop) in AuthenticatedApp */}
       <div className="relative z-10 w-full">
         {goals.length > 0 ? (

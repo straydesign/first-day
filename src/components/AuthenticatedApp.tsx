@@ -5,6 +5,7 @@ import { HeroMosaic } from "./HeroMosaic";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { computeEngagementState, getMilestone, getLatestDayXP, calculateStreaks } from "@/lib/engagement";
 import { useGoalManager } from "@/hooks/useGoalManager";
+import { useKeyboardNav } from "@/hooks/useKeyboardNav";
 import type { AppView, EngagementState, Milestone, XPBreakdown, Achievement, SelectedDay } from "@/types";
 
 const CalendarView = dynamic(() => import("@/components/CalendarView").then(m => ({ default: m.CalendarView })), { loading: () => <LoadingScreen /> });
@@ -59,6 +60,14 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
     handleDayComplete: dayCompleteLogic,
     resetGoalState,
   } = goalManager;
+
+  // Keyboard nav: Escape goes back contextually
+  useKeyboardNav(() => {
+    if (currentView === "day") setCurrentView("calendar");
+    else if (currentView === "calendar") handleBackToGoals();
+    else if (currentView === "settings") handleBackToGoals();
+    else if (currentView === "congrats") setCurrentView("calendar");
+  });
 
   // Compute engagement state from progress + plan start date
   const engagement: EngagementState | null = useMemo(() => {
