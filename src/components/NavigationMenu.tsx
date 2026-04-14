@@ -1,8 +1,6 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { LogOut, Bell, Settings as SettingsIcon, Target, Calendar } from "lucide-react";
-import { VoronoiMosaic } from "./VoronoiMosaic";
-import { VORONOI_PALETTE } from "@/constants";
+import { LogOut, Target, Calendar, Settings as SettingsIcon } from "lucide-react";
+import { getClip, SHARD_CLIPS } from "@/constants";
 
 interface NavigationMenuProps {
   currentView: string;
@@ -13,57 +11,59 @@ interface NavigationMenuProps {
   onLogout: () => void;
 }
 
+const NAV_ITEMS = [
+  { id: "goals", label: "Goals", icon: Target },
+  { id: "calendar", label: "Plan", icon: Calendar },
+  { id: "settings", label: "Settings", icon: SettingsIcon },
+] as const;
+
 export function NavigationMenu({
   currentView,
   onNavigateToGoals,
   onNavigateToSettings,
   onNavigateToCalendar,
-  onShowNotifications,
   onLogout,
 }: NavigationMenuProps) {
-  const menuItems = [
-    { id: "goals", label: "My Goals", icon: Target, onClick: onNavigateToGoals },
-    { id: "calendar", label: "Calendar", icon: Calendar, onClick: onNavigateToCalendar || (() => {}) },
-    { id: "notifications", label: "Reminders", icon: Bell, onClick: onShowNotifications || (() => {}) },
-    { id: "settings", label: "Settings", icon: SettingsIcon, onClick: onNavigateToSettings },
-  ];
+  const handlers: Record<string, (() => void) | undefined> = {
+    goals: onNavigateToGoals,
+    calendar: onNavigateToCalendar,
+    settings: onNavigateToSettings,
+  };
 
   return (
-    <div className="hidden md:flex justify-between items-center w-full relative overflow-visible">
-      {/* Mosaic background with organic jagged edges */}
-      <VoronoiMosaic
-        seed={42}
-        width={1200}
-        height={80}
-        tileCount={40}
-        margin={10}
-        gap={3}
-        palette={VORONOI_PALETTE}
-        hideEdgeTiles
-        className="absolute -inset-2 w-[calc(100%+16px)] h-[calc(100%+16px)] opacity-30"
-      />
-      <div className="relative z-10 flex gap-2">
-        {menuItems.map((item) => {
+    <div className="hidden md:flex items-center gap-2 w-full">
+      <nav className="flex items-center gap-2">
+        {NAV_ITEMS.map((item, i) => {
           const Icon = item.icon;
           const isActive = currentView === item.id;
+          const handler = handlers[item.id];
           return (
-            <Button
+            <button
               key={item.id}
-              onClick={item.onClick}
-              variant={isActive ? "default" : "outline"}
-              size="sm"
-              className={`transition-smooth hover:scale-105 ${isActive ? "" : "bg-transparent border-2 border-white font-bold text-white hover:bg-white/10"}`}
+              onClick={handler}
+              disabled={!handler}
+              className={`flex items-center gap-2 px-5 py-2.5 text-sm font-bold uppercase tracking-wider transition-all hover:scale-105 ${
+                isActive
+                  ? "bg-white text-black"
+                  : "bg-black/80 text-white/80 hover:text-white hover:bg-black"
+              } ${!handler ? "opacity-30 cursor-not-allowed" : ""}`}
+              style={{ clipPath: getClip(SHARD_CLIPS, i) }}
             >
-              <Icon className="w-4 h-4 mr-2" />
+              <Icon className="w-4 h-4" />
               {item.label}
-            </Button>
+            </button>
           );
         })}
-      </div>
-      <Button onClick={onLogout} variant="outline" size="sm" className="relative z-10 bg-transparent border-2 border-white/10 text-white/80 hover:bg-white/10 transition-smooth hover:scale-105">
-        <LogOut className="w-4 h-4 mr-2" />
+      </nav>
+      <div className="flex-1" />
+      <button
+        onClick={onLogout}
+        className="flex items-center gap-2 px-4 py-2 text-sm font-bold uppercase tracking-wider bg-black/60 text-white/50 hover:text-white hover:bg-black/80 transition-all hover:scale-105"
+        style={{ clipPath: getClip(SHARD_CLIPS, 3) }}
+      >
+        <LogOut className="w-4 h-4" />
         Logout
-      </Button>
+      </button>
     </div>
   );
 }
