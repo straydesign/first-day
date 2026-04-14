@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { CardDescription } from "@/components/ui/card";
 import { MosaicCard } from "./MosaicCard";
 import { VORONOI_LIGHT } from "@/constants";
@@ -14,6 +15,7 @@ import { AchievementsSheet } from "./AchievementsSheet";
 import { useMonotone } from "./MonotoneContext";
 import { ShardRewardGrid } from "./ShardRewardGrid";
 import { DEMO_GOALS_LIST, DEMO_GOAL_DETAILS } from "@/lib/demo-data";
+import { staggerContainer, tileEnter, contentReveal, scaleReveal } from "@/lib/animations";
 import type { EngagementState, ProgressMap } from "@/types";
 
 interface Goal {
@@ -191,9 +193,9 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
       {/* Background mosaic provided by AuthenticatedApp */}
       <div className="relative z-10 w-full">
         {goals.length > 0 ? (
-          <div className="animate-fadeIn min-h-screen px-6 pb-6 md:px-10 md:pb-10 pt-[120px]">
+          <motion.div variants={staggerContainer} initial="hidden" animate="visible" className="min-h-screen px-6 pb-6 md:px-10 md:pb-10 pt-[120px]">
             {/* Date — sticky header */}
-            <div className="sticky top-0 z-20 text-center pb-4 pt-2">
+            <motion.div variants={contentReveal} className="sticky top-0 z-20 text-center pb-4 pt-2">
               <div
                 className="inline-block bg-black px-6 py-2"
                 style={{ clipPath: "polygon(2% 0%, 98% 4%, 100% 96%, 0% 100%)" }}
@@ -205,11 +207,11 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
                   <StreakBadge streak={engagement.currentStreak} isAtRisk={engagement.isAtRisk} size="sm" />
                 </div>
               )}
-            </div>
+            </motion.div>
             {/* All goals stacked */}
             <div className="space-y-6 md:space-y-8 mb-8">
               {goals.map((goal, goalIndex) => (
-                <div key={goal.id} className="w-full relative">
+                <motion.div key={goal.id} variants={tileEnter} className="w-full relative">
                   {/* Day X label — attached to top of goal card */}
                   <div
                     className="inline-block bg-black px-5 py-2 ml-2 mb-0 relative z-10"
@@ -248,28 +250,28 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
                       <ShardRewardGrid progress={goalProgress[goal.id]} />
                     </div>
                   )}
-                </div>
+                </motion.div>
               ))}
             </div>
             {/* Stats & Achievements — once */}
             {engagement && (
-              <div className="space-y-4 mb-8 px-2 md:px-6">
+              <motion.div variants={tileEnter} className="space-y-4 mb-8 px-2 md:px-6">
                 <StatsCard engagement={engagement} />
                 <div className="flex justify-center">
                   <AchievementsSheet achievements={engagement.achievements} />
                 </div>
-              </div>
+              </motion.div>
             )}
             {/* Add Goal — once at the bottom */}
-            <button
+            <motion.button variants={tileEnter}
               onClick={onCreateGoal}
               className="w-full bg-black py-4 md:py-5 text-xl md:text-2xl font-black uppercase tracking-wide hover:scale-105 transition-transform flex items-center justify-center gap-2"
               style={{ clipPath: "polygon(2% 0%, 100% 4%, 98% 100%, 0% 96%)", fontFamily: "var(--font-bebas), system-ui, sans-serif", letterSpacing: 3 }}
             >
               <Plus className="w-5 h-5 text-white" />
               <span className="text-white">ADD NEW GOAL</span>
-            </button>
-          </div>
+            </motion.button>
+          </motion.div>
         ) : (
           <MosaicCard seed={0} className="min-h-screen p-6 md:p-10 flex flex-col items-center justify-center">
             <div className="text-center mb-4 md:mb-8 space-y-3">

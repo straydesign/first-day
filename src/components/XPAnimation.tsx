@@ -2,6 +2,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import type { XPBreakdown } from "@/types";
 import { Zap } from "lucide-react";
+import { SPRING } from "@/lib/animations";
 
 interface XPAnimationProps {
   xp: XPBreakdown;
@@ -13,9 +14,9 @@ const lineVariants = {
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: 0.3 + i * 0.15, duration: 0.4, ease: "easeOut" as const },
+    transition: { ...SPRING.gentle, delay: 0.3 + i * 0.12 },
   }),
-  exit: { opacity: 0, y: -30, transition: { duration: 0.3 } },
+  exit: { opacity: 0, y: -30, transition: { duration: 0.2 } },
 };
 
 const totalVariants = {
@@ -23,7 +24,7 @@ const totalVariants = {
   visible: {
     opacity: 1,
     scale: 1,
-    transition: { delay: 1.0, duration: 0.5, type: "spring" as const, stiffness: 200 },
+    transition: { ...SPRING.bouncy, delay: 0.9 },
   },
   exit: { opacity: 0, scale: 0.8, transition: { duration: 0.2 } },
 };

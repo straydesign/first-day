@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ShardSquare } from "./ShardSquare";
+import { SPRING } from "@/lib/animations";
 import type { ProgressMap } from "@/types";
 
 interface ShardRewardGridProps {
@@ -30,7 +31,7 @@ export function ShardRewardGrid({
           key={week.weekNumber}
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: i * 0.08, ease: "easeOut" }}
+          transition={{ ...SPRING.gentle, delay: i * 0.06 }}
         >
           <ShardSquare
             weekNumber={week.weekNumber}

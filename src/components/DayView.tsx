@@ -8,6 +8,7 @@ import { BackButton } from "@/components/ui/back-button";
 import { previewDayXP } from "@/lib/engagement";
 import { HERO_PALETTE } from "@/constants";
 import { useMonotone } from "./MonotoneContext";
+import { staggerContainer, tileEnter, contentReveal, popIn, SPRING } from "@/lib/animations";
 import type { SelectedDay, DayProgress, Activity, ActivityResource } from "@/types";
 
 interface DayViewProps {
@@ -70,9 +71,9 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
 
         {isCompleted && (
           <motion.div
-            initial={{ opacity: 0, y: 20, filter: "blur(4px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
+            variants={contentReveal}
+            initial="hidden"
+            animate="visible"
             className="mb-4 md:mb-6 p-4 bg-lime-600 text-white clip-tile-a text-center border border-white/10"
           >
             <div className="flex items-center justify-center gap-2">
@@ -84,9 +85,9 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
         )}
 
         <motion.div
-          initial={{ opacity: 0, y: 16, filter: "blur(4px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ duration: 0.5, delay: 0.05, ease: "easeOut" }}
+          variants={contentReveal}
+          initial="hidden"
+          animate="visible"
           className="text-center mb-4 md:mb-8"
         >
           <div
@@ -103,18 +104,18 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
 
         {hasActivities ? (
           <motion.div
-            initial={{ opacity: 0, y: 20, filter: "blur(4px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            transition={{ duration: 0.4, delay: 0.15, ease: "easeOut" }}
+            variants={staggerContainer}
+            initial="hidden"
+            animate="visible"
           >
             <div className="mb-4 md:mb-6">
-              <div className="bg-black px-6 py-4 inline-block mb-4" style={{ clipPath: "polygon(1% 0%, 100% 3%, 99% 97%, 0% 100%)" }}>
+              <motion.div variants={contentReveal} className="bg-black px-6 py-4 inline-block mb-4" style={{ clipPath: "polygon(1% 0%, 100% 3%, 99% 97%, 0% 100%)" }}>
                 <h2 className="text-4xl md:text-6xl font-black italic uppercase tracking-wide whitespace-nowrap" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>
                   {"Your Activities".split("").map((char, i) => (
                     <span key={i} style={{ color: char === " " ? "transparent" : monotone ? "#ffffff" : ["#FFE633","#FF6B2B","#FF2D55","#00EAFF","#FF10F0","#FF1493","#4FC3F7","#FF4500"][i % 8], width: char === " " ? "0.3em" : undefined, display: "inline-block" }}>{char}</span>
                   ))}
                 </h2>
-              </div>
+              </motion.div>
               <div className="space-y-4">
                 {activities.map((activity: string | Activity, index: number) => {
                     const activityText = typeof activity === 'string' ? activity : activity.text;
@@ -122,16 +123,14 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
                     return (
                       <motion.div
                         key={index}
-                        initial={{ opacity: 0, y: 20, filter: "blur(4px)" }}
-                        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                        transition={{ duration: 0.4, delay: 0.25 + index * 0.1, ease: "easeOut" }}
+                        variants={tileEnter}
                         className="space-y-2"
                       >
                         <div className={`flex items-start gap-2 md:gap-4 p-3 md:p-5 bg-black transition-smooth ${completedActivities[index] ? 'ring-2 ring-[#FFE633]/40' : ''} ${isCompleted ? 'opacity-75' : ''}`} style={{ clipPath: ["polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)", "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)", "polygon(1% 0%, 100% 2%, 99% 100%, 0% 98%)"][index % 3] }}>
                           <div className="mt-1 flex-shrink-0 relative">
                             <Checkbox checked={completedActivities[index] || false} onCheckedChange={() => !isCompleted && toggleActivity(index)} id={`activity-${index}`} className="size-14 md:size-16 border-[3px] border-white rounded-none data-[state=checked]:border-white data-[state=checked]:bg-white" disabled={isCompleted} />
                             {completedActivities[index] && (
-                              <motion.div initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0, opacity: 0 }} transition={{ type: "spring", stiffness: 500, damping: 20 }} className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                              <motion.div variants={popIn} initial="hidden" animate="visible" exit="hidden" className="absolute inset-0 flex items-center justify-center pointer-events-none">
                                 <svg viewBox="0 0 24 24" className="w-10 h-10 md:w-12 md:h-12 text-black" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
                                   <motion.path d="M5 12l5 5L19 7" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.3, delay: 0.1 }} />
                                 </svg>
@@ -180,9 +179,9 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
         ) : (
 
           <motion.div
-            initial={{ opacity: 0, y: 20, filter: "blur(4px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            transition={{ duration: 0.4, delay: 0.15, ease: "easeOut" }}
+            variants={tileEnter}
+            initial="hidden"
+            animate="visible"
           >
             <div className="mb-4 md:mb-6 bg-black p-8 text-center" style={{ clipPath: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" }}>
               <p className="text-white/60 text-lg">Activities for this day are not available yet.</p>
@@ -193,18 +192,18 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
 
         {!isCompleted && (
           <motion.div
-            initial={{ opacity: 0, y: 20, filter: "blur(4px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            transition={{ duration: 0.4, delay: 0.45 + (hasActivities ? activities.length * 0.1 : 0), ease: "easeOut" }}
+            variants={tileEnter}
+            initial="hidden"
+            animate="visible"
           >
             <div className="flex justify-center">
               <button onClick={handleSubmit} className="px-10 py-5 md:px-14 md:py-6 text-lg md:text-xl font-black text-white uppercase tracking-wide hover:scale-105 transition-all duration-500" style={{ backgroundColor: btnColors[btnColorIdx], clipPath: "polygon(2% 0%, 100% 4%, 98% 100%, 0% 96%)" }}>Complete Day</button>
             </div>
             {canSubmit && (
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
+                initial={{ opacity: 0, y: 4 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={SPRING.gentle}
                 className="flex items-center justify-center gap-2 mt-3 text-sm text-white/80 font-medium"
               >
                 <Zap className="w-4 h-4 text-yellow-400" />
@@ -231,7 +230,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.9, opacity: 0 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                transition={SPRING.snappy}
                 className="bg-black p-8 mx-4 max-w-sm text-center"
                 style={{ clipPath: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" }}
                 onClick={(e) => e.stopPropagation()}

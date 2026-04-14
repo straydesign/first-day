@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { Calendar, ArrowRight } from "lucide-react";
 import { useMonotone } from "./MonotoneContext";
+import { wordReveal, scaleReveal, tileEnter, SPRING } from "@/lib/animations";
 import type { ProgressMap } from "@/types";
 
 const ShardContainer = dynamic(
@@ -76,9 +77,9 @@ export function CongratsView({
               x: piece.x,
               y: [piece.y, piece.y + 600],
               rotate: piece.rotation * 3,
-              scale: [0, piece.scale, piece.scale],
+              scale: [0, piece.scale * 1.3, piece.scale],
             }}
-            transition={{ duration: 2.5, delay: piece.delay, ease: "easeOut" }}
+            transition={{ duration: 2.5, delay: piece.delay, type: "spring", stiffness: 80, damping: 12 }}
           />
         ))}
       </div>
@@ -91,9 +92,10 @@ export function CongratsView({
             {(dayNumber ? `Day ${dayNumber} Complete!` : "Congratulations!").split(" ").map((word, i) => (
               <motion.span
                 key={i}
-                initial={{ opacity: 0, filter: "blur(8px)", y: 10 }}
-                animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-                transition={{ duration: 0.4, delay: 0.3 + i * 0.12, ease: "easeOut" }}
+                custom={i}
+                variants={wordReveal}
+                initial="hidden"
+                animate="visible"
                 className="inline-block mr-[0.3em]"
               >
                 {word}
@@ -106,7 +108,7 @@ export function CongratsView({
               className="text-lg md:text-2xl text-white/80 font-bold mb-6 px-4"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.6, ease: "easeOut" }}
+              transition={{ ...SPRING.gentle, delay: 0.5 }}
             >
               {goalTitle}
             </motion.p>
@@ -116,9 +118,9 @@ export function CongratsView({
           {dayNumber && progress && (
             <motion.div
               className="flex flex-col items-center mb-4"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.3, delay: 0.5 }}
+              variants={scaleReveal}
+              initial="hidden"
+              animate="visible"
             >
               <ShardContainer dayNumber={dayNumber} progress={progress} />
             </motion.div>
@@ -130,7 +132,7 @@ export function CongratsView({
               className="text-base md:text-xl text-white/70 font-medium mb-8 md:mb-12 px-4"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 1.2, ease: "easeOut" }}
+              transition={{ ...SPRING.soft, delay: 1.0 }}
             >
               Come back tomorrow for another shard.
             </motion.p>
@@ -140,7 +142,7 @@ export function CongratsView({
               className="text-base md:text-xl text-white/70 font-medium mb-8 md:mb-12 px-4"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 1.2, ease: "easeOut" }}
+              transition={{ ...SPRING.soft, delay: 1.0 }}
             >
               You did it — all 30 days complete.
             </motion.p>
@@ -152,7 +154,7 @@ export function CongratsView({
             className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center px-4"
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 1.4, ease: "easeOut" }}
+            transition={{ ...SPRING.gentle, delay: 1.2 }}
           >
             <button onClick={onViewCalendar} className="flex items-center justify-center gap-2 px-8 py-5 md:px-10 md:py-6 text-base md:text-lg font-black text-black uppercase tracking-wide hover:scale-105 transition-transform btn-shake" style={{ backgroundColor: monotone ? "#666666" : "#fb7025", clipPath: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" }}>
               <Calendar className="w-5 h-5 flex-shrink-0" />View Calendar

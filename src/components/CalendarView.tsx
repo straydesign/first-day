@@ -7,6 +7,7 @@ import { StreakBadge } from "./StreakBadge";
 import { motion } from "framer-motion";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useMonotone } from "./MonotoneContext";
+import { staggerContainerSlow, tileEnter, contentReveal, slideInLeft, SPRING } from "@/lib/animations";
 import type { Plan, ProgressMap, EngagementState, SelectedDay } from "@/types";
 
 interface CalendarViewProps {
@@ -138,9 +139,9 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
         <div className="max-w-7xl mx-auto">
           <motion.div
             className="mb-8 md:mb-12"
-            initial={{ opacity: 0, y: 16, filter: "blur(4px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
+            variants={contentReveal}
+            initial="hidden"
+            animate="visible"
           >
             {onBack && (
               <button
@@ -187,15 +188,13 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
             </div>)}
           </motion.div>
           {/* Weeks — no panels, separated by vertical space */}
-          <div className="space-y-12 md:space-y-16">
-            {weeks.map((week: WeekData, weekIndex: number) => {
+          <motion.div className="space-y-12 md:space-y-16" variants={staggerContainerSlow} initial="hidden" animate="visible">
+            {weeks.map((week: WeekData) => {
               return (
                 <motion.div
                   key={week.weekNumber}
                   className="relative"
-                  initial={{ opacity: 0, y: 24, filter: "blur(4px)" }}
-                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                  transition={{ duration: 0.5, delay: weekIndex * 0.12, ease: "easeOut" }}
+                  variants={tileEnter}
                 >
                   <div className="mb-4 flex items-center gap-3">
                     <div
@@ -242,7 +241,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, onRe
                 </motion.div>
               );
             })}
-          </div>
+          </motion.div>
         </div>
       </div>
       {/* Bottom gradient fade — weeks blend into black */}

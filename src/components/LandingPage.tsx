@@ -8,6 +8,7 @@ import { HeroMosaic } from "./HeroMosaic";
 import { Footer } from "./Footer";
 import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, BRIGHT_COLORS, SCROLL_SPEEDS } from "@/constants";
 import { useMonotone } from "./MonotoneContext";
+import { SPRING } from "@/lib/animations";
 
 interface LandingPageProps {
   onGetStarted: () => void;
@@ -25,7 +26,7 @@ function AnimatedSection({ children, className, delay = 0 }: { children: React.R
       ref={ref}
       initial={{ opacity: 0, y: 32 }}
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
-      transition={{ duration: 0.5, delay, ease: "easeOut" }}
+      transition={{ ...SPRING.gentle, delay }}
       className={className}
     >
       {children}
@@ -118,7 +119,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: "easeOut" }}
+              transition={SPRING.bouncy}
             >
               {/* Mobile: default size, Desktop: hero size — both interactive */}
               <div className="block md:hidden">
@@ -152,7 +153,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
           <motion.div
             initial={{ y: -60, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
+            transition={SPRING.snappy}
             className="fixed top-0 left-0 right-0 z-50 bg-black px-4 pt-[84px] pb-5"
           >
             <div className="flex items-center justify-between">
@@ -184,7 +185,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
+            transition={{ ...SPRING.soft, delay: 0.4 }}
             className="overflow-hidden w-full"
           >
             <div className="py-4 overflow-hidden space-y-1.5">
