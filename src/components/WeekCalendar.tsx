@@ -1,81 +1,108 @@
 "use client";
-import { CheckCircle2, Circle } from "lucide-react";
+import { CheckCircle2, Lock, Play } from "lucide-react";
 import { useMonotone } from "./MonotoneContext";
 import { SHARD_CLIPS } from "@/constants";
-import type { Plan, ProgressMap, SelectedDay } from "@/types";
+import { getNextAvailableDay, isDayCompleted } from "@/lib/engagement";
+import type { Plan, ProgressMap, SelectedDay, Activity } from "@/types";
 
 const DAY_COLORS = ["#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF", "#FF10F0", "#4FC3F7", "#FF4500", "#2979FF"];
 
 interface WeekCalendarProps {
   weekNumber: number;
-  days: Array<{ dayNumber: number; date: Date; dayOfWeek: number; isToday: boolean }>;
+  days: Array<{ dayNumber: number }>;
   progress?: ProgressMap;
   onDayClick?: (day: SelectedDay) => void;
   planData?: Plan | null;
-  startDate?: string;
 }
 
-export function WeekCalendar({ weekNumber, days, progress = {}, onDayClick, planData, startDate }: WeekCalendarProps) {
-  const { monotone } = useMonotone();
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+function activityText(a: string | Activity): string {
+  return typeof a === "string" ? a : a.text;
+}
 
-  const goalStartDate = startDate ? new Date(startDate) : null;
-  if (goalStartDate) goalStartDate.setHours(0, 0, 0, 0);
+function formatCompletedDate(iso: string): string {
+  const d = new Date(iso);
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+}
+
+export function WeekCalendar({ days, progress = {}, onDayClick, planData }: WeekCalendarProps) {
+  const { monotone } = useMonotone();
+  const nextAvailable = getNextAvailableDay(progress);
 
   return (
     <div className="space-y-2">
       {days.map((day) => {
-        const dayData = planData?.days?.[day.dayNumber] || {
-          title: `Day ${day.dayNumber}`,
-          activities: ["Review your progress", "Take one small action", "Reflect on your journey"],
-        };
-        const isCompleted = progress[day.dayNumber]?.completed || false;
-        const isPast = day.date < today;
-        const isFuture = day.date > today;
-        const isBeforeStart = weekNumber === 1 && goalStartDate && day.date < goalStartDate;
+        const dayProgress = progress[day.dayNumber];
+        const completed = isDayCompleted(dayProgress);
+        const current = !completed && day.dayNumber === nextAvailable;
+        const locked = day.dayNumber > nextAvailable;
+        const dayData = planData?.days?.[day.dayNumber];
 
-        if (isBeforeStart) return null;
-
-        const activityCount = (dayData.activities || []).length;
-        const title = dayData.title || `Day ${day.dayNumber}`;
-
-        const borderColor = isCompleted
-          ? "border-l-lime-500"
-          : day.isToday
-            ? "border-l-white/50"
-            : isPast && !isCompleted
-              ? "border-l-coral-400"
-              : "border-l-white/10";
-
-        const badgeBg = isCompleted
-          ? "bg-[#FFE633] text-[#000000]"
-          : day.isToday
-            ? "bg-white/20 text-white font-bold"
-            : isPast && !isCompleted
-              ? "bg-coral-400 text-white"
-              : "bg-black text-white/80";
-
-        const shardColor = monotone ? "#333333" : DAY_COLORS[(day.dayNumber - 1) % DAY_COLORS.length];
         const shardClip = SHARD_CLIPS[(day.dayNumber - 1) % SHARD_CLIPS.length];
+
+        if (locked) {
+          return (
+            <div
+              key={day.dayNumber}
+              role="button"
+              aria-disabled="true"
+              aria-label={`Lesson ${day.dayNumber} locked. Complete previous lessons to unlock.`}
+              tabIndex={-1}
+              className="w-full p-3 md:p-4 flex items-center gap-3 md:gap-4 cursor-not-allowed select-none"
+              style={{
+                backgroundColor: "rgba(20,20,20,0.85)",
+                clipPath: shardClip,
+                opacity: 0.45,
+              }}
+            >
+              <div className="w-9 h-9 md:w-10 md:h-10 clip-diamond flex items-center justify-center flex-shrink-0 text-sm md:text-base font-bold bg-black/60 text-white/40">
+                {day.dayNumber}
+              </div>
+              <div className="flex-1 text-left min-w-0">
+                <p className="text-sm md:text-base font-bold text-white/30">—</p>
+                <p className="text-xs md:text-sm text-white/30">Locked</p>
+              </div>
+              <div className="flex-shrink-0">
+                <Lock className="w-5 h-5 md:w-6 md:h-6 text-white/30" />
+              </div>
+            </div>
+          );
+        }
+
+        const title = dayData?.title || `Day ${day.dayNumber}`;
+        const activities = dayData?.activities || [];
+        const activityCount = activities.length;
+        const previewActivity = current && activities.length > 0 ? activityText(activities[0]) : null;
+
+        const shardColor = monotone
+          ? "#333333"
+          : completed
+            ? DAY_COLORS[(day.dayNumber - 1) % DAY_COLORS.length]
+            : DAY_COLORS[(day.dayNumber - 1) % DAY_COLORS.length];
+
+        const completedDate = completed && dayProgress?.completedAt ? formatCompletedDate(dayProgress.completedAt) : null;
+
+        const handleClick = () => {
+          if (!onDayClick) return;
+          const useDate = completed && dayProgress?.completedAt ? new Date(dayProgress.completedAt) : new Date();
+          onDayClick({
+            number: day.dayNumber,
+            date: useDate.toISOString(),
+            dateDisplay: useDate.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }),
+            isToday: current,
+            title,
+            activities,
+            tip: dayData?.tip,
+          });
+        };
 
         return (
           <button
             key={day.dayNumber}
-            onClick={() =>
-              onDayClick?.({
-                number: day.dayNumber,
-                date: day.date.toISOString(),
-                dateDisplay: day.date.toLocaleDateString("en-US", {
-                  weekday: "long",
-                  month: "long",
-                  day: "numeric",
-                }),
-                isToday: day.isToday,
-                ...dayData,
-              })
-            }
-            className={`w-full p-3 md:p-4 flex items-center gap-3 md:gap-4 transition-smooth hover:scale-[1.02] active:scale-[0.98] ${isCompleted ? 'ring-2 ring-white/30' : ''}`}
+            onClick={handleClick}
+            aria-label={current ? `Start lesson ${day.dayNumber}: ${title}` : `Review lesson ${day.dayNumber}: ${title}`}
+            className={`relative w-full p-3 md:p-4 flex items-center gap-3 md:gap-4 transition-smooth hover:scale-[1.02] active:scale-[0.98] ${
+              completed ? "ring-2 ring-white/30" : current ? "ring-2 ring-white" : ""
+            }`}
             style={{
               backgroundColor: shardColor,
               clipPath: shardClip,
@@ -83,36 +110,35 @@ export function WeekCalendar({ weekNumber, days, progress = {}, onDayClick, plan
           >
             <div
               className={`w-9 h-9 md:w-10 md:h-10 clip-diamond flex items-center justify-center flex-shrink-0 text-sm md:text-base font-bold ${
-                isCompleted ? "bg-black text-white" : "bg-black/20 text-black"
+                completed ? "bg-black text-white" : "bg-black/20 text-black"
               }`}
             >
               {day.dayNumber}
             </div>
 
             <div className="flex-1 text-left min-w-0">
-              <p className="text-sm md:text-base font-bold text-black truncate">{title}</p>
-              <p className="text-xs md:text-sm text-black/60">
-                {day.date.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}
-                {" · "}
-                {activityCount} {activityCount === 1 ? "activity" : "activities"}
+              <div className="flex items-center gap-2">
+                <p className="text-sm md:text-base font-bold text-black truncate">{title}</p>
+                {current && (
+                  <span className="bg-black text-white px-2 py-0.5 text-[10px] md:text-xs font-black uppercase tracking-widest flex-shrink-0">START</span>
+                )}
+              </div>
+              <p className="text-xs md:text-sm text-black/60 truncate">
+                {completed && completedDate
+                  ? `Completed ${completedDate}`
+                  : previewActivity
+                    ? previewActivity
+                    : `${activityCount} ${activityCount === 1 ? "activity" : "activities"}`}
               </p>
             </div>
 
             <div className="flex-shrink-0">
-              {isCompleted ? (
+              {completed ? (
                 <CheckCircle2 className="w-5 h-5 md:w-6 md:h-6 text-black" />
               ) : (
-                <Circle
-                  className={`w-5 h-5 md:w-6 md:h-6 ${
-                    day.isToday ? "text-black" : isPast ? "text-black/40" : "text-black/20"
-                  }`}
-                />
+                <Play className="w-5 h-5 md:w-6 md:h-6 text-black fill-black" />
               )}
             </div>
-
-            {day.isToday && (
-              <div className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-black/40 clip-diamond animate-pulse" />
-            )}
           </button>
         );
       })}

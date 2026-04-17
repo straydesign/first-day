@@ -15,6 +15,7 @@ import { useMonotone } from "./MonotoneContext";
 import { ShardRewardGrid } from "./ShardRewardGrid";
 import { DEMO_GOALS_LIST, DEMO_GOAL_DETAILS } from "@/lib/demo-data";
 import { staggerContainer, tileEnter, contentReveal } from "@/lib/animations";
+import { getCompletedDayCount } from "@/lib/engagement";
 import type { EngagementState, ProgressMap } from "@/types";
 
 interface Goal {
@@ -39,7 +40,6 @@ interface GoalsManagementProps {
 
 export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onViewTodayActivities, onLogout, engagement, demoMode = false }: GoalsManagementProps) {
   const [goals, setGoals] = useState<Goal[]>([]);
-  const [goalCurrentDays, setGoalCurrentDays] = useState<Record<string, number>>({});
   const [goalProgress, setGoalProgress] = useState<Record<string, ProgressMap>>({});
   const [loading, setLoading] = useState(true);
   const { monotone } = useMonotone();
@@ -48,19 +48,6 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
 
   useEffect(() => {
     if (goals.length > 0) {
-      goals.forEach(goal => {
-        // Parse date as local (not UTC) to avoid timezone shift
-        const parts = goal.startDate.split('-').map(Number);
-        const startDate = new Date(parts[0], parts[1] - 1, parts[2]);
-        startDate.setHours(0, 0, 0, 0);
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const diffTime = today.getTime() - startDate.getTime();
-        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-        const dayNumber = Math.max(1, Math.min(diffDays + 1, 30));
-        setGoalCurrentDays(prev => ({ ...prev, [goal.id]: dayNumber }));
-      });
-
       if (demoMode) {
         // Use demo progress directly
         const progressMap: Record<string, ProgressMap> = {};
@@ -189,7 +176,7 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
                     className="inline-block bg-black px-5 py-2 ml-2 mb-0 relative z-10"
                     style={{ clipPath: getClip(LABEL_CLIPS, goalIndex) }}
                   >
-                    <CardDescription className="text-white font-black text-xl md:text-2xl uppercase tracking-wide" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>Day {goalCurrentDays[goal.id] || 0} of 30</CardDescription>
+                    <CardDescription className="text-white font-black text-xl md:text-2xl uppercase tracking-wide" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>Lesson {getCompletedDayCount(goalProgress[goal.id] ?? {})} of 30</CardDescription>
                   </div>
                   <button
                     onClick={() => onSelectGoal(goal.id)}

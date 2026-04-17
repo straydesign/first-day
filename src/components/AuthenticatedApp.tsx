@@ -156,7 +156,7 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
     setLatestDayXP(xp);
     setShowXPAnimation(true);
 
-    const streaks = calculateStreaks(updatedProgress, planData.startDate);
+    const streaks = calculateStreaks(updatedProgress);
     const milestone = getMilestone(dayKey, streaks.current);
     setLatestMilestone(milestone);
 

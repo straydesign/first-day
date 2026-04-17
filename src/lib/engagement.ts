@@ -41,41 +41,89 @@ export function getTodayDayNumber(planStartDate: string): number {
   return Math.max(1, Math.min(diff + 1, 30));
 }
 
-// --- Streaks ---
+// --- Progression ---
+
+/** First day number (1–30) that is not completed. Returns 31 if all done. */
+export function getNextAvailableDay(progress: ProgressMap): number {
+  for (let d = 1; d <= 30; d++) {
+    if (!isDayCompleted(progress[d])) return d;
+  }
+  return 31;
+}
+
+/** Total count of completed days. */
+export function getCompletedDayCount(progress: ProgressMap): number {
+  let count = 0;
+  for (let d = 1; d <= 30; d++) if (isDayCompleted(progress[d])) count++;
+  return count;
+}
+
+/** Is a given day unlocked (completed already, or the next available one)? */
+export function isDayUnlocked(progress: ProgressMap, dayNumber: number): boolean {
+  return dayNumber <= getNextAvailableDay(progress);
+}
+
+// --- Streaks (calendar-based on completedAt timestamps) ---
+
+function toDateKey(d: Date): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+function completedAtToLocalKey(iso: string): string {
+  const d = new Date(iso);
+  return toDateKey(d);
+}
 
 export function calculateStreaks(
-  progress: ProgressMap,
-  planStartDate: string
+  progress: ProgressMap
 ): { current: number; longest: number; isAtRisk: boolean } {
-  const todayDay = getTodayDayNumber(planStartDate);
+  const activeDates = new Set<string>();
+  for (const dp of Object.values(progress)) {
+    if (dp?.completedAt) activeDates.add(completedAtToLocalKey(dp.completedAt));
+  }
 
-  // Current streak: count backwards from today (or yesterday if today not done)
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const todayKey = toDateKey(today);
+  const todayDone = activeDates.has(todayKey);
+
   let current = 0;
-  let startFrom = todayDay;
-  const todayDone = isDayCompleted(progress[todayDay]);
-
-  if (!todayDone) {
-    startFrom = todayDay - 1;
+  const cursor = new Date(today);
+  if (todayDone) {
+    current = 1;
+    cursor.setDate(cursor.getDate() - 1);
+    while (activeDates.has(toDateKey(cursor))) {
+      current++;
+      cursor.setDate(cursor.getDate() - 1);
+    }
+  } else {
+    cursor.setDate(cursor.getDate() - 1);
+    while (activeDates.has(toDateKey(cursor))) {
+      current++;
+      cursor.setDate(cursor.getDate() - 1);
+    }
   }
 
-  for (let d = startFrom; d >= 1; d--) {
-    if (isDayCompleted(progress[d])) current++;
-    else break;
-  }
-
-  // isAtRisk: today not done AND there's a streak from yesterday
   const isAtRisk = !todayDone && current > 0;
 
-  // Longest streak: scan all days
+  // Longest consecutive run across all active dates
+  const sorted = [...activeDates].sort();
   let longest = 0;
   let run = 0;
-  for (let d = 1; d <= 30; d++) {
-    if (isDayCompleted(progress[d])) {
+  let prev: Date | null = null;
+  for (const k of sorted) {
+    const [y, m, d] = k.split("-").map(Number);
+    const dt = new Date(y, m - 1, d);
+    if (prev && dt.getTime() - prev.getTime() === 86400000) {
       run++;
-      if (run > longest) longest = run;
     } else {
-      run = 0;
+      run = 1;
     }
+    if (run > longest) longest = run;
+    prev = dt;
   }
 
   return { current, longest, isAtRisk };
@@ -418,25 +466,21 @@ export function isComeback(progress: ProgressMap, dayNumber: number): boolean {
 
 export function computeEngagementState(
   progress: ProgressMap,
-  planStartDate: string
+  _planStartDate: string
 ): EngagementState {
-  const streaks = calculateStreaks(progress, planStartDate);
-  const totalXP = calculateTotalXP(progress, planStartDate);
+  const streaks = calculateStreaks(progress);
+  const totalXP = calculateTotalXP(progress, _planStartDate);
   const level = getLevel(totalXP);
   const levelProgress = getLevelProgress(totalXP);
   const achievements = calculateAchievements(progress, streaks);
   const streakFreezes = calculateStreakFreezes(progress);
 
-  let totalDaysCompleted = 0;
-  for (let d = 1; d <= 30; d++) {
-    if (isDayCompleted(progress[d])) totalDaysCompleted++;
-  }
-
-  const todayDay = getTodayDayNumber(planStartDate);
-  const completionRate = todayDay > 0 ? Math.round((totalDaysCompleted / todayDay) * 100) : 0;
-  const dailyMultiplier = getDailyMultiplier(todayDay);
-  const dailyChallenge = getDailyChallenge(todayDay);
-  const comebackCheck = isComeback(progress, todayDay);
+  const totalDaysCompleted = getCompletedDayCount(progress);
+  const nextDay = getNextAvailableDay(progress);
+  const completionRate = Math.round((totalDaysCompleted / 30) * 100);
+  const dailyMultiplier = getDailyMultiplier(nextDay);
+  const dailyChallenge = getDailyChallenge(nextDay);
+  const comebackCheck = isComeback(progress, nextDay);
 
   return {
     currentStreak: streaks.current,

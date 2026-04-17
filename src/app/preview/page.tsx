@@ -102,15 +102,15 @@ const MOCK_ACHIEVEMENTS: Achievement[] = [
 ];
 
 const MOCK_ENGAGEMENT: EngagementState = {
-  currentStreak: 4,
-  longestStreak: 4,
+  currentStreak: 5,
+  longestStreak: 5,
   isAtRisk: false,
   totalXP: 560,
   level: { name: "Committed", threshold: 500, nextThreshold: 1200 },
   levelProgress: 0.086,
   achievements: MOCK_ACHIEVEMENTS,
-  completionRate: 0.13,
-  totalDaysCompleted: 4,
+  completionRate: 17,
+  totalDaysCompleted: 5,
   streakFreezes: 0,
   dailyMultiplier: 2.0,
   dailyChallenge: { id: "reflect_50", description: "Write a 50+ word reflection", bonusXP: 50, checkKey: "reflect_50" },

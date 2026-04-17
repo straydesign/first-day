@@ -373,7 +373,7 @@ export const DEMO_ENGAGEMENT: EngagementState = {
   level: { name: "Committed", threshold: 500, nextThreshold: 1200 },
   levelProgress: 0.086,
   achievements: DEMO_ACHIEVEMENTS,
-  completionRate: 0.17,
+  completionRate: 17,
   totalDaysCompleted: 5,
   streakFreezes: 0,
   dailyMultiplier: 1.5,
