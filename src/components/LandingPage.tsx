@@ -446,15 +446,51 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
 
               {/* CTA */}
               <div className="text-center mt-8 md:mt-12 lg:mt-16">
-                <button
+                <motion.button
                   onClick={onGetStarted}
-                  className="text-white font-black text-3xl md:text-5xl lg:text-7xl uppercase tracking-wide hover:opacity-70 transition-opacity btn-shake"
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="group relative inline-flex items-center gap-3 lg:gap-5 text-white font-black text-3xl md:text-5xl lg:text-7xl uppercase tracking-wide btn-shake"
                 >
-                  Create Your Plan
-                </button>
-                <p className="text-sm lg:text-base text-white/70 mt-3">
+                  {["Create", "Your", "Plan"].map((word, i) => (
+                    <motion.span
+                      key={word}
+                      initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
+                      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                      viewport={{ once: true, margin: "-40px" }}
+                      transition={{ ...SPRING.bouncy, delay: 0.15 + i * 0.1 }}
+                      className="inline-block"
+                    >
+                      {word}
+                    </motion.span>
+                  ))}
+                  <motion.span
+                    aria-hidden
+                    initial={{ opacity: 0, x: -16 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, margin: "-40px" }}
+                    transition={{ ...SPRING.bouncy, delay: 0.55 }}
+                    className="inline-flex"
+                  >
+                    <motion.span
+                      animate={{ x: [0, 8, 0] }}
+                      transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
+                      className="inline-block transition-colors"
+                      style={{ color: "#FFE633" }}
+                    >
+                      →
+                    </motion.span>
+                  </motion.span>
+                </motion.button>
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{ delay: 0.7, duration: 0.6 }}
+                  className="text-sm lg:text-base text-white/70 mt-3"
+                >
                   Every plan is unique — personalized to your goal and experience
-                </p>
+                </motion.p>
               </div>
               </div>
           </section>
