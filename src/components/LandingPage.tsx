@@ -20,6 +20,32 @@ interface LandingPageProps {
   onTermsOfService: () => void;
 }
 
+function SectionKicker({ num, label, color }: { num: string; label: string; color: string }) {
+  const { monotone } = useMonotone();
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ ...SPRING.gentle }}
+      className="inline-flex items-center gap-2 mb-3"
+    >
+      <span
+        className="inline-flex items-center justify-center w-8 h-8 lg:w-10 lg:h-10 text-xs lg:text-sm font-black text-black"
+        style={{
+          backgroundColor: monotone ? "#888" : color,
+          clipPath: "polygon(4% 8%, 95% 0%, 100% 85%, 8% 100%)",
+        }}
+      >
+        {num}
+      </span>
+      <span className="text-xs lg:text-sm uppercase tracking-[0.2em] text-white/60 font-bold">
+        {label}
+      </span>
+    </motion.div>
+  );
+}
+
 function AnimatedSection({ children, className, delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-60px" });
@@ -194,7 +220,13 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
             className="overflow-hidden w-full"
           >
             <div className="py-4 overflow-hidden space-y-1.5">
-              <p className="text-white text-sm font-medium mb-3 text-center px-4">Goals you can start this week:</p>
+              <div className="flex items-center justify-center gap-2 mb-4 px-4">
+                <span className="h-px w-8 bg-white/30" aria-hidden />
+                <span className="text-xs lg:text-sm uppercase tracking-[0.25em] text-white/70 font-bold">
+                  Start this week
+                </span>
+                <span className="h-px w-8 bg-white/30" aria-hidden />
+              </div>
               {renderScrollRow(GOAL_SUGGESTIONS_ROW_1, "left", 0)}
               {renderScrollRow(GOAL_SUGGESTIONS_ROW_2, "right", 1)}
               {renderScrollRow(GOAL_SUGGESTIONS_ROW_3, "left", 2)}
@@ -228,6 +260,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
           <section id="how-it-works" className="w-full py-8 md:py-16 lg:py-24 px-4 md:px-10">
             <div className="max-w-5xl lg:max-w-7xl mx-auto">
               <div className="text-center mb-6 lg:mb-10">
+                <SectionKicker num="01" label="The System" color="#FFE633" />
                 <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-2">How It Works</h2>
                 <p className="text-white/80 md:text-lg lg:text-xl">No vague vision boards. A real 7-day battle plan.</p>
               </div>
@@ -271,6 +304,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
           <section className="w-full py-8 md:py-16 lg:py-24 px-4 md:px-10">
             <div className="max-w-5xl lg:max-w-7xl mx-auto">
               <div className="text-center mb-6 lg:mb-10">
+                <SectionKicker num="02" label="The Loop" color="#FF6B2B" />
                 <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-2">Stay Motivated</h2>
                 <p className="text-white/80 md:text-lg lg:text-xl">Built-in streaks, XP, and achievements keep you coming back</p>
               </div>
@@ -414,6 +448,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
           <section className="w-full py-8 md:py-16 lg:py-24 px-4 md:px-10">
               <div className="max-w-5xl lg:max-w-7xl mx-auto">
               <div className="text-center mb-6 lg:mb-10">
+                <SectionKicker num="03" label="The Sprint" color="#FF2D55" />
                 <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-2">What Your Plan Looks Like</h2>
                 <p className="text-white/80 md:text-lg lg:text-xl">Your personalized weekly sprint</p>
               </div>
