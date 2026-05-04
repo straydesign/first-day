@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
-import { Flame, Zap, Trophy, Target, Sparkles } from "lucide-react";
+import { Flame, Zap, Trophy, Target, Sparkles, Calendar, ListChecks, NotebookPen } from "lucide-react";
 import { FirstDayLogo } from "./FirstDayLogo";
 import { HeroMosaic } from "./HeroMosaic";
 import { LivePlanDemo } from "./LivePlanDemo";
@@ -420,20 +420,27 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5 lg:gap-8">
                 {[
-                  { icon: "📅", label: "Your Weekly Sprint", desc: "A personalized plan broken into 7-day sprints", color: "#FFE633", clip: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" },
-                  { icon: "✅", label: "Daily Activities", desc: "Curated tasks, videos, and resources for each day", color: "#FF6B2B", clip: "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)" },
-                  { icon: "⚡", label: "Earn XP & Level Up", desc: "Points for every activity, reflection, and streak day", color: "#FF2D55", clip: "polygon(1% 0%, 100% 2%, 99% 100%, 0% 98%)" },
-                  { icon: "🏆", label: "Complete Your Goal", desc: "You did it. Badges, trophies, and proof", color: "#00EAFF", clip: "polygon(3% 2%, 100% 0%, 97% 98%, 0% 100%)" },
-                ].map((card) => (
-                  <div
+                  { Icon: Calendar, label: "Weekly Sprint", desc: "Seven days. Beginning to finish line.", color: "#FFE633", clip: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" },
+                  { Icon: ListChecks, label: "Daily Activities", desc: "Curated tasks, videos, and resources.", color: "#FF6B2B", clip: "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)" },
+                  { Icon: NotebookPen, label: "Daily Reflection", desc: "Lock in what you learned in 30 seconds.", color: "#FF2D55", clip: "polygon(1% 0%, 100% 2%, 99% 100%, 0% 98%)" },
+                  { Icon: Trophy, label: "Finish Strong", desc: "Badges, trophies, and the proof you did it.", color: "#00EAFF", clip: "polygon(3% 2%, 100% 0%, 97% 98%, 0% 100%)" },
+                ].map((card, i) => (
+                  <motion.div
                     key={card.label}
-                    className="p-5 md:p-6 lg:p-8 text-center"
+                    initial={{ opacity: 0, y: 24, scale: 0.96 }}
+                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    viewport={{ once: true, margin: "-40px" }}
+                    transition={{ ...SPRING.gentle, delay: i * 0.08 }}
+                    whileHover={{ scale: 1.04 }}
+                    className="p-5 md:p-6 lg:p-8 text-center cursor-default"
                     style={{ backgroundColor: monotone ? "#222" : card.color, clipPath: card.clip }}
                   >
-                    <span className="text-3xl md:text-4xl lg:text-5xl block mb-2">{card.icon}</span>
+                    <div className="clip-diamond inline-flex items-center justify-center w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-black/20 mb-3">
+                      <card.Icon className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 text-black" strokeWidth={2.5} />
+                    </div>
                     <h3 className="text-base md:text-lg lg:text-xl font-bold text-black mb-1">{card.label}</h3>
                     <p className="text-xs md:text-sm lg:text-base text-black/70">{card.desc}</p>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
 
