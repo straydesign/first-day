@@ -7,6 +7,7 @@ import { FirstDayLogo } from "./FirstDayLogo";
 import { HeroMosaic } from "./HeroMosaic";
 import { LivePlanDemo } from "./LivePlanDemo";
 import { DayCompleteDemo } from "./DayCompleteDemo";
+import { CountUp } from "./CountUp";
 import { Footer } from "./Footer";
 import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, BRIGHT_COLORS, SCROLL_SPEEDS } from "@/constants";
 import { useMonotone } from "./MonotoneContext";
@@ -260,7 +261,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                     <p className="text-black/80 text-sm lg:text-base mb-4">Keep your streak alive by showing up every day. The longer you go, the more bonus XP you earn.</p>
                     <div className="clip-badge-a inline-flex items-center gap-1.5 bg-black/20 text-black px-5 py-1.5 font-bold text-lg">
                       <Flame className="w-5 h-5" />
-                      <span>12</span>
+                      <CountUp target={12} />
                     </div>
                     <p className="text-xs text-black/70 mt-1 font-medium">12-day streak</p>
                   </div>
@@ -281,10 +282,18 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                     <div className="space-y-2 max-w-[180px] mx-auto">
                       <div className="flex justify-between text-sm">
                         <span className="font-semibold text-black">Dedicated</span>
-                        <span className="text-black font-bold">1,450 XP</span>
+                        <span className="text-black font-bold">
+                          <CountUp target={1450} suffix=" XP" />
+                        </span>
                       </div>
                       <div className="clip-progress w-full h-2.5 bg-black/20 overflow-hidden">
-                        <div className="h-full bg-black/40" style={{ width: "62%" }} />
+                        <motion.div
+                          className="h-full bg-black/40"
+                          initial={{ width: "0%" }}
+                          whileInView={{ width: "62%" }}
+                          viewport={{ once: true, margin: "-40px" }}
+                          transition={{ duration: 1.4, ease: [0.22, 0.8, 0.3, 1], delay: 0.2 }}
+                        />
                       </div>
                       <p className="text-xs text-black/60">750 XP to Unstoppable</p>
                     </div>
@@ -305,8 +314,12 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                     <p className="text-black/80 text-sm lg:text-base mb-4">Hit milestones and earn achievements. Can you collect them all?</p>
                     <div className="flex justify-center gap-2">
                       {["First Step", "On Fire", "Perfect Week", "???"].map((label, i) => (
-                        <div
+                        <motion.div
                           key={label}
+                          initial={{ opacity: 0, scale: 0 }}
+                          whileInView={{ opacity: 1, scale: 1 }}
+                          viewport={{ once: true, margin: "-40px" }}
+                          transition={{ ...SPRING.bouncy, delay: 0.15 + i * 0.12 }}
                           className={`clip-diamond w-10 h-10 flex items-center justify-center text-xs font-bold ${
                             i === 3
                               ? "bg-black/10 text-black/30"
@@ -315,7 +328,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                           title={label}
                         >
                           {i === 3 ? "?" : (i + 1)}
-                        </div>
+                        </motion.div>
                       ))}
                     </div>
                   </div>
@@ -331,7 +344,9 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                       <Target className="w-3.5 h-3.5 lg:w-5 lg:h-5 text-black" />
                       <span className="text-xs lg:text-sm text-black/70 font-medium">Rate</span>
                     </div>
-                    <p className="text-3xl md:text-5xl lg:text-6xl font-bold text-black">87%</p>
+                    <p className="text-3xl md:text-5xl lg:text-6xl font-bold text-black">
+                      <CountUp target={87} suffix="%" />
+                    </p>
                   </div>
                   <div
                     className="text-center py-4 lg:py-6 px-2 lg:px-4"
@@ -341,7 +356,9 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                       <Flame className="w-3.5 h-3.5 lg:w-5 lg:h-5 text-black" />
                       <span className="text-xs lg:text-sm text-black/70 font-medium">Streak</span>
                     </div>
-                    <p className="text-3xl md:text-5xl lg:text-6xl font-bold text-black">12</p>
+                    <p className="text-3xl md:text-5xl lg:text-6xl font-bold text-black">
+                      <CountUp target={12} delay={0.1} />
+                    </p>
                   </div>
                   <div
                     className="text-center py-4 lg:py-6 px-2 lg:px-4"
@@ -351,7 +368,9 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                       <Trophy className="w-3.5 h-3.5 lg:w-5 lg:h-5 text-black" />
                       <span className="text-xs lg:text-sm text-black/70 font-medium">Badges</span>
                     </div>
-                    <p className="text-3xl md:text-5xl lg:text-6xl font-bold text-black">5/8</p>
+                    <p className="text-3xl md:text-5xl lg:text-6xl font-bold text-black">
+                      <CountUp target={5} delay={0.2} />/8
+                    </p>
                   </div>
                 </div>
               </div>
