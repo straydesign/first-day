@@ -5,6 +5,7 @@ import { motion, useInView } from "framer-motion";
 import { Flame, Zap, Trophy, Target } from "lucide-react";
 import { FirstDayLogo } from "./FirstDayLogo";
 import { HeroMosaic } from "./HeroMosaic";
+import { LivePlanDemo } from "./LivePlanDemo";
 import { Footer } from "./Footer";
 import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, BRIGHT_COLORS, SCROLL_SPEEDS } from "@/constants";
 import { useMonotone } from "./MonotoneContext";
@@ -196,6 +197,11 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
             </div>
           </motion.div>
         </section>
+
+        {/* Live magic-moment demo — try a goal, watch a plan assemble */}
+        <AnimatedSection>
+          <LivePlanDemo onGetStarted={onGetStarted} />
+        </AnimatedSection>
 
         {/* How It Works */}
         <AnimatedSection>

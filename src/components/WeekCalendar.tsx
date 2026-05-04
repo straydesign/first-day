@@ -1,11 +1,9 @@
 "use client";
 import { CheckCircle2, Lock, Play } from "lucide-react";
 import { useMonotone } from "./MonotoneContext";
-import { SHARD_CLIPS } from "@/constants";
+import { SHARD_CLIPS, DAY_COLORS } from "@/tokens";
 import { getNextAvailableDay, isDayCompleted } from "@/lib/engagement";
 import type { Plan, ProgressMap, SelectedDay, Activity } from "@/types";
-
-const DAY_COLORS = ["#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF", "#FF10F0", "#4FC3F7", "#FF4500", "#2979FF"];
 
 interface WeekCalendarProps {
   weekNumber: number;

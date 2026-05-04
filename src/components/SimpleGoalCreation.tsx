@@ -4,14 +4,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { ArrowRight, Loader2, AlertCircle, ChevronDown, ChevronUp, Check } from 'lucide-react';
 import { BackButton } from '@/components/ui/back-button';
-import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, BRIGHT_COLORS, SHARD_CLIPS, SCROLL_SPEEDS } from '@/constants';
+import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3 } from '@/constants';
+import { BRIGHT_COLORS, SHARD_CLIPS, SCROLL_SPEEDS, FIELD_COLORS, EXP_COLORS } from '@/tokens';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMonotone } from './MonotoneContext';
 import type { GoalFormData } from '@/types';
-
-
-const FIELD_COLORS = ["#FFE633", "#FF6B2B", "#2979FF", "#FF10F0"];
-const EXP_COLORS = ["#FFE633", "#FF2D55", "#00EAFF"]; // beginner, intermediate, advanced
 
 interface SimpleGoalCreationProps {
   onComplete: (goalData: GoalFormData) => void;
