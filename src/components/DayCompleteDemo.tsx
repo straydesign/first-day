@@ -15,7 +15,7 @@
  *   - fire pulse → SF Symbol + .symbolEffect(.bounce)
  */
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, Flame, Zap } from "lucide-react";
 import { ShardEngine } from "./lab/ShardEngine";
@@ -24,15 +24,64 @@ import { TOKENS } from "@/tokens";
 const XP_PER_DAY = 50;
 const STREAK_MAX = 7;
 
+// Sample 7-day plan that visitors tap through. Mirrors LivePlanDemo's
+// "Learn guitar" canned plan so the dopamine loop demos the actual product.
+const SAMPLE_PLAN = [
+  "Tune up + fret hand basics",
+  "Three open chords: G, C, D",
+  "Strumming patterns 4/4",
+  "Switch chords cleanly",
+  "Play your first song",
+  "Add minor chords (Am, Em)",
+  "Record yourself, review",
+] as const;
+
+// iOS-portable audio: maps to AVAudioEngine on iOS (or AudioServicesPlaySystemSound
+// for system-default). Web Audio is suspended until user gesture, so the
+// AudioContext is lazy-instantiated inside the tap handler.
+type WindowWithWebkitAudio = Window & {
+  webkitAudioContext?: typeof AudioContext;
+};
+
+function playBlip(ctx: AudioContext, completed: number) {
+  // Frequency rises slightly with each day for an ascending feel.
+  const baseFreq = 380 + completed * 28;
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = "triangle";
+  osc.frequency.setValueAtTime(baseFreq, now);
+  osc.frequency.exponentialRampToValueAtTime(baseFreq * 1.6, now + 0.06);
+  gain.gain.setValueAtTime(0.0001, now);
+  gain.gain.exponentialRampToValueAtTime(0.18, now + 0.01);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.2);
+}
+
 export function DayCompleteDemo() {
   const [completed, setCompleted] = useState(0);
   const [pulseKey, setPulseKey] = useState(0);
   const [showXpToast, setShowXpToast] = useState(false);
+  const audioCtxRef = useRef<AudioContext | null>(null);
 
   const isMaxed = completed >= STREAK_MAX;
 
   const handleTap = () => {
     if (isMaxed) return;
+    if (!audioCtxRef.current && typeof window !== "undefined") {
+      const Ctx =
+        window.AudioContext ??
+        (window as WindowWithWebkitAudio).webkitAudioContext;
+      if (Ctx) audioCtxRef.current = new Ctx();
+    }
+    if (audioCtxRef.current) {
+      if (audioCtxRef.current.state === "suspended") {
+        void audioCtxRef.current.resume();
+      }
+      playBlip(audioCtxRef.current, completed);
+    }
     setCompleted((c) => c + 1);
     setPulseKey((k) => k + 1);
     setShowXpToast(true);
@@ -48,6 +97,8 @@ export function DayCompleteDemo() {
   const xp = completed * XP_PER_DAY;
   const streak = completed;
   const dayLabel = Math.min(completed + 1, STREAK_MAX);
+  const upcomingActivity = SAMPLE_PLAN[Math.min(completed, STREAK_MAX - 1)];
+  const justCompletedActivity = completed > 0 ? SAMPLE_PLAN[completed - 1] : "";
 
   return (
     <section className="relative w-full py-12 md:py-20 px-4 md:px-10 overflow-hidden">
@@ -72,7 +123,7 @@ export function DayCompleteDemo() {
             Every day you show up feels like this
           </h2>
           <p className="text-white/70 md:text-lg">
-            Tap the card. Then tap it again. {STREAK_MAX} days = full streak.
+            Sample plan: <span className="text-white font-bold">Learn guitar</span>. Tap each day. {STREAK_MAX} days = full streak.
           </p>
         </div>
 
@@ -141,7 +192,7 @@ export function DayCompleteDemo() {
         </div>
 
         {/* Tap stage */}
-        <div className="relative max-w-md mx-auto h-[280px] md:h-[320px]">
+        <div className="relative max-w-md mx-auto h-[320px] md:h-[360px]">
           {/* Confetti burst — re-mounts on each tap via key */}
           {pulseKey > 0 && (
             <div key={`burst-${pulseKey}`} className="absolute inset-0 pointer-events-none">
@@ -174,7 +225,7 @@ export function DayCompleteDemo() {
                 : TOKENS.motion.spring.snappy
             }
             key={`card-${pulseKey}`}
-            className="absolute inset-0 m-auto w-[240px] h-[240px] md:w-[280px] md:h-[280px] flex flex-col items-center justify-center p-6 disabled:cursor-default"
+            className="absolute inset-0 m-auto w-[280px] h-[280px] md:w-[320px] md:h-[320px] flex flex-col items-center justify-center p-5 disabled:cursor-default"
             style={{
               backgroundColor: isMaxed ? "#FFE633" : "#FF2D55",
               clipPath: TOKENS.clipPaths.shard[1],
@@ -200,46 +251,35 @@ export function DayCompleteDemo() {
                     Week<br />Complete
                   </div>
                 </motion.div>
-              ) : completed > 0 ? (
-                <motion.div
-                  key={`check-${completed}`}
-                  initial={{ opacity: 0, scale: 0, rotate: -45 }}
-                  animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                  transition={TOKENS.motion.spring.bouncy}
-                  className="flex flex-col items-center gap-2"
-                >
-                  <div
-                    className="w-20 h-20 md:w-24 md:h-24 bg-black flex items-center justify-center"
-                    style={{ clipPath: TOKENS.clipPaths.shard[3] }}
-                  >
-                    <Check className="w-12 h-12 md:w-14 md:h-14 text-[#FFE633]" strokeWidth={4} />
-                  </div>
-                  <div className="text-xs uppercase tracking-widest text-black/70 font-bold">
-                    Day {completed} Done
-                  </div>
-                  <div className="text-sm font-bold text-black">
-                    Tap for Day {dayLabel}
-                  </div>
-                </motion.div>
               ) : (
                 <motion.div
-                  key="empty"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="flex flex-col items-center gap-2"
+                  key={`day-${completed}`}
+                  initial={{ opacity: 0, scale: 0.85 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={TOKENS.motion.spring.bouncy}
+                  className="flex flex-col items-center gap-2 w-full"
                 >
+                  {completed > 0 && (
+                    <div
+                      className="w-12 h-12 md:w-14 md:h-14 bg-black flex items-center justify-center mb-1"
+                      style={{ clipPath: TOKENS.clipPaths.shard[3] }}
+                    >
+                      <Check className="w-7 h-7 md:w-8 md:h-8 text-[#FFE633]" strokeWidth={4} />
+                    </div>
+                  )}
                   <div className="text-[10px] uppercase tracking-widest text-black/70 font-bold">
-                    Day 1
+                    {completed > 0
+                      ? `Day ${completed} Done`
+                      : `Day ${dayLabel} · Tap to complete`}
                   </div>
-                  <div
-                    className="text-2xl md:text-3xl font-black text-black uppercase tracking-wider text-center leading-tight"
-                    style={{
-                      fontFamily: TOKENS.typography.fontFamily.display,
-                      letterSpacing: TOKENS.typography.letterSpacing.display,
-                    }}
-                  >
-                    Tap to<br />Complete
+                  <div className="text-base md:text-lg font-black text-black text-center leading-tight px-2">
+                    {completed > 0 ? justCompletedActivity : upcomingActivity}
                   </div>
+                  {completed > 0 && completed < STREAK_MAX && (
+                    <div className="text-[10px] uppercase tracking-widest text-black/60 font-bold mt-1">
+                      Next: Day {dayLabel}
+                    </div>
+                  )}
                 </motion.div>
               )}
             </AnimatePresence>
