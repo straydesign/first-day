@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
-import { Flame, Zap, Trophy, Target } from "lucide-react";
+import { Flame, Zap, Trophy, Target, Sparkles } from "lucide-react";
 import { FirstDayLogo } from "./FirstDayLogo";
 import { HeroMosaic } from "./HeroMosaic";
 import { LivePlanDemo } from "./LivePlanDemo";
@@ -225,13 +225,44 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
 
         {/* How It Works */}
         <AnimatedSection>
-          <section id="how-it-works" className="w-full py-8 md:py-16 lg:py-24 px-4 md:px-10 text-center">
-              <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4 lg:mb-8">How It Works</h2>
-              <div className="space-y-2 lg:space-y-4 text-lg md:text-2xl lg:text-3xl font-bold text-white/90">
-                <p><span className="text-[#FFE633]">1.</span> Set Your Goal</p>
-                <p><span className="text-[#FF6B2B]">2.</span> Get Your Plan</p>
-                <p><span className="text-[#FF2D55]">3.</span> Show Up Daily</p>
+          <section id="how-it-works" className="w-full py-8 md:py-16 lg:py-24 px-4 md:px-10">
+            <div className="max-w-5xl lg:max-w-7xl mx-auto">
+              <div className="text-center mb-6 lg:mb-10">
+                <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-2">How It Works</h2>
+                <p className="text-white/80 md:text-lg lg:text-xl">No vague vision boards. A real 7-day battle plan.</p>
               </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 lg:gap-10">
+                {[
+                  { n: 1, title: "Set Your Goal", line: "Pick what's been nagging you. One sentence.", color: "#FFE633", clip: "polygon(4% 8%, 95% 0%, 100% 85%, 8% 100%)", Icon: Target },
+                  { n: 2, title: "Get Your Plan", line: "AI builds your 7-day sprint. Specific. Actionable.", color: "#FF6B2B", clip: "polygon(0% 5%, 92% 0%, 98% 92%, 3% 95%)", Icon: Sparkles },
+                  { n: 3, title: "Show Up Daily", line: "Earn XP, build streaks, finish what you started.", color: "#FF2D55", clip: "polygon(6% 0%, 100% 10%, 94% 100%, 0% 88%)", Icon: Flame },
+                ].map((s, i) => (
+                  <motion.div
+                    key={s.n}
+                    initial={{ opacity: 0, y: 24 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-40px" }}
+                    transition={{ ...SPRING.gentle, delay: i * 0.12 }}
+                    className="relative p-5 lg:p-8 text-center overflow-hidden"
+                    style={{
+                      backgroundColor: monotone ? "#444" : s.color,
+                      clipPath: s.clip,
+                    }}
+                  >
+                    <div className="absolute top-1 right-3 text-7xl md:text-8xl lg:text-[9rem] font-black text-black/10 leading-none pointer-events-none select-none">
+                      {s.n}
+                    </div>
+                    <div className="relative">
+                      <div className="clip-diamond inline-flex items-center justify-center w-14 h-14 lg:w-18 lg:h-18 bg-black/20 mb-3">
+                        <s.Icon className="w-7 h-7 lg:w-9 lg:h-9 text-black" />
+                      </div>
+                      <h3 className="text-xl md:text-3xl lg:text-4xl font-bold text-black mb-2">{s.title}</h3>
+                      <p className="text-black/80 text-sm lg:text-base">{s.line}</p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
           </section>
         </AnimatedSection>
 
