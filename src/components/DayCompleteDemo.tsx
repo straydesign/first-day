@@ -15,26 +15,24 @@
  *   - fire pulse → SF Symbol + .symbolEffect(.bounce)
  */
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, Flame, Zap } from "lucide-react";
 import { ShardEngine } from "./lab/ShardEngine";
 import { TOKENS } from "@/tokens";
+import { DEFAULT_DEMO_GOAL, planFor } from "@/data/sample-plans";
 
 const XP_PER_DAY = 50;
 const STREAK_MAX = 7;
 
-// Sample 7-day plan that visitors tap through. Mirrors LivePlanDemo's
-// "Learn guitar" canned plan so the dopamine loop demos the actual product.
-const SAMPLE_PLAN = [
-  "Tune up + fret hand basics",
-  "Three open chords: G, C, D",
-  "Strumming patterns 4/4",
-  "Switch chords cleanly",
-  "Play your first song",
-  "Add minor chords (Am, Em)",
-  "Record yourself, review",
-] as const;
+interface DayCompleteDemoProps {
+  /** Goal title shown in the header. Defaults to the sample goal. */
+  goal?: string;
+  /** 7-item activity list. Defaults to the sample plan for the default goal. */
+  plan?: string[];
+  /** Whether the goal/plan came from visitor input (vs. the built-in sample). */
+  isUserChosen?: boolean;
+}
 
 // iOS-portable audio: maps to AVAudioEngine on iOS (or AudioServicesPlaySystemSound
 // for system-default). Web Audio is suspended until user gesture, so the
@@ -60,11 +58,25 @@ function playBlip(ctx: AudioContext, completed: number) {
   osc.stop(now + 0.2);
 }
 
-export function DayCompleteDemo() {
+export function DayCompleteDemo({
+  goal,
+  plan,
+  isUserChosen = false,
+}: DayCompleteDemoProps = {}) {
+  const effectiveGoal = goal ?? DEFAULT_DEMO_GOAL;
+  const effectivePlan = plan ?? planFor(DEFAULT_DEMO_GOAL);
+
   const [completed, setCompleted] = useState(0);
   const [pulseKey, setPulseKey] = useState(0);
   const [showXpToast, setShowXpToast] = useState(false);
   const audioCtxRef = useRef<AudioContext | null>(null);
+
+  // Reset progress when the visitor picks a fresh goal upstream.
+  useEffect(() => {
+    setCompleted(0);
+    setPulseKey(0);
+    setShowXpToast(false);
+  }, [effectiveGoal]);
 
   const isMaxed = completed >= STREAK_MAX;
 
@@ -97,8 +109,9 @@ export function DayCompleteDemo() {
   const xp = completed * XP_PER_DAY;
   const streak = completed;
   const dayLabel = Math.min(completed + 1, STREAK_MAX);
-  const upcomingActivity = SAMPLE_PLAN[Math.min(completed, STREAK_MAX - 1)];
-  const justCompletedActivity = completed > 0 ? SAMPLE_PLAN[completed - 1] : "";
+  const upcomingActivity = effectivePlan[Math.min(completed, STREAK_MAX - 1)] ?? "";
+  const justCompletedActivity =
+    completed > 0 ? (effectivePlan[completed - 1] ?? "") : "";
 
   return (
     <section className="relative w-full py-12 md:py-20 px-4 md:px-10 overflow-hidden">
@@ -123,7 +136,8 @@ export function DayCompleteDemo() {
             Every day you show up feels like this
           </h2>
           <p className="text-white/70 md:text-lg">
-            Sample plan: <span className="text-white font-bold">Learn guitar</span>. Tap each day. {STREAK_MAX} days = full streak.
+            {isUserChosen ? "Your plan: " : "Sample plan: "}
+            <span className="text-white font-bold">{effectiveGoal}</span>. Tap each day. {STREAK_MAX} days = full streak.
           </p>
         </div>
 

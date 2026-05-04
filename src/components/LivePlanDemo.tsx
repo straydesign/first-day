@@ -16,80 +16,16 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { ShardEngine } from "./lab/ShardEngine";
 import { TOKENS } from "@/tokens";
+import { QUICK_GOALS, planFor } from "@/data/sample-plans";
 
 interface LivePlanDemoProps {
   onGetStarted: () => void;
+  onPlanGenerated?: (goal: string, plan: string[]) => void;
 }
-
-const QUICK_GOALS = [
-  "Learn guitar",
-  "Run a 5K",
-  "Write a novel",
-  "Code daily",
-  "Meditate",
-] as const;
-
-const CANNED_PLANS: Record<string, string[]> = {
-  "Learn guitar": [
-    "Tune up + fret hand basics",
-    "Three open chords: G, C, D",
-    "Strumming patterns 4/4",
-    "Switch chords cleanly",
-    "Play your first song",
-    "Add minor chords (Am, Em)",
-    "Record yourself, review",
-  ],
-  "Run a 5K": [
-    "Walk-jog 20 min, easy pace",
-    "Form drills + 1mi run",
-    "Rest + stretch + foam roll",
-    "Intervals: 4×400m",
-    "Easy 1.5mi conversational",
-    "Long slow 2mi run",
-    "Time trial — full 5K",
-  ],
-  "Write a novel": [
-    "Premise: 1 sentence + 3 act spine",
-    "Cast: 4 characters, 1 wound each",
-    "Outline 12 scenes",
-    "Write opening 500 words",
-    "Daily 500w, no editing",
-    "Push to act-2 turn",
-    "Crash through to climax",
-  ],
-  "Code daily": [
-    "Set up environment + repo",
-    "Solve 1 LeetCode easy",
-    "Refactor an old script",
-    "Build a tiny CLI tool",
-    "Write tests for something",
-    "Read someone else's code",
-    "Ship something publicly",
-  ],
-  Meditate: [
-    "5 min breath, eyes closed",
-    "Body scan, 10 min",
-    "Noting practice — thoughts as 'thinking'",
-    "Loving-kindness, 10 min",
-    "Walking meditation, 15 min",
-    "Open awareness, 15 min",
-    "Silent sit, 20 min",
-  ],
-};
-
-const FALLBACK_PLAN = [
-  "Define what 'done' looks like",
-  "Block 30 min on the calendar",
-  "Take the smallest first step",
-  "Show up — even when tired",
-  "Iterate on what's working",
-  "Push past the dip",
-  "Reflect, celebrate, plan next",
-];
 
 type Phase = "idle" | "generating" | "revealed";
 
-export function LivePlanDemo({ onGetStarted }: LivePlanDemoProps) {
+export function LivePlanDemo({ onGetStarted, onPlanGenerated }: LivePlanDemoProps) {
   const [goal, setGoal] = useState("");
   const [phase, setPhase] = useState<Phase>("idle");
   const [activePlan, setActivePlan] = useState<string[]>([]);
@@ -99,8 +35,9 @@ export function LivePlanDemo({ onGetStarted }: LivePlanDemoProps) {
     if (!cleaned) return;
     setGoal(cleaned);
     setPhase("generating");
-    const plan = CANNED_PLANS[cleaned] ?? FALLBACK_PLAN;
+    const plan = planFor(cleaned);
     setActivePlan(plan);
+    onPlanGenerated?.(cleaned, plan);
     setTimeout(() => setPhase("revealed"), 1400);
   };
 

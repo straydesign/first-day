@@ -39,6 +39,8 @@ function AnimatedSection({ children, className, delay = 0 }: { children: React.R
 export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfService }: LandingPageProps) {
   const { monotone } = useMonotone();
   const [isNavSticky, setIsNavSticky] = useState(false);
+  const [demoGoal, setDemoGoal] = useState<string | null>(null);
+  const [demoPlan, setDemoPlan] = useState<string[] | null>(null);
   const heroNavRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const handleScroll = () => {
@@ -201,12 +203,23 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
 
         {/* Live magic-moment demo — try a goal, watch a plan assemble */}
         <AnimatedSection>
-          <LivePlanDemo onGetStarted={onGetStarted} />
+          <LivePlanDemo
+            onGetStarted={onGetStarted}
+            onPlanGenerated={(g, p) => {
+              setDemoGoal(g);
+              setDemoPlan(p);
+            }}
+          />
         </AnimatedSection>
 
-        {/* Dopamine loop — tap-to-feel day completion */}
+        {/* Dopamine loop — tap-to-feel day completion (auto-fills with the
+            visitor's plan from LivePlanDemo when they pick a goal) */}
         <AnimatedSection>
-          <DayCompleteDemo />
+          <DayCompleteDemo
+            goal={demoGoal ?? undefined}
+            plan={demoPlan ?? undefined}
+            isUserChosen={demoGoal !== null}
+          />
         </AnimatedSection>
 
         {/* How It Works */}
