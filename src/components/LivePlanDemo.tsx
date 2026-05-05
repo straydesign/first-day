@@ -51,11 +51,30 @@ function playAssemblyChord(ctx: AudioContext) {
   });
 }
 
+const PLACEHOLDER_GOALS = [
+  "Learn Spanish in 7 days?",
+  "Run my first 5k?",
+  "Read 5 books this month?",
+  "Ship my side project?",
+  "Cut sugar for a week?",
+  "Wake up at 6am every day?",
+];
+
 export function LivePlanDemo({ onGetStarted, onPlanGenerated, externalSeed }: LivePlanDemoProps) {
   const [goal, setGoal] = useState("");
   const [phase, setPhase] = useState<Phase>("idle");
   const [activePlan, setActivePlan] = useState<string[]>([]);
+  const [placeholderIdx, setPlaceholderIdx] = useState(0);
   const audioCtxRef = useRef<AudioContext | null>(null);
+
+  // Cycle the placeholder while idle so the input feels alive.
+  useEffect(() => {
+    if (phase !== "idle" || goal) return;
+    const t = setInterval(() => {
+      setPlaceholderIdx((i) => (i + 1) % PLACEHOLDER_GOALS.length);
+    }, 2400);
+    return () => clearInterval(t);
+  }, [phase, goal]);
 
   const generate = (raw: string) => {
     const cleaned = raw.trim();
@@ -153,7 +172,7 @@ export function LivePlanDemo({ onGetStarted, onPlanGenerated, externalSeed }: Li
                   type="text"
                   value={goal}
                   onChange={(e) => setGoal(e.target.value)}
-                  placeholder="What do you want to start?"
+                  placeholder={PLACEHOLDER_GOALS[placeholderIdx]}
                   className="flex-1 bg-white/5 border border-white/10 px-5 py-4 text-white text-lg placeholder:text-white/40 focus:outline-none focus:border-white/30 transition-colors"
                   style={{ clipPath: TOKENS.clipPaths.button[1] }}
                 />
