@@ -8,6 +8,10 @@
  *   - `exploding`  → flying outward from center, fading
  *   - `assembling` → moving into a target formation (grid, voronoi, freeform)
  *
+ * `target.type === 'tiled'` is a special mode: all shards fill `inset-0`
+ * and are clipped by their clipPath (no position offsets). Use this for
+ * week-square mosaic rendering (ShardRewardGrid / ShardSquare).
+ *
  * Every shard/tile/confetti/mosaic render in the app should eventually
  * route through this component so the visual language stays unified.
  *
@@ -15,7 +19,7 @@
  * r3f/3D assembly will be added under `target.type === '3d'` later.
  */
 
-import { useMemo } from "react";
+import { useMemo, type ReactNode } from "react";
 import { motion, AnimatePresence, type Transition } from "framer-motion";
 import { TOKENS } from "@/tokens";
 
@@ -33,7 +37,31 @@ export type ShardTarget =
         scale?: number;
         color?: string;
       }>;
+    }
+  | {
+      /**
+       * Tiled mode: each shard fills the container (inset-0) and is clipped
+       * by its clipPath. Used for week-square mosaics where clip-paths divide
+       * the container into interlocking cells.
+       */
+      type: "tiled";
     };
+
+/**
+ * Per-shard overrides for tiled/freeform modes.
+ * Allows locked/unlocked state, animating-shard highlight, and custom colors.
+ */
+export interface ShardOverride {
+  /** Override the shard color (e.g. locked = dark, unlocked = bright). */
+  color?: string;
+  /** Override opacity for this shard. */
+  opacity?: number;
+  /**
+   * When true, shard springs in from scale:3 → scale:1.
+   * Maps to ShardSquare's `animatingDay` behavior.
+   */
+  animating?: boolean;
+}
 
 export interface ShardEngineProps {
   /** Number of shards. Ignored if `target.type === 'freeform'` (uses positions.length). */
@@ -58,6 +86,25 @@ export interface ShardEngineProps {
   maxOpacity?: number;
   /** Forward class for the container. Absolute-positioned inside. */
   className?: string;
+
+  // ── Tiled-mode extensions ──────────────────────────────────────
+  /**
+   * Fixed pixel size for the container (width = height). When set, the
+   * container uses `position: relative` with explicit dimensions instead
+   * of `absolute inset-0`. Required for tiled mode in a flex row.
+   */
+  containerSize?: number;
+  /**
+   * Per-shard color/opacity/animation overrides. Index matches the clipPaths
+   * array order. Used in tiled mode for locked/unlocked/animating states.
+   */
+  shardOverrides?: ShardOverride[];
+  /**
+   * ReactNode rendered on top of all shards (e.g. trophy badge for a
+   * completed week). Requires `containerSize` or an ancestor that provides
+   * positioning context.
+   */
+  overlay?: ReactNode;
 }
 
 // ── Seeded PRNG (mulberry32) ────────────────────────────────────
@@ -161,6 +208,17 @@ function resolveTarget(
     }));
   }
 
+  if (target.type === "tiled") {
+    // Tiled mode doesn't use slot positions — shards fill inset-0.
+    // Return dummy slots so indices stay in sync.
+    return Array.from({ length: count }, () => ({
+      x: 50,
+      y: 50,
+      rotation: 0,
+      scale: 1,
+    }));
+  }
+
   // freeform
   return target.positions.map((p) => ({
     x: p.x,
@@ -186,10 +244,19 @@ export function ShardEngine({
   drift = true,
   maxOpacity = 1,
   className = "",
+  containerSize,
+  shardOverrides,
+  overlay,
 }: ShardEngineProps) {
+  const isTiled = target?.type === "tiled";
+
   // For freeform targets, count comes from positions length.
-  const effectiveCount =
-    target?.type === "freeform" ? target.positions.length : count;
+  // For tiled, count comes from clipPaths length (one shard per clip cell).
+  const effectiveCount = isTiled
+    ? clipPaths.length
+    : target?.type === "freeform"
+    ? target.positions.length
+    : count;
 
   const shards = useMemo(
     () => seedShards(effectiveCount, palette, clipPaths, sizeRange, seed),
@@ -201,15 +268,63 @@ export function ShardEngine({
     [target, effectiveCount],
   );
 
+  // Container style — fixed size vs absolute fill
+  const containerStyle: React.CSSProperties = containerSize
+    ? {
+        position: "relative",
+        width: containerSize,
+        height: containerSize,
+        overflow: "hidden",
+        filter: blurPx > 0 ? `blur(${blurPx}px)` : undefined,
+      }
+    : {
+        filter: blurPx > 0 ? `blur(${blurPx}px)` : undefined,
+      };
+
+  const containerClass = containerSize
+    ? className
+    : `absolute inset-0 overflow-hidden pointer-events-none ${className}`;
+
   return (
-    <div
-      className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}
-      style={{ filter: blurPx > 0 ? `blur(${blurPx}px)` : undefined }}
-    >
+    <div className={containerClass} style={containerStyle}>
       <AnimatePresence>
         {shards.map((shard, i) => {
           const slot = slots[i] ?? slots[slots.length - 1];
-          const animateProps = computeAnimate(state, shard, slot, maxOpacity, drift);
+          const override = shardOverrides?.[i];
+          const resolvedColor = override?.color ?? slot.color ?? shard.color;
+          const resolvedOpacity = override?.opacity ?? maxOpacity;
+          const isAnimating = override?.animating ?? false;
+
+          if (isTiled) {
+            // Tiled mode: each shard fills the container, clipped by its clip-path.
+            // The clip-path index matches `i` directly (not from seedShards random).
+            const clipPath = clipPaths[i] ?? shard.clip;
+            return (
+              <motion.div
+                key={shard.id}
+                className="absolute inset-0"
+                style={{
+                  clipPath,
+                  WebkitClipPath: clipPath,
+                  backgroundColor: resolvedColor,
+                  willChange: isAnimating ? "transform, opacity" : undefined,
+                }}
+                initial={isAnimating ? { scale: 3, opacity: 0 } : false}
+                animate={
+                  isAnimating
+                    ? { scale: 1, opacity: resolvedOpacity }
+                    : { opacity: resolvedOpacity }
+                }
+                transition={
+                  isAnimating
+                    ? { type: "spring", stiffness: 300, damping: 20, delay: 0.3 }
+                    : undefined
+                }
+              />
+            );
+          }
+
+          const animateProps = computeAnimate(state, shard, slot, resolvedOpacity, drift);
           const transition = computeTransition(state, i);
           return (
             <motion.div
@@ -224,7 +339,7 @@ export function ShardEngine({
                 height: shard.size,
                 marginLeft: -shard.size / 2,
                 marginTop: -shard.size / 2,
-                backgroundColor: slot.color ?? shard.color,
+                backgroundColor: resolvedColor,
                 clipPath: shard.clip,
                 WebkitClipPath: shard.clip,
                 willChange: "transform, opacity",
@@ -233,6 +348,11 @@ export function ShardEngine({
           );
         })}
       </AnimatePresence>
+      {overlay && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          {overlay}
+        </div>
+      )}
     </div>
   );
 }
