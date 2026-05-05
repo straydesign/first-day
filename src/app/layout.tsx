@@ -25,20 +25,20 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "First Day - Goal Achievement App",
-  description: "AI-powered 30-day plans to help you achieve any goal. Start your journey today.",
+  title: "First Day — your 7-day sprint, in 2 seconds",
+  description: "Type a goal, watch your week assemble. Daily activities, streaks, and the dopamine to keep going.",
   metadataBase: new URL("https://firstday.life"),
   openGraph: {
-    title: "First Day - Goal Achievement App",
-    description: "AI-powered 30-day plans to help you achieve any goal.",
+    title: "First Day — your 7-day sprint, in 2 seconds",
+    description: "Type a goal, watch your week assemble. Daily activities, streaks, and the dopamine to keep going.",
     type: "website",
     url: "https://firstday.life",
     images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "First Day — first day of the rest of your life" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "First Day - Goal Achievement App",
-    description: "AI-powered 30-day plans to help you achieve any goal.",
+    title: "First Day — your 7-day sprint, in 2 seconds",
+    description: "Type a goal, watch your week assemble. Daily activities, streaks, and the dopamine to keep going.",
     images: ["/twitter-image"],
   },
   robots: {
@@ -52,7 +52,7 @@ const jsonLd = {
   "@type": "WebApplication",
   "name": "First Day",
   "url": "https://firstday.life",
-  "description": "AI-powered 30-day plans to help you achieve any goal. Personalized daily activities, progress tracking, streaks, and achievements.",
+  "description": "AI-powered 7-day sprints to help you achieve any goal. Personalized daily activities, progress tracking, streaks, and achievements.",
   "applicationCategory": "LifestyleApplication",
   "operatingSystem": "Web",
   "offers": {
@@ -61,7 +61,7 @@ const jsonLd = {
     "priceCurrency": "USD",
   },
   "featureList": [
-    "AI-generated personalized 30-day goal plans",
+    "AI-generated personalized 7-day goal sprints",
     "Daily activity tracking with reflections",
     "XP system, streaks, and achievement badges",
     "Curated resources (videos, articles, books)",
