@@ -79,9 +79,9 @@ export function LivePlanDemo({ onGetStarted, onPlanGenerated, externalSeed }: Li
   }, [phase]);
 
   const sharePlan = async () => {
-    const text = `My 7-day sprint to ${goal}:\n\n${activePlan
-      .map((a, i) => `Day ${i + 1}: ${a}`)
-      .join("\n")}\n\nBuilt with First Day · firstday.life`;
+    const text = `7-day sprint: ${goal}\n\n${activePlan
+      .map((a, i) => `Day ${i + 1} — ${a}`)
+      .join("\n")}\n\nBuilt mine in 2 seconds → firstday.life`;
     try {
       if (typeof navigator !== "undefined" && navigator.share) {
         await navigator.share({ title: `My ${goal} sprint`, text });
