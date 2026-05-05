@@ -11,7 +11,7 @@
  * a shape transition + opacity + transform, which iOS handles natively.
  */
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { ShardEngine } from "./lab/ShardEngine";
@@ -25,10 +25,35 @@ interface LivePlanDemoProps {
 
 type Phase = "idle" | "scattered" | "assembling" | "revealed";
 
+// iOS-portable audio: maps to AVAudioEngine triad on iOS.
+// Plays a soft major-triad chord when shards click into the grid.
+type WindowWithWebkitAudio = Window & {
+  webkitAudioContext?: typeof AudioContext;
+};
+
+function playAssemblyChord(ctx: AudioContext) {
+  const now = ctx.currentTime;
+  // C4–E4–G4 major triad — warm, satisfying "click into place".
+  const freqs = [261.63, 329.63, 392.0];
+  freqs.forEach((freq, i) => {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "triangle";
+    osc.frequency.setValueAtTime(freq, now);
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(0.07, now + 0.04 + i * 0.04);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.55);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.6);
+  });
+}
+
 export function LivePlanDemo({ onGetStarted, onPlanGenerated }: LivePlanDemoProps) {
   const [goal, setGoal] = useState("");
   const [phase, setPhase] = useState<Phase>("idle");
   const [activePlan, setActivePlan] = useState<string[]>([]);
+  const audioCtxRef = useRef<AudioContext | null>(null);
 
   const generate = (raw: string) => {
     const cleaned = raw.trim();
@@ -38,7 +63,23 @@ export function LivePlanDemo({ onGetStarted, onPlanGenerated }: LivePlanDemoProp
     const plan = planFor(cleaned);
     setActivePlan(plan);
     onPlanGenerated?.(cleaned, plan);
-    setTimeout(() => setPhase("assembling"), 600);
+
+    // Web Audio is suspended until user gesture, so init lazily inside the click handler.
+    if (!audioCtxRef.current && typeof window !== "undefined") {
+      const Ctx =
+        window.AudioContext ??
+        (window as WindowWithWebkitAudio).webkitAudioContext;
+      if (Ctx) audioCtxRef.current = new Ctx();
+    }
+
+    setTimeout(() => {
+      setPhase("assembling");
+      const ctx = audioCtxRef.current;
+      if (ctx) {
+        if (ctx.state === "suspended") void ctx.resume();
+        playAssemblyChord(ctx);
+      }
+    }, 600);
     setTimeout(() => setPhase("revealed"), 1500);
   };
 
