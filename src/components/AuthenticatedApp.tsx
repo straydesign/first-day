@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useMemo, useRef } from "react";
 import dynamic from "next/dynamic";
+import { motion, AnimatePresence } from "framer-motion";
 import { HeroMosaic } from "./HeroMosaic";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { computeEngagementState, getMilestone, getLatestDayXP, calculateStreaks } from "@/lib/engagement";
@@ -16,9 +17,8 @@ const NavigationMenu = dynamic(() => import("@/components/NavigationMenu").then(
 const BottomNav = dynamic(() => import("@/components/BottomNav").then(m => ({ default: m.BottomNav })));
 const SimpleGoalCreation = dynamic(() => import("@/components/SimpleGoalCreation").then(m => ({ default: m.SimpleGoalCreation })), { loading: () => <LoadingScreen /> });
 const CongratsView = dynamic(() => import("@/components/CongratsView").then(m => ({ default: m.CongratsView })), { loading: () => <LoadingScreen /> });
-const NotificationSettings = dynamic(() => import("@/components/NotificationSettings").then(m => ({ default: m.NotificationSettings })));
-const XPAnimation = dynamic(() => import("@/components/XPAnimation").then(m => ({ default: m.XPAnimation })));
 const BeastMode = dynamic(() => import("@/components/BeastMode").then(m => ({ default: m.BeastMode })));
+const AchievementUnlockToast = dynamic(() => import("@/components/AchievementUnlockToast").then(m => ({ default: m.AchievementUnlockToast })));
 
 interface AuthenticatedAppProps {
   accessToken: string;
@@ -31,9 +31,7 @@ interface AuthenticatedAppProps {
 
 export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, onLogout, demoMode = false }: AuthenticatedAppProps) {
   const [currentView, setCurrentView] = useState<AppView>(initialView);
-  const [showNotificationSettings, setShowNotificationSettings] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
-  const [showXPAnimation, setShowXPAnimation] = useState(false);
   const [latestDayXP, setLatestDayXP] = useState<XPBreakdown | null>(null);
   const [latestMilestone, setLatestMilestone] = useState<Milestone | null>(null);
   const [newAchievements, setNewAchievements] = useState<Achievement[]>([]);
@@ -154,14 +152,10 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
     // Compute XP and milestone for the completed day
     const xp = getLatestDayXP(updatedProgress, dayKey);
     setLatestDayXP(xp);
-    setShowXPAnimation(true);
 
     const streaks = calculateStreaks(updatedProgress);
     const milestone = getMilestone(dayKey, streaks.current);
     setLatestMilestone(milestone);
-
-    // Auto-dismiss XP animation after 2.5 seconds
-    setTimeout(() => setShowXPAnimation(false), 2500);
 
     // Set view to congrats first (preloads the component), then show beast mode on top
     setCurrentView("congrats");
@@ -188,7 +182,6 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
                   ? () => { loadGoalData(currentGoalId).then(() => setCurrentView("calendar")); }
                   : undefined
               }
-              onShowNotifications={() => setShowNotificationSettings(true)}
               onLogout={handleLogoutAndReset}
             />
           </div>
@@ -196,81 +189,87 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
 
         {loadingGoal && <LoadingScreen />}
 
-        {currentView === "goals" && !loadingGoal && (
-          <GoalsManagement
-            accessToken={accessToken}
-            onCreateGoal={handleCreateGoal}
-            onSelectGoal={handleSelectGoalAndNavigate}
-            onEditGoal={handleEditGoal}
-            onViewTodayActivities={handleViewTodayActivities}
-            onLogout={handleLogoutAndReset}
-            engagement={engagement}
-            demoMode={demoMode}
-          />
-        )}
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={currentView}
+            initial={{ opacity: 0, y: 12, scale: 0.985 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -8, scale: 0.99 }}
+            transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+          >
+            {currentView === "goals" && !loadingGoal && (
+              <GoalsManagement
+                accessToken={accessToken}
+                onCreateGoal={handleCreateGoal}
+                onSelectGoal={handleSelectGoalAndNavigate}
+                onEditGoal={handleEditGoal}
+                onViewTodayActivities={handleViewTodayActivities}
+                onLogout={handleLogoutAndReset}
+                engagement={engagement}
+                demoMode={demoMode}
+              />
+            )}
 
-        {currentView === "settings" && !demoMode && (
-          <Settings
-            accessToken={accessToken}
-            userId={userId}
-            userEmail={userEmail || undefined}
-            onBack={handleBackToGoals}
-            onDeleteSuccess={handleLogoutAndReset}
-          />
-        )}
+            {currentView === "settings" && !demoMode && (
+              <Settings
+                accessToken={accessToken}
+                userId={userId}
+                userEmail={userEmail || undefined}
+                onBack={handleBackToGoals}
+                onDeleteSuccess={handleLogoutAndReset}
+                notificationsEnabled={notificationsEnabled}
+                onToggleNotifications={setNotificationsEnabled}
+              />
+            )}
 
-        {currentView === "onboarding" && (
-          <SimpleGoalCreation
-            onComplete={handleOnboardingCompleteAndNavigate}
-            onCancel={handleBackToGoals}
-            initialData={editingGoalData}
-          />
-        )}
+            {currentView === "onboarding" && (
+              <SimpleGoalCreation
+                onComplete={handleOnboardingCompleteAndNavigate}
+                onCancel={handleBackToGoals}
+                initialData={editingGoalData}
+              />
+            )}
 
-        {currentView === "calendar" && planData && goalData && (
-          <CalendarView
-            planData={planData}
-            goalTitle={planData.cleanedGoal || goalData.goal}
-            onDayClick={handleDayClick}
-            onEditGoal={() => {
-              if (currentGoalId) handleEditGoal(currentGoalId);
-            }}
-            onRegeneratePlan={handleRegeneratePlan}
-            progress={progress}
-            onBack={handleBackToGoals}
-            engagement={engagement}
-            onLogout={handleLogoutAndReset}
-          />
-        )}
+            {currentView === "calendar" && planData && goalData && (
+              <CalendarView
+                planData={planData}
+                goalTitle={planData.cleanedGoal || goalData.goal}
+                onDayClick={handleDayClick}
+                onEditGoal={() => {
+                  if (currentGoalId) handleEditGoal(currentGoalId);
+                }}
+                onRegeneratePlan={handleRegeneratePlan}
+                progress={progress}
+                onBack={handleBackToGoals}
+                engagement={engagement}
+                onLogout={handleLogoutAndReset}
+              />
+            )}
 
-        {currentView === "day" && selectedDay && (
-          <DayView
-            day={selectedDay}
-            onComplete={handleDayComplete}
-            isCompleted={progress[selectedDay.number]?.completed ? true : false}
-            savedProgress={progress[selectedDay.number] || null}
-            onBack={() => setCurrentView("calendar")}
-            currentStreak={engagement?.currentStreak ?? 0}
-          />
-        )}
+            {currentView === "day" && selectedDay && (
+              <DayView
+                day={selectedDay}
+                onComplete={handleDayComplete}
+                isCompleted={progress[selectedDay.number]?.completed ? true : false}
+                savedProgress={progress[selectedDay.number] || null}
+                onBack={() => setCurrentView("calendar")}
+                currentStreak={engagement?.currentStreak ?? 0}
+              />
+            )}
 
-        {currentView === "congrats" && (
-          <CongratsView
-            onViewCalendar={() => setCurrentView("calendar")}
-            onDoMore={handleBackToGoals}
-            goalTitle={planData?.cleanedGoal || goalData?.goal}
-            dayNumber={selectedDay?.number}
-            progress={progress}
-          />
-        )}
-
-        {showNotificationSettings && (
-          <NotificationSettings
-            notificationsEnabled={notificationsEnabled}
-            onToggle={(enabled: boolean) => setNotificationsEnabled(enabled)}
-            onClose={() => setShowNotificationSettings(false)}
-          />
-        )}
+            {currentView === "congrats" && (
+              <CongratsView
+                onViewCalendar={() => setCurrentView("calendar")}
+                onDoMore={handleBackToGoals}
+                goalTitle={planData?.cleanedGoal || goalData?.goal}
+                dayNumber={selectedDay?.number}
+                progress={progress}
+                milestone={latestMilestone}
+                xp={latestDayXP}
+              />
+            )}
+          </motion.div>
+        </AnimatePresence>
 
         {showBeastMode && (
           <BeastMode onComplete={() => {
@@ -296,9 +295,10 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
           />
         )}
 
-        {latestDayXP && (
-          <XPAnimation xp={latestDayXP} show={showXPAnimation} />
-        )}
+        <AchievementUnlockToast
+          achievements={newAchievements}
+          onDismiss={() => setNewAchievements([])}
+        />
       </div>
     </div>
   );

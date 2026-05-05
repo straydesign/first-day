@@ -7,114 +7,38 @@ import {
   useEffect,
   useCallback,
 } from "react";
-
-/**
- * Hand-traced tile shapes from the hero-sunset.png stained-glass artwork.
- * Each tile follows the natural visual boundaries of the image —
- * mountain ridges, sky sections, water reflections, sun glow.
- * Coordinates are percentages (0-100).
- */
-const IMAGE_TILES: { id: string; name: string; polygon: [number, number][] }[] = [
-  {
-    id: "sky-upper-left",
-    name: "Upper-left sky",
-    polygon: [[0,0],[32,0],[28,8],[22,16],[12,22],[0,28]],
-  },
-  {
-    id: "sky-upper-center-left",
-    name: "Pink sky left of center",
-    polygon: [[32,0],[48,0],[46,12],[38,18],[28,8]],
-  },
-  {
-    id: "sky-upper-center-right",
-    name: "Red sky right of center",
-    polygon: [[48,0],[68,0],[72,8],[62,18],[54,12]],
-  },
-  {
-    id: "sky-upper-right",
-    name: "Upper-right sky",
-    polygon: [[68,0],[100,0],[100,28],[88,22],[78,16],[72,8]],
-  },
-  {
-    id: "mountain-left",
-    name: "Left mountain mass",
-    polygon: [[0,28],[12,22],[22,16],[28,8],[38,18],[32,32],[22,42],[10,48],[0,52]],
-  },
-  {
-    id: "mountain-right",
-    name: "Right mountain mass",
-    polygon: [[62,18],[72,8],[78,16],[88,22],[100,28],[100,52],[90,48],[78,42],[68,32]],
-  },
-  {
-    id: "sun-glow",
-    name: "Central sun and glow",
-    polygon: [[38,18],[46,12],[54,12],[62,18],[68,32],[58,42],[50,46],[42,42],[32,32]],
-  },
-  {
-    id: "water-reflection-center",
-    name: "Golden water reflection",
-    polygon: [[42,42],[50,46],[58,42],[62,56],[56,68],[50,72],[44,68],[38,56]],
-  },
-  {
-    id: "water-left",
-    name: "Left water section",
-    polygon: [[0,52],[10,48],[22,42],[32,50],[38,56],[32,72],[18,78],[0,82]],
-  },
-  {
-    id: "water-right",
-    name: "Right water section",
-    polygon: [[62,56],[68,50],[78,42],[90,48],[100,52],[100,82],[82,78],[68,72]],
-  },
-];
-
-/**
- * Remaining image area — filled by the base image layer.
- * These are the bottom sections and gaps between the main tiles.
- */
-const BOTTOM_TILES: { polygon: [number, number][] }[] = [
-  { polygon: [[0,82],[18,78],[32,72],[44,68],[50,72],[56,68],[68,72],[82,78],[100,82],[100,100],[0,100]] },
-];
-
-/* ─── Shrink polygon inward to create visible gap ─── */
-function shrinkPolygon(
-  polygon: [number, number][],
-  amount: number,
-): [number, number][] {
-  // Compute centroid
-  let cx = 0, cy = 0;
-  for (const [x, y] of polygon) { cx += x; cy += y; }
-  cx /= polygon.length;
-  cy /= polygon.length;
-
-  return polygon.map(([x, y]) => {
-    const dx = x - cx;
-    const dy = y - cy;
-    const len = Math.sqrt(dx * dx + dy * dy);
-    if (len === 0) return [x, y] as [number, number];
-    return [
-      x - (dx / len) * amount,
-      y - (dy / len) * amount,
-    ] as [number, number];
-  });
-}
-
-function polygonToClipPath(polygon: [number, number][]): string {
-  return `polygon(${polygon.map(([x, y]) => `${x}% ${y}%`).join(", ")})`;
-}
+import { HERO_MOSAIC_TILES, type MosaicTile } from "@/data/hero-mosaic-tiles";
 
 /* ─── Drift settings — subtle breathing for floating tiles ─── */
 const DRIFT = {
-  amplitude: 3,
-  rotateAmp: 0.6,
-  baseSpeed: 0.0003,
+  amplitude: 4,
+  rotateAmp: 0.8,
+  baseSpeed: 0.0004,
 };
 
 /* ─── Click pulse ─── */
 const PULSE = {
-  radius: 350,
-  strength: 8,
-  rotateStrength: 1,
-  duration: 900,
+  radius: 320,
+  strength: 14,
+  rotateStrength: 1.4,
+  duration: 950,
+};
+
+/* ─── Cursor magnet — tiles part around the cursor as it moves ─── */
+const MAGNET = {
+  radius: 240,
+  strength: 6,
+  smoothing: 0.08,
+};
+
+/* ─── Scroll parallax — tiles drift at varied rates as the page scrolls ─── */
+const PARALLAX = {
+  yMin: 0.05,        // slowest tile moves at 5% of scroll
+  yMax: 0.32,        // fastest tile moves at 32% of scroll
+  rotateMax: 0.018,  // max rotation in degrees per pixel scrolled
+  fadeStart: 80,     // px scrolled before mosaic begins fading
+  fadeEnd: 720,      // px scrolled when mosaic reaches min opacity
+  fadeMin: 0.35,     // floor opacity so it never disappears completely
 };
 
 interface DriftParams {
@@ -135,6 +59,10 @@ interface PulseEvent {
   startTime: number;
 }
 
+function polygonClipPath(verts: [number, number][]): string {
+  return `polygon(${verts.map(([x, y]) => `${x}% ${y}%`).join(", ")})`;
+}
+
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
@@ -148,74 +76,117 @@ export function HeroMosaic() {
   const pieceRefs = useRef<(HTMLDivElement | null)[]>([]);
   const rafRef = useRef<number>(0);
   const pulsesRef = useRef<PulseEvent[]>([]);
-  const [imageReady, setImageReady] = useState(false);
+  const cursorRef = useRef<{ x: number; y: number; active: boolean }>({ x: 0, y: 0, active: false });
+  const smoothCursorRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const scrollYRef = useRef(0);
   const [assembled, setAssembled] = useState(false);
   const isMobile = useIsMobile();
 
-  // Preload hero image — prefer WebP, fall back to PNG
-  useEffect(() => {
-    const img = new Image();
-    const supportsWebP = (() => {
-      const canvas = typeof document !== "undefined" ? document.createElement("canvas") : null;
-      return canvas?.toDataURL("image/webp").startsWith("data:image/webp") ?? false;
-    })();
-    img.src = supportsWebP ? "/hero-sunset.webp" : "/hero-sunset.png";
-    img.onload = () => setImageReady(true);
+  // Static tiles render below floating ones — drawn as a separate frozen list
+  const { staticTiles, floatingTiles } = useMemo(() => {
+    const s: MosaicTile[] = [];
+    const f: MosaicTile[] = [];
+    for (const t of HERO_MOSAIC_TILES) (t.floating ? f : s).push(t);
+    return { staticTiles: s, floatingTiles: f };
   }, []);
 
-  // Trigger assembly after image loads
-  useEffect(() => {
-    if (imageReady) {
-      const timer = setTimeout(() => setAssembled(true), 100);
-      return () => clearTimeout(timer);
-    }
-    const fallback = setTimeout(() => setAssembled(true), 3000);
-    return () => clearTimeout(fallback);
-  }, [imageReady]);
+  // Static tile clip-paths — computed once, never animated
+  const staticData = useMemo(() =>
+    staticTiles.map((t) => ({
+      ...t,
+      clipPath: polygonClipPath(t.verts),
+    })),
+  [staticTiles]);
 
-  // Precompute tile clip-paths (full + gapped versions)
-  const tileData = useMemo(() =>
-    IMAGE_TILES.map((tile) => {
-      const centroid: [number, number] = [
-        tile.polygon.reduce((s, p) => s + p[0], 0) / tile.polygon.length,
-        tile.polygon.reduce((s, p) => s + p[1], 0) / tile.polygon.length,
+  // Floating tile clip-paths + viewport-relative centroids for cursor math
+  const floatingData = useMemo(() =>
+    floatingTiles.map((t) => {
+      const cxLocal =
+        t.verts.reduce((s, p) => s + p[0], 0) / t.verts.length;
+      const cyLocal =
+        t.verts.reduce((s, p) => s + p[1], 0) / t.verts.length;
+      const centroidPct: [number, number] = [
+        t.leftPct + (cxLocal / 100) * t.widthPct,
+        t.topPct + (cyLocal / 100) * t.heightPct,
       ];
       return {
-        ...tile,
-        centroid,
-        clipPath: polygonToClipPath(tile.polygon),
-        gapClipPath: polygonToClipPath(shrinkPolygon(tile.polygon, 0.4)),
+        ...t,
+        clipPath: polygonClipPath(t.verts),
+        centroidPct,
       };
     }),
-  []);
+  [floatingTiles]);
 
-  const bottomClipPaths = useMemo(() =>
-    BOTTOM_TILES.map((t) => polygonToClipPath(t.polygon)),
-  []);
+  useEffect(() => {
+    const t = setTimeout(() => setAssembled(true), 60);
+    return () => clearTimeout(t);
+  }, []);
 
-  // Entrance offsets for floating tiles
+  // Container fade on scroll — runs always (mobile + reduced-motion fallback).
+  // The desktop rAF loop overrides this each frame, which is fine.
+  useEffect(() => {
+    const apply = () => {
+      const container = containerRef.current;
+      if (!container) return;
+      const sy = window.scrollY;
+      const fadeT = Math.min(
+        1,
+        Math.max(0, (sy - PARALLAX.fadeStart) / (PARALLAX.fadeEnd - PARALLAX.fadeStart)),
+      );
+      container.style.opacity = String(1 - fadeT * (1 - PARALLAX.fadeMin));
+    };
+    apply();
+    window.addEventListener("scroll", apply, { passive: true });
+    return () => window.removeEventListener("scroll", apply);
+  }, []);
+
+  // Entrance offsets for floating tiles (off-screen drift-in)
   const entranceOffsets = useMemo(() => {
-    let seed = 42;
+    let seed = 17;
     const rng = () => {
-      seed = (seed * 16807 + 0) % 2147483647;
+      seed = (seed * 16807) % 2147483647;
       return seed / 2147483647;
     };
-    return tileData.map(() => ({
-      x: (rng() - 0.5) * 100,
-      y: (rng() - 0.5) * 100,
-      r: (rng() - 0.5) * 20,
-      delay: rng() * 0.6,
+    return floatingData.map(() => ({
+      x: (rng() - 0.5) * 80,
+      y: (rng() - 0.5) * 80,
+      r: (rng() - 0.5) * 30,
+      delay: rng() * 0.7,
     }));
-  }, [tileData]);
+  }, [floatingData]);
 
-  // Drift params
-  const driftParams = useMemo<DriftParams[]>(() => {
-    let seed = 137;
+  // Per-tile parallax factors — deterministic, mapped to PARALLAX.yMin..yMax
+  const parallaxFactors = useMemo<number[]>(() => {
+    let seed = 31337;
     const rng = () => {
-      seed = (seed * 16807 + 0) % 2147483647;
+      seed = (seed * 16807) % 2147483647;
       return seed / 2147483647;
     };
-    return tileData.map(() => ({
+    return floatingData.map(() => {
+      const t = rng();
+      const factor = PARALLAX.yMin + t * (PARALLAX.yMax - PARALLAX.yMin);
+      const rotSign = rng() < 0.5 ? -1 : 1;
+      return factor * rotSign < 0 ? -factor : factor;
+    });
+  }, [floatingData]);
+
+  const parallaxRotSigns = useMemo<number[]>(() => {
+    let seed = 4242;
+    const rng = () => {
+      seed = (seed * 16807) % 2147483647;
+      return seed / 2147483647;
+    };
+    return floatingData.map(() => (rng() < 0.5 ? -1 : 1));
+  }, [floatingData]);
+
+  // Per-tile drift parameters
+  const driftParams = useMemo<DriftParams[]>(() => {
+    let seed = 9001;
+    const rng = () => {
+      seed = (seed * 16807) % 2147483647;
+      return seed / 2147483647;
+    };
+    return floatingData.map(() => ({
       freqX: DRIFT.baseSpeed * (0.7 + rng() * 0.6),
       freqY: DRIFT.baseSpeed * (0.7 + rng() * 0.6),
       freqR: DRIFT.baseSpeed * (0.5 + rng() * 0.5),
@@ -226,9 +197,8 @@ export function HeroMosaic() {
       ampY: DRIFT.amplitude * (0.5 + rng() * 0.5),
       ampR: DRIFT.rotateAmp * (0.5 + rng() * 0.5),
     }));
-  }, [tileData]);
+  }, [floatingData]);
 
-  // Click pulse handler
   const handleClick = useCallback((e: MouseEvent) => {
     const container = containerRef.current;
     if (!container || !assembled) return;
@@ -240,9 +210,32 @@ export function HeroMosaic() {
     });
   }, [assembled]);
 
-  // Drift animation loop (desktop only)
+  const handleMove = useCallback((e: MouseEvent) => {
+    const container = containerRef.current;
+    if (!container) return;
+    const rect = container.getBoundingClientRect();
+    cursorRef.current = {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+      active: true,
+    };
+  }, []);
+
+  const handleLeave = useCallback(() => {
+    cursorRef.current.active = false;
+  }, []);
+
+  // Drift animation loop (desktop only, only for floating tiles)
   useEffect(() => {
     if (!assembled || isMobile) return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) return;
+
+    const onScroll = () => {
+      scrollYRef.current = window.scrollY;
+    };
+    scrollYRef.current = window.scrollY;
+    window.addEventListener("scroll", onScroll, { passive: true });
 
     const startDelay = setTimeout(() => {
       pieceRefs.current.forEach((piece) => {
@@ -261,23 +254,53 @@ export function HeroMosaic() {
           (p) => now - p.startTime < PULSE.duration,
         );
 
+        const cur = cursorRef.current;
+        smoothCursorRef.current.x += (cur.x - smoothCursorRef.current.x) * MAGNET.smoothing;
+        smoothCursorRef.current.y += (cur.y - smoothCursorRef.current.y) * MAGNET.smoothing;
+
+        const sy = scrollYRef.current;
+        const fadeT = Math.min(
+          1,
+          Math.max(0, (sy - PARALLAX.fadeStart) / (PARALLAX.fadeEnd - PARALLAX.fadeStart)),
+        );
+        container.style.opacity = String(1 - fadeT * (1 - PARALLAX.fadeMin));
+
         pieceRefs.current.forEach((piece, i) => {
           if (!piece) return;
           const dp = driftParams[i];
+
+          const parallaxY = -sy * parallaxFactors[i];
+          const parallaxR = sy * PARALLAX.rotateMax * parallaxRotSigns[i];
 
           const dx =
             Math.sin(now * dp.freqX + dp.phaseX) * dp.ampX +
             Math.sin(now * dp.freqX * 1.7 + dp.phaseX + 1) * dp.ampX * 0.3;
           const dy =
             Math.sin(now * dp.freqY + dp.phaseY) * dp.ampY +
-            Math.cos(now * dp.freqY * 1.3 + dp.phaseY + 2) * dp.ampY * 0.3;
-          const dr = Math.sin(now * dp.freqR + dp.phaseR) * dp.ampR;
+            Math.cos(now * dp.freqY * 1.3 + dp.phaseY + 2) * dp.ampY * 0.3 +
+            parallaxY;
+          const dr = Math.sin(now * dp.freqR + dp.phaseR) * dp.ampR + parallaxR;
 
-          let pulseX = 0, pulseY = 0, pulseR = 0;
-          const [cxPct, cyPct] = tileData[i].centroid;
+          const [cxPct, cyPct] = floatingData[i].centroidPct;
           const cx = (cxPct / 100) * rect.width;
           const cy = (cyPct / 100) * rect.height;
 
+          let magX = 0, magY = 0, magR = 0;
+          if (cur.active) {
+            const mdx = smoothCursorRef.current.x - cx;
+            const mdy = smoothCursorRef.current.y - cy;
+            const dist = Math.sqrt(mdx * mdx + mdy * mdy);
+            if (dist < MAGNET.radius && dist > 0) {
+              const t = 1 - dist / MAGNET.radius;
+              const force = t * t * MAGNET.strength;
+              const angle = Math.atan2(mdy, mdx);
+              magX = -Math.cos(angle) * force;
+              magY = -Math.sin(angle) * force;
+              magR = -Math.cos(angle) * t * 1.5;
+            }
+          }
+
+          let pulseX = 0, pulseY = 0, pulseR = 0;
           for (const pulse of pulsesRef.current) {
             const pdx = pulse.x - cx;
             const pdy = pulse.y - cy;
@@ -295,97 +318,79 @@ export function HeroMosaic() {
           }
 
           piece.style.transform =
-            `translate(${dx + pulseX}px, ${dy + pulseY}px) rotate(${dr + pulseR}deg)`;
+            `translate(${dx + magX + pulseX}px, ${dy + magY + pulseY}px) rotate(${dr + magR + pulseR}deg)`;
         });
 
         rafRef.current = requestAnimationFrame(animate);
       };
 
       rafRef.current = requestAnimationFrame(animate);
-    }, 1800);
+    }, 1600);
 
     window.addEventListener("click", handleClick);
+    window.addEventListener("mousemove", handleMove);
+    window.addEventListener("mouseleave", handleLeave);
     return () => {
       clearTimeout(startDelay);
       cancelAnimationFrame(rafRef.current);
       window.removeEventListener("click", handleClick);
+      window.removeEventListener("mousemove", handleMove);
+      window.removeEventListener("mouseleave", handleLeave);
+      window.removeEventListener("scroll", onScroll);
     };
-  }, [assembled, isMobile, tileData, driftParams, handleClick]);
-
-  // Respect prefers-reduced-motion
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (mq.matches) cancelAnimationFrame(rafRef.current);
-  }, [assembled]);
-
-  const [heroSrc, setHeroSrc] = useState("/hero-sunset.png");
-  useEffect(() => {
-    const canvas = document.createElement("canvas");
-    if (canvas.toDataURL("image/webp").startsWith("data:image/webp")) {
-      setHeroSrc("/hero-sunset.webp");
-    }
-  }, []);
-
-  const bgStyle = imageReady
-    ? { backgroundImage: `url(${heroSrc})`, backgroundSize: "100% 100%", backgroundPosition: "center" }
-    : {};
+  }, [assembled, isMobile, floatingData, driftParams, parallaxFactors, parallaxRotSigns, handleClick, handleMove, handleLeave]);
 
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-0 pointer-events-none"
+      className="fixed inset-0 z-0 pointer-events-none overflow-hidden"
     >
-      {/* Layer 1: Full base image (static, slightly dimmed) */}
-      <div
-        className="absolute inset-0"
-        style={{
-          ...bgStyle,
-          backgroundColor: "#0a0a0a",
-          opacity: assembled ? 0.5 : 0,
-          transition: "opacity 1s ease",
-        }}
-      />
-
-      {/* Layer 2: Bottom fill tiles (static, no animation) */}
-      {BOTTOM_TILES.map((tile, i) => (
+      {/* Static tiles — every non-floating tile in the artwork. Frozen, no animation. */}
+      {staticData.map((tile) => (
         <div
-          key={`bottom-${i}`}
-          className="absolute inset-0"
+          key={tile.id}
+          className="absolute"
           style={{
-            clipPath: bottomClipPaths[i],
-            ...bgStyle,
-            backgroundColor: "#0a0a14",
+            left: `${tile.leftPct}%`,
+            top: `${tile.topPct}%`,
+            width: `${tile.widthPct}%`,
+            height: `${tile.heightPct}%`,
+            clipPath: tile.clipPath,
+            backgroundColor: tile.fill,
             opacity: assembled ? 1 : 0,
-            transition: `opacity 0.8s ease 0.3s`,
+            transition: assembled ? "opacity 0.6s ease" : "none",
           }}
         />
       ))}
 
-      {/* Layer 3: The 10 main tiles — hand-traced from the image's natural shapes */}
-      {tileData.map((tile, i) => {
+      {/* Floating tiles — top 48 by area, animated with drift + cursor magnet + click pulse */}
+      {floatingData.map((tile, i) => {
         const off = entranceOffsets[i];
         return (
           <div
             key={tile.id}
             ref={(el) => { pieceRefs.current[i] = el; }}
-            className="absolute inset-0"
+            className="absolute"
             style={{
-              clipPath: tile.gapClipPath,
-              ...bgStyle,
-              backgroundColor: "#0a0a14",
+              left: `${tile.leftPct}%`,
+              top: `${tile.topPct}%`,
+              width: `${tile.widthPct}%`,
+              height: `${tile.heightPct}%`,
+              clipPath: tile.clipPath,
+              backgroundColor: tile.fill,
               willChange: isMobile ? "auto" : "transform",
               opacity: assembled ? 1 : 0,
               transform: assembled
                 ? undefined
                 : isMobile
                   ? undefined
-                  : `translate(${off.x}vw, ${off.y}vh) rotate(${off.r}deg) scale(0.85)`,
+                  : `translate(${off.x}vw, ${off.y}vh) rotate(${off.r}deg) scale(0.7)`,
               transition: assembled
                 ? isMobile
                   ? `opacity 0.6s ease ${off.delay * 0.5}s`
-                  : `opacity 1.2s cubic-bezier(0.25, 1, 0.5, 1) ${off.delay}s, transform 1.2s cubic-bezier(0.25, 1, 0.5, 1) ${off.delay}s`
+                  : `opacity 1.0s cubic-bezier(0.25, 1, 0.5, 1) ${off.delay}s, transform 1.2s cubic-bezier(0.22, 1, 0.36, 1) ${off.delay}s`
                 : "none",
-              filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.5))",
+              filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.45))",
             }}
           />
         );

@@ -83,13 +83,6 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${bebasNeue.variable}`}>
       <head>
-        {/* Preload hero image — WebP for supporting browsers, PNG fallback handled in HeroMosaic */}
-        <link
-          rel="preload"
-          href="/hero-sunset.webp"
-          as="image"
-          type="image/webp"
-        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

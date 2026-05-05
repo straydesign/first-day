@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import { User, Mail, Shield, Bell, Trash2 } from "lucide-react";
 import { BackButton } from "@/components/ui/back-button";
 import { Input } from "@/components/ui/input";
@@ -15,9 +16,11 @@ interface SettingsProps {
   userEmail?: string;
   onBack: () => void;
   onDeleteSuccess: () => void;
+  notificationsEnabled: boolean;
+  onToggleNotifications: (enabled: boolean) => void;
 }
 
-export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSuccess }: SettingsProps) {
+export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSuccess, notificationsEnabled, onToggleNotifications }: SettingsProps) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [confirmText, setConfirmText] = useState("");
   const [isSendingTestEmail, setIsSendingTestEmail] = useState(false);
@@ -84,9 +87,20 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
             <div className="w-10 h-10 clip-diamond bg-black border border-white/20 flex items-center justify-center"><Bell className="w-5 h-5 text-white" /></div>
             <h2 className="text-xl font-semibold text-white">Email Notifications</h2>
           </div>
-          <div className="text-white/80 text-sm space-y-2 mb-4">
-            <p>Daily reminder emails are automatically sent based on your goal&apos;s preferred time slot.</p>
+          <div className="flex items-center justify-between p-4 mb-4 bg-black border border-white/10" style={{ clipPath: "polygon(1% 0%, 100% 2%, 99% 100%, 0% 97%)" }}>
+            <div className="pr-4">
+              <p className="font-bold text-white">Daily Reminders</p>
+              <p className="text-sm text-white/70">Get reminded about your daily activities</p>
+            </div>
+            <Switch
+              id="daily-reminders-toggle"
+              checked={notificationsEnabled}
+              onCheckedChange={onToggleNotifications}
+              aria-label="Toggle daily reminders"
+              className="data-[state=checked]:bg-[#FFE633]"
+            />
           </div>
+          <p className="text-white/70 text-sm mb-4">Reminder emails are sent based on your goal&apos;s preferred time slot.</p>
           <button onClick={handleSendTestEmail} disabled={isSendingTestEmail} className="flex items-center gap-2 px-5 py-3 font-black text-black uppercase tracking-wide text-sm hover:scale-105 disabled:hover:scale-100 disabled:opacity-50 transition-transform" style={{ backgroundColor: "#fcd02a", clipPath: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" }}>
             <Bell className="w-4 h-4" />{isSendingTestEmail ? "Sending..." : "Send Test Email"}
           </button>

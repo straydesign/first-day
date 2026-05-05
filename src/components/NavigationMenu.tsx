@@ -7,7 +7,6 @@ interface NavigationMenuProps {
   onNavigateToGoals: () => void;
   onNavigateToSettings: () => void;
   onNavigateToCalendar?: () => void;
-  onShowNotifications?: () => void;
   onLogout: () => void;
 }
 

@@ -111,7 +111,7 @@ const MOCK_ENGAGEMENT: EngagementState = {
   achievements: MOCK_ACHIEVEMENTS,
   completionRate: 17,
   totalDaysCompleted: 5,
-  streakFreezes: 0,
+  streakFreezes: 2,
   dailyMultiplier: 2.0,
   dailyChallenge: { id: "reflect_50", description: "Write a 50+ word reflection", bonusXP: 50, checkKey: "reflect_50" },
   isComeback: false,
@@ -168,7 +168,7 @@ const SCREENS = [
     <DayView day={MOCK_DAY} onComplete={noop} savedProgress={{ completed: { 0: true, 1: true }, feedback: "" }} currentStreak={4} />
   )},
   { id: "congrats-view", Component: ({ noop }: { noop: () => void }) => (
-    <CongratsView onViewCalendar={noop} onDoMore={noop} goalTitle="Learn to play guitar" dayNumber={5} totalDays={30} progress={MOCK_PROGRESS} />
+    <CongratsView onViewCalendar={noop} onDoMore={noop} goalTitle="Learn to play guitar" dayNumber={5} totalDays={30} progress={MOCK_PROGRESS} milestone={MOCK_MILESTONE} xp={MOCK_XP} />
   )},
 ];
 
@@ -202,6 +202,38 @@ function PreviewContent() {
           </PhoneFrame>
         ))}
       </div>
+    );
+  }
+
+  // ?complete=1 — full 30-day completion to verify the celebration screen
+  if (searchParams.get("complete") !== null) {
+    const fullProgress = Object.fromEntries(
+      Array.from({ length: 30 }, (_, i) => [
+        i + 1,
+        { completed: { 0: true, 1: true, 2: true }, feedback: "Done.", completedAt: `2026-03-${String(i + 1).padStart(2, "0")}T20:00:00Z` },
+      ])
+    );
+    const fullEngagement: EngagementState = {
+      ...MOCK_ENGAGEMENT,
+      currentStreak: 30,
+      longestStreak: 30,
+      totalXP: 12480,
+      level: { name: "Master", threshold: 5000, nextThreshold: null },
+      levelProgress: 1,
+      completionRate: 100,
+      totalDaysCompleted: 30,
+      streakFreezes: 3,
+      achievements: MOCK_ACHIEVEMENTS.map((a) => ({ ...a, unlocked: true })),
+    };
+    return (
+      <CalendarView
+        planData={MOCK_PLAN}
+        goalTitle="Learn to play guitar"
+        onDayClick={noop}
+        progress={fullProgress}
+        engagement={fullEngagement}
+        onBack={noop}
+      />
     );
   }
 

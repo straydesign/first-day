@@ -4,7 +4,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { ArrowRight, Loader2, AlertCircle, ChevronDown, ChevronUp, Check } from 'lucide-react';
 import { BackButton } from '@/components/ui/back-button';
-import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3 } from '@/constants';
+import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, GOAL_TEMPLATES, type GoalTemplate } from '@/constants';
 import { BRIGHT_COLORS, SHARD_CLIPS, SCROLL_SPEEDS, FIELD_COLORS, EXP_COLORS } from '@/tokens';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMonotone } from './MonotoneContext';
@@ -41,6 +41,16 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
   const [showValidation, setShowValidation] = useState(false);
 
   const handleSuggestionClick = (suggestion: string) => { setGoal(suggestion); setError(null); };
+
+  const handleTemplateClick = (template: GoalTemplate) => {
+    setGoal(template.goal);
+    setWhy(template.why);
+    setExperienceLevel(template.experienceLevel);
+    setPriorExperience(template.priorExperience);
+    setPreferredTactics(template.preferredTactics);
+    setShowOptional(true);
+    setError(null);
+  };
 
   const handleGenerate = () => {
     if (!goal.trim()) { setShowValidation(true); return; }
@@ -112,6 +122,39 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
             </div>
           </div>
         </motion.div>
+      </div>
+      <div className="flex items-center justify-center">
+        <div className="w-full max-w-4xl mx-auto px-4 md:px-12 pb-2 md:pb-6">
+          <div className="flex items-center gap-3 mb-3 md:mb-4">
+            <div className="h-px flex-1 bg-white/15" />
+            <p className="text-[10px] md:text-xs uppercase tracking-[0.3em] font-black text-white/60">Or start from a template</p>
+            <div className="h-px flex-1 bg-white/15" />
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3">
+            {GOAL_TEMPLATES.map((template, i) => {
+              const isActive = goal === template.goal;
+              return (
+                <button
+                  key={template.id}
+                  onClick={() => handleTemplateClick(template)}
+                  disabled={isGenerating}
+                  className={`text-left p-3 md:p-4 transition-all hover:scale-[1.03] disabled:opacity-50 ${isActive ? 'ring-2 ring-white/60 scale-[1.03]' : ''}`}
+                  style={{
+                    backgroundColor: monotone ? "#222222" : BRIGHT_COLORS[(i * 3 + 1) % BRIGHT_COLORS.length],
+                    clipPath: SHARD_CLIPS[i % SHARD_CLIPS.length],
+                  }}
+                  aria-label={`Use ${template.title} template`}
+                >
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-xl md:text-2xl" aria-hidden>{template.icon}</span>
+                    <span className="text-sm md:text-base font-black text-black uppercase tracking-wide truncate">{template.title}</span>
+                  </div>
+                  <p className="text-xs md:text-sm text-black/70 font-medium leading-snug line-clamp-2">{template.goal}</p>
+                </button>
+              );
+            })}
+          </div>
+        </div>
       </div>
       <div className="w-full space-y-1 mb-4 md:mb-8 py-3 md:py-6">
         {renderScrollRow(GOAL_SUGGESTIONS_ROW_1, 'left', 0)}

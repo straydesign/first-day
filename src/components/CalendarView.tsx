@@ -1,9 +1,12 @@
 "use client";
-import { BookOpen, Edit2, ChevronUp, ChevronDown, AlertTriangle, ArrowLeft, ArrowRight, Trophy, Flame, Sparkles } from "lucide-react";
+import { BookOpen, Edit2, ChevronUp, ChevronDown, AlertTriangle, ArrowLeft, ArrowRight, Flame, Sparkles } from "lucide-react";
 import { WeekCalendar } from "./WeekCalendar";
+import { PlanCompleteCelebration } from "./PlanCompleteCelebration";
+import { OnboardingTour } from "./OnboardingTour";
 import { VORONOI_LIGHT, SHARD_CLIPS, LABEL_CLIPS, BUTTON_CLIPS, getClip } from "@/constants";
 import { useState, useEffect } from "react";
 import { StreakBadge } from "./StreakBadge";
+import { StreakFreezeIndicator } from "./StreakFreezeIndicator";
 import { motion } from "framer-motion";
 import { useMonotone } from "./MonotoneContext";
 import { staggerContainerSlow, tileEnter, contentReveal } from "@/lib/animations";
@@ -99,8 +102,19 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, prog
   const heroAccent = monotone ? "#FFFFFF" : VORONOI_LIGHT[(nextDay - 1) % VORONOI_LIGHT.length];
   const progressPct = Math.round((completedCount / 30) * 100);
 
+  if (allDone) {
+    return (
+      <PlanCompleteCelebration
+        goalTitle={goalTitle}
+        engagement={engagement}
+        onStartNextGoal={() => onBack?.()}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen relative pb-20 md:pb-0" role="main" aria-label="30-day plan calendar">
+      <OnboardingTour />
       <div className="relative z-10 p-4 md:p-8 pt-[120px] md:pt-[120px]">
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -126,13 +140,19 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, prog
                   <h1 className="text-3xl md:text-7xl font-bold text-white">{goalTitle}</h1>
                 </div>
                 {engagement && (engagement.currentStreak > 0 || engagement.isAtRisk) && (
-                  <StreakBadge streak={engagement.currentStreak} isAtRisk={engagement.isAtRisk} />
+                  <div className="flex items-center justify-center gap-2 flex-wrap">
+                    <StreakBadge streak={engagement.currentStreak} isAtRisk={engagement.isAtRisk} />
+                    <StreakFreezeIndicator count={engagement.streakFreezes} isAtRisk={engagement.isAtRisk} />
+                  </div>
                 )}
               </div>
               {engagement?.isAtRisk && (
                 <div className="mb-3 mx-auto max-w-md bg-black border border-coral-500/40 clip-tile-c px-4 py-2 flex items-center gap-2 animate-pulse">
                   <AlertTriangle className="w-4 h-4 text-coral-400 flex-shrink-0" />
-                  <p className="text-sm text-coral-300 font-medium">Complete a lesson today to keep your {engagement.currentStreak}-day streak alive.</p>
+                  <p className="text-sm text-coral-300 font-medium">
+                    Complete a lesson today to keep your {engagement.currentStreak}-day streak alive
+                    {engagement.streakFreezes > 0 ? ` — or your freeze will catch you.` : "."}
+                  </p>
                 </div>
               )}
               {onEditGoal && (
@@ -161,23 +181,13 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, prog
             initial="hidden"
             animate="visible"
           >
-            {allDone ? (
-              <div
-                className="relative bg-black p-8 md:p-14 text-center"
-                style={{ clipPath: getClip(SHARD_CLIPS, 0) }}
-              >
-                <Trophy className="w-16 h-16 md:w-20 md:h-20 mx-auto mb-4 text-[#fcd02a]" />
-                <h2 className="text-4xl md:text-6xl font-black uppercase text-white mb-2" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>Goal Crushed</h2>
-                <p className="text-lg md:text-xl text-white/80">All 30 lessons complete. You proved you can do anything you set your mind to.</p>
-              </div>
-            ) : (
-              <div
-                className="relative p-6 md:p-10"
-                style={{
-                  backgroundColor: heroAccent,
-                  clipPath: getClip(SHARD_CLIPS, (nextDay - 1) % SHARD_CLIPS.length),
-                }}
-              >
+            <div
+              className="relative p-6 md:p-10"
+              style={{
+                backgroundColor: heroAccent,
+                clipPath: getClip(SHARD_CLIPS, (nextDay - 1) % SHARD_CLIPS.length),
+              }}
+            >
                 <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-3">
@@ -223,8 +233,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, prog
                     </button>
                   </div>
                 </div>
-              </div>
-            )}
+            </div>
           </motion.div>
 
           {/* Section B — Progress summary */}

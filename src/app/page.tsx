@@ -9,8 +9,7 @@ import { useAuth } from "@/hooks/useAuth";
 import type { AppView } from "@/types";
 
 const LoginModal = dynamic(() => import("@/components/LoginModal").then(m => ({ default: m.LoginModal })));
-const PrivacyPolicy = dynamic(() => import("@/components/PrivacyPolicy").then(m => ({ default: m.PrivacyPolicy })));
-const TermsOfService = dynamic(() => import("@/components/TermsOfService").then(m => ({ default: m.TermsOfService })));
+const LegalPage = dynamic(() => import("@/components/LegalPage").then(m => ({ default: m.LegalPage })));
 const ResetPasswordView = dynamic(() => import("@/components/ResetPasswordView").then(m => ({ default: m.ResetPasswordView })));
 
 export default function Home() {
@@ -132,24 +131,15 @@ export default function Home() {
     return <LoadingScreen />;
   }
 
-  // Public pages
-  if (currentView === "privacy") {
+  // Public pages — Privacy + Terms share a single tabbed component
+  if (currentView === "privacy" || currentView === "terms") {
     return (
-      <PrivacyPolicy
+      <LegalPage
         onBack={handleBackToLanding}
-        onNavigate={(page) => {
-          if (page === "terms") handleShowTermsOfService();
-        }}
-      />
-    );
-  }
-
-  if (currentView === "terms") {
-    return (
-      <TermsOfService
-        onBack={handleBackToLanding}
-        onNavigate={(page) => {
-          if (page === "privacy") handleShowPrivacyPolicy();
+        initialTab={currentView}
+        onTabChange={(tab) => {
+          if (tab === "privacy") handleShowPrivacyPolicy();
+          else handleShowTermsOfService();
         }}
       />
     );
