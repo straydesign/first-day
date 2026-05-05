@@ -250,7 +250,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
               <div className="flex items-center justify-center gap-2 mb-4 px-4">
                 <span className="h-px w-8 bg-white/30" aria-hidden />
                 <span className="text-xs lg:text-sm uppercase tracking-[0.25em] text-white/70 font-bold">
-                  Start this week
+                  Tap a goal to preview your week
                 </span>
                 <span className="h-px w-8 bg-white/30" aria-hidden />
               </div>
