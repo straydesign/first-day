@@ -67,6 +67,16 @@ export function LivePlanDemo({ onGetStarted, onPlanGenerated, externalSeed }: Li
   const [placeholderIdx, setPlaceholderIdx] = useState(0);
   const [shareCopied, setShareCopied] = useState(false);
   const audioCtxRef = useRef<AudioContext | null>(null);
+  const dayGridRef = useRef<HTMLDivElement | null>(null);
+
+  // Auto-scroll the freshly revealed plan into view so the user sees all 7 days.
+  useEffect(() => {
+    if (phase !== "revealed") return;
+    const t = setTimeout(() => {
+      dayGridRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 120);
+    return () => clearTimeout(t);
+  }, [phase]);
 
   const sharePlan = async () => {
     const text = `My 7-day sprint to ${goal}:\n\n${activePlan
@@ -259,7 +269,30 @@ export function LivePlanDemo({ onGetStarted, onPlanGenerated, externalSeed }: Li
 
               {/* Day cards — fade in after assembly */}
               {phase === "revealed" && (
-                <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 md:gap-3 mb-6">
+                <div ref={dayGridRef} className="relative grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 md:gap-3 mb-6">
+                  {/* Celebration burst — fires once on reveal, respects reduced motion via MotionConfig */}
+                  <div className="pointer-events-none absolute inset-0 flex items-center justify-center" aria-hidden>
+                    {Array.from({ length: 18 }).map((_, i) => {
+                      const angle = (i / 18) * Math.PI * 2;
+                      const dist = 120 + (i % 3) * 24;
+                      const color = TOKENS.colors.bright[i % TOKENS.colors.bright.length];
+                      return (
+                        <motion.div
+                          key={i}
+                          initial={{ x: 0, y: 0, scale: 0, opacity: 1 }}
+                          animate={{
+                            x: Math.cos(angle) * dist,
+                            y: Math.sin(angle) * dist,
+                            scale: [0, 1, 0.4],
+                            opacity: [1, 1, 0],
+                          }}
+                          transition={{ duration: 0.9, ease: "easeOut", delay: 0.05 }}
+                          className="absolute w-2 h-2"
+                          style={{ backgroundColor: color, clipPath: TOKENS.clipPaths.shard[i % TOKENS.clipPaths.shard.length] }}
+                        />
+                      );
+                    })}
+                  </div>
                   {activePlan.map((activity, i) => (
                     <motion.div
                       key={i}
