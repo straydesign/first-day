@@ -188,21 +188,27 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
             </motion.div>
           </div>
 
-          {/* Scroll indicator */}
-          <motion.div
+          {/* Scroll indicator — clickable shortcut to the magic-moment demo */}
+          <motion.button
+            type="button"
+            onClick={() => liveDemoRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.2 }}
-            className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 group cursor-pointer"
+            aria-label="Scroll to live plan demo"
           >
-            <div className="clip-tile-c w-6 h-10 border-2 border-white/40 flex justify-center pt-2">
+            <span className="text-[10px] uppercase tracking-[0.25em] text-white/50 group-hover:text-white/90 transition-colors font-bold">
+              See it in 2s
+            </span>
+            <div className="clip-tile-c w-6 h-10 border-2 border-white/40 group-hover:border-white/80 transition-colors flex justify-center pt-2">
               <motion.div
                 animate={{ y: [0, 8, 0] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
-                className="clip-diamond w-1.5 h-1.5 bg-white/60"
+                className="clip-diamond w-1.5 h-1.5 bg-white/60 group-hover:bg-white transition-colors"
               />
             </div>
-          </motion.div>
+          </motion.button>
         </section>
 
         {/* Sticky nav — tagline bar with centered login/get-started */}
