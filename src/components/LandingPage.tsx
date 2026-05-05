@@ -92,9 +92,9 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
   };
 
   const renderScrollRow = (goals: string[], direction: "left" | "right", rowIndex: number) => (
-    <div className="overflow-hidden select-none">
+    <div className="overflow-hidden select-none group">
       <div
-        className="flex whitespace-nowrap"
+        className="flex whitespace-nowrap group-hover:[animation-play-state:paused]"
         style={{
           animation: `scroll-${direction === "left" ? "left" : "right"} ${SCROLL_SPEEDS[rowIndex]} linear infinite`,
         }}
