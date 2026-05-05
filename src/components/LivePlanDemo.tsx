@@ -226,8 +226,9 @@ export function LivePlanDemo({ onGetStarted, onPlanGenerated, externalSeed }: Li
                       key={i}
                       initial={{ opacity: 0, y: 16, scale: 0.92 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
+                      whileHover={{ y: -4, scale: 1.04 }}
                       transition={{ ...TOKENS.motion.spring.gentle, delay: 0.05 * i }}
-                      className="relative p-4 md:p-5 flex flex-col gap-2 min-h-[140px] md:min-h-[160px]"
+                      className="relative p-4 md:p-5 flex flex-col gap-2 min-h-[140px] md:min-h-[160px] cursor-default"
                       style={{
                         backgroundColor: TOKENS.colors.bright[i % TOKENS.colors.bright.length],
                         clipPath: TOKENS.clipPaths.shard[i % TOKENS.clipPaths.shard.length],
