@@ -131,10 +131,24 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
               Log In
             </button>
           </div>
-          <div className="absolute top-[100px] md:top-6 right-4 lg:right-8 z-50">
-            <button
+          <div className="absolute top-[100px] md:top-6 right-4 lg:right-8 z-50 inline-block">
+            <motion.span
+              aria-hidden
+              animate={{ scale: [1, 1.18, 1], opacity: [0.5, 0, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                backgroundColor: "#FF2D55",
+                clipPath: "polygon(0% 8%, 97% 0%, 100% 88%, 3% 100%)",
+              }}
+            />
+            <motion.button
               onClick={onGetStarted}
-              className="px-8 py-4 lg:px-10 lg:py-5 font-black text-lg lg:text-xl tracking-wide uppercase hover:scale-105 transition-all duration-300 btn-shake"
+              animate={{ scale: [1, 1.03, 1] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              whileHover={{ scale: 1.07 }}
+              whileTap={{ scale: 0.96 }}
+              className="relative px-8 py-4 lg:px-10 lg:py-5 font-black text-lg lg:text-xl tracking-wide uppercase btn-shake"
               style={{
                 backgroundColor: "#FF2D55",
                 color: "#000000",
@@ -142,7 +156,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
               }}
             >
               Get Started
-            </button>
+            </motion.button>
           </div>
 
           {/* Tagline — shard word chips floating over hero */}
