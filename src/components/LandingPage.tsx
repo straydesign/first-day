@@ -304,9 +304,10 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                     key={s.n}
                     initial={{ opacity: 0, y: 24 }}
                     whileInView={{ opacity: 1, y: 0 }}
+                    whileHover={{ y: -6, scale: 1.02 }}
                     viewport={{ once: true, margin: "-40px" }}
                     transition={{ ...SPRING.gentle, delay: i * 0.12 }}
-                    className="relative p-5 lg:p-8 text-center overflow-hidden"
+                    className="relative p-5 lg:p-8 text-center overflow-hidden cursor-default"
                     style={{
                       backgroundColor: monotone ? "#444" : s.color,
                       clipPath: s.clip,
@@ -342,8 +343,10 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
               <div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 lg:gap-10">
                   {/* Streaks — single shard */}
-                  <div
-                    className="relative p-5 lg:p-8 text-center overflow-hidden"
+                  <motion.div
+                    whileHover={{ y: -6, scale: 1.02 }}
+                    transition={SPRING.gentle}
+                    className="relative p-5 lg:p-8 text-center overflow-hidden cursor-default"
                     style={{
                       backgroundColor: monotone ? "#555555" : "#FFE633",
                       clipPath: "polygon(4% 8%, 95% 0%, 100% 85%, 8% 100%)",
@@ -359,11 +362,13 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                       <CountUp target={12} />
                     </div>
                     <p className="text-xs text-black/70 mt-1 font-medium">12-day streak</p>
-                  </div>
+                  </motion.div>
 
                   {/* XP & Levels — single shard */}
-                  <div
-                    className="relative p-5 lg:p-8 text-center overflow-hidden"
+                  <motion.div
+                    whileHover={{ y: -6, scale: 1.02 }}
+                    transition={SPRING.gentle}
+                    className="relative p-5 lg:p-8 text-center overflow-hidden cursor-default"
                     style={{
                       backgroundColor: monotone ? "#444444" : "#FF6B2B",
                       clipPath: "polygon(0% 5%, 92% 0%, 98% 92%, 3% 95%)",
@@ -392,11 +397,13 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                       </div>
                       <p className="text-xs text-black/60">750 XP to Unstoppable</p>
                     </div>
-                  </div>
+                  </motion.div>
 
                   {/* Achievements — single shard */}
-                  <div
-                    className="relative p-5 lg:p-8 text-center overflow-hidden"
+                  <motion.div
+                    whileHover={{ y: -6, scale: 1.02 }}
+                    transition={SPRING.gentle}
+                    className="relative p-5 lg:p-8 text-center overflow-hidden cursor-default"
                     style={{
                       backgroundColor: monotone ? "#333333" : "#FF10F0",
                       clipPath: "polygon(6% 0%, 100% 10%, 94% 100%, 0% 88%)",
@@ -426,7 +433,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                         </motion.div>
                       ))}
                     </div>
-                  </div>
+                  </motion.div>
                 </div>
 
                 {/* Stat bar — single-color shards */}
