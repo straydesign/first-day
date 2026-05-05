@@ -304,6 +304,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
             goal={demoGoal ?? undefined}
             plan={demoPlan ?? undefined}
             isUserChosen={demoGoal !== null}
+            onGetStarted={onGetStarted}
           />
         </AnimatedSection>
 

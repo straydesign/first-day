@@ -32,6 +32,8 @@ interface DayCompleteDemoProps {
   plan?: string[];
   /** Whether the goal/plan came from visitor input (vs. the built-in sample). */
   isUserChosen?: boolean;
+  /** Conversion CTA fired when the user hits Week Complete (peak dopamine). */
+  onGetStarted?: () => void;
 }
 
 // iOS-portable audio: maps to AVAudioEngine on iOS (or AudioServicesPlaySystemSound
@@ -62,6 +64,7 @@ export function DayCompleteDemo({
   goal,
   plan,
   isUserChosen = false,
+  onGetStarted,
 }: DayCompleteDemoProps = {}) {
   const effectiveGoal = goal ?? DEFAULT_DEMO_GOAL;
   const effectivePlan = plan ?? planFor(DEFAULT_DEMO_GOAL);
@@ -383,14 +386,27 @@ export function DayCompleteDemo({
           </AnimatePresence>
         </div>
 
-        {/* Reset CTA */}
+        {/* Reset CTA — at Week Complete, show a strong sprint CTA alongside reset */}
         {completed > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={TOKENS.motion.spring.gentle}
-            className="text-center mt-6"
+            className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-6"
           >
+            {isMaxed && onGetStarted && (
+              <motion.button
+                onClick={onGetStarted}
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.97 }}
+                animate={{ scale: [1, 1.03, 1] }}
+                transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+                className="px-7 py-4 bg-[#FF2D55] text-black font-black uppercase tracking-wider text-base md:text-lg"
+                style={{ clipPath: TOKENS.clipPaths.button[0] }}
+              >
+                Start your real sprint →
+              </motion.button>
+            )}
             <button
               onClick={reset}
               className="px-5 py-2 text-white/60 hover:text-white text-xs uppercase tracking-widest transition-colors"
