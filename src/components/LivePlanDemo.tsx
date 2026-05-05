@@ -23,7 +23,7 @@ interface LivePlanDemoProps {
   onPlanGenerated?: (goal: string, plan: string[]) => void;
 }
 
-type Phase = "idle" | "generating" | "revealed";
+type Phase = "idle" | "scattered" | "assembling" | "revealed";
 
 export function LivePlanDemo({ onGetStarted, onPlanGenerated }: LivePlanDemoProps) {
   const [goal, setGoal] = useState("");
@@ -34,11 +34,12 @@ export function LivePlanDemo({ onGetStarted, onPlanGenerated }: LivePlanDemoProp
     const cleaned = raw.trim();
     if (!cleaned) return;
     setGoal(cleaned);
-    setPhase("generating");
+    setPhase("scattered");
     const plan = planFor(cleaned);
     setActivePlan(plan);
     onPlanGenerated?.(cleaned, plan);
-    setTimeout(() => setPhase("revealed"), 1400);
+    setTimeout(() => setPhase("assembling"), 600);
+    setTimeout(() => setPhase("revealed"), 1500);
   };
 
   const reset = () => {
@@ -46,6 +47,8 @@ export function LivePlanDemo({ onGetStarted, onPlanGenerated }: LivePlanDemoProp
     setGoal("");
     setActivePlan([]);
   };
+
+  const isAnimating = phase === "scattered" || phase === "assembling";
 
   return (
     <section className="relative w-full py-12 md:py-20 px-4 md:px-10 overflow-hidden">
@@ -132,7 +135,7 @@ export function LivePlanDemo({ onGetStarted, onPlanGenerated }: LivePlanDemoProp
             </motion.div>
           )}
 
-          {(phase === "generating" || phase === "revealed") && (
+          {(isAnimating || phase === "revealed") && (
             <motion.div
               key="plan"
               initial={{ opacity: 0 }}
@@ -150,16 +153,16 @@ export function LivePlanDemo({ onGetStarted, onPlanGenerated }: LivePlanDemoProp
                 </p>
               </div>
 
-              {/* Shard assembly stage — only visible while shards are animating */}
-              {phase === "generating" && (
+              {/* Shard assembly stage — scattered → assembled grid */}
+              {isAnimating && (
                 <div className="relative h-[280px] md:h-[320px] mb-6">
                   <ShardEngine
                     count={28}
-                    state="scattered"
+                    state={phase === "assembling" ? "assembling" : "scattered"}
                     target={{ type: "grid", rows: 4, cols: 7, gap: 3 }}
                     seed={goal.length * 7 + 13}
-                    maxOpacity={0.85}
-                    drift={true}
+                    maxOpacity={phase === "assembling" ? 1 : 0.7}
+                    drift={phase === "scattered"}
                   />
                 </div>
               )}
