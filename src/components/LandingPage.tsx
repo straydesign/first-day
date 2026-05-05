@@ -96,7 +96,10 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
       <div
         className="flex whitespace-nowrap group-hover:[animation-play-state:paused]"
         style={{
-          animation: `scroll-${direction === "left" ? "left" : "right"} ${SCROLL_SPEEDS[rowIndex]} linear infinite`,
+          animationName: `scroll-${direction === "left" ? "left" : "right"}`,
+          animationDuration: SCROLL_SPEEDS[rowIndex],
+          animationTimingFunction: "linear",
+          animationIterationCount: "infinite",
         }}
       >
         {[...goals, ...goals, ...goals, ...goals, ...goals, ...goals, ...goals, ...goals].map((goal, index) => (
