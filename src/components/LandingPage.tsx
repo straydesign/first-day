@@ -121,7 +121,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
           <div className="absolute top-[100px] md:top-6 left-4 lg:left-8 z-50">
             <button
               onClick={onLogin || onGetStarted}
-              className="px-8 py-4 lg:px-10 lg:py-5 font-black text-lg lg:text-xl tracking-wide uppercase hover:scale-105 transition-all duration-300 btn-shake"
+              className="px-5 py-3 md:px-8 md:py-4 lg:px-10 lg:py-5 font-black text-base md:text-lg lg:text-xl tracking-wide uppercase hover:scale-105 transition-all duration-300 btn-shake"
               style={{
                 backgroundColor: "#FFE633",
                 color: "#000000",
@@ -148,7 +148,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
               whileHover={{ scale: 1.07 }}
               whileTap={{ scale: 0.96 }}
-              className="relative px-8 py-4 lg:px-10 lg:py-5 font-black text-lg lg:text-xl tracking-wide uppercase btn-shake"
+              className="relative px-5 py-3 md:px-8 md:py-4 lg:px-10 lg:py-5 font-black text-base md:text-lg lg:text-xl tracking-wide uppercase btn-shake"
               style={{
                 backgroundColor: "#FF2D55",
                 color: "#000000",
@@ -201,25 +201,28 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
             transition={SPRING.snappy}
             className="fixed top-0 left-0 right-0 z-50 bg-black px-4 pt-[84px] pb-5"
           >
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-2">
               <motion.button
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 onClick={onLogin || onGetStarted}
-                className="bg-white/10 px-6 py-3 text-white font-black text-base tracking-wide uppercase hover:scale-105 hover:bg-white/15 transition-all flex-shrink-0"
+                className="bg-white/10 px-4 py-2.5 md:px-6 md:py-3 text-white font-black text-sm md:text-base tracking-wide uppercase hover:scale-105 hover:bg-white/15 transition-all flex-shrink-0"
                 style={{ clipPath: "polygon(3% 0%, 100% 8%, 97% 100%, 0% 88%)" }}
               >
                 Log In
               </motion.button>
-              <FirstDayLogo compact={true} />
+              <div className="flex-1 min-w-0 flex justify-center">
+                <FirstDayLogo compact={true} />
+              </div>
               <motion.button
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 onClick={onGetStarted}
-                className="bg-black px-6 py-3 text-white font-black text-sm tracking-wide uppercase hover:scale-105 transition-transform flex-shrink-0"
+                className="bg-black px-4 py-2.5 md:px-6 md:py-3 text-white font-black text-sm tracking-wide uppercase hover:scale-105 transition-transform flex-shrink-0"
                 style={{ clipPath: "polygon(0% 8%, 97% 0%, 100% 88%, 3% 100%)" }}
               >
-                Get Started
+                <span className="hidden sm:inline">Get Started</span>
+                <span className="sm:hidden">Start</span>
               </motion.button>
             </div>
           </motion.div>
