@@ -68,6 +68,7 @@ export function DayCompleteDemo({
 
   const [completed, setCompleted] = useState(0);
   const [pulseKey, setPulseKey] = useState(0);
+  const [finaleKey, setFinaleKey] = useState(0);
   const [showXpToast, setShowXpToast] = useState(false);
   const audioCtxRef = useRef<AudioContext | null>(null);
 
@@ -75,6 +76,7 @@ export function DayCompleteDemo({
   useEffect(() => {
     setCompleted(0);
     setPulseKey(0);
+    setFinaleKey(0);
     setShowXpToast(false);
   }, [effectiveGoal]);
 
@@ -94,8 +96,12 @@ export function DayCompleteDemo({
       }
       playBlip(audioCtxRef.current, completed);
     }
-    setCompleted((c) => c + 1);
+    const next = completed + 1;
+    setCompleted(next);
     setPulseKey((k) => k + 1);
+    if (next >= STREAK_MAX) {
+      setFinaleKey((k) => k + 1);
+    }
     setShowXpToast(true);
     setTimeout(() => setShowXpToast(false), 900);
   };
@@ -103,6 +109,7 @@ export function DayCompleteDemo({
   const reset = () => {
     setCompleted(0);
     setPulseKey(0);
+    setFinaleKey(0);
     setShowXpToast(false);
   };
 
@@ -221,6 +228,48 @@ export function DayCompleteDemo({
             </div>
           )}
 
+          {/* Finale: bigger, longer burst when streak completes */}
+          {finaleKey > 0 && (
+            <>
+              <div
+                key={`finale-a-${finaleKey}`}
+                className="absolute inset-0 pointer-events-none z-10"
+                style={{ transform: "scale(1.6)" }}
+              >
+                <ShardEngine
+                  count={60}
+                  state="exploding"
+                  seed={finaleKey * 53 + 1}
+                  sizeRange={[18, 56]}
+                  maxOpacity={1}
+                  drift={false}
+                />
+              </div>
+              <div
+                key={`finale-b-${finaleKey}`}
+                className="absolute inset-0 pointer-events-none z-10"
+                style={{ transform: "scale(2.2)" }}
+              >
+                <ShardEngine
+                  count={40}
+                  state="exploding"
+                  seed={finaleKey * 71 + 19}
+                  sizeRange={[10, 28]}
+                  maxOpacity={0.85}
+                  drift={false}
+                />
+              </div>
+              <motion.div
+                key={`flash-${finaleKey}`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0, 0.6, 0] }}
+                transition={{ duration: 0.7, ease: [0.22, 0.8, 0.3, 1] }}
+                className="absolute inset-0 pointer-events-none bg-[#FFE633]"
+                style={{ clipPath: TOKENS.clipPaths.shard[1] }}
+              />
+            </>
+          )}
+
           {/* The card — tappable */}
           <motion.button
             type="button"
@@ -254,7 +303,20 @@ export function DayCompleteDemo({
                   transition={TOKENS.motion.spring.bouncy}
                   className="flex flex-col items-center gap-2"
                 >
-                  <div className="text-5xl md:text-6xl">🏆</div>
+                  <motion.div
+                    className="text-6xl md:text-7xl"
+                    animate={{
+                      scale: [1, 1.08, 1],
+                      rotate: [0, -4, 4, 0],
+                    }}
+                    transition={{
+                      duration: 1.6,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                  >
+                    🏆
+                  </motion.div>
                   <div
                     className="text-2xl md:text-3xl font-black text-black uppercase tracking-wider text-center leading-tight"
                     style={{
