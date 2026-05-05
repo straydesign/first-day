@@ -13,7 +13,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, ArrowRight } from "lucide-react";
+import { Sparkles, ArrowRight, Share2, Check } from "lucide-react";
 import { ShardEngine } from "./lab/ShardEngine";
 import { TOKENS } from "@/tokens";
 import { QUICK_GOALS, planFor } from "@/data/sample-plans";
@@ -65,7 +65,27 @@ export function LivePlanDemo({ onGetStarted, onPlanGenerated, externalSeed }: Li
   const [phase, setPhase] = useState<Phase>("idle");
   const [activePlan, setActivePlan] = useState<string[]>([]);
   const [placeholderIdx, setPlaceholderIdx] = useState(0);
+  const [shareCopied, setShareCopied] = useState(false);
   const audioCtxRef = useRef<AudioContext | null>(null);
+
+  const sharePlan = async () => {
+    const text = `My 7-day sprint to ${goal}:\n\n${activePlan
+      .map((a, i) => `Day ${i + 1}: ${a}`)
+      .join("\n")}\n\nBuilt with First Day · firstday.life`;
+    try {
+      if (typeof navigator !== "undefined" && navigator.share) {
+        await navigator.share({ title: `My ${goal} sprint`, text });
+        return;
+      }
+      if (typeof navigator !== "undefined" && navigator.clipboard) {
+        await navigator.clipboard.writeText(text);
+        setShareCopied(true);
+        setTimeout(() => setShareCopied(false), 2000);
+      }
+    } catch {
+      // User cancelled share sheet — silent.
+    }
+  };
 
   // Cycle the placeholder while idle so the input feels alive.
   useEffect(() => {
@@ -275,6 +295,21 @@ export function LivePlanDemo({ onGetStarted, onPlanGenerated, externalSeed }: Li
                     style={{ clipPath: TOKENS.clipPaths.button[0] }}
                   >
                     Start your real plan →
+                  </button>
+                  <button
+                    onClick={sharePlan}
+                    className="px-5 py-3 bg-white/10 hover:bg-white/20 text-white text-sm font-bold uppercase tracking-wider transition-colors inline-flex items-center gap-2"
+                    style={{ clipPath: TOKENS.clipPaths.button[2] }}
+                  >
+                    {shareCopied ? (
+                      <>
+                        <Check className="w-4 h-4" /> Copied
+                      </>
+                    ) : (
+                      <>
+                        <Share2 className="w-4 h-4" /> Share
+                      </>
+                    )}
                   </button>
                   <button
                     onClick={reset}
