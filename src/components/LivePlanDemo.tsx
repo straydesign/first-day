@@ -322,13 +322,26 @@ export function LivePlanDemo({ onGetStarted, onPlanGenerated, externalSeed }: Li
                   transition={{ ...TOKENS.motion.spring.gentle, delay: 0.6 }}
                   className="flex flex-col sm:flex-row items-center justify-center gap-3"
                 >
-                  <button
-                    onClick={onGetStarted}
-                    className="px-8 py-4 bg-[#FF2D55] text-black font-black uppercase tracking-wider text-base md:text-lg hover:scale-[1.03] transition-transform"
-                    style={{ clipPath: TOKENS.clipPaths.button[0] }}
-                  >
-                    Start your real plan →
-                  </button>
+                  <span className="relative inline-block">
+                    <motion.span
+                      aria-hidden
+                      animate={{ scale: [1, 1.15, 1], opacity: [0.45, 0, 0] }}
+                      transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
+                      className="absolute inset-0 pointer-events-none"
+                      style={{ backgroundColor: "#FF2D55", clipPath: TOKENS.clipPaths.button[0] }}
+                    />
+                    <motion.button
+                      onClick={onGetStarted}
+                      animate={{ scale: [1, 1.03, 1] }}
+                      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                      whileHover={{ scale: 1.06 }}
+                      whileTap={{ scale: 0.96 }}
+                      className="relative px-8 py-4 bg-[#FF2D55] text-black font-black uppercase tracking-wider text-base md:text-lg"
+                      style={{ clipPath: TOKENS.clipPaths.button[0] }}
+                    >
+                      Start your real plan →
+                    </motion.button>
+                  </span>
                   <button
                     onClick={sharePlan}
                     className="px-5 py-3 bg-white/10 hover:bg-white/20 text-white text-sm font-bold uppercase tracking-wider transition-colors inline-flex items-center gap-2"
