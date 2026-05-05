@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useScroll, useSpring } from "framer-motion";
 import { Flame, Zap, Trophy, Target, Sparkles, Calendar, ListChecks, NotebookPen } from "lucide-react";
 import { FirstDayLogo } from "./FirstDayLogo";
 import { HeroMosaic } from "./HeroMosaic";
@@ -76,6 +76,9 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
     setPillSeed({ goal, nonce: Date.now() });
     liveDemoRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
+
+  const { scrollYProgress } = useScroll();
+  const scrollProgressX = useSpring(scrollYProgress, { stiffness: 140, damping: 30, mass: 0.4 });
   useEffect(() => {
     const handleScroll = () => {
       if (!heroNavRef.current) return;
@@ -119,6 +122,16 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
 
   return (
     <div className="min-h-screen relative bg-black">
+      {/* Scroll progress bar — sits above everything, brand yellow, springy */}
+      <motion.div
+        aria-hidden
+        className="fixed top-0 left-0 right-0 h-[3px] z-[100] origin-left pointer-events-none"
+        style={{
+          scaleX: scrollProgressX,
+          backgroundColor: monotone ? "#999999" : "#FFE633",
+        }}
+      />
+
       {/* Full-page animated Voronoi mosaic background */}
       <HeroMosaic />
 
