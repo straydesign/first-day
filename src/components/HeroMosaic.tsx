@@ -152,10 +152,14 @@ export function HeroMosaic() {
   const [assembled, setAssembled] = useState(false);
   const isMobile = useIsMobile();
 
-  // Preload hero image
+  // Preload hero image — prefer WebP, fall back to PNG
   useEffect(() => {
     const img = new Image();
-    img.src = "/hero-sunset.png";
+    const supportsWebP = (() => {
+      const canvas = typeof document !== "undefined" ? document.createElement("canvas") : null;
+      return canvas?.toDataURL("image/webp").startsWith("data:image/webp") ?? false;
+    })();
+    img.src = supportsWebP ? "/hero-sunset.webp" : "/hero-sunset.png";
     img.onload = () => setImageReady(true);
   }, []);
 
@@ -314,8 +318,16 @@ export function HeroMosaic() {
     if (mq.matches) cancelAnimationFrame(rafRef.current);
   }, [assembled]);
 
+  const [heroSrc, setHeroSrc] = useState("/hero-sunset.png");
+  useEffect(() => {
+    const canvas = document.createElement("canvas");
+    if (canvas.toDataURL("image/webp").startsWith("data:image/webp")) {
+      setHeroSrc("/hero-sunset.webp");
+    }
+  }, []);
+
   const bgStyle = imageReady
-    ? { backgroundImage: "url(/hero-sunset.png)", backgroundSize: "100% 100%", backgroundPosition: "center" }
+    ? { backgroundImage: `url(${heroSrc})`, backgroundSize: "100% 100%", backgroundPosition: "center" }
     : {};
 
   return (
