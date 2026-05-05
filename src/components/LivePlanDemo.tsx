@@ -11,7 +11,7 @@
  * a shape transition + opacity + transform, which iOS handles natively.
  */
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { ShardEngine } from "./lab/ShardEngine";
@@ -21,6 +21,8 @@ import { QUICK_GOALS, planFor } from "@/data/sample-plans";
 interface LivePlanDemoProps {
   onGetStarted: () => void;
   onPlanGenerated?: (goal: string, plan: string[]) => void;
+  /** External seed — when set (e.g., from a clicked goal pill), auto-generates. */
+  externalSeed?: { goal: string; nonce: number } | null;
 }
 
 type Phase = "idle" | "scattered" | "assembling" | "revealed";
@@ -49,7 +51,7 @@ function playAssemblyChord(ctx: AudioContext) {
   });
 }
 
-export function LivePlanDemo({ onGetStarted, onPlanGenerated }: LivePlanDemoProps) {
+export function LivePlanDemo({ onGetStarted, onPlanGenerated, externalSeed }: LivePlanDemoProps) {
   const [goal, setGoal] = useState("");
   const [phase, setPhase] = useState<Phase>("idle");
   const [activePlan, setActivePlan] = useState<string[]>([]);
@@ -88,6 +90,14 @@ export function LivePlanDemo({ onGetStarted, onPlanGenerated }: LivePlanDemoProp
     setGoal("");
     setActivePlan([]);
   };
+
+  // External seeding: when a goal pill upstream is clicked, auto-run generate.
+  // The nonce ensures repeated clicks of the same pill still re-trigger.
+  useEffect(() => {
+    if (!externalSeed?.goal) return;
+    generate(externalSeed.goal);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [externalSeed?.nonce]);
 
   const isAnimating = phase === "scattered" || phase === "assembling";
 

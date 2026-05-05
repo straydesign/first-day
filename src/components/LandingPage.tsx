@@ -68,7 +68,14 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
   const [isNavSticky, setIsNavSticky] = useState(false);
   const [demoGoal, setDemoGoal] = useState<string | null>(null);
   const [demoPlan, setDemoPlan] = useState<string[] | null>(null);
+  const [pillSeed, setPillSeed] = useState<{ goal: string; nonce: number } | null>(null);
   const heroNavRef = useRef<HTMLDivElement>(null);
+  const liveDemoRef = useRef<HTMLDivElement>(null);
+
+  const handlePillClick = (goal: string) => {
+    setPillSeed({ goal, nonce: Date.now() });
+    liveDemoRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
   useEffect(() => {
     const handleScroll = () => {
       if (!heroNavRef.current) return;
@@ -93,13 +100,15 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
         }}
       >
         {[...goals, ...goals, ...goals, ...goals, ...goals, ...goals, ...goals, ...goals].map((goal, index) => (
-          <div
+          <button
             key={index}
-            className={`${index % 2 === 0 ? "clip-badge-a" : "clip-badge-b"} inline-block px-5 py-2 text-black text-sm font-bold mx-1.5 select-none`}
+            type="button"
+            onClick={() => handlePillClick(goal)}
+            className={`${index % 2 === 0 ? "clip-badge-a" : "clip-badge-b"} inline-block px-5 py-2 text-black text-sm font-bold mx-1.5 select-none cursor-pointer hover:scale-110 active:scale-95 transition-transform`}
             style={{ backgroundColor: monotone ? "#333333" : getGoalBgColor(goal, index) }}
           >
             {goal}
-          </div>
+          </button>
         ))}
       </div>
     </div>
@@ -254,13 +263,16 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
 
         {/* Live magic-moment demo — try a goal, watch a plan assemble */}
         <AnimatedSection>
-          <LivePlanDemo
-            onGetStarted={onGetStarted}
-            onPlanGenerated={(g, p) => {
-              setDemoGoal(g);
-              setDemoPlan(p);
-            }}
-          />
+          <div ref={liveDemoRef}>
+            <LivePlanDemo
+              onGetStarted={onGetStarted}
+              onPlanGenerated={(g, p) => {
+                setDemoGoal(g);
+                setDemoPlan(p);
+              }}
+              externalSeed={pillSeed}
+            />
+          </div>
         </AnimatedSection>
 
         {/* Dopamine loop — tap-to-feel day completion (auto-fills with the
