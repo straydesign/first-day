@@ -1,5 +1,6 @@
 "use client";
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
+import { MotionConfig } from "framer-motion";
 
 interface MonotoneContextValue {
   monotone: boolean;
@@ -25,11 +26,13 @@ export function MonotoneProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <MonotoneContext.Provider value={{ monotone, toggleMonotone }}>
-      <div
-        style={monotone ? { filter: "grayscale(1)", WebkitFilter: "grayscale(1)" } : undefined}
-      >
-        {children}
-      </div>
+      <MotionConfig reducedMotion="user">
+        <div
+          style={monotone ? { filter: "grayscale(1)", WebkitFilter: "grayscale(1)" } : undefined}
+        >
+          {children}
+        </div>
+      </MotionConfig>
     </MonotoneContext.Provider>
   );
 }
