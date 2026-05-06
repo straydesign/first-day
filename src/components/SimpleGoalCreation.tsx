@@ -259,8 +259,7 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
               <button
                 onClick={onCancel}
                 disabled={isGenerating}
-                className="w-full bg-black/50 text-white/70 py-3 font-bold uppercase tracking-wide hover:scale-105 transition-transform btn-shake"
-                style={{ clipPath: "polygon(0% 3%, 99% 0%, 100% 97%, 1% 100%)" }}
+                className="self-center inline-flex items-center px-3 py-2 text-sm font-bold text-white/50 hover:text-white/90 uppercase tracking-wide transition-colors disabled:opacity-50"
               >
                 Cancel
               </button>

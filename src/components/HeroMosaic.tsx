@@ -9,6 +9,9 @@ import {
 } from "react";
 import { HERO_MOSAIC_TILES, type MosaicTile } from "@/data/hero-mosaic-tiles";
 
+/* ─── Tile bleed — expands each tile outward to close hairline seams between polygons ─── */
+const BLEED = 0.026;
+
 /* ─── Drift settings — subtle breathing for floating tiles ─── */
 const DRIFT = {
   amplitude: 4,
@@ -63,6 +66,77 @@ function polygonClipPath(verts: [number, number][]): string {
   return `polygon(${verts.map(([x, y]) => `${x}% ${y}%`).join(", ")})`;
 }
 
+/* ─── Brand hue snap ─── */
+// Brand hues in degrees: yellow #fcd02a · orange #fb7025 · pink #f31b5e · blue #3075e1
+const BRAND_HUES = [49, 18, 339, 213];
+const HUE_PULL = 0.75;     // 0=keep tile hue, 1=fully snap to nearest brand hue
+const SAT_FLOOR = 0.55;    // bump dull tiles up to at least this saturation
+
+function hexToRgb(hex: string): [number, number, number] {
+  const h = hex.replace("#", "");
+  const v = h.length === 3
+    ? h.split("").map((c) => parseInt(c + c, 16))
+    : [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
+  return [v[0], v[1], v[2]];
+}
+
+function rgbToHsl(r: number, g: number, b: number): [number, number, number] {
+  const rn = r / 255, gn = g / 255, bn = b / 255;
+  const max = Math.max(rn, gn, bn), min = Math.min(rn, gn, bn);
+  const l = (max + min) / 2;
+  if (max === min) return [0, 0, l];
+  const d = max - min;
+  const s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+  let h = 0;
+  if (max === rn) h = ((gn - bn) / d + (gn < bn ? 6 : 0));
+  else if (max === gn) h = ((bn - rn) / d + 2);
+  else h = ((rn - gn) / d + 4);
+  return [h * 60, s, l];
+}
+
+function hslToHex(h: number, s: number, l: number): string {
+  const c = (1 - Math.abs(2 * l - 1)) * s;
+  const hh = ((h % 360) + 360) % 360 / 60;
+  const x = c * (1 - Math.abs((hh % 2) - 1));
+  let r = 0, g = 0, b = 0;
+  if (hh < 1) { r = c; g = x; b = 0; }
+  else if (hh < 2) { r = x; g = c; b = 0; }
+  else if (hh < 3) { r = 0; g = c; b = x; }
+  else if (hh < 4) { r = 0; g = x; b = c; }
+  else if (hh < 5) { r = x; g = 0; b = c; }
+  else { r = c; g = 0; b = x; }
+  const m = l - c / 2;
+  const toHex = (v: number) => Math.max(0, Math.min(255, Math.round((v + m) * 255))).toString(16).padStart(2, "0");
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
+
+function nearestBrandHue(h: number): number {
+  let best = BRAND_HUES[0];
+  let bestDist = Infinity;
+  for (const bh of BRAND_HUES) {
+    const d = Math.min(Math.abs(h - bh), 360 - Math.abs(h - bh));
+    if (d < bestDist) { bestDist = d; best = bh; }
+  }
+  return best;
+}
+
+function lerpHue(from: number, to: number, t: number): number {
+  let diff = to - from;
+  if (diff > 180) diff -= 360;
+  else if (diff < -180) diff += 360;
+  return ((from + diff * t) % 360 + 360) % 360;
+}
+
+function tintTowardBrand(hex: string): string {
+  const [r, g, b] = hexToRgb(hex);
+  const [h, s, l] = rgbToHsl(r, g, b);
+  if (s < 0.05) return hex;  // near-grayscale tiles stay neutral
+  const targetH = nearestBrandHue(h);
+  const newH = lerpHue(h, targetH, HUE_PULL);
+  const newS = Math.max(s, SAT_FLOOR);
+  return hslToHex(newH, newS, l);
+}
+
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
@@ -94,6 +168,7 @@ export function HeroMosaic() {
   const staticData = useMemo(() =>
     staticTiles.map((t) => ({
       ...t,
+      fill: tintTowardBrand(t.fill),
       clipPath: polygonClipPath(t.verts),
     })),
   [staticTiles]);
@@ -111,6 +186,7 @@ export function HeroMosaic() {
       ];
       return {
         ...t,
+        fill: tintTowardBrand(t.fill),
         clipPath: polygonClipPath(t.verts),
         centroidPct,
       };
@@ -344,38 +420,48 @@ export function HeroMosaic() {
     <div
       ref={containerRef}
       className="fixed inset-0 z-0 pointer-events-none overflow-hidden"
+      style={{
+        background:
+          "linear-gradient(to bottom, #1d2a5e 0%, #4a1f5a 35%, #7a1f3e 55%, #2a1f5a 78%, #0f1a3a 100%)",
+      }}
     >
       {/* Static tiles — every non-floating tile in the artwork. Frozen, no animation. */}
-      {staticData.map((tile) => (
-        <div
-          key={tile.id}
-          className="absolute"
-          style={{
-            left: `${tile.leftPct}%`,
-            top: `${tile.topPct}%`,
-            width: `${tile.widthPct}%`,
-            height: `${tile.heightPct}%`,
-            clipPath: tile.clipPath,
-            backgroundColor: tile.fill,
-            opacity: assembled ? 1 : 0,
-            transition: assembled ? "opacity 0.6s ease" : "none",
-          }}
-        />
-      ))}
+      {staticData.map((tile) => {
+        const dx = (tile.widthPct * BLEED) / 2;
+        const dy = (tile.heightPct * BLEED) / 2;
+        return (
+          <div
+            key={tile.id}
+            className="absolute"
+            style={{
+              left: `${tile.leftPct - dx}%`,
+              top: `${tile.topPct - dy}%`,
+              width: `${tile.widthPct * (1 + BLEED)}%`,
+              height: `${tile.heightPct * (1 + BLEED)}%`,
+              clipPath: tile.clipPath,
+              backgroundColor: tile.fill,
+              opacity: assembled ? 1 : 0,
+              transition: assembled ? "opacity 0.6s ease" : "none",
+            }}
+          />
+        );
+      })}
 
       {/* Floating tiles — top 48 by area, animated with drift + cursor magnet + click pulse */}
       {floatingData.map((tile, i) => {
         const off = entranceOffsets[i];
+        const bdx = (tile.widthPct * BLEED) / 2;
+        const bdy = (tile.heightPct * BLEED) / 2;
         return (
           <div
             key={tile.id}
             ref={(el) => { pieceRefs.current[i] = el; }}
             className="absolute"
             style={{
-              left: `${tile.leftPct}%`,
-              top: `${tile.topPct}%`,
-              width: `${tile.widthPct}%`,
-              height: `${tile.heightPct}%`,
+              left: `${tile.leftPct - bdx}%`,
+              top: `${tile.topPct - bdy}%`,
+              width: `${tile.widthPct * (1 + BLEED)}%`,
+              height: `${tile.heightPct * (1 + BLEED)}%`,
               clipPath: tile.clipPath,
               backgroundColor: tile.fill,
               willChange: isMobile ? "auto" : "transform",

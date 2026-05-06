@@ -272,18 +272,18 @@ export function CongratsView({
           )}
           {daysRemaining === null && <div className="mb-8 md:mb-12" />}
 
-          {/* Buttons */}
+          {/* Buttons — primary CTA, secondary text link */}
           <motion.div
-            className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center px-4"
+            className="flex flex-col items-center gap-3 md:gap-4 px-4"
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ ...SPRING.gentle, delay: 1.2 }}
           >
-            <button onClick={onViewCalendar} className="flex items-center justify-center gap-2 px-8 py-5 md:px-10 md:py-6 text-base md:text-lg font-black text-black uppercase tracking-wide hover:scale-105 transition-transform btn-shake" style={{ backgroundColor: monotone ? "#666666" : "#fb7025", clipPath: getClip(BUTTON_CLIPS, 0) }}>
+            <button onClick={onViewCalendar} className="flex items-center justify-center gap-2 px-10 py-5 md:px-14 md:py-6 text-base md:text-lg font-black text-black uppercase tracking-wide hover:scale-105 transition-transform btn-shake" style={{ backgroundColor: monotone ? "#666666" : "#fcd02a", clipPath: getClip(BUTTON_CLIPS, 0) }}>
               <Calendar className="w-5 h-5 flex-shrink-0" />View Calendar
             </button>
-            <button onClick={onDoMore} className="flex items-center justify-center gap-2 px-8 py-5 md:px-10 md:py-6 text-base md:text-lg font-black text-black uppercase tracking-wide hover:scale-105 transition-transform btn-shake" style={{ backgroundColor: monotone ? "#444444" : "#f31b5e", clipPath: getClip(BUTTON_CLIPS, 1) }}>
-              <ArrowRight className="w-5 h-5 flex-shrink-0" />Back to Goals
+            <button onClick={onDoMore} className="inline-flex items-center gap-1.5 px-3 py-2 text-sm md:text-base font-bold text-white/60 hover:text-white uppercase tracking-wide transition-colors">
+              Back to Goals<ArrowRight className="w-4 h-4 flex-shrink-0" />
             </button>
           </motion.div>
         </div>

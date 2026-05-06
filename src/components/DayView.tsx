@@ -6,7 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { CheckCircle2, Calendar, Youtube, ExternalLink, Zap } from "lucide-react";
 import { BackButton } from "@/components/ui/back-button";
 import { previewDayXP, getDailyMultiplier, getDailyChallenge } from "@/lib/engagement";
-import { HERO_PALETTE, SHARD_CLIPS, LABEL_CLIPS, BUTTON_CLIPS, getClip } from "@/constants";
+import { SHARD_CLIPS, LABEL_CLIPS, BUTTON_CLIPS, getClip } from "@/constants";
 import { useMonotone } from "./MonotoneContext";
 import { staggerContainer, tileEnter, contentReveal, popIn, SPRING } from "@/lib/animations";
 import type { SelectedDay, DayProgress, Activity, ActivityResource } from "@/types";
@@ -25,14 +25,6 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
   const [completedActivities, setCompletedActivities] = useState<Record<number, boolean>>({});
   const [feedback, setFeedback] = useState("");
   const [showValidation, setShowValidation] = useState(false);
-  const [btnColorIdx, setBtnColorIdx] = useState(0);
-  const btnColors = useMemo(() => HERO_PALETTE.filter((_, i) => i > 2 && i !== 28), []);
-
-  useEffect(() => {
-    const interval = setInterval(() => setBtnColorIdx(prev => (prev + 1) % btnColors.length), 800);
-    return () => clearInterval(interval);
-  }, [btnColors.length]);
-
   useEffect(() => {
     if (savedProgress) {
       if (savedProgress.completed) setCompletedActivities(savedProgress.completed as Record<number, boolean>);
@@ -218,7 +210,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
             animate="visible"
           >
             <div className="flex justify-center">
-              <button onClick={handleSubmit} className="px-10 py-5 md:px-14 md:py-6 text-lg md:text-xl font-black text-white uppercase tracking-wide hover:scale-105 transition-all duration-500" style={{ backgroundColor: btnColors[btnColorIdx], clipPath: getClip(BUTTON_CLIPS, 0) }}>Complete Day</button>
+              <button onClick={handleSubmit} className="px-10 py-5 md:px-14 md:py-6 text-lg md:text-xl font-black text-black uppercase tracking-wide hover:scale-105 transition-transform" style={{ backgroundColor: monotone ? "#666" : "#fcd02a", clipPath: getClip(BUTTON_CLIPS, 0) }}>Complete Day</button>
             </div>
             {canSubmit && (
               <motion.div
