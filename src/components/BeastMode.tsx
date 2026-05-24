@@ -2,6 +2,9 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { VORONOI_LIGHT, SHARD_CLIPS } from "@/constants";
+import { VoronoiMosaic } from "./VoronoiMosaic";
+
+const PANEL_DARK_PALETTE = ["#0a0a14", "#10122a", "#0f0e1f", "#181a3a", "#0c0d1e"] as const;
 
 interface BeastModeProps {
   onComplete: () => void;
@@ -45,12 +48,13 @@ export function BeastMode({ onComplete }: BeastModeProps) {
 
   return (
     <motion.div
-      className="fixed inset-0 z-[200] bg-black flex flex-col items-center justify-center"
+      className="fixed inset-0 z-[200] overflow-hidden flex flex-col items-center justify-center"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
     >
+      <VoronoiMosaic seed={2707} tileCount={64} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
       {/* Top shard bar */}
       <div className="absolute top-[45%] left-4 right-4 -translate-y-16">
         <div className="flex gap-[2px] h-2 w-full">

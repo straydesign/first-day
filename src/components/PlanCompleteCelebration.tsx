@@ -6,7 +6,10 @@ import { toast } from "sonner";
 import { useMonotone } from "./MonotoneContext";
 import { BUTTON_CLIPS, SHARD_CLIPS, LABEL_CLIPS, VORONOI_LIGHT, getClip } from "@/constants";
 import { scaleReveal, wordReveal, contentReveal, popIn, SPRING } from "@/lib/animations";
+import { VoronoiMosaic } from "./VoronoiMosaic";
 import type { EngagementState, Achievement } from "@/types";
+
+const PANEL_DARK_PALETTE = ["#0a0a14", "#10122a", "#0f0e1f", "#181a3a", "#0c0d1e"] as const;
 
 interface ConfettiPiece {
   id: number;
@@ -128,31 +131,47 @@ export function PlanCompleteCelebration({ goalTitle, engagement, onStartNextGoal
           animate="visible"
         >
           <div
-            className="relative flex items-center justify-center w-32 h-32 md:w-44 md:h-44 bg-black"
+            className="relative flex items-center justify-center w-32 h-32 md:w-44 md:h-44 overflow-hidden"
             style={{ clipPath: getClip(SHARD_CLIPS, 0) }}
           >
-            <Trophy className="w-20 h-20 md:w-28 md:h-28 text-[#fcd02a]" strokeWidth={1.5} />
+            <VoronoiMosaic seed={2801} tileCount={18} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+            <Trophy className="relative z-10 w-20 h-20 md:w-28 md:h-28 text-[#fcd02a]" strokeWidth={1.5} />
           </div>
         </motion.div>
 
-        {/* Headline */}
-        <h1
-          className="text-center text-5xl md:text-8xl font-black uppercase text-white mb-3 leading-[0.95]"
-          style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif", letterSpacing: 1 }}
-        >
-          {"Goal Crushed".split(" ").map((word, i) => (
-            <motion.span
-              key={i}
-              custom={i}
-              variants={wordReveal}
-              initial="hidden"
-              animate="visible"
-              className="inline-block mr-[0.25em]"
+        {/* Headline — mosaic-backed so the gold congrats-room scene never bleeds through the text */}
+        <div className="flex justify-center mb-3">
+          <div
+            className="relative overflow-hidden px-6 py-4 md:px-10 md:py-6"
+            style={{ clipPath: getClip(SHARD_CLIPS, 1) }}
+          >
+            <VoronoiMosaic
+              seed={2821}
+              tileCount={42}
+              margin={4}
+              gap={2}
+              palette={PANEL_DARK_PALETTE}
+              className="absolute inset-0 w-full h-full pointer-events-none"
+            />
+            <h1
+              className="relative z-10 text-center text-5xl md:text-8xl font-black uppercase text-white leading-[0.95]"
+              style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif", letterSpacing: 1 }}
             >
-              {word}
-            </motion.span>
-          ))}
-        </h1>
+              {"Goal Crushed".split(" ").map((word, i) => (
+                <motion.span
+                  key={i}
+                  custom={i}
+                  variants={wordReveal}
+                  initial="hidden"
+                  animate="visible"
+                  className="inline-block mr-[0.25em]"
+                >
+                  {word}
+                </motion.span>
+              ))}
+            </h1>
+          </div>
+        </div>
 
         {/* Goal title chip */}
         {goalTitle && (
@@ -173,15 +192,30 @@ export function PlanCompleteCelebration({ goalTitle, engagement, onStartNextGoal
           </motion.div>
         )}
 
-        {/* Sub-line */}
-        <motion.p
-          className="text-center text-base md:text-xl text-white/75 font-medium mb-10 md:mb-14 max-w-xl mx-auto"
+        {/* Sub-line — mosaic-backed shard so readability survives the celebration warmth */}
+        <motion.div
+          className="flex justify-center mb-10 md:mb-14"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ ...SPRING.soft, delay: 0.7 }}
         >
-          30 lessons. 30 days. You proved you can do anything you set your mind to.
-        </motion.p>
+          <div
+            className="relative overflow-hidden px-6 py-3 md:px-10 md:py-4 max-w-xl"
+            style={{ clipPath: getClip(SHARD_CLIPS, 2) }}
+          >
+            <VoronoiMosaic
+              seed={2829}
+              tileCount={24}
+              margin={3}
+              gap={2}
+              palette={PANEL_DARK_PALETTE}
+              className="absolute inset-0 w-full h-full pointer-events-none"
+            />
+            <p className="relative z-10 text-center text-base md:text-xl text-white/85 font-medium">
+              30 lessons. 30 days. You proved you can do anything you set your mind to.
+            </p>
+          </div>
+        </motion.div>
 
         {/* Stats grid */}
         <motion.div
@@ -197,19 +231,22 @@ export function PlanCompleteCelebration({ goalTitle, engagement, onStartNextGoal
             return (
               <motion.div
                 key={stat.label}
-                className="relative bg-black p-4 md:p-5 overflow-hidden"
+                className="relative p-4 md:p-5 overflow-hidden"
                 style={{ clipPath: getClip(SHARD_CLIPS, i) }}
                 initial={{ opacity: 0, y: 16, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ ...SPRING.bouncy, delay: 1.0 + i * 0.08 }}
               >
-                <Icon className="w-5 h-5 md:w-6 md:h-6 mb-2" style={{ color: accent }} />
-                <div className="text-3xl md:text-5xl font-black text-white leading-none mb-1" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>
-                  {typeof stat.value === "number" ? stat.value.toLocaleString() : stat.value}
-                  <span className="text-base md:text-2xl text-white/55 font-bold">{stat.suffix}</span>
-                </div>
-                <div className="text-[10px] md:text-xs uppercase tracking-[0.2em] font-black" style={{ color: accent }}>
-                  {stat.label}
+                <VoronoiMosaic seed={2811 + i * 7} tileCount={18} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+                <div className="relative z-10">
+                  <Icon className="w-5 h-5 md:w-6 md:h-6 mb-2" style={{ color: accent }} />
+                  <div className="text-3xl md:text-5xl font-black text-white leading-none mb-1" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>
+                    {typeof stat.value === "number" ? stat.value.toLocaleString() : stat.value}
+                    <span className="text-base md:text-2xl text-white/55 font-bold">{stat.suffix}</span>
+                  </div>
+                  <div className="text-[10px] md:text-xs uppercase tracking-[0.2em] font-black" style={{ color: accent }}>
+                    {stat.label}
+                  </div>
                 </div>
               </motion.div>
             );
@@ -234,7 +271,7 @@ export function PlanCompleteCelebration({ goalTitle, engagement, onStartNextGoal
               {unlockedAchievements.map((a, i) => (
                 <motion.div
                   key={a.id}
-                  className="bg-black px-3 py-2 md:px-4 md:py-2.5 flex items-center gap-2"
+                  className="relative overflow-hidden px-3 py-2 md:px-4 md:py-2.5 flex items-center gap-2"
                   style={{ clipPath: getClip(LABEL_CLIPS, i) }}
                   variants={popIn}
                   initial="hidden"
@@ -242,8 +279,9 @@ export function PlanCompleteCelebration({ goalTitle, engagement, onStartNextGoal
                   transition={{ ...SPRING.snappy, delay: 1.7 + i * 0.05 }}
                   title={a.description}
                 >
-                  <span className="text-base md:text-lg" aria-hidden>{a.icon}</span>
-                  <span className="text-xs md:text-sm font-bold text-white whitespace-nowrap">{a.name}</span>
+                  <VoronoiMosaic seed={2851 + i * 11} tileCount={10} margin={3} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+                  <span className="relative z-10 text-base md:text-lg" aria-hidden>{a.icon}</span>
+                  <span className="relative z-10 text-xs md:text-sm font-bold text-white whitespace-nowrap">{a.name}</span>
                 </motion.div>
               ))}
             </div>

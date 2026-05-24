@@ -9,6 +9,8 @@ import { validatePassword } from '@/lib/validation';
 import { FirstDayLogo } from './FirstDayLogo';
 import { VoronoiMosaic } from './VoronoiMosaic';
 
+const PANEL_DARK_PALETTE = ["#0a0a14", "#10122a", "#0f0e1f", "#181a3a", "#0c0d1e"] as const;
+
 interface ResetPasswordViewProps {
   token: string | null;
   onSuccess: () => void;
@@ -59,7 +61,7 @@ export function ResetPasswordView({ token, onSuccess }: ResetPasswordViewProps) 
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black px-4 pt-[84px] pb-4 md:px-8 md:pb-8 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center px-4 pt-[84px] pb-4 md:px-8 md:pb-8 relative overflow-hidden">
       <VoronoiMosaic seed={55} tileCount={40} margin={10} gap={3} className="absolute inset-0 w-full h-full" />
       {/* No scrim — full brightness */}
       <div className="relative z-10 max-w-md w-full space-y-6">
@@ -70,11 +72,17 @@ export function ResetPasswordView({ token, onSuccess }: ResetPasswordViewProps) 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <Label htmlFor="new-password" className="text-white/80">New Password</Label>
-            <Input id="new-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} disabled={loading} className="bg-black border-white/10" />
+            <div className="relative overflow-hidden rounded-md mt-1">
+              <VoronoiMosaic seed={3231} tileCount={28} margin={3} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+              <Input id="new-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} disabled={loading} className="relative z-10 bg-transparent border-white/10" />
+            </div>
           </div>
           <div>
             <Label htmlFor="confirm-new-password" className="text-white/80">Confirm Password</Label>
-            <Input id="confirm-new-password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} disabled={loading} className="bg-black border-white/10" />
+            <div className="relative overflow-hidden rounded-md mt-1">
+              <VoronoiMosaic seed={3243} tileCount={28} margin={3} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+              <Input id="confirm-new-password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} disabled={loading} className="relative z-10 bg-transparent border-white/10" />
+            </div>
           </div>
           <Button type="submit" className="w-full transition-smooth hover:scale-105 disabled:hover:scale-100" disabled={loading}>
             {loading ? 'Resetting...' : 'Reset Password'}

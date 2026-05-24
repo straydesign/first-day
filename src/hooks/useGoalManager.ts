@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import { toast } from "sonner";
 import { api } from "@/lib/api";
 import { DEMO_GOAL_DETAILS } from "@/lib/demo-data";
+import { getRoomView, setGenerating, fireCelebration } from "@/components/3d-shell/RoomRegistry";
 import type { Plan, ProgressMap, SelectedDay, GoalFormData } from "@/types";
 
 interface GoalDisplayData {
@@ -131,6 +132,7 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
   ): Promise<{ goalId: string | null; view: "calendar" | null }> => {
     setIsGenerating(true);
     setShowFullScreenLoading(true);
+    setGenerating(true, getRoomView());
 
     try {
       const localToday = new Date();
@@ -147,6 +149,12 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
         setEditingGoalData(null);
         toast.success(
           existingGoalId ? "Your plan has been updated!" : "Your plan is ready!"
+        );
+        // VISCERAL plan-arrival room event — wave stops, room ERUPTS, then view switches.
+        // Burst intensity scales with plan size (7-day → 1.5, 14+-day → 2.0).
+        fireCelebration(
+          getRoomView(),
+          1.0 + Math.min(1.0, Object.keys(plan.days ?? {}).length / 14)
         );
         return { goalId, view: "calendar" };
       } else {
@@ -166,6 +174,7 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
     } finally {
       setIsGenerating(false);
       setShowFullScreenLoading(false);
+      setGenerating(false);
     }
   }, [onLogout, saveGoalData]);
 

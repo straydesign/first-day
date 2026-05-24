@@ -9,6 +9,9 @@ import { FirstDayLogo } from './FirstDayLogo';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { validatePassword } from '@/lib/validation';
 import { SHARD_CLIPS } from '@/constants';
+import { VoronoiMosaic } from './VoronoiMosaic';
+
+const PANEL_DARK_PALETTE = ["#0a0a14", "#10122a", "#0f0e1f", "#181a3a", "#0c0d1e"] as const;
 
 const LETTER_PALETTE = ["#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF", "#FF10F0", "#4FC3F7", "#FF4500", "#2979FF"];
 
@@ -180,8 +183,7 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, onTryD
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
-        className="w-screen h-screen max-w-none m-0 p-4 md:p-8 bg-black border-0 animate-scaleIn shadow-none overflow-y-auto [clip-path:none]"
-        noMosaic
+        className="w-screen h-screen max-w-none m-0 p-4 md:p-8 border-0 shadow-none overflow-y-auto [clip-path:none]"
       >
         <div className="relative z-10 flex flex-col min-h-full">
           <DialogTitle className="sr-only">
@@ -253,36 +255,40 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, onTryD
 
           <form onSubmit={handleSubmit} className="space-y-4 max-w-md w-full mx-auto">
             {isSignup && (
-              <div className="bg-black overflow-hidden" style={{ clipPath: "polygon(1% 0%, 100% 2%, 99% 100%, 0% 97%)" }}>
-                <Label htmlFor="name" className="block px-4 pt-3 pb-1 text-white/60 text-xs font-bold uppercase tracking-wider">Name</Label>
-                <div className="mx-3 border-t border-white/10" />
-                <Input id="name" type="text" placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} disabled={loading} className="bg-transparent border-0 text-white placeholder:text-white/40 rounded-none focus-visible:ring-0 px-4" />
+              <div className="relative overflow-hidden" style={{ clipPath: "polygon(1% 0%, 100% 2%, 99% 100%, 0% 97%)" }}>
+                <VoronoiMosaic seed={3101} tileCount={28} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+                <Label htmlFor="name" className="relative z-10 block px-4 pt-3 pb-1 text-white/60 text-xs font-bold uppercase tracking-wider">Name</Label>
+                <div className="relative z-10 mx-3 border-t border-white/10" />
+                <Input id="name" type="text" placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} disabled={loading} className="relative z-10 bg-transparent border-0 text-white placeholder:text-white/40 rounded-none focus-visible:ring-0 px-4" />
               </div>
             )}
             {!resetSent && (
-              <div className="bg-black overflow-hidden" style={{ clipPath: "polygon(0% 2%, 99% 0%, 100% 98%, 1% 100%)" }}>
-                <Label htmlFor="email" className="block px-4 pt-3 pb-1 text-white/60 text-xs font-bold uppercase tracking-wider">Email</Label>
-                <div className="mx-3 border-t border-white/10" />
-                <Input id="email" type="email" placeholder="your@email.com" value={email} onChange={(e) => setEmail(e.target.value)} disabled={loading} className="bg-transparent border-0 text-white placeholder:text-white/40 rounded-none focus-visible:ring-0 px-4" />
+              <div className="relative overflow-hidden" style={{ clipPath: "polygon(0% 2%, 99% 0%, 100% 98%, 1% 100%)" }}>
+                <VoronoiMosaic seed={3113} tileCount={28} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+                <Label htmlFor="email" className="relative z-10 block px-4 pt-3 pb-1 text-white/60 text-xs font-bold uppercase tracking-wider">Email</Label>
+                <div className="relative z-10 mx-3 border-t border-white/10" />
+                <Input id="email" type="email" placeholder="your@email.com" value={email} onChange={(e) => setEmail(e.target.value)} disabled={loading} className="relative z-10 bg-transparent border-0 text-white placeholder:text-white/40 rounded-none focus-visible:ring-0 px-4" />
               </div>
             )}
             {!isReset && (
-              <div className="bg-black overflow-hidden" style={{ clipPath: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" }}>
-                <div className="flex items-center justify-between px-4 pt-3 pb-1">
+              <div className="relative overflow-hidden" style={{ clipPath: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" }}>
+                <VoronoiMosaic seed={3127} tileCount={28} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+                <div className="relative z-10 flex items-center justify-between px-4 pt-3 pb-1">
                   <Label htmlFor="password" className="text-white/60 text-xs font-bold uppercase tracking-wider">Password</Label>
                   {isLogin && (
                     <button type="button" onClick={() => switchMode("reset")} className="text-xs text-white/50 hover:text-white hover:underline font-medium" disabled={loading} aria-label="Forgot password?">Forgot?</button>
                   )}
                 </div>
-                <div className="mx-3 border-t border-white/10" />
-                <Input id="password" type="password" placeholder={isLogin ? 'Enter password' : 'Create password'} value={password} onChange={(e) => setPassword(e.target.value)} disabled={loading} className="bg-transparent border-0 text-white placeholder:text-white/40 rounded-none focus-visible:ring-0 px-4" />
+                <div className="relative z-10 mx-3 border-t border-white/10" />
+                <Input id="password" type="password" placeholder={isLogin ? 'Enter password' : 'Create password'} value={password} onChange={(e) => setPassword(e.target.value)} disabled={loading} className="relative z-10 bg-transparent border-0 text-white placeholder:text-white/40 rounded-none focus-visible:ring-0 px-4" />
               </div>
             )}
             {isSignup && (
-              <div className="bg-black overflow-hidden" style={{ clipPath: "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)" }}>
-                <Label htmlFor="confirmPassword" className="block px-4 pt-3 pb-1 text-white/60 text-xs font-bold uppercase tracking-wider">Confirm Password</Label>
-                <div className="mx-3 border-t border-white/10" />
-                <Input id="confirmPassword" type="password" placeholder="Re-enter password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} disabled={loading} className="bg-transparent border-0 text-white placeholder:text-white/40 rounded-none focus-visible:ring-0 px-4" />
+              <div className="relative overflow-hidden" style={{ clipPath: "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)" }}>
+                <VoronoiMosaic seed={3139} tileCount={28} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+                <Label htmlFor="confirmPassword" className="relative z-10 block px-4 pt-3 pb-1 text-white/60 text-xs font-bold uppercase tracking-wider">Confirm Password</Label>
+                <div className="relative z-10 mx-3 border-t border-white/10" />
+                <Input id="confirmPassword" type="password" placeholder="Re-enter password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} disabled={loading} className="relative z-10 bg-transparent border-0 text-white placeholder:text-white/40 rounded-none focus-visible:ring-0 px-4" />
               </div>
             )}
             {isSignup && (
@@ -316,13 +322,14 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, onTryD
               type={isReset && resetSent ? "button" : "submit"}
               onClick={isReset && resetSent ? () => switchMode("login") : undefined}
               disabled={loading}
-              className="w-full bg-black py-4 text-xl font-black uppercase tracking-wide hover:scale-105 transition-transform disabled:hover:scale-100 disabled:opacity-50"
+              className="relative overflow-hidden w-full py-4 text-xl font-black uppercase tracking-wide hover:scale-105 transition-transform disabled:hover:scale-100 disabled:opacity-50"
               style={{ clipPath: "polygon(1% 0%, 100% 4%, 99% 96%, 0% 100%)" }}
             >
+              <VoronoiMosaic seed={3151} tileCount={36} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
               {loading ? (
-                <span className="text-white">Please wait...</span>
+                <span className="relative z-10 text-white">Please wait...</span>
               ) : (
-                <span className="flex items-center justify-center">
+                <span className="relative z-10 flex items-center justify-center">
                   {submitLabel.split('').map((char, i) => (
                     <span key={i} style={{ color: char === ' ' ? 'transparent' : LETTER_PALETTE[i % LETTER_PALETTE.length], width: char === ' ' ? '0.3em' : undefined, display: 'inline-block' }}>{char}</span>
                   ))}
@@ -337,19 +344,21 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onShowTerms, onTryD
               <button
                 onClick={() => switchMode("login")}
                 disabled={loading}
-                className="bg-black text-white px-6 py-3 font-black text-sm uppercase tracking-wide hover:scale-105 transition-transform btn-shake"
+                className="relative overflow-hidden text-white px-6 py-3 font-black text-sm uppercase tracking-wide hover:scale-105 transition-transform btn-shake"
                 style={{ clipPath: "polygon(2% 0%, 98% 5%, 100% 95%, 0% 100%)" }}
               >
-                Back to Log In
+                <VoronoiMosaic seed={3163} tileCount={20} margin={3} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+                <span className="relative z-10">Back to Log In</span>
               </button>
             ) : (
               <button
                 onClick={() => switchMode(isLogin ? "signup" : "login")}
                 disabled={loading}
-                className="bg-black text-white px-6 py-3 font-black text-sm uppercase tracking-wide hover:scale-105 transition-transform btn-shake"
+                className="relative overflow-hidden text-white px-6 py-3 font-black text-sm uppercase tracking-wide hover:scale-105 transition-transform btn-shake"
                 style={{ clipPath: "polygon(2% 0%, 98% 5%, 100% 95%, 0% 100%)" }}
               >
-                {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Log in'}
+                <VoronoiMosaic seed={3171} tileCount={22} margin={3} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+                <span className="relative z-10">{isLogin ? "Don't have an account? Sign up" : 'Already have an account? Log in'}</span>
               </button>
             )}
           </div>

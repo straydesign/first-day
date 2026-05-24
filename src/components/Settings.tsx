@@ -9,6 +9,9 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { toast } from "sonner";
 import { API_BASE } from "@/lib/supabase/client";
 import { MosaicCard } from "./MosaicCard";
+import { VoronoiMosaic } from "./VoronoiMosaic";
+
+const PANEL_DARK_PALETTE = ["#0a0a14", "#10122a", "#0f0e1f", "#181a3a", "#0c0d1e"] as const;
 
 interface SettingsProps {
   accessToken: string;
@@ -87,8 +90,9 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
             <div className="w-10 h-10 clip-diamond bg-black border border-white/20 flex items-center justify-center"><Bell className="w-5 h-5 text-white" /></div>
             <h2 className="text-xl font-semibold text-white">Email Notifications</h2>
           </div>
-          <div className="flex items-center justify-between p-4 mb-4 bg-black border border-white/10" style={{ clipPath: "polygon(1% 0%, 100% 2%, 99% 100%, 0% 97%)" }}>
-            <div className="pr-4">
+          <div className="relative overflow-hidden flex items-center justify-between p-4 mb-4 border border-white/10" style={{ clipPath: "polygon(1% 0%, 100% 2%, 99% 100%, 0% 97%)" }}>
+            <VoronoiMosaic seed={3301} tileCount={36} margin={3} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+            <div className="relative z-10 pr-4">
               <p className="font-bold text-white">Daily Reminders</p>
               <p className="text-sm text-white/70">Get reminded about your daily activities</p>
             </div>
@@ -97,7 +101,7 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
               checked={notificationsEnabled}
               onCheckedChange={onToggleNotifications}
               aria-label="Toggle daily reminders"
-              className="data-[state=checked]:bg-[#FFE633]"
+              className="relative z-10 data-[state=checked]:bg-[#FFE633]"
             />
           </div>
           <p className="text-white/70 text-sm mb-4">Reminder emails are sent based on your goal&apos;s preferred time slot.</p>
@@ -113,19 +117,22 @@ export function Settings({ accessToken, userId, userEmail, onBack, onDeleteSucce
           <p className="text-white/80 text-sm mb-4">Permanently delete your account and all associated data. This action cannot be undone.</p>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button variant="outline" className="border-red-400 text-red-600 hover:bg-red-950/50 hover:text-red-400 bg-black transition-smooth hover:scale-105"><Trash2 className="w-4 h-4 mr-2" />Delete My Account</Button>
+              <Button variant="outline" className="border-red-400 text-red-600 hover:bg-red-950/50 hover:text-red-400 bg-transparent transition-smooth hover:scale-105"><Trash2 className="w-4 h-4 mr-2" />Delete My Account</Button>
             </AlertDialogTrigger>
-            <AlertDialogContent className="bg-black border border-white/10">
+            <AlertDialogContent className="border border-white/10">
               <AlertDialogHeader>
                 <AlertDialogTitle className="text-white">Are you absolutely sure?</AlertDialogTitle>
                 <AlertDialogDescription className="text-white/80">This action cannot be undone. This will permanently delete your account and remove all your data.</AlertDialogDescription>
               </AlertDialogHeader>
               <div className="my-4">
                 <label htmlFor="delete-confirm-input" className="text-sm text-white/80 mb-2 block">Type <span className="font-bold text-red-600">DELETE</span> to confirm:</label>
-                <Input id="delete-confirm-input" type="text" value={confirmText} onChange={(e) => setConfirmText(e.target.value)} className="bg-black border-white/10 text-white focus:ring-2 focus:ring-red-500" placeholder="Type DELETE" />
+                <div className="relative overflow-hidden rounded-md">
+                  <VoronoiMosaic seed={3313} tileCount={28} margin={3} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+                  <Input id="delete-confirm-input" type="text" value={confirmText} onChange={(e) => setConfirmText(e.target.value)} className="relative z-10 bg-transparent border-white/10 text-white focus:ring-2 focus:ring-red-500" placeholder="Type DELETE" />
+                </div>
               </div>
               <AlertDialogFooter>
-                <AlertDialogCancel onClick={() => setConfirmText("")} className="bg-black border-2 border-white/10 text-white/80 hover:bg-white/10">Cancel</AlertDialogCancel>
+                <AlertDialogCancel onClick={() => setConfirmText("")} className="bg-transparent border-2 border-white/10 text-white/80 hover:bg-white/10">Cancel</AlertDialogCancel>
                 <AlertDialogAction onClick={handleDeleteAccount} disabled={isDeleting || confirmText !== "DELETE"} className="bg-red-600 text-white hover:bg-red-700 disabled:opacity-50">{isDeleting ? "Deleting..." : "Delete Account"}</AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>

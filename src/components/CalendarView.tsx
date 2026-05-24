@@ -4,8 +4,29 @@ import { WeekCalendar } from "./WeekCalendar";
 import { PlanCompleteCelebration } from "./PlanCompleteCelebration";
 import { OnboardingTour } from "./OnboardingTour";
 import { VORONOI_LIGHT, SHARD_CLIPS, LABEL_CLIPS, BUTTON_CLIPS, getClip } from "@/constants";
+import { VoronoiMosaic } from "./VoronoiMosaic";
 import { useState, useEffect } from "react";
 import { StreakBadge } from "./StreakBadge";
+import { fireCelebration, getRoomView } from "./3d-shell/RoomRegistry";
+
+const PANEL_DARK_PALETTE = ["#0a0a14", "#10122a", "#0f0e1f", "#181a3a", "#0c0d1e"] as const;
+
+function tonalPalette(hex: string): readonly string[] {
+  const h = hex.replace("#", "");
+  const r = parseInt(h.slice(0, 2), 16);
+  const g = parseInt(h.slice(2, 4), 16);
+  const b = parseInt(h.slice(4, 6), 16);
+  const mix = (a: number, t: number, target: number) => Math.round(a + (target - a) * t);
+  const toHex = (n: number) => Math.max(0, Math.min(255, n)).toString(16).padStart(2, "0");
+  const rgb = (rr: number, gg: number, bb: number) => `#${toHex(rr)}${toHex(gg)}${toHex(bb)}`;
+  return [
+    rgb(mix(r, 0.42, 0), mix(g, 0.42, 0), mix(b, 0.42, 0)),
+    rgb(mix(r, 0.20, 0), mix(g, 0.20, 0), mix(b, 0.20, 0)),
+    hex,
+    rgb(mix(r, 0.18, 255), mix(g, 0.18, 255), mix(b, 0.18, 255)),
+    rgb(mix(r, 0.34, 255), mix(g, 0.34, 255), mix(b, 0.34, 255)),
+  ];
+}
 import { StreakFreezeIndicator } from "./StreakFreezeIndicator";
 import { motion } from "framer-motion";
 import { useMonotone } from "./MonotoneContext";
@@ -134,10 +155,11 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, prog
             {goalTitle && (<div className="text-center">
               <div className="flex items-center justify-center gap-3 mb-4">
                 <div
-                  className="inline-block bg-black px-8 py-3"
+                  className="relative overflow-hidden inline-block px-8 py-3"
                   style={{ clipPath: getClip(LABEL_CLIPS, 1) }}
                 >
-                  <h1 className="text-3xl md:text-7xl font-bold text-white">{goalTitle}</h1>
+                  <VoronoiMosaic seed={2901} tileCount={28} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+                  <h1 className="relative z-10 text-3xl md:text-7xl font-bold text-white">{goalTitle}</h1>
                 </div>
                 {engagement && (engagement.currentStreak > 0 || engagement.isAtRisk) && (
                   <div className="flex items-center justify-center gap-2 flex-wrap">
@@ -182,13 +204,20 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, prog
             animate="visible"
           >
             <div
-              className="relative p-6 md:p-10"
+              className="relative overflow-hidden p-6 md:p-10"
               style={{
-                backgroundColor: heroAccent,
                 clipPath: getClip(SHARD_CLIPS, (nextDay - 1) % SHARD_CLIPS.length),
               }}
             >
-                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+                <VoronoiMosaic
+                  seed={2933 + nextDay * 7}
+                  tileCount={56}
+                  margin={4}
+                  gap={2}
+                  palette={tonalPalette(heroAccent)}
+                  className="absolute inset-0 w-full h-full pointer-events-none"
+                />
+                <div className="relative z-10 flex flex-col md:flex-row md:items-start md:justify-between gap-6">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-3">
                       <span className="inline-block bg-black text-white px-3 py-1 text-xs md:text-sm font-black uppercase tracking-[0.25em]" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>Next Lesson</span>
@@ -225,7 +254,12 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, prog
                       )}
                     </div>
                     <button
-                      onClick={() => onDayClick(buildSelectedDay(nextDay, planData))}
+                      onClick={() => {
+                        // Primary action — stronger pre-cascade impulse than day-card peek.
+                        // Room punches BEFORE wall-shatter exits toward day room.
+                        fireCelebration(getRoomView(), 0.65);
+                        onDayClick(buildSelectedDay(nextDay, planData));
+                      }}
                       className="inline-flex items-center gap-2 bg-black text-white px-6 py-3 md:px-8 md:py-4 text-base md:text-lg font-black uppercase tracking-wider hover:scale-105 transition-transform"
                       style={{ clipPath: getClip(BUTTON_CLIPS, 0), fontFamily: "var(--font-bebas), system-ui, sans-serif", letterSpacing: 3 }}
                     >
@@ -243,15 +277,16 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, prog
             initial="hidden"
             animate="visible"
           >
-            <div className="bg-black p-5 md:p-7" style={{ clipPath: getClip(SHARD_CLIPS, 1) }}>
-              <div className="flex items-baseline justify-between mb-4">
+            <div className="relative overflow-hidden p-5 md:p-7" style={{ clipPath: getClip(SHARD_CLIPS, 1) }}>
+              <VoronoiMosaic seed={2917} tileCount={48} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+              <div className="relative z-10 flex items-baseline justify-between mb-4">
                 <div>
                   <span className="text-3xl md:text-4xl font-black text-white" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>{completedCount}</span>
                   <span className="text-white/60 text-base md:text-lg font-bold"> / 30 lessons</span>
                 </div>
                 <span className="text-white/70 text-sm md:text-base font-bold">{progressPct}%</span>
               </div>
-              <div className="flex gap-[2px] h-3 mb-4" aria-label={`${completedCount} of 30 lessons completed`}>
+              <div className="relative z-10 flex gap-[2px] h-3 mb-4" aria-label={`${completedCount} of 30 lessons completed`}>
                 {Array.from({ length: 30 }, (_, i) => {
                   const isDone = i < completedCount;
                   return (
@@ -267,7 +302,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, prog
                 })}
               </div>
               {engagement && (
-                <div className="flex flex-wrap items-center gap-3 text-sm">
+                <div className="relative z-10 flex flex-wrap items-center gap-3 text-sm">
                   {engagement.currentStreak > 0 && (
                     <span className="inline-flex items-center gap-1.5 text-orange-300 font-bold">
                       <Flame className="w-4 h-4" />{engagement.currentStreak}-day streak
@@ -292,21 +327,23 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, prog
                 >
                   <div className="mb-4 flex items-center gap-3">
                     <div
-                      className="inline-block bg-black px-5 py-2"
+                      className="relative overflow-hidden inline-block px-5 py-2"
                       style={{ clipPath: getClip(LABEL_CLIPS, 2) }}
                     >
-                      <h3 className="text-xl md:text-2xl font-black text-white uppercase tracking-wide" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>Week {week.weekNumber}: {week.label}</h3>
+                      <VoronoiMosaic seed={2937 + week.weekNumber * 17} tileCount={20} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+                      <h3 className="relative z-10 text-xl md:text-2xl font-black text-white uppercase tracking-wide" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>Week {week.weekNumber}: {week.label}</h3>
                     </div>
                   </div>
                   <div className="space-y-3 md:space-y-4">
                     {week.weeklyBook && (
-                      <div className="bg-black clip-tile-b overflow-hidden">
-                        <button onClick={() => toggleWeekBook(week.weekNumber)} className="w-full p-4 md:p-5 flex items-center justify-between hover:bg-white/5 transition-colors" aria-expanded={expandedWeeks.has(week.weekNumber)} aria-label={`Week ${week.weekNumber} reading recommendation`}>
+                      <div className="relative clip-tile-b overflow-hidden">
+                        <VoronoiMosaic seed={2967 + week.weekNumber * 23} tileCount={42} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+                        <button onClick={() => toggleWeekBook(week.weekNumber)} className="relative z-10 w-full p-4 md:p-5 flex items-center justify-between hover:bg-white/5 transition-colors" aria-expanded={expandedWeeks.has(week.weekNumber)} aria-label={`Week ${week.weekNumber} reading recommendation`}>
                           <div className="flex items-center gap-3"><BookOpen className="w-6 h-6 md:w-7 md:h-7 text-[#fcd02a]" /><h3 className="text-2xl md:text-3xl text-[#fcd02a] font-black uppercase tracking-wide">Week {week.weekNumber} Reading</h3></div>
                           {expandedWeeks.has(week.weekNumber) ? <ChevronUp className="w-5 h-5 text-[#fcd02a]" /> : <ChevronDown className="w-5 h-5 text-[#fcd02a]" />}
                         </button>
                         {expandedWeeks.has(week.weekNumber) && (
-                          <div className="px-3 md:px-4 pb-3 md:pb-4 space-y-1 md:space-y-2">
+                          <div className="relative z-10 px-3 md:px-4 pb-3 md:pb-4 space-y-1 md:space-y-2">
                             <p className="text-sm md:text-base text-yellow-100 font-semibold">{week.weeklyBook.title}</p>
                             <p className="text-xs md:text-sm text-yellow-400">by {week.weeklyBook.author}</p>
                             <p className="text-xs text-yellow-300/80 italic mt-1 md:mt-2">{week.weeklyBook.description || week.weeklyBook.reason}</p>
@@ -322,7 +359,6 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, prog
           </motion.div>
         </div>
       </div>
-      <div className="fixed bottom-0 left-0 right-0 h-40 z-20 pointer-events-none bg-gradient-to-t from-black via-black/60 to-transparent" />
     </div>
   );
 }

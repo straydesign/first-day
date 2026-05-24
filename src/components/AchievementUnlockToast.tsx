@@ -5,7 +5,10 @@ import { Award, X } from "lucide-react";
 import { useMonotone } from "./MonotoneContext";
 import { LABEL_CLIPS, SHARD_CLIPS, VORONOI_LIGHT, getClip } from "@/constants";
 import { SPRING } from "@/lib/animations";
+import { VoronoiMosaic } from "./VoronoiMosaic";
 import type { Achievement } from "@/types";
+
+const PANEL_DARK_PALETTE = ["#0a0a14", "#10122a", "#0f0e1f", "#181a3a", "#0c0d1e"] as const;
 
 interface AchievementUnlockToastProps {
   achievements: Achievement[];
@@ -37,25 +40,26 @@ export function AchievementUnlockToast({ achievements, onDismiss }: AchievementU
           aria-live="polite"
         >
           <div
-            className="relative bg-black p-5 pr-10 shadow-[0_8px_32px_rgba(0,0,0,0.6)]"
+            className="relative overflow-hidden p-5 pr-10 shadow-[0_8px_32px_rgba(0,0,0,0.6)]"
             style={{ clipPath: getClip(SHARD_CLIPS, 0) }}
           >
+            <VoronoiMosaic seed={1873} tileCount={22} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
             <button
               onClick={onDismiss}
-              className="absolute top-3 right-3 text-white/50 hover:text-white transition-colors"
+              className="absolute top-3 right-3 z-10 text-white/50 hover:text-white transition-colors"
               aria-label="Dismiss"
             >
               <X className="w-4 h-4" />
             </button>
 
-            <div className="flex items-center gap-2 mb-3">
+            <div className="relative z-10 flex items-center gap-2 mb-3">
               <Award className="w-4 h-4 text-[#fcd02a]" />
               <span className="text-[10px] uppercase tracking-[0.3em] font-black text-[#fcd02a]">
                 {achievements.length === 1 ? "Achievement Unlocked" : `${achievements.length} Achievements Unlocked`}
               </span>
             </div>
 
-            <div className="space-y-3">
+            <div className="relative z-10 space-y-3">
               {achievements.slice(0, 3).map((a, i) => {
                 const accent = monotone ? "#FFFFFF" : VORONOI_LIGHT[i % VORONOI_LIGHT.length];
                 return (

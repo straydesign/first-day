@@ -10,7 +10,8 @@ export type AppView =
   | "settings"
   | "privacy"
   | "terms"
-  | "reset-password";
+  | "reset-password"
+  | "gallery";
 
 export interface ActivityResource {
   type: "youtube" | "link";
@@ -40,6 +41,8 @@ export interface Plan {
   cleanedGoal?: string;
   startDate: string;
   days: Record<number, DayPlan>;
+  /** Owner identity for shared/published rooms. Optional — never required at load. */
+  ownerUserId?: string;
 }
 
 export interface DayProgress {
@@ -63,6 +66,71 @@ export interface Goal {
   startDate: string;
   completedDays: number;
   totalDays: number;
+  /** Owner identity for shared/published goals. Optional — never required at load. */
+  ownerUserId?: string;
+}
+
+// --- Social Surface Types ---
+
+export type MoodTileKind = "warm" | "cool" | "spark" | "weight" | "quiet";
+
+/**
+ * REDACTED projection of a Plan safe to publish to the gallery.
+ * Includes day titles only — never activities, tips, contextAnswers, why.
+ */
+export interface PublishedPlanJson {
+  /** Schema version so future projections can evolve without server changes. */
+  v: 1;
+  cleanedGoal?: string;
+  /** Day-by-day breakdown, titles only. */
+  days: Array<{ number: number; title: string; activityCount: number }>;
+}
+
+export interface PublicRoomRow {
+  id: string;
+  owner_user_id: string;
+  goal_title: string;
+  cleaned_goal?: string | null;
+  published_plan_json: PublishedPlanJson;
+  position_x: number;
+  position_y: number;
+  position_z: number;
+  color: string;
+  is_public: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+/** Slim row used to render distant gallery markers without pulling full plans. */
+export interface PublicRoomMarker {
+  id: string;
+  ownerUserId: string;
+  goalTitle: string;
+  position: [number, number, number];
+  color: string;
+  updatedAt: string;
+}
+
+export interface ReactionRow {
+  id: string;
+  room_id: string;
+  author_user_id: string;
+  kind: MoodTileKind;
+  wall_face: number;
+  anchor_u: number;
+  anchor_v: number;
+  created_at: string;
+}
+
+export interface ReactionTile {
+  id: string;
+  roomId: string;
+  authorUserId: string;
+  kind: MoodTileKind;
+  wallFace: number;
+  u: number;
+  v: number;
+  createdAt: string;
 }
 
 export interface GoalFormData {

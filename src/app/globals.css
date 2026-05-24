@@ -6,6 +6,13 @@
 
 :root {
   --font-size: 16px;
+  --app-anchor-x: 50vw;
+  --app-anchor-y: 50vh;
+  --app-anchor-dx: 0px;
+  --app-anchor-dy: 0px;
+  --cam-shift-x: 0px;
+  --cam-shift-y: 0px;
+  --cam-scale: 1;
   --background: #000000;
   --foreground: #ffffff;
   --card: #000000;
@@ -179,16 +186,28 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+@utility tile-substrate {
+  background-color: #050507;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    radial-gradient(ellipse at 22% 18%, rgba(204, 85, 51, 0.10), transparent 55%),
+    radial-gradient(ellipse at 78% 82%, rgba(252, 208, 42, 0.055), transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(48, 117, 225, 0.035), transparent 65%);
+  background-size: 80px 80px, 80px 80px, 100% 100%, 100% 100%, 100% 100%;
+  background-position: 0 0, 0 0, 0 0, 0 0, 0 0;
+  background-attachment: fixed, fixed, fixed, fixed, fixed;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground tile-substrate;
     font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
     font-weight: 500;
-    background-color: #000000;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -307,6 +326,243 @@ html {
 
   .btn-shake:active {
     animation: btnShake 0.4s ease-out forwards;
+  }
+
+  /* Panel-assemble: matches wall pulse (1.4s, square ease) so DOM content
+     materializes alongside the IN-room walls instead of hard-cutting. */
+  @keyframes panelAssemble {
+    0% {
+      opacity: 0;
+      transform: scale(0.94);
+      filter: blur(10px) brightness(0.45);
+      clip-path: polygon(
+        8% 0%, 92% 0%, 100% 8%, 100% 92%,
+        92% 100%, 8% 100%, 0% 92%, 0% 8%
+      );
+    }
+    35% {
+      opacity: 0.55;
+      filter: blur(5px) brightness(0.7);
+    }
+    65% {
+      opacity: 1;
+      filter: blur(1.5px) brightness(0.95);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+      filter: blur(0) brightness(1);
+      clip-path: polygon(
+        0% 0%, 100% 0%, 100% 0%, 100% 100%,
+        100% 100%, 0% 100%, 0% 100%, 0% 0%
+      );
+    }
+  }
+
+  .panel-assemble,
+  [data-slot="dialog-content"][data-state="open"],
+  [data-slot="alert-dialog-content"][data-state="open"],
+  [data-slot="sheet-content"][data-state="open"] {
+    animation: panelAssemble 1.4s cubic-bezier(0.16, 0.84, 0.44, 1) both;
+    will-change: opacity, transform, filter, clip-path;
+  }
+
+  [data-slot="dialog-content"][data-state="closed"],
+  [data-slot="alert-dialog-content"][data-state="closed"],
+  [data-slot="sheet-content"][data-state="closed"],
+  .panel-assemble[data-state="leaving"] {
+    animation: panelDisassemble 0.5s cubic-bezier(0.7, 0, 0.84, 0) both;
+    will-change: opacity, transform, filter, clip-path;
+  }
+
+  /* Panel-disassemble: mirror of panelAssemble for modal close. Tile-wall
+     blurs, scales down, clip-path bites off the corners, opacity drops. */
+  @keyframes panelDisassemble {
+    0% {
+      opacity: 1;
+      transform: scale(1);
+      filter: blur(0) brightness(1);
+      clip-path: polygon(
+        0% 0%, 100% 0%, 100% 0%, 100% 100%,
+        100% 100%, 0% 100%, 0% 100%, 0% 0%
+      );
+    }
+    35% {
+      opacity: 1;
+      filter: blur(1.5px) brightness(0.95);
+    }
+    65% {
+      opacity: 0.55;
+      filter: blur(5px) brightness(0.7);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(0.94);
+      filter: blur(10px) brightness(0.45);
+      clip-path: polygon(
+        8% 0%, 92% 0%, 100% 8%, 100% 92%,
+        92% 100%, 8% 100%, 0% 92%, 0% 8%
+      );
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .panel-assemble,
+    [data-slot="dialog-content"],
+    [data-slot="alert-dialog-content"],
+    [data-slot="sheet-content"] {
+      animation: none;
+    }
+  }
+}
+
+/* ============================================
+   P3 v27 — Toasts as tile-shaped shards
+   ============================================
+   Sonner's default rendering is a flat white/dark rectangle floating over
+   the canvas — every plan-ready, save, and error event was painting a flat
+   panel against a 3D scene, in direct violation of VISION line 15 ("no flat
+   backdrops"). Override the default look so each toast reads as a brand-
+   colored shard tile in the same visual language as the loading bar, room
+   accents, and shard chips: opaque brand fill, irregular clip-path, black
+   uppercase font-black text, drop-shadow glow keyed to the fill. Per-type
+   color coding: success = golden yellow, error = hot red-pink, info/loading
+   = bright blue, default/warning = warm orange. Tile-pop entry expands the
+   clip-path from a corner-cut octagon (an unbuilt tile) to the settled
+   shard. Kept outside @layer components so lightning-css doesn't drop it. */
+[data-sonner-toaster] [data-sonner-toast] {
+  background: #fb7025 !important;
+  color: #000 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: 0 0 14px rgba(251, 112, 37, 0.44), 0 4px 18px rgba(0, 0, 0, 0.45) !important;
+  clip-path: polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%) !important;
+  padding: 18px 22px !important;
+  min-height: 56px !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  animation: toastTilePop 0.42s cubic-bezier(0.16, 0.84, 0.44, 1) both !important;
+  will-change: opacity, transform, clip-path;
+}
+[data-sonner-toaster] [data-sonner-toast]:nth-child(4n+2) {
+  clip-path: polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%) !important;
+}
+[data-sonner-toaster] [data-sonner-toast]:nth-child(4n+3) {
+  clip-path: polygon(1% 0%, 100% 2%, 99% 100%, 0% 98%) !important;
+}
+[data-sonner-toaster] [data-sonner-toast]:nth-child(4n) {
+  clip-path: polygon(3% 2%, 100% 0%, 97% 98%, 0% 100%) !important;
+}
+[data-sonner-toaster] [data-sonner-toast][data-type="success"] {
+  background: #fcd02a !important;
+  box-shadow: 0 0 14px rgba(252, 208, 42, 0.5), 0 4px 18px rgba(0, 0, 0, 0.45) !important;
+}
+[data-sonner-toaster] [data-sonner-toast][data-type="error"] {
+  background: #f31b5e !important;
+  box-shadow: 0 0 14px rgba(243, 27, 94, 0.5), 0 4px 18px rgba(0, 0, 0, 0.45) !important;
+}
+[data-sonner-toaster] [data-sonner-toast][data-type="info"],
+[data-sonner-toaster] [data-sonner-toast][data-type="loading"] {
+  background: #3075e1 !important;
+  box-shadow: 0 0 14px rgba(48, 117, 225, 0.5), 0 4px 18px rgba(0, 0, 0, 0.45) !important;
+}
+[data-sonner-toaster] [data-sonner-toast][data-type="warning"] {
+  background: #fb7025 !important;
+  box-shadow: 0 0 14px rgba(251, 112, 37, 0.5), 0 4px 18px rgba(0, 0, 0, 0.45) !important;
+}
+[data-sonner-toaster] [data-sonner-toast] [data-title] {
+  color: #000 !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  font-size: 0.95rem !important;
+}
+[data-sonner-toaster] [data-sonner-toast] [data-description] {
+  color: rgba(0, 0, 0, 0.78) !important;
+  font-weight: 700 !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-size: 0.82rem !important;
+  margin-top: 4px !important;
+}
+[data-sonner-toaster] [data-sonner-toast] [data-icon] {
+  color: #000 !important;
+}
+[data-sonner-toaster] [data-sonner-toast] [data-button],
+[data-sonner-toaster] [data-sonner-toast] [data-action] {
+  background: #000 !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 0 !important;
+  clip-path: polygon(4% 0%, 100% 6%, 96% 100%, 0% 94%) !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  padding: 6px 14px !important;
+}
+[data-sonner-toaster] [data-sonner-toast] [data-cancel] {
+  background: rgba(0, 0, 0, 0.18) !important;
+  color: #000 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  clip-path: polygon(4% 0%, 100% 6%, 96% 100%, 0% 94%) !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  padding: 6px 14px !important;
+}
+[data-sonner-toaster] [data-sonner-toast] [data-close-button] {
+  background: #000 !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 0 !important;
+  clip-path: polygon(8% 0%, 100% 8%, 92% 100%, 0% 92%) !important;
+}
+
+@keyframes toastTilePop {
+  0% {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.92);
+    clip-path: polygon(12% 0%, 88% 0%, 100% 12%, 100% 88%, 88% 100%, 12% 100%, 0% 88%, 0% 12%);
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* P3 v226 — env-source TEMPORAL axis opens on DOM substrate. CSS @keyframes is
+   the FIRST structurally-DOM-engine temporal primitive in the system — every
+   prior env-source TEMPORAL cut (cosmos drift v218, lintel breath v219, floor
+   wave v220, audio pitch v221) lived inside a useFrame or RAF loop and wrote
+   to either a 3D property or an audio param. v226 puts the temporal carrier
+   inside the CSS animation engine itself, which runs on the compositor thread
+   independently of the main RAF. @property registers --app-day-breath-pulse so
+   the keyframe interpolates as a number (without registration, browsers swap
+   custom-property values discretely at frame breakpoints). animation-duration
+   is bound to --app-day-warmth via calc() in ActivePanel — slower at night,
+   faster at day, mirroring cosmos drift v218's scale arc. DOM substrate
+   promotes from 2-axis (v222 color + v223 magnitude) to 3-axis env-source
+   consumer, joining cosmos and lights. TEMPORAL axis breadth ticks 4 → 5
+   substrates — first env-source axis to tie color's 5-substrate lead. */
+@property --app-day-breath-pulse {
+  syntax: "<number>";
+  initial-value: 0;
+  inherits: true;
+}
+
+@keyframes app-day-breath {
+  0%, 100% { --app-day-breath-pulse: 0; }
+  50% { --app-day-breath-pulse: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-sonner-toaster] [data-sonner-toast] {
+    animation: none !important;
   }
 }
 
@@ -456,6 +712,18 @@ button:focus-visible {
   filter: brightness(1.1);
 }
 
+/* 3D shell: subtle parallax bound to camera anchor (driven by AnchorDriver
+   inside the persistent r3f Canvas). Stays at 0,0 until P4 camera rig animates. */
+#main-content {
+  transform: translate3d(
+    calc(var(--app-anchor-dx) * 0.04),
+    calc(var(--app-anchor-dy) * 0.04),
+    0
+  );
+  transition: transform 120ms linear;
+  will-change: transform;
+}
+
 /* Reduced motion — disable animations, keep fades */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -469,6 +737,7 @@ button:focus-visible {
   .hover-geo:hover { transform: none; }
   .animate-scroll-left, .animate-scroll-right { animation: none !important; }
   .btn-shake:active { animation: none !important; }
+  #main-content { transform: none !important; }
 }
 
 /* Only show focus rings during keyboard navigation */

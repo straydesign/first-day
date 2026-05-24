@@ -11,6 +11,9 @@ const TAGLINE_PALETTE = [
   "#FF10F0", "#FF1493", "#4FC3F7", "#FF4500",
 ] as const;
 
+/** Dark mosaic palette for word-shard backplates — deep blue/violet variants */
+const PANEL_TAGLINE_PALETTE = ["#0a0a14", "#10122a", "#0f0e1f", "#181a3a", "#0c0d1e"] as const;
+
 /** Tagline rows — pairs of words cascading top-left → bottom-right */
 const TAGLINE_ROWS = [
   { words: ["FIRST", "DAY"],   offset: 2 },
@@ -247,12 +250,13 @@ function FirstDayLogoInner({
   return (
     <div className={`flex flex-col items-center ${className}`}>
       {showLetters ? (
-      <div className={`bg-black border border-white/10 ${isHero ? "px-6 py-4" : "px-3 py-2"} flex flex-col items-center`} style={{ clipPath: "polygon(3% 2%, 12% 0%, 45% 1%, 78% 0%, 97% 3%, 100% 15%, 99% 50%, 100% 85%, 96% 98%, 82% 100%, 50% 99%, 18% 100%, 2% 97%, 0% 80%, 1% 45%, 0% 12%)" }}>
+      <div className={`relative overflow-hidden border border-white/10 ${isHero ? "px-6 py-4" : "px-3 py-2"} flex flex-col items-center`} style={{ clipPath: "polygon(3% 2%, 12% 0%, 45% 1%, 78% 0%, 97% 3%, 100% 15%, 99% 50%, 100% 85%, 96% 98%, 82% 100%, 50% 99%, 18% 100%, 2% 97%, 0% 80%, 1% 45%, 0% 12%)" }}>
+        <VoronoiMosaic seed={3601} tileCount={isHero ? 60 : 36} margin={4} gap={2} palette={PANEL_TAGLINE_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
       {showLetters && (
         <>
           {/* FIRST row */}
           <div
-            className="flex items-center drop-shadow-[0_2px_16px_rgba(0,0,0,0.6)]"
+            className="relative z-10 flex items-center drop-shadow-[0_2px_16px_rgba(0,0,0,0.6)]"
             style={{ gap: isHero ? "10px" : "5px" }}
           >
             {LETTER_TILES.map((lt, i) => (
@@ -269,7 +273,7 @@ function FirstDayLogoInner({
 
           {/* DAY row */}
           <div
-            className="flex items-center drop-shadow-[0_2px_16px_rgba(0,0,0,0.6)]"
+            className="relative z-10 flex items-center drop-shadow-[0_2px_16px_rgba(0,0,0,0.6)]"
             style={{
               gap: isHero ? "10px" : "5px",
               marginTop: isHero ? "4px" : "2px",
@@ -292,7 +296,7 @@ function FirstDayLogoInner({
       {/* Tagline — each letter cycles through palette colors */}
       {showLetters && showTagline && (
         <span
-          className="mt-2 drop-shadow-[0_1px_8px_rgba(0,0,0,0.5)] flex flex-wrap justify-center"
+          className="relative z-10 mt-2 drop-shadow-[0_1px_8px_rgba(0,0,0,0.5)] flex flex-wrap justify-center"
           style={{
             fontSize: "clamp(0.6rem, 1.5vw, 0.75rem)",
             fontWeight: 900,
@@ -345,12 +349,22 @@ function FirstDayLogoInner({
                   fontWeight: 900,
                   letterSpacing: 3,
                   color: c,
-                  backgroundColor: "#0a0a14",
                   border: `1px solid ${c}30`,
                   clipPath: SHARD_CLIPS_TAGLINE[globalIdx % SHARD_CLIPS_TAGLINE.length],
                   whiteSpace: "nowrap" as const,
                   transform: `rotate(${baseRotation}deg)`,
                 };
+
+                const wordMosaic = (
+                  <VoronoiMosaic
+                    seed={2003 + globalIdx * 23}
+                    tileCount={14}
+                    margin={3}
+                    gap={1.5}
+                    palette={PANEL_TAGLINE_PALETTE}
+                    className="absolute inset-0 w-full h-full pointer-events-none"
+                  />
+                );
 
                 if (interactive) {
                   return (
@@ -361,13 +375,14 @@ function FirstDayLogoInner({
                     >
                       <span
                         ref={(el) => { wordSpanRefs.current[globalIdx] = el; }}
-                        className="inline-block px-4 py-1.5 md:px-8 md:py-3"
+                        className="relative overflow-hidden inline-block px-4 py-1.5 md:px-8 md:py-3"
                         style={{
                           ...wordStyle,
                           willChange: "transform",
                         }}
                       >
-                        {word}
+                        {wordMosaic}
+                        <span className="relative z-10">{word}</span>
                       </span>
                     </div>
                   );
@@ -376,10 +391,11 @@ function FirstDayLogoInner({
                 return (
                   <span
                     key={word + wordIdx}
-                    className="inline-block px-4 py-1.5 md:px-8 md:py-3"
+                    className="relative overflow-hidden inline-block px-4 py-1.5 md:px-8 md:py-3"
                     style={wordStyle}
                   >
-                    {word}
+                    {wordMosaic}
+                    <span className="relative z-10">{word}</span>
                   </span>
                 );
               })}

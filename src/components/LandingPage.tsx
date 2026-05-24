@@ -4,7 +4,6 @@ import { useState, useRef, useEffect } from "react";
 import { motion, useInView, useScroll, useSpring } from "framer-motion";
 import { Flame, Zap, Trophy, Target, Sparkles, Calendar, ListChecks, NotebookPen } from "lucide-react";
 import { FirstDayLogo } from "./FirstDayLogo";
-import { HeroMosaic } from "./HeroMosaic";
 import { LivePlanDemo } from "./LivePlanDemo";
 import { DayCompleteDemo } from "./DayCompleteDemo";
 import { CountUp } from "./CountUp";
@@ -12,6 +11,11 @@ import { Footer } from "./Footer";
 import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, BRIGHT_COLORS, SCROLL_SPEEDS } from "@/constants";
 import { useMonotone } from "./MonotoneContext";
 import { SPRING } from "@/lib/animations";
+import { VoronoiMosaic } from "./VoronoiMosaic";
+import { setActionIntent } from "./3d-shell/actionIntent";
+import { HeroAutoTour } from "./HeroAutoTour";
+
+const PANEL_DARK_PALETTE = ["#0a0a14", "#10122a", "#0f0e1f", "#181a3a", "#0c0d1e"] as const;
 
 interface LandingPageProps {
   onGetStarted: () => void;
@@ -121,7 +125,8 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
   );
 
   return (
-    <div className="min-h-screen relative bg-black">
+    <div className="min-h-screen relative">
+      <HeroAutoTour />
       {/* Scroll progress bar — sits above everything, brand yellow, springy */}
       <motion.div
         aria-hidden
@@ -131,9 +136,6 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
           backgroundColor: monotone ? "#999999" : "#FFE633",
         }}
       />
-
-      {/* Full-page animated Voronoi mosaic background */}
-      <HeroMosaic />
 
       {/* Content */}
       <div className="relative z-10">
@@ -169,6 +171,12 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
             />
             <motion.button
               onClick={onGetStarted}
+              onMouseEnter={() => setActionIntent(1)}
+              onMouseLeave={() => setActionIntent(0)}
+              onFocus={() => setActionIntent(1)}
+              onBlur={() => setActionIntent(0)}
+              onPointerDown={() => setActionIntent(1)}
+              onPointerUp={() => setActionIntent(0)}
               animate={{ scale: [1, 1.03, 1] }}
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
               whileHover={{ scale: 1.07 }}
@@ -230,10 +238,11 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
             initial={{ y: -60, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={SPRING.snappy}
-            className="fixed top-0 left-0 right-0 z-50 bg-black px-4 pb-5"
+            className="fixed top-0 left-0 right-0 z-50 overflow-hidden px-4 pb-5"
             style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 84px)" }}
           >
-            <div className="flex items-center justify-between gap-2">
+            <VoronoiMosaic seed={2207} tileCount={48} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+            <div className="relative z-10 flex items-center justify-between gap-2">
               <motion.button
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -250,11 +259,18 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 onClick={onGetStarted}
-                className="bg-black px-4 py-2.5 md:px-6 md:py-3 text-white font-black text-sm tracking-wide uppercase hover:scale-105 transition-transform flex-shrink-0"
+                onMouseEnter={() => setActionIntent(1)}
+                onMouseLeave={() => setActionIntent(0)}
+                onFocus={() => setActionIntent(1)}
+                onBlur={() => setActionIntent(0)}
+                onPointerDown={() => setActionIntent(1)}
+                onPointerUp={() => setActionIntent(0)}
+                className="relative overflow-hidden px-4 py-2.5 md:px-6 md:py-3 text-white font-black text-sm tracking-wide uppercase hover:scale-105 transition-transform flex-shrink-0"
                 style={{ clipPath: "polygon(0% 8%, 97% 0%, 100% 88%, 3% 100%)" }}
               >
-                <span className="hidden sm:inline">Get Started</span>
-                <span className="sm:hidden">Start</span>
+                <VoronoiMosaic seed={2287} tileCount={14} margin={3} gap={1.5} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+                <span className="relative z-10 hidden sm:inline">Get Started</span>
+                <span className="relative z-10 sm:hidden">Start</span>
               </motion.button>
             </div>
           </motion.div>

@@ -5,6 +5,9 @@ import { BackButton } from "@/components/ui/back-button";
 import { Footer } from "./Footer";
 import { useMonotone } from "./MonotoneContext";
 import { VORONOI_LIGHT } from "@/constants";
+import { VoronoiMosaic } from "./VoronoiMosaic";
+
+const PANEL_DARK_PALETTE = ["#0a0a14", "#10122a", "#0f0e1f", "#181a3a", "#0c0d1e"] as const;
 
 type LegalTab = "privacy" | "terms";
 
@@ -37,8 +40,9 @@ export function LegalPage({ onBack, initialTab = "privacy", onTabChange }: Legal
   const inactive = monotone ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.05)";
 
   return (
-    <div className="min-h-screen bg-black flex flex-col">
-      <div className="max-w-4xl mx-auto px-4 pt-[84px] pb-6 md:pb-12 flex-1 w-full">
+    <div className="min-h-screen relative flex flex-col">
+      <VoronoiMosaic seed={3201} tileCount={80} margin={6} gap={3} palette={PANEL_DARK_PALETTE} className="fixed inset-0 w-full h-full pointer-events-none" />
+      <div className="relative z-10 max-w-4xl mx-auto px-4 pt-[84px] pb-6 md:pb-12 flex-1 w-full">
         <BackButton onClick={onBack} />
 
         <h1

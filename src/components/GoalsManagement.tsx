@@ -3,7 +3,10 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { CardDescription } from "@/components/ui/card";
 import { MosaicCard } from "./MosaicCard";
+import { VoronoiMosaic } from "./VoronoiMosaic";
 import { VORONOI_LIGHT, SHARD_CLIPS, LABEL_CLIPS, BUTTON_CLIPS, getClip } from "@/constants";
+
+const PANEL_DARK_PALETTE = ["#0a0a14", "#10122a", "#0f0e1f", "#181a3a", "#0c0d1e"] as const;
 import { Plus, Trash2 } from "lucide-react";
 import { api } from "@/lib/api";
 import { BouncingButton } from "./BouncingButton";
@@ -137,10 +140,11 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
             ))}
           </div>
           <div
-            className="inline-block bg-black px-6 py-3"
+            className="relative overflow-hidden inline-block px-6 py-3"
             style={{ clipPath: getClip(LABEL_CLIPS, 1) }}
           >
-            <p className="text-lg text-white font-black uppercase tracking-wide" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>Loading your goals...</p>
+            <VoronoiMosaic seed={1001} tileCount={14} margin={3} gap={1.5} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+            <p className="relative z-10 text-lg text-white font-black uppercase tracking-wide" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>Loading your goals...</p>
           </div>
         </div>
       </div>
@@ -156,10 +160,11 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
             {/* Date — sticky header */}
             <motion.div variants={contentReveal} className="sticky top-0 z-20 text-center pb-4 pt-2">
               <div
-                className="inline-block bg-black px-6 py-2"
+                className="relative overflow-hidden inline-block px-6 py-2"
                 style={{ clipPath: getClip(LABEL_CLIPS, 1) }}
               >
-                <p className="text-xl md:text-3xl text-white font-bold">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                <VoronoiMosaic seed={1013} tileCount={18} margin={3} gap={1.5} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+                <p className="relative z-10 text-xl md:text-3xl text-white font-bold">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</p>
               </div>
               {engagement && (engagement.currentStreak > 0 || engagement.isAtRisk) && (
                 <div className="flex items-center justify-center gap-2 mt-3">
@@ -173,18 +178,27 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
                 <motion.div key={goal.id} variants={tileEnter} className="w-full relative">
                   {/* Day X label — attached to top of goal card */}
                   <div
-                    className="inline-block bg-black px-5 py-2 ml-2 mb-0 relative z-10"
+                    className="relative overflow-hidden inline-block px-5 py-2 ml-2 mb-0 z-10"
                     style={{ clipPath: getClip(LABEL_CLIPS, goalIndex) }}
                   >
-                    <CardDescription className="text-white font-black text-xl md:text-2xl uppercase tracking-wide" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>Lesson {getCompletedDayCount(goalProgress[goal.id] ?? {})} of 30</CardDescription>
+                    <VoronoiMosaic seed={1117 + goalIndex * 19} tileCount={12} margin={3} gap={1.5} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+                    <CardDescription className="relative z-10 text-white font-black text-xl md:text-2xl uppercase tracking-wide" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>Lesson {getCompletedDayCount(goalProgress[goal.id] ?? {})} of 30</CardDescription>
                   </div>
                   <button
                     onClick={() => onSelectGoal(goal.id)}
-                    className="bg-black px-6 py-8 md:px-10 md:py-12 w-full hover:scale-[1.02] transition-transform cursor-pointer -mt-1"
+                    className="relative overflow-hidden px-6 py-8 md:px-10 md:py-12 w-full hover:scale-[1.02] transition-transform cursor-pointer -mt-1"
                     style={{ clipPath: getClip(SHARD_CLIPS, goalIndex) }}
                   >
+                    <VoronoiMosaic
+                      seed={111 + goalIndex * 17}
+                      tileCount={28}
+                      margin={4}
+                      gap={2}
+                      palette={PANEL_DARK_PALETTE}
+                      className="absolute inset-0 w-full h-full pointer-events-none"
+                    />
                     <h1
-                      className="text-center font-black uppercase leading-[0.95] break-words"
+                      className="relative z-10 text-center font-black uppercase leading-[0.95] break-words"
                       style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif", fontSize: "clamp(3rem, 12vw, 8rem)" }}
                     >
                       {goal.title.split(" ").map((word, i) => (
@@ -198,10 +212,11 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
                   <button
                     onClick={(e) => { e.stopPropagation(); handleDeleteGoal(goal.id, goal.title); }}
                     aria-label="Delete goal"
-                    className="absolute bottom-2 right-2 bg-black text-white/60 p-3 hover:scale-110 hover:text-white transition-all z-10"
+                    className="relative overflow-hidden absolute bottom-2 right-2 text-white/60 p-3 hover:scale-110 hover:text-white transition-all z-10"
                     style={{ clipPath: getClip(BUTTON_CLIPS, goalIndex) }}
                   >
-                    <Trash2 className="w-5 h-5" />
+                    <VoronoiMosaic seed={1207 + goalIndex * 13} tileCount={8} margin={2} gap={1} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+                    <Trash2 className="relative z-10 w-5 h-5" />
                   </button>
                   {/* Shard reward grid */}
                   {goalProgress[goal.id] && (
@@ -244,27 +259,37 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
             {/* Add Goal — once at the bottom */}
             <motion.button variants={tileEnter}
               onClick={onCreateGoal}
-              className="w-full bg-black py-4 md:py-5 text-xl md:text-2xl font-black uppercase tracking-wide hover:scale-105 transition-transform flex items-center justify-center gap-2"
+              className="relative overflow-hidden w-full py-4 md:py-5 text-xl md:text-2xl font-black uppercase tracking-wide hover:scale-105 transition-transform flex items-center justify-center gap-2"
               style={{ clipPath: getClip(BUTTON_CLIPS, 0), fontFamily: "var(--font-bebas), system-ui, sans-serif", letterSpacing: 3 }}
             >
-              <Plus className="w-5 h-5 text-white" />
-              <span className="text-white">ADD NEW GOAL</span>
+              <VoronoiMosaic
+                seed={91}
+                tileCount={18}
+                margin={3}
+                gap={2}
+                palette={PANEL_DARK_PALETTE}
+                className="absolute inset-0 w-full h-full pointer-events-none"
+              />
+              <Plus className="relative z-10 w-5 h-5 text-white" />
+              <span className="relative z-10 text-white">ADD NEW GOAL</span>
             </motion.button>
           </motion.div>
         ) : (
           <MosaicCard seed={0} className="min-h-screen p-6 md:p-10 flex flex-col items-center justify-center">
             <div className="text-center mb-4 md:mb-8 space-y-3">
               <div
-                className="inline-block bg-black px-8 py-3"
+                className="relative overflow-hidden inline-block px-8 py-3"
                 style={{ clipPath: getClip(LABEL_CLIPS, 3) }}
               >
-                <h1 className="text-3xl md:text-5xl font-bold text-white">Set Your First Goal</h1>
+                <VoronoiMosaic seed={1303} tileCount={20} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+                <h1 className="relative z-10 text-3xl md:text-5xl font-bold text-white">Set Your First Goal</h1>
               </div>
               <div
-                className="inline-block bg-black px-6 py-2"
+                className="relative overflow-hidden inline-block px-6 py-2"
                 style={{ clipPath: getClip(LABEL_CLIPS, 1) }}
               >
-                <p className="text-xl text-white font-bold">Pick any goal and get a personalized 30-day plan</p>
+                <VoronoiMosaic seed={1319} tileCount={16} margin={3} gap={1.5} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+                <p className="relative z-10 text-xl text-white font-bold">Pick any goal and get a personalized 30-day plan</p>
               </div>
             </div>
             <BouncingButton onClick={onCreateGoal} />

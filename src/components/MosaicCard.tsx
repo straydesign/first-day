@@ -27,7 +27,7 @@ function MosaicCardInner({
     <div
       className={cn(
         `clip-tile-${variant}`,
-        "relative overflow-hidden border border-white/15 bg-black focus-geo",
+        "relative overflow-hidden border border-white/15 focus-geo",
         className
       )}
     >

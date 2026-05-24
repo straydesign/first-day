@@ -2,6 +2,9 @@
 
 import { useRef, useCallback } from "react";
 import { VORONOI_LIGHT } from "@/constants";
+import { VoronoiMosaic } from "./VoronoiMosaic";
+
+const PANEL_DARK_PALETTE = ["#0a0a14", "#10122a", "#0f0e1f", "#181a3a", "#0c0d1e"] as const;
 
 interface FooterProps {
   onPrivacyClick?: () => void;
@@ -100,9 +103,10 @@ export function Footer({ onPrivacyClick, onTermsClick }: FooterProps) {
   ];
 
   return (
-    <footer className="bg-black py-8 mt-auto">
+    <footer className="relative overflow-hidden py-8 mt-auto">
+      <VoronoiMosaic seed={2503} tileCount={56} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
       <div
-        className="max-w-7xl mx-auto px-4"
+        className="relative z-10 max-w-7xl mx-auto px-4"
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
       >

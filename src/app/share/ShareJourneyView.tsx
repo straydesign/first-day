@@ -59,7 +59,7 @@ export function ShareJourneyView({
   ] as const;
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-black" role="main">
+    <div className="min-h-screen relative overflow-hidden tile-substrate" role="main">
       <div className="fixed inset-0 z-20 pointer-events-none overflow-hidden">
         {confettiPieces.map((piece) => (
           <motion.div

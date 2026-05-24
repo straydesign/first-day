@@ -6,7 +6,10 @@ import { Calendar, ArrowRight, Zap } from "lucide-react";
 import { useMonotone } from "./MonotoneContext";
 import { wordReveal, scaleReveal, SPRING } from "@/lib/animations";
 import { BUTTON_CLIPS, SHARD_CLIPS, VORONOI_LIGHT, getClip } from "@/constants";
+import { VoronoiMosaic } from "./VoronoiMosaic";
 import type { ProgressMap, Milestone, XPBreakdown } from "@/types";
+
+const PANEL_DARK_PALETTE = ["#0a0a14", "#10122a", "#0f0e1f", "#181a3a", "#0c0d1e"] as const;
 
 const ShardContainer = dynamic(
   () =>
@@ -115,10 +118,11 @@ export function CongratsView({
               transition={{ ...SPRING.bouncy, delay: 0.1 }}
             >
               <div
-                className="relative bg-black px-5 py-3 md:px-7 md:py-4 max-w-md"
+                className="relative overflow-hidden px-5 py-3 md:px-7 md:py-4 max-w-md"
                 style={{ clipPath: getClip(SHARD_CLIPS, 0) }}
               >
-                <div className="flex items-center gap-3 mb-1">
+                <VoronoiMosaic seed={1707} tileCount={20} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+                <div className="relative z-10 flex items-center gap-3 mb-1">
                   <span className="text-3xl md:text-4xl" aria-hidden>{milestone.icon}</span>
                   <span
                     className="text-xl md:text-2xl font-black uppercase leading-none"
@@ -131,39 +135,60 @@ export function CongratsView({
                     {milestone.title}
                   </span>
                 </div>
-                <p className="text-xs md:text-sm text-white/80 font-medium leading-snug pl-[3.25rem] md:pl-[3.75rem]">
+                <p className="relative z-10 text-xs md:text-sm text-white/80 font-medium leading-snug pl-[3.25rem] md:pl-[3.75rem]">
                   {milestone.message}
                 </p>
               </div>
             </motion.div>
           )}
 
-          {/* Word-by-word headline */}
-          <h1 className="text-3xl md:text-5xl font-bold mb-2 text-white">
-            {(dayNumber ? `Day ${dayNumber} Complete!` : "Congratulations!").split(" ").map((word, i) => (
-              <motion.span
-                key={i}
-                custom={i}
-                variants={wordReveal}
-                initial="hidden"
-                animate="visible"
-                className="inline-block mr-[0.3em]"
-              >
-                {word}
-              </motion.span>
-            ))}
-          </h1>
-
-          {goalTitle && (
-            <motion.p
-              className="text-lg md:text-2xl text-white/80 font-bold mb-6 px-4"
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ ...SPRING.gentle, delay: 0.5 }}
+          {/* Climax shard — headline + goal title ride a tile-mosaic panel
+              so the largest text element of the celebration reads as a
+              tile-built unit rather than a flat-bg leak through the cosmos. */}
+          <motion.div
+            className="mb-6 flex justify-center px-2"
+            initial={{ opacity: 0, y: 18, scale: 0.94 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ ...SPRING.bouncy, delay: 0.2 }}
+          >
+            <div
+              className="relative overflow-hidden border border-white/10 px-6 py-5 md:px-10 md:py-7 w-full max-w-xl"
+              style={{ clipPath: getClip(SHARD_CLIPS, 2) }}
             >
-              {goalTitle}
-            </motion.p>
-          )}
+              <VoronoiMosaic
+                seed={1823}
+                tileCount={32}
+                margin={4}
+                gap={2}
+                palette={PANEL_DARK_PALETTE}
+                className="absolute inset-0 w-full h-full pointer-events-none"
+              />
+              <h1 className="relative z-10 text-3xl md:text-5xl font-bold mb-2 text-white text-center">
+                {(dayNumber ? `Day ${dayNumber} Complete!` : "Congratulations!").split(" ").map((word, i) => (
+                  <motion.span
+                    key={i}
+                    custom={i}
+                    variants={wordReveal}
+                    initial="hidden"
+                    animate="visible"
+                    className="inline-block mr-[0.3em]"
+                  >
+                    {word}
+                  </motion.span>
+                ))}
+              </h1>
+              {goalTitle && (
+                <motion.p
+                  className="relative z-10 text-lg md:text-2xl text-white/80 font-bold text-center"
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ ...SPRING.gentle, delay: 0.5 }}
+                >
+                  {goalTitle}
+                </motion.p>
+              )}
+            </div>
+          </motion.div>
 
           {/* 3D Shard Container — shards drop into glass jar */}
           {dayNumber && progress && (
@@ -186,10 +211,11 @@ export function CongratsView({
               transition={{ ...SPRING.gentle, delay: 0.6 }}
             >
               <div
-                className="relative bg-black/80 backdrop-blur-sm border border-white/10 px-6 py-5 md:px-8 md:py-6 w-full max-w-sm"
+                className="relative overflow-hidden border border-white/10 px-6 py-5 md:px-8 md:py-6 w-full max-w-sm"
                 style={{ clipPath: getClip(SHARD_CLIPS, 1) }}
               >
-                <div className="space-y-1.5 mb-4">
+                <VoronoiMosaic seed={1789} tileCount={28} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+                <div className="relative z-10 space-y-1.5 mb-4">
                   {xpLines.map((line, i) => (
                     <motion.div
                       key={line.label}
@@ -215,7 +241,7 @@ export function CongratsView({
                   ))}
                 </div>
                 <motion.div
-                  className="pt-3 border-t border-white/10 flex flex-col items-center gap-1"
+                  className="relative z-10 pt-3 border-t border-white/10 flex flex-col items-center gap-1"
                   initial={{ opacity: 0, scale: 0.85 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ ...SPRING.bouncy, delay: 0.95 + xpLines.length * 0.08 }}

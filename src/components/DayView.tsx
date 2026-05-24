@@ -5,9 +5,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CheckCircle2, Calendar, Youtube, ExternalLink, Zap } from "lucide-react";
 import { BackButton } from "@/components/ui/back-button";
+import { VoronoiMosaic } from "./VoronoiMosaic";
+import { fireCelebration, getRoomView } from "./3d-shell/RoomRegistry";
 import { previewDayXP, getDailyMultiplier, getDailyChallenge } from "@/lib/engagement";
 import { SHARD_CLIPS, LABEL_CLIPS, BUTTON_CLIPS, getClip } from "@/constants";
 import { useMonotone } from "./MonotoneContext";
+
+const PANEL_DARK_PALETTE = ["#0a0a14", "#10122a", "#0f0e1f", "#181a3a", "#0c0d1e"] as const;
 import { staggerContainer, tileEnter, contentReveal, popIn, SPRING } from "@/lib/animations";
 import type { SelectedDay, DayProgress, Activity, ActivityResource } from "@/types";
 
@@ -41,6 +45,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
 
   const handleSubmit = () => {
     if (!canSubmit) { setShowValidation(true); return; }
+    fireCelebration(getRoomView(), 1.0);
     onComplete({ dayNumber: day.number, completed: completedActivities, feedback });
   };
 
@@ -87,12 +92,14 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
             className="mb-4 flex flex-wrap items-center justify-center gap-3"
           >
             {dailyMultiplier > 1 && (
-              <div className="bg-black border-2 border-yellow-500/60 px-4 py-2 text-sm font-bold text-yellow-300 uppercase tracking-wider" style={{ clipPath: getClip(SHARD_CLIPS, 0) }}>
-                {dailyMultiplier}x XP Day
+              <div className="relative overflow-hidden border-2 border-yellow-500/60 px-4 py-2 text-sm font-bold text-yellow-300 uppercase tracking-wider" style={{ clipPath: getClip(SHARD_CLIPS, 0) }}>
+                <VoronoiMosaic seed={601} tileCount={10} margin={3} gap={1.5} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+                <span className="relative z-10">{dailyMultiplier}x XP Day</span>
               </div>
             )}
-            <div className="bg-black border border-white/20 px-4 py-2 text-sm font-medium text-white/70" style={{ clipPath: getClip(SHARD_CLIPS, 1) }}>
-              Challenge: {dailyChallenge.description} (+{dailyChallenge.bonusXP} XP)
+            <div className="relative overflow-hidden border border-white/20 px-4 py-2 text-sm font-medium text-white/70" style={{ clipPath: getClip(SHARD_CLIPS, 1) }}>
+              <VoronoiMosaic seed={613} tileCount={14} margin={3} gap={1.5} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+              <span className="relative z-10">Challenge: {dailyChallenge.description} (+{dailyChallenge.bonusXP} XP)</span>
             </div>
           </motion.div>
         )}
@@ -104,14 +111,15 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
           className="text-center mb-4 md:mb-8"
         >
           <div
-            className="inline-block bg-black px-6 py-3"
+            className="relative overflow-hidden inline-block px-6 py-3"
             style={{ clipPath: getClip(LABEL_CLIPS, 1) }}
           >
-            <div className="flex items-center justify-center gap-2">
+            <VoronoiMosaic seed={701} tileCount={20} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+            <div className="relative z-10 flex items-center justify-center gap-2">
               <Calendar className="w-6 h-6 md:w-8 md:h-8 text-white" />
               <h1 className="text-2xl md:text-5xl font-black text-white uppercase tracking-wide" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>{isToday ? `Today · Day ${day.number}` : `Day ${day.number}`}</h1>
             </div>
-            {day.dateDisplay && <p className="text-lg md:text-2xl text-white/70 font-bold mt-1">{day.dateDisplay}</p>}
+            {day.dateDisplay && <p className="relative z-10 text-lg md:text-2xl text-white/70 font-bold mt-1">{day.dateDisplay}</p>}
           </div>
         </motion.div>
 
@@ -122,8 +130,9 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
             animate="visible"
           >
             <div className="mb-4 md:mb-6">
-              <motion.div variants={contentReveal} className="bg-black px-6 py-4 inline-block mb-4" style={{ clipPath: getClip(LABEL_CLIPS, 3) }}>
-                <h2 className="text-4xl md:text-6xl font-black italic uppercase tracking-wide whitespace-nowrap" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>
+              <motion.div variants={contentReveal} className="relative overflow-hidden px-6 py-4 inline-block mb-4" style={{ clipPath: getClip(LABEL_CLIPS, 3) }}>
+                <VoronoiMosaic seed={811} tileCount={18} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+                <h2 className="relative z-10 text-4xl md:text-6xl font-black italic uppercase tracking-wide whitespace-nowrap" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>
                   {"Your Activities".split("").map((char, i) => (
                     <span key={i} style={{ color: char === " " ? "transparent" : monotone ? "#ffffff" : ["#FFE633","#FF6B2B","#FF2D55","#00EAFF","#FF10F0","#FF1493","#4FC3F7","#FF4500"][i % 8], width: char === " " ? "0.3em" : undefined, display: "inline-block" }}>{char}</span>
                   ))}
@@ -139,8 +148,16 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
                         variants={tileEnter}
                         className="space-y-2"
                       >
-                        <div className={`flex items-start gap-2 md:gap-4 p-3 md:p-5 bg-black transition-smooth ${completedActivities[index] ? 'ring-2 ring-[#FFE633]/40' : ''} ${isCompleted ? 'opacity-75' : ''}`} style={{ clipPath: getClip(SHARD_CLIPS, index) }}>
-                          <div className="mt-1 flex-shrink-0 relative">
+                        <div className={`relative overflow-hidden flex items-start gap-2 md:gap-4 p-3 md:p-5 transition-smooth ${completedActivities[index] ? 'ring-2 ring-[#FFE633]/40' : ''} ${isCompleted ? 'opacity-75' : ''}`} style={{ clipPath: getClip(SHARD_CLIPS, index) }}>
+                          <VoronoiMosaic
+                            seed={211 + index * 23}
+                            tileCount={32}
+                            margin={4}
+                            gap={2}
+                            palette={PANEL_DARK_PALETTE}
+                            className="absolute inset-0 w-full h-full pointer-events-none"
+                          />
+                          <div className="relative z-10 mt-1 flex-shrink-0">
                             <Checkbox checked={completedActivities[index] || false} onCheckedChange={() => !isCompleted && toggleActivity(index)} id={`activity-${index}`} className="size-14 md:size-16 border-[3px] border-white rounded-none data-[state=checked]:border-white data-[state=checked]:bg-white" disabled={isCompleted} />
                             {completedActivities[index] && (
                               <motion.div variants={popIn} initial="hidden" animate="visible" exit="hidden" className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -150,7 +167,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
                               </motion.div>
                             )}
                           </div>
-                          <label htmlFor={`activity-${index}`} className="flex-1 min-w-0 cursor-pointer">
+                          <label htmlFor={`activity-${index}`} className="relative z-10 flex-1 min-w-0 cursor-pointer">
                             <div className="text-base md:text-lg leading-relaxed select-text text-white font-bold">{activityText}</div>
                             {resources && resources.length > 0 && (
                               <div className="mt-3 space-y-2">
@@ -171,18 +188,27 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
                               </div>
                             )}
                           </label>
-                          {completedActivities[index] && <CheckCircle2 className="w-6 h-6 text-lime-500 flex-shrink-0 animate-scaleIn" />}
+                          {completedActivities[index] && <CheckCircle2 className="relative z-10 w-6 h-6 text-lime-500 flex-shrink-0 animate-scaleIn" />}
                         </div>
                       </motion.div>
                     );
                   })}
                   {/* How did today go? — merged into activities card */}
                   <div className="mt-6">
-                    <div className="bg-black px-5 py-3 inline-block mb-3" style={{ clipPath: getClip(LABEL_CLIPS, 0) }}>
-                      <h3 className="text-xl md:text-3xl font-black text-white uppercase tracking-wide">How did today go?</h3>
+                    <div className="relative overflow-hidden px-5 py-3 inline-block mb-3" style={{ clipPath: getClip(LABEL_CLIPS, 0) }}>
+                      <VoronoiMosaic seed={907} tileCount={14} margin={3} gap={1.5} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+                      <h3 className="relative z-10 text-xl md:text-3xl font-black text-white uppercase tracking-wide">How did today go?</h3>
                     </div>
-                    <div className="bg-black p-3 md:p-5" style={{ clipPath: getClip(SHARD_CLIPS, 2) }}>
-                      <Textarea id="day-feedback" aria-label="How did today go?" value={feedback} onChange={(e) => !isCompleted && setFeedback(e.target.value)} placeholder="Share your thoughts, challenges, or wins from today..." className="min-h-32 text-lg border-0 focus-visible:ring-0 bg-transparent text-white placeholder:text-white/40 resize-none" disabled={isCompleted} />
+                    <div className="relative overflow-hidden p-3 md:p-5" style={{ clipPath: getClip(SHARD_CLIPS, 2) }}>
+                      <VoronoiMosaic
+                        seed={313}
+                        tileCount={26}
+                        margin={4}
+                        gap={2}
+                        palette={PANEL_DARK_PALETTE}
+                        className="absolute inset-0 w-full h-full pointer-events-none"
+                      />
+                      <Textarea id="day-feedback" aria-label="How did today go?" value={feedback} onChange={(e) => !isCompleted && setFeedback(e.target.value)} placeholder="Share your thoughts, challenges, or wins from today..." className="relative z-10 min-h-32 text-lg border-0 focus-visible:ring-0 bg-transparent text-white placeholder:text-white/40 resize-none" disabled={isCompleted} />
                     </div>
                     {!isCompleted && <p className="text-sm text-white/50 mt-2">Reflect on your progress — what went well and what you can improve.</p>}
                   </div>
@@ -196,9 +222,17 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
             initial="hidden"
             animate="visible"
           >
-            <div className="mb-4 md:mb-6 bg-black p-8 text-center" style={{ clipPath: getClip(SHARD_CLIPS, 0) }}>
-              <p className="text-white/60 text-lg">Activities for this day are not available yet.</p>
-              <p className="text-white/40 text-sm mt-2">Check back later or contact support if this persists.</p>
+            <div className="relative overflow-hidden mb-4 md:mb-6 p-8 text-center" style={{ clipPath: getClip(SHARD_CLIPS, 0) }}>
+              <VoronoiMosaic
+                seed={401}
+                tileCount={24}
+                margin={4}
+                gap={2}
+                palette={PANEL_DARK_PALETTE}
+                className="absolute inset-0 w-full h-full pointer-events-none"
+              />
+              <p className="relative z-10 text-white/60 text-lg">Activities for this day are not available yet.</p>
+              <p className="relative z-10 text-white/40 text-sm mt-2">Check back later or contact support if this persists.</p>
             </div>
           </motion.div>
         )}
@@ -233,7 +267,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-50 flex items-center justify-center bg-black/70"
+              className="fixed inset-0 z-50 flex items-center justify-center bg-transparent"
               onClick={() => setShowValidation(false)}
             >
               <motion.div
@@ -244,14 +278,22 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.9, opacity: 0 }}
                 transition={SPRING.snappy}
-                className="bg-black p-8 mx-4 max-w-sm text-center"
+                className="relative overflow-hidden p-8 mx-4 max-w-sm text-center"
                 style={{ clipPath: getClip(SHARD_CLIPS, 0) }}
                 onClick={(e) => e.stopPropagation()}
               >
-                <p id="day-validation-title" className="text-xl text-white font-black uppercase tracking-wide mb-6">Check at least one activity or add a reflection to continue</p>
+                <VoronoiMosaic
+                  seed={509}
+                  tileCount={22}
+                  margin={4}
+                  gap={2}
+                  palette={PANEL_DARK_PALETTE}
+                  className="absolute inset-0 w-full h-full pointer-events-none"
+                />
+                <p id="day-validation-title" className="relative z-10 text-xl text-white font-black uppercase tracking-wide mb-6">Check at least one activity or add a reflection to continue</p>
                 <button
                   onClick={() => setShowValidation(false)}
-                  className="px-8 py-3 font-black text-black uppercase tracking-wide hover:scale-105 transition-transform btn-shake"
+                  className="relative z-10 px-8 py-3 font-black text-black uppercase tracking-wide hover:scale-105 transition-transform btn-shake"
                   style={{ backgroundColor: "#fcd02a", clipPath: getClip(BUTTON_CLIPS, 2) }}
                   autoFocus
                 >

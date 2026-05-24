@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Bebas_Neue } from "next/font/google";
 import { Toaster } from "sonner";
 import { MonotoneProvider } from "@/components/MonotoneContext";
+import { PersistentCanvasMount } from "@/components/3d-shell/PersistentCanvasMount";
+import { DomBridgeSource } from "@/components/3d-shell/DomBridge";
 import "./globals.css";
 
 const inter = Inter({
@@ -88,13 +90,14 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="antialiased bg-black">
+      <body className="antialiased tile-substrate">
         <a href="#main-content" className="skip-to-content">
           Skip to content
         </a>
+        <PersistentCanvasMount />
         <MonotoneProvider>
-          <main id="main-content">
-            {children}
+          <main id="main-content" className="relative z-10">
+            <DomBridgeSource>{children}</DomBridgeSource>
           </main>
         </MonotoneProvider>
         <Toaster />

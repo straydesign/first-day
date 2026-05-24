@@ -4,7 +4,7 @@ const SHARD_COUNT = 16;
 
 export default function NotFound() {
   return (
-    <div className="fixed inset-0 z-[100] bg-black overflow-hidden flex items-center justify-center">
+    <div className="fixed inset-0 z-[100] tile-substrate overflow-hidden flex items-center justify-center">
       {/* Decorative background shards */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         {Array.from({ length: 5 }, (_, i) => {

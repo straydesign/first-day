@@ -251,7 +251,7 @@ function PreviewContent() {
 
 export default function PreviewPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-black" />}>
+    <Suspense fallback={<div className="min-h-screen tile-substrate" />}>
       <PreviewContent />
     </Suspense>
   );

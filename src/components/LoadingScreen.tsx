@@ -66,8 +66,12 @@ export function LoadingScreen({ showProgress = false, estimatedDuration = 15000 
     ? Math.floor((progress / 100) * SHARD_COUNT)
     : loopProgress;
 
+  // v207 — kill the bg-black/35 flat scrim that v26 introduced "for legibility"
+  // (~15s of plan-generation = the screen-recording window VISION's success
+  // criterion lives or dies on). The backdrop-blur alone separates copy from
+  // the room without painting a flat-black wash over the cosmos.
   return (
-    <div className="fixed inset-0 z-[100] bg-black overflow-hidden">
+    <div className="fixed inset-0 z-[100] overflow-hidden pointer-events-none backdrop-blur-[2px]">
       <div className="absolute inset-0 z-[105] flex flex-col items-center justify-center gap-8 px-6">
         <FirstDayLogo size="hero" showTagline={true} showLetters={false} className="w-full" />
 

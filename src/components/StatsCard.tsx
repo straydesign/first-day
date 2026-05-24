@@ -12,7 +12,7 @@ export function StatsCard({ engagement }: StatsCardProps) {
 
   return (
     <div className="grid grid-cols-2 gap-3">
-      <div className="relative backdrop-blur-sm clip-tile-a p-3 border border-white/15 overflow-hidden bg-black">
+      <div className="relative backdrop-blur-sm clip-tile-a p-3 border border-white/15 overflow-hidden">
         <VoronoiMosaic seed={100} tileCount={20} margin={4} gap={2} className="absolute inset-0 w-full h-full" />
         {/* No scrim — full brightness */}
         <div className="relative z-10">
@@ -24,7 +24,7 @@ export function StatsCard({ engagement }: StatsCardProps) {
         </div>
       </div>
 
-      <div className="relative backdrop-blur-sm clip-tile-b p-3 border border-white/15 overflow-hidden bg-black">
+      <div className="relative backdrop-blur-sm clip-tile-b p-3 border border-white/15 overflow-hidden">
         <VoronoiMosaic seed={101} tileCount={20} margin={4} gap={2} className="absolute inset-0 w-full h-full" />
         {/* No scrim — full brightness */}
         <div className="relative z-10">
@@ -36,7 +36,7 @@ export function StatsCard({ engagement }: StatsCardProps) {
         </div>
       </div>
 
-      <div className="relative backdrop-blur-sm clip-tile-c p-3 border border-white/15 overflow-hidden bg-black">
+      <div className="relative backdrop-blur-sm clip-tile-c p-3 border border-white/15 overflow-hidden">
         <VoronoiMosaic seed={102} tileCount={20} margin={4} gap={2} className="absolute inset-0 w-full h-full" />
         {/* No scrim — full brightness */}
         <div className="relative z-10">
@@ -48,7 +48,7 @@ export function StatsCard({ engagement }: StatsCardProps) {
         </div>
       </div>
 
-      <div className="relative backdrop-blur-sm clip-tile-d p-3 border border-white/15 overflow-hidden bg-black">
+      <div className="relative backdrop-blur-sm clip-tile-d p-3 border border-white/15 overflow-hidden">
         <VoronoiMosaic seed={103} tileCount={20} margin={4} gap={2} className="absolute inset-0 w-full h-full" />
         {/* No scrim — full brightness */}
         <div className="relative z-10">

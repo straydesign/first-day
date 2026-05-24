@@ -14,7 +14,7 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black overflow-hidden flex items-center justify-center">
+    <div className="fixed inset-0 z-[100] tile-substrate overflow-hidden flex items-center justify-center">
       <div className="flex flex-col items-center gap-8 px-6 max-w-md w-full">
         <h1
           className="text-4xl sm:text-5xl text-white text-center uppercase tracking-wider"

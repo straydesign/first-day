@@ -8,7 +8,11 @@ import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3,
 import { BRIGHT_COLORS, SHARD_CLIPS, SCROLL_SPEEDS, FIELD_COLORS, EXP_COLORS } from '@/tokens';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMonotone } from './MonotoneContext';
+import { VoronoiMosaic } from './VoronoiMosaic';
+import { fireCelebration, getRoomView } from './3d-shell/RoomRegistry';
 import type { GoalFormData } from '@/types';
+
+const PANEL_DARK_PALETTE = ["#0a0a14", "#10122a", "#0f0e1f", "#181a3a", "#0c0d1e"] as const;
 
 interface SimpleGoalCreationProps {
   onComplete: (goalData: GoalFormData) => void;
@@ -56,6 +60,7 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
     if (!goal.trim()) { setShowValidation(true); return; }
     setIsGenerating(true);
     setError(null);
+    fireCelebration(getRoomView(), 1.2);
     onComplete({ goal: goal.trim(), why: why.trim(), experienceLevel, priorExperience: priorExperience.trim(), preferredTactics: preferredTactics.trim(), contextAnswers: { why: why.trim(), experienceLevel, priorExperience: priorExperience.trim(), preferredTactics: preferredTactics.trim() }, timestamp: Date.now() });
   };
 
@@ -95,11 +100,13 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-4xl mx-auto">
           <div className="p-4 md:p-12">
             <div className="text-center mb-6 md:mb-10">
-              <div className="inline-block bg-black px-8 py-3 mb-3" style={{ clipPath: "polygon(1% 0%, 100% 3%, 99% 97%, 0% 100%)" }}>
-                <h1 className="text-3xl md:text-6xl font-bold text-white">Let&apos;s Create Your Goal</h1>
+              <div className="relative overflow-hidden inline-block px-8 py-3 mb-3" style={{ clipPath: "polygon(1% 0%, 100% 3%, 99% 97%, 0% 100%)" }}>
+                <VoronoiMosaic seed={1407} tileCount={22} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+                <h1 className="relative z-10 text-3xl md:text-6xl font-bold text-white">Let&apos;s Create Your Goal</h1>
               </div>
-              <div className="inline-block bg-black px-6 py-2" style={{ clipPath: "polygon(2% 0%, 98% 4%, 100% 96%, 0% 100%)" }}>
-                <p className="text-lg md:text-2xl text-white font-bold">Tell us what you want to achieve</p>
+              <div className="relative overflow-hidden inline-block px-6 py-2" style={{ clipPath: "polygon(2% 0%, 98% 4%, 100% 96%, 0% 100%)" }}>
+                <VoronoiMosaic seed={1423} tileCount={16} margin={3} gap={1.5} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+                <p className="relative z-10 text-lg md:text-2xl text-white font-bold">Tell us what you want to achieve</p>
               </div>
             </div>
             <AnimatePresence>
@@ -238,11 +245,12 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
                   ))}
                 </div>
                 {/* Main button body */}
-                <div className="bg-black py-6 md:py-8 flex items-center justify-center gap-3 overflow-hidden">
+                <div className="relative py-6 md:py-8 flex items-center justify-center gap-3 overflow-hidden">
+                  <VoronoiMosaic seed={1531} tileCount={36} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
                   {isGenerating ? (
-                    <><Loader2 className="w-8 h-8 animate-spin text-white" /><span className="text-4xl md:text-5xl font-black uppercase tracking-wide text-white" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>Generating...</span></>
+                    <span className="relative z-10 flex items-center gap-3"><Loader2 className="w-8 h-8 animate-spin text-white" /><span className="text-4xl md:text-5xl font-black uppercase tracking-wide text-white" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>Generating...</span></span>
                   ) : (
-                    <span className="flex items-center" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>
+                    <span className="relative z-10 flex items-center" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>
                       {"GENERATE MY PLAN".split("").map((char, i) => (
                         <span key={i} className="text-5xl md:text-6xl font-black uppercase tracking-wide" style={{ color: char === " " ? "transparent" : monotone ? "#ffffff" : BRIGHT_COLORS[i % BRIGHT_COLORS.length], width: char === " " ? "0.3em" : undefined, display: "inline-block", animation: char === " " ? "none" : `letterWave 2s ease-in-out ${i * 0.12}s infinite` }}>{char}</span>
                       ))}
@@ -278,7 +286,7 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-transparent"
             onClick={() => setShowValidation(false)}
           >
             <motion.div
@@ -289,15 +297,16 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ type: "spring", stiffness: 400, damping: 25 }}
-              className="bg-black p-8 mx-4 max-w-sm text-center"
+              className="relative overflow-hidden p-8 mx-4 max-w-sm text-center"
               style={{ clipPath: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" }}
               onClick={(e) => e.stopPropagation()}
             >
-              <p id="validation-title" className="text-xl text-white font-black uppercase tracking-wide mb-2">Hold up!</p>
-              <p className="text-base text-white/80 font-medium mb-6">Just fill in your goal above and we&apos;ll build your plan</p>
+              <VoronoiMosaic seed={1607} tileCount={22} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+              <p id="validation-title" className="relative z-10 text-xl text-white font-black uppercase tracking-wide mb-2">Hold up!</p>
+              <p className="relative z-10 text-base text-white/80 font-medium mb-6">Just fill in your goal above and we&apos;ll build your plan</p>
               <button
                 onClick={() => setShowValidation(false)}
-                className="px-8 py-3 font-black text-black uppercase tracking-wide hover:scale-105 transition-transform btn-shake"
+                className="relative z-10 px-8 py-3 font-black text-black uppercase tracking-wide hover:scale-105 transition-transform btn-shake"
                 style={{ backgroundColor: "#fcd02a", clipPath: "polygon(1% 0%, 100% 4%, 99% 96%, 0% 100%)" }}
                 autoFocus
               >

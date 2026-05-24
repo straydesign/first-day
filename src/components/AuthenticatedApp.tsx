@@ -2,9 +2,20 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
-import { HeroMosaic } from "./HeroMosaic";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { computeEngagementState, getMilestone, getLatestDayXP, calculateStreaks } from "@/lib/engagement";
+import { setProgressFraction } from "@/components/3d-shell/progressIntent";
+import {
+  startPresence,
+  stopPresence,
+  setOwnRoomId,
+} from "@/components/3d-shell/presencePulseIntent";
+import {
+  startReactionsRealtime,
+  stopReactionsRealtime,
+  setVisibleRoomIds,
+} from "@/components/3d-shell/reactionsIntent";
+import { subscribeArrivedMarker, getArrivedMarker } from "@/components/3d-shell/galleryIntent";
 import { useGoalManager } from "@/hooks/useGoalManager";
 import { useKeyboardNav } from "@/hooks/useKeyboardNav";
 import type { AppView, EngagementState, Milestone, XPBreakdown, Achievement, SelectedDay } from "@/types";
@@ -19,6 +30,7 @@ const SimpleGoalCreation = dynamic(() => import("@/components/SimpleGoalCreation
 const CongratsView = dynamic(() => import("@/components/CongratsView").then(m => ({ default: m.CongratsView })), { loading: () => <LoadingScreen /> });
 const BeastMode = dynamic(() => import("@/components/BeastMode").then(m => ({ default: m.BeastMode })));
 const AchievementUnlockToast = dynamic(() => import("@/components/AchievementUnlockToast").then(m => ({ default: m.AchievementUnlockToast })));
+const GalleryView = dynamic(() => import("@/components/GalleryView").then(m => ({ default: m.GalleryView })));
 
 interface AuthenticatedAppProps {
   accessToken: string;
@@ -73,6 +85,18 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
     return computeEngagementState(progress, planData.startDate);
   }, [progress, planData?.startDate]);
 
+  // v209 — bridge user completion-state into cosmos identity. Each time
+  // engagement recomputes (a day completes, the user reopens the app, demo
+  // mode loads fixtures), push the fraction of the 30-day journey into the
+  // module-level singleton; TileVoid reads it each frame and lights the
+  // corresponding fraction of cosmos slabs. The void becomes a progress
+  // ledger rather than a generic backdrop. Closes the VISION line "every
+  // tile movement maps to a user transition or a state change" on the
+  // long-term state axis — every prior cosmos channel was instantaneous.
+  useEffect(() => {
+    setProgressFraction((engagement?.totalDaysCompleted ?? 0) / 30);
+  }, [engagement]);
+
   // Track achievement unlocks for reveal animations
   useEffect(() => {
     if (!engagement) return;
@@ -92,6 +116,52 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
   // Scroll to top whenever the view changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [currentView]);
+
+  // Sync 3D camera rig to current view
+  useEffect(() => {
+    void import("./3d-shell/RoomRegistry").then((m) => m.setRoomView(currentView));
+  }, [currentView]);
+
+  // P6 — own published room id (server-trust). Set by handlePublished from
+  // GalleryView; lets the presence-pulse driver track who's inside it.
+  const [ownRoomId, setOwnRoomIdState] = useState<string | null>(null);
+
+  // P6 — presence + reactions realtime drivers. Presence runs whenever a
+  // userId is known so the owner sees pulses anywhere in the app, not just
+  // in the gallery. Reactions realtime is gated on gallery+visiting so the
+  // channel doesn't stay open while the user is deep in their own plan.
+  useEffect(() => {
+    if (!userId) return;
+    const visitingRoomId = currentView === "gallery" ? getArrivedMarker()?.id ?? null : null;
+    startPresence(userId, visitingRoomId);
+    // Re-track when the arrived marker changes (camera dolly lands on a new room).
+    const unsub = subscribeArrivedMarker(() => {
+      const next = currentView === "gallery" ? getArrivedMarker()?.id ?? null : null;
+      startPresence(userId, next);
+    });
+    return () => {
+      unsub();
+    };
+  }, [userId, currentView]);
+
+  useEffect(() => () => stopPresence(), []);
+
+  useEffect(() => {
+    setOwnRoomId(ownRoomId);
+  }, [ownRoomId]);
+
+  useEffect(() => {
+    if (currentView !== "gallery") {
+      stopReactionsRealtime();
+      return;
+    }
+    setVisibleRoomIds(() => {
+      const arrived = getArrivedMarker();
+      return new Set(arrived ? [arrived.id] : []);
+    });
+    startReactionsRealtime();
+    return () => stopReactionsRealtime();
   }, [currentView]);
 
   const handleBackToGoals = () => {
@@ -168,8 +238,7 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
   };
 
   return (
-    <div className="min-h-screen relative bg-black">
-      <HeroMosaic />
+    <div className="min-h-screen relative">
       <div className="relative z-10">
         {currentView !== "onboarding" && currentView !== "congrats" && (
           <div className="absolute top-4 left-4 right-4 z-50 flex justify-between items-center">
@@ -268,6 +337,17 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
                 xp={latestDayXP}
               />
             )}
+
+            {currentView === "gallery" && (
+              <GalleryView
+                onBack={handleBackToGoals}
+                userId={userId}
+                plan={planData}
+                goalId={goalManager.currentGoalId}
+                goalTitle={planData?.cleanedGoal || goalData?.goal || null}
+                onPublished={(roomId) => setOwnRoomIdState(roomId)}
+              />
+            )}
           </motion.div>
         </AnimatePresence>
 
@@ -291,6 +371,7 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
                 ? () => { loadGoalData(currentGoalId).then(() => setCurrentView("calendar")); }
                 : undefined
             }
+            onNavigateToGallery={() => setCurrentView("gallery")}
             onNavigateToSettings={demoMode ? () => {} : () => setCurrentView("settings")}
           />
         )}

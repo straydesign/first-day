@@ -5,7 +5,7 @@ const WORDMARK = ["FIRST", "DAY"] as const;
 
 export default function Loading() {
   return (
-    <div className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center gap-10 px-6">
+    <div className="fixed inset-0 z-[100] tile-substrate flex flex-col items-center justify-center gap-10 px-6">
       <div className="flex flex-col items-center gap-2">
         {WORDMARK.map((word, i) => (
           <span
