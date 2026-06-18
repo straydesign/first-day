@@ -20,6 +20,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Check, Flame, Zap } from "lucide-react";
 import { ShardEngine } from "./lab/ShardEngine";
 import { TOKENS } from "@/tokens";
+import { Panel } from "@/components/ui/Panel";
+import { FONT, GREY_VORONOI } from "@/lib/design";
 import { DEFAULT_DEMO_GOAL, planFor } from "@/data/sample-plans";
 
 const XP_PER_DAY = 50;
@@ -127,65 +129,47 @@ export function DayCompleteDemo({
     <section className="relative w-full py-12 md:py-20 px-4 md:px-10 overflow-hidden">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
-          <div
-            className="inline-flex items-center gap-2 px-4 py-1.5 mb-4 bg-white/10"
-            style={{ clipPath: TOKENS.clipPaths.button[1] }}
-          >
-            <Zap className="w-4 h-4 text-[#FF6B2B]" />
-            <span className="text-xs uppercase tracking-widest text-white/80">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-4 rounded-full bg-white/5 border border-white/10">
+            <Zap className="w-4 h-4 text-white/60" />
+            <span className="text-xs uppercase tracking-[0.08em] text-white/40">
               Tap to feel it
             </span>
           </div>
           <h2
-            className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-2"
-            style={{
-              fontFamily: TOKENS.typography.fontFamily.display,
-              letterSpacing: TOKENS.typography.letterSpacing.display,
-            }}
+            className="text-3xl md:text-5xl lg:text-6xl font-semibold tracking-[-0.02em] text-white mb-2"
+            style={{ fontFamily: FONT }}
           >
             Every day you show up feels like this
           </h2>
-          <p className="text-white/70 md:text-lg">
+          <p className="text-white/55 md:text-lg">
             {isUserChosen ? "Your plan: " : "Sample plan: "}
-            <span className="text-white font-bold">{effectiveGoal}</span>. Tap each day. {STREAK_MAX} days = full streak.
+            <span className="text-white font-semibold">{effectiveGoal}</span>. Tap each day. {STREAK_MAX} days = full streak.
           </p>
         </div>
 
         {/* Stat bar — XP + Streak counters */}
         <div className="grid grid-cols-2 gap-3 md:gap-5 max-w-md mx-auto mb-8">
           {/* XP */}
-          <div
-            className="text-center py-4 px-3"
-            style={{
-              backgroundColor: "#FFE633",
-              clipPath: TOKENS.clipPaths.shard[0],
-            }}
-          >
+          <Panel contentClassName="py-4 px-3 text-center">
             <div className="flex items-center justify-center gap-1.5 mb-0.5">
-              <Zap className="w-4 h-4 text-black" />
-              <span className="text-[10px] uppercase tracking-widest text-black/70 font-bold">
+              <Zap className="w-4 h-4 text-white/60" />
+              <span className="text-[10px] uppercase tracking-[0.08em] text-white/40 font-medium">
                 XP
               </span>
             </div>
             <motion.p
               key={`xp-${xp}`}
-              initial={{ scale: 1.3, color: "#FF2D55" }}
-              animate={{ scale: 1, color: "#000000" }}
+              initial={{ scale: 1.3, color: "rgba(255,255,255,0.55)" }}
+              animate={{ scale: 1, color: "rgba(255,255,255,1)" }}
               transition={TOKENS.motion.spring.snappy}
-              className="text-3xl md:text-4xl font-black text-black tabular-nums"
+              className="text-3xl md:text-4xl font-semibold text-white tabular-nums"
             >
               {xp}
             </motion.p>
-          </div>
+          </Panel>
 
           {/* Streak */}
-          <div
-            className="text-center py-4 px-3"
-            style={{
-              backgroundColor: "#FF4500",
-              clipPath: TOKENS.clipPaths.shard[2],
-            }}
-          >
+          <Panel contentClassName="py-4 px-3 text-center">
             <div className="flex items-center justify-center gap-1.5 mb-0.5">
               <motion.span
                 key={`fire-${streak}`}
@@ -197,9 +181,9 @@ export function DayCompleteDemo({
                 transition={{ duration: 0.5 }}
                 className="inline-flex"
               >
-                <Flame className="w-4 h-4 text-black" />
+                <Flame className="w-4 h-4 text-white/60" />
               </motion.span>
-              <span className="text-[10px] uppercase tracking-widest text-black/70 font-bold">
+              <span className="text-[10px] uppercase tracking-[0.08em] text-white/40 font-medium">
                 Streak
               </span>
             </div>
@@ -208,11 +192,11 @@ export function DayCompleteDemo({
               initial={{ scale: 1.3 }}
               animate={{ scale: 1 }}
               transition={TOKENS.motion.spring.snappy}
-              className="text-3xl md:text-4xl font-black text-black tabular-nums"
+              className="text-3xl md:text-4xl font-semibold text-white tabular-nums"
             >
               {streak}
             </motion.p>
-          </div>
+          </Panel>
         </div>
 
         {/* Tap stage */}
@@ -227,6 +211,7 @@ export function DayCompleteDemo({
                 sizeRange={[12, 32]}
                 maxOpacity={1}
                 drift={false}
+                palette={GREY_VORONOI}
               />
             </div>
           )}
@@ -246,6 +231,7 @@ export function DayCompleteDemo({
                   sizeRange={[18, 56]}
                   maxOpacity={1}
                   drift={false}
+                  palette={GREY_VORONOI}
                 />
               </div>
               <div
@@ -260,15 +246,15 @@ export function DayCompleteDemo({
                   sizeRange={[10, 28]}
                   maxOpacity={0.85}
                   drift={false}
+                  palette={GREY_VORONOI}
                 />
               </div>
               <motion.div
                 key={`flash-${finaleKey}`}
                 initial={{ opacity: 0 }}
-                animate={{ opacity: [0, 0.6, 0] }}
+                animate={{ opacity: [0, 0.25, 0] }}
                 transition={{ duration: 0.7, ease: [0.22, 0.8, 0.3, 1] }}
-                className="absolute inset-0 pointer-events-none bg-[#FFE633]"
-                style={{ clipPath: TOKENS.clipPaths.shard[1] }}
+                className="absolute inset-0 pointer-events-none rounded-2xl bg-white"
               />
             </>
           )}
@@ -291,77 +277,69 @@ export function DayCompleteDemo({
                 : TOKENS.motion.spring.snappy
             }
             key={`card-${pulseKey}`}
-            className="absolute inset-0 m-auto w-[280px] h-[280px] md:w-[320px] md:h-[320px] flex flex-col items-center justify-center p-5 disabled:cursor-default"
-            style={{
-              backgroundColor: isMaxed ? "#FFE633" : "#FF2D55",
-              clipPath: TOKENS.clipPaths.shard[1],
-            }}
+            className="absolute inset-0 m-auto w-[280px] h-[280px] md:w-[320px] md:h-[320px] disabled:cursor-default"
           >
-            <AnimatePresence mode="wait">
-              {isMaxed ? (
-                <motion.div
-                  key="maxed"
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={TOKENS.motion.spring.bouncy}
-                  className="flex flex-col items-center gap-2"
-                >
+            <Panel solid={isMaxed} contentClassName="h-full flex flex-col items-center justify-center p-5">
+              <AnimatePresence mode="wait">
+                {isMaxed ? (
                   <motion.div
-                    className="text-6xl md:text-7xl"
-                    animate={{
-                      scale: [1, 1.08, 1],
-                      rotate: [0, -4, 4, 0],
-                    }}
-                    transition={{
-                      duration: 1.6,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
+                    key="maxed"
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={TOKENS.motion.spring.bouncy}
+                    className="flex flex-col items-center gap-2"
                   >
-                    🏆
-                  </motion.div>
-                  <div
-                    className="text-2xl md:text-3xl font-black text-black uppercase tracking-wider text-center leading-tight"
-                    style={{
-                      fontFamily: TOKENS.typography.fontFamily.display,
-                      letterSpacing: TOKENS.typography.letterSpacing.display,
-                    }}
-                  >
-                    Week<br />Complete
-                  </div>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key={`day-${completed}`}
-                  initial={{ opacity: 0, scale: 0.85 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={TOKENS.motion.spring.bouncy}
-                  className="flex flex-col items-center gap-2 w-full"
-                >
-                  {completed > 0 && (
-                    <div
-                      className="w-12 h-12 md:w-14 md:h-14 bg-black flex items-center justify-center mb-1"
-                      style={{ clipPath: TOKENS.clipPaths.shard[3] }}
+                    <motion.div
+                      className="text-6xl md:text-7xl"
+                      animate={{
+                        scale: [1, 1.08, 1],
+                        rotate: [0, -4, 4, 0],
+                      }}
+                      transition={{
+                        duration: 1.6,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
                     >
-                      <Check className="w-7 h-7 md:w-8 md:h-8 text-[#FFE633]" strokeWidth={4} />
+                      🏆
+                    </motion.div>
+                    <div
+                      className="text-2xl md:text-3xl font-semibold tracking-[-0.02em] text-black text-center leading-tight"
+                      style={{ fontFamily: FONT }}
+                    >
+                      Week<br />Complete
                     </div>
-                  )}
-                  <div className="text-[10px] uppercase tracking-widest text-black/70 font-bold">
-                    {completed > 0
-                      ? `Day ${completed} Done`
-                      : `Day ${dayLabel} · Tap to complete`}
-                  </div>
-                  <div className="text-base md:text-lg font-black text-black text-center leading-tight px-2">
-                    {completed > 0 ? justCompletedActivity : upcomingActivity}
-                  </div>
-                  {completed > 0 && completed < STREAK_MAX && (
-                    <div className="text-[10px] uppercase tracking-widest text-black/60 font-bold mt-1">
-                      Next: Day {dayLabel}
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key={`day-${completed}`}
+                    initial={{ opacity: 0, scale: 0.85 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={TOKENS.motion.spring.bouncy}
+                    className="flex flex-col items-center gap-2 w-full"
+                  >
+                    {completed > 0 && (
+                      <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/10 border border-white/20 flex items-center justify-center mb-1">
+                        <Check className="w-7 h-7 md:w-8 md:h-8 text-white" strokeWidth={2.5} />
+                      </div>
+                    )}
+                    <div className="text-[10px] uppercase tracking-[0.08em] text-white/40 font-medium">
+                      {completed > 0
+                        ? `Day ${completed} Done`
+                        : `Day ${dayLabel} · Tap to complete`}
                     </div>
-                  )}
-                </motion.div>
-              )}
-            </AnimatePresence>
+                    <div className="text-base md:text-lg font-semibold text-white text-center leading-tight px-2">
+                      {completed > 0 ? justCompletedActivity : upcomingActivity}
+                    </div>
+                    {completed > 0 && completed < STREAK_MAX && (
+                      <div className="text-[10px] uppercase tracking-[0.08em] text-white/30 font-medium mt-1">
+                        Next: Day {dayLabel}
+                      </div>
+                    )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </Panel>
           </motion.button>
 
           {/* Floating +50 XP toast */}
@@ -375,10 +353,7 @@ export function DayCompleteDemo({
                 transition={{ duration: 0.8, ease: [0.22, 0.8, 0.3, 1] }}
                 className="absolute top-1/2 left-1/2 -translate-x-1/2 pointer-events-none"
               >
-                <div
-                  className="px-4 py-2 bg-[#FFE633] text-black font-black text-xl tracking-wider"
-                  style={{ clipPath: TOKENS.clipPaths.button[0] }}
-                >
+                <div className="px-4 py-2 rounded-full bg-white text-black font-semibold text-xl tracking-[-0.01em]">
                   +{XP_PER_DAY} XP
                 </div>
               </motion.div>
@@ -401,15 +376,14 @@ export function DayCompleteDemo({
                 whileTap={{ scale: 0.97 }}
                 animate={{ scale: [1, 1.03, 1] }}
                 transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-                className="px-7 py-4 bg-[#FF2D55] text-black font-black uppercase tracking-wider text-base md:text-lg"
-                style={{ clipPath: TOKENS.clipPaths.button[0] }}
+                className="rounded-full bg-white text-black font-semibold px-7 py-4 text-base md:text-lg transition-transform"
               >
                 Start your real sprint →
               </motion.button>
             )}
             <button
               onClick={reset}
-              className="px-5 py-2 text-white/60 hover:text-white text-xs uppercase tracking-widest transition-colors"
+              className="rounded-full border border-white/15 text-white/80 hover:bg-white/5 px-5 py-2 text-xs font-medium uppercase tracking-[0.08em] transition"
             >
               Reset
             </button>

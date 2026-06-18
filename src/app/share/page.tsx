@@ -13,18 +13,24 @@ interface SharePageProps {
   }>;
 }
 
+/** parseInt that falls back to a default for missing/garbage params (avoids "NaN"). */
+function num(v: string | undefined, def: number): number {
+  const n = parseInt(v ?? "", 10);
+  return Number.isFinite(n) ? n : def;
+}
+
 export async function generateMetadata({ searchParams }: SharePageProps): Promise<Metadata> {
   const params = await searchParams;
   const goal = (params.g || "").slice(0, 80);
-  const days = parseInt(params.d || "30", 10);
-  const streak = parseInt(params.s || "0", 10);
+  const days = num(params.d, 28);
+  const streak = num(params.s, 0);
 
   const title = goal
     ? `I crushed ${days} days · ${goal} · First Day`
     : `I crushed ${days} days on First Day`;
   const description = goal
-    ? `${days} days · ${streak}-day streak · I just finished a 30-day sprint on "${goal}". Start yours on First Day.`
-    : `${days} days · ${streak}-day streak. Start your own 30-day sprint on First Day.`;
+    ? `${days} days · ${streak}-day streak · I finished every day on "${goal}". Start your first 7-day sprint on First Day.`
+    : `${days} days · ${streak}-day streak. Start your first 7-day sprint on First Day.`;
 
   const ogParams = new URLSearchParams();
   if (goal) ogParams.set("g", goal);
@@ -60,11 +66,11 @@ export default async function SharePage({ searchParams }: SharePageProps) {
     <Suspense fallback={<div className="min-h-screen tile-substrate" />}>
       <ShareJourneyView
         goalTitle={params.g}
-        days={params.d ? parseInt(params.d, 10) : 30}
-        longestStreak={params.s ? parseInt(params.s, 10) : 0}
-        totalXP={params.x ? parseInt(params.x, 10) : 0}
+        days={num(params.d, 28)}
+        longestStreak={num(params.s, 0)}
+        totalXP={num(params.x, 0)}
         levelName={params.l}
-        achievementCount={params.a ? parseInt(params.a, 10) : 0}
+        achievementCount={num(params.a, 0)}
       />
     </Suspense>
   );

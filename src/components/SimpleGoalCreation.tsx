@@ -2,20 +2,19 @@
 import { useState } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
-import { ArrowRight, Loader2, AlertCircle, ChevronDown, ChevronUp, Check } from 'lucide-react';
+import { Loader2, AlertCircle, ChevronDown, ChevronUp, Check } from 'lucide-react';
 import { BackButton } from '@/components/ui/back-button';
 import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, GOAL_TEMPLATES, type GoalTemplate } from '@/constants';
-import { BRIGHT_COLORS, SHARD_CLIPS, SCROLL_SPEEDS, FIELD_COLORS, EXP_COLORS } from '@/tokens';
+import { SCROLL_SPEEDS } from '@/tokens';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useMonotone } from './MonotoneContext';
-import { VoronoiMosaic } from './VoronoiMosaic';
+import { Panel } from '@/components/ui/Panel';
+import { FONT } from '@/lib/design';
 import { fireCelebration, getRoomView } from './3d-shell/RoomRegistry';
 import type { GoalFormData } from '@/types';
 
-const PANEL_DARK_PALETTE = ["#0a0a14", "#10122a", "#0f0e1f", "#181a3a", "#0c0d1e"] as const;
 
 interface SimpleGoalCreationProps {
-  onComplete: (goalData: GoalFormData) => void;
+  onComplete: (goalData: GoalFormData) => void | Promise<void>;
   onCancel: () => void;
   initialData?: {
     goalId?: string;
@@ -29,7 +28,6 @@ interface SimpleGoalCreationProps {
 }
 
 export function SimpleGoalCreation({ onComplete, onCancel, initialData }: SimpleGoalCreationProps) {
-  const { monotone } = useMonotone();
   const [goal, setGoal] = useState(initialData?.goal || '');
   const [why, setWhy] = useState(initialData?.contextAnswers?.why || '');
   const [experienceLevel, setExperienceLevel] = useState<'beginner' | 'intermediate' | 'advanced'>(
@@ -56,12 +54,16 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
     setError(null);
   };
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     if (!goal.trim()) { setShowValidation(true); return; }
     setIsGenerating(true);
     setError(null);
     fireCelebration(getRoomView(), 1.2);
-    onComplete({ goal: goal.trim(), why: why.trim(), experienceLevel, priorExperience: priorExperience.trim(), preferredTactics: preferredTactics.trim(), contextAnswers: { why: why.trim(), experienceLevel, priorExperience: priorExperience.trim(), preferredTactics: preferredTactics.trim() }, timestamp: Date.now() });
+    try {
+      await onComplete({ goal: goal.trim(), why: why.trim(), experienceLevel, priorExperience: priorExperience.trim(), preferredTactics: preferredTactics.trim(), contextAnswers: { why: why.trim(), experienceLevel, priorExperience: priorExperience.trim(), preferredTactics: preferredTactics.trim() }, timestamp: Date.now() });
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const renderScrollRow = (goals: string[], direction: 'left' | 'right', rowIndex: number) => (
@@ -77,11 +79,11 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
             key={index}
             onClick={() => handleSuggestionClick(suggestion)}
             disabled={isGenerating}
-            className={`inline-block px-5 py-2 text-black text-sm font-bold mx-1.5 select-none hover:scale-105 transition-transform disabled:opacity-50 ${goal === suggestion ? 'ring-2 ring-white/60 scale-105' : ''}`}
-            style={{
-              backgroundColor: monotone ? "#333333" : BRIGHT_COLORS[(index * 7 + 3) % BRIGHT_COLORS.length],
-              clipPath: index % 2 === 0 ? "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" : "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)",
-            }}
+            className={`inline-block rounded-full px-4 py-1.5 text-[13px] font-medium mx-1.5 select-none hover:scale-105 transition-transform disabled:opacity-50 border ${
+              goal === suggestion
+                ? 'bg-white text-black border-white/0 scale-105'
+                : 'bg-white/5 text-white/70 border-white/10 hover:bg-white/10'
+            }`}
           >
             {suggestion}
           </button>
@@ -93,200 +95,271 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
   return (
     <div className="min-h-screen relative">
       <div className="relative z-10">
-      <div className="pt-[120px] pl-6">
-        <BackButton onClick={onCancel} disabled={isGenerating} />
-      </div>
-      <div className="flex items-center justify-center">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-4xl mx-auto">
-          <div className="p-4 md:p-12">
-            <div className="text-center mb-6 md:mb-10">
-              <div className="relative overflow-hidden inline-block px-8 py-3 mb-3" style={{ clipPath: "polygon(1% 0%, 100% 3%, 99% 97%, 0% 100%)" }}>
-                <VoronoiMosaic seed={1407} tileCount={22} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
-                <h1 className="relative z-10 text-3xl md:text-6xl font-bold text-white">Let&apos;s Create Your Goal</h1>
-              </div>
-              <div className="relative overflow-hidden inline-block px-6 py-2" style={{ clipPath: "polygon(2% 0%, 98% 4%, 100% 96%, 0% 100%)" }}>
-                <VoronoiMosaic seed={1423} tileCount={16} margin={3} gap={1.5} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
-                <p className="relative z-10 text-lg md:text-2xl text-white font-bold">Tell us what you want to achieve</p>
-              </div>
-            </div>
-            <AnimatePresence>
-              {error && (
-                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="mb-6 bg-red-50 border border-red-200 p-4 flex items-start gap-3" style={{ clipPath: SHARD_CLIPS[0] }}>
-                  <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-                  <p className="text-sm font-medium text-red-800">{error}</p>
-                </motion.div>
-              )}
-            </AnimatePresence>
-            <div className="mb-0">
-              <div
-                className="overflow-hidden"
-                style={{ backgroundColor: monotone ? "#333333" : FIELD_COLORS[0], clipPath: SHARD_CLIPS[0] }}
-              >
-                <label htmlFor="goal-input" className="block px-5 pt-3 pb-1 text-black/60 text-xs font-bold uppercase tracking-wider">What&apos;s your goal?</label>
-                <div className="mx-4 border-t border-black/10" />
-                <Textarea id="goal-input" value={goal} onChange={(e) => { setGoal(e.target.value); setError(null); }} placeholder="Type your goal here..." className="px-5 py-3 bg-transparent border-0 text-black placeholder:text-black/40 text-lg focus-visible:ring-0 rounded-none resize-none min-h-[80px] md:min-h-[120px]" disabled={isGenerating} autoFocus rows={3} />
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      </div>
-      <div className="flex items-center justify-center">
-        <div className="w-full max-w-4xl mx-auto px-4 md:px-12 pb-2 md:pb-6">
-          <div className="flex items-center gap-3 mb-3 md:mb-4">
-            <div className="h-px flex-1 bg-white/15" />
-            <p className="text-[10px] md:text-xs uppercase tracking-[0.3em] font-black text-white/60">Or start from a template</p>
-            <div className="h-px flex-1 bg-white/15" />
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3">
-            {GOAL_TEMPLATES.map((template, i) => {
-              const isActive = goal === template.goal;
-              return (
-                <button
-                  key={template.id}
-                  onClick={() => handleTemplateClick(template)}
-                  disabled={isGenerating}
-                  className={`text-left p-3 md:p-4 transition-all hover:scale-[1.03] disabled:opacity-50 ${isActive ? 'ring-2 ring-white/60 scale-[1.03]' : ''}`}
-                  style={{
-                    backgroundColor: monotone ? "#222222" : BRIGHT_COLORS[(i * 3 + 1) % BRIGHT_COLORS.length],
-                    clipPath: SHARD_CLIPS[i % SHARD_CLIPS.length],
-                  }}
-                  aria-label={`Use ${template.title} template`}
+        <div className="pt-[120px] pl-6">
+          <BackButton onClick={onCancel} disabled={isGenerating} />
+        </div>
+        <div className="flex items-center justify-center">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-4xl mx-auto">
+            <div className="p-4 md:p-12">
+              {/* Header — sleek Apple type, no Bebas, no clip-path shards */}
+              <div className="text-center mb-6 md:mb-10">
+                <h1
+                  className="text-[32px] md:text-[40px] font-semibold tracking-[-0.02em] text-white leading-[1.05] mb-2"
+                  style={{ fontFamily: FONT }}
                 >
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-xl md:text-2xl" aria-hidden>{template.icon}</span>
-                    <span className="text-sm md:text-base font-black text-black uppercase tracking-wide truncate">{template.title}</span>
-                  </div>
-                  <p className="text-xs md:text-sm text-black/70 font-medium leading-snug line-clamp-2">{template.goal}</p>
-                </button>
-              );
-            })}
+                  Let&apos;s Create Your Goal
+                </h1>
+                <p className="text-[16px] leading-relaxed text-white/55">
+                  Tell us what you want to achieve
+                </p>
+              </div>
+
+              {/* Error banner */}
+              <AnimatePresence>
+                {error && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="mb-6"
+                  >
+                    <Panel contentClassName="p-4 flex items-start gap-3">
+                      <AlertCircle className="w-5 h-5 text-white/60 shrink-0 mt-0.5" />
+                      <p className="text-[14px] font-medium text-white/80">{error}</p>
+                    </Panel>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Goal input — dark glass */}
+              <div className="mb-0">
+                <div className="bg-white/5 border border-white/10 rounded-xl overflow-hidden focus-within:border-white/30 transition-colors">
+                  <label htmlFor="goal-input" className="block px-5 pt-3 pb-1 text-white/40 text-[11px] font-medium uppercase tracking-[0.08em]">
+                    What&apos;s your goal?
+                  </label>
+                  <div className="mx-5 border-t border-white/5" />
+                  <Textarea
+                    id="goal-input"
+                    value={goal}
+                    onChange={(e) => { setGoal(e.target.value); setError(null); }}
+                    placeholder="Type your goal here..."
+                    className="px-5 py-3 bg-transparent border-0 text-white placeholder:text-white/35 text-[17px] focus-visible:ring-0 rounded-none resize-none min-h-[80px] md:min-h-[120px]"
+                    disabled={isGenerating}
+                    autoFocus
+                    rows={3}
+                  />
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Template grid */}
+        <div className="flex items-center justify-center">
+          <div className="w-full max-w-4xl mx-auto px-4 md:px-12 pb-2 md:pb-6">
+            <div className="flex items-center gap-3 mb-3 md:mb-4">
+              <div className="h-px flex-1 bg-white/10" />
+              <p className="text-[11px] uppercase tracking-[0.08em] font-medium text-white/40">Or start from a template</p>
+              <div className="h-px flex-1 bg-white/10" />
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3">
+              {GOAL_TEMPLATES.map((template) => {
+                const isActive = goal === template.goal;
+                return (
+                  <Panel
+                    key={template.id}
+                    className={`cursor-pointer transition-all hover:scale-[1.02] disabled:opacity-50 ${isActive ? 'ring-1 ring-white/30 scale-[1.02]' : ''}`}
+                    contentClassName="p-3 md:p-4"
+                    solid={isActive}
+                  >
+                    <button
+                      onClick={() => handleTemplateClick(template)}
+                      disabled={isGenerating}
+                      className="w-full h-full text-left"
+                      aria-label={`Use ${template.title} template`}
+                    >
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-xl md:text-2xl" aria-hidden>{template.icon}</span>
+                        <span
+                          className={`text-[13px] md:text-[14px] font-semibold tracking-[-0.01em] truncate ${isActive ? 'text-black' : 'text-white'}`}
+                          style={{ fontFamily: FONT }}
+                        >
+                          {template.title}
+                        </span>
+                      </div>
+                      <p className={`text-[12px] md:text-[13px] leading-snug line-clamp-2 ${isActive ? 'text-black/60' : 'text-white/50'}`}>
+                        {template.goal}
+                      </p>
+                    </button>
+                  </Panel>
+                );
+              })}
+            </div>
           </div>
         </div>
-      </div>
-      <div className="w-full space-y-1 mb-4 md:mb-8 py-3 md:py-6">
-        {renderScrollRow(GOAL_SUGGESTIONS_ROW_1, 'left', 0)}
-        {renderScrollRow(GOAL_SUGGESTIONS_ROW_2, 'right', 1)}
-        {renderScrollRow(GOAL_SUGGESTIONS_ROW_3, 'left', 2)}
-      </div>
-      <div className="flex items-center justify-center">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-4xl mx-auto">
-          <div className="p-4 md:p-12">
-            <div className="mb-4 md:mb-8">
-              <div
-                className="overflow-hidden"
-                style={{ backgroundColor: monotone ? "#333333" : FIELD_COLORS[1], clipPath: SHARD_CLIPS[1] }}
-              >
-                <label htmlFor="why-input" className="block px-5 pt-3 pb-1 text-black/60 text-xs font-bold uppercase tracking-wider">Why do you want to achieve this?</label>
-                <div className="mx-4 border-t border-black/10" />
-                <Textarea id="why-input" value={why} onChange={(e) => setWhy(e.target.value)} placeholder="Tell us what motivates you..." className="px-5 py-3 bg-transparent border-0 text-black placeholder:text-black/40 text-lg focus-visible:ring-0 rounded-none resize-none min-h-[80px] md:min-h-[120px]" disabled={isGenerating} rows={3} />
-              </div>
-            </div>
-            <div className="mb-4 md:mb-8">
-              <label id="experience-level-label" className="block text-sm font-semibold text-white/80 mb-2 md:mb-3">What&apos;s your experience level?</label>
-              <div className="flex flex-col gap-3" role="radiogroup" aria-labelledby="experience-level-label">
-                {[{ value: 'beginner' as const, label: 'Beginner', desc: 'Just starting', color: monotone ? "#555555" : EXP_COLORS[0] }, { value: 'intermediate' as const, label: 'Intermediate', desc: 'Some experience', color: monotone ? "#555555" : EXP_COLORS[1] }, { value: 'advanced' as const, label: 'Advanced', desc: 'Experienced', color: monotone ? "#555555" : EXP_COLORS[2] }].map((level, index) => (
-                  <button
-                    key={level.value}
-                    onClick={() => setExperienceLevel(level.value)}
+
+        {/* Scroll suggestion rows */}
+        <div className="w-full space-y-1 mb-4 md:mb-8 py-3 md:py-6">
+          {renderScrollRow(GOAL_SUGGESTIONS_ROW_1, 'left', 0)}
+          {renderScrollRow(GOAL_SUGGESTIONS_ROW_2, 'right', 1)}
+          {renderScrollRow(GOAL_SUGGESTIONS_ROW_3, 'left', 2)}
+        </div>
+
+        {/* Context fields + CTA */}
+        <div className="flex items-center justify-center">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-4xl mx-auto">
+            <div className="p-4 md:p-12">
+
+              {/* Why input — dark glass */}
+              <div className="mb-4 md:mb-8">
+                <div className="bg-white/5 border border-white/10 rounded-xl overflow-hidden focus-within:border-white/30 transition-colors">
+                  <label htmlFor="why-input" className="block px-5 pt-3 pb-1 text-white/40 text-[11px] font-medium uppercase tracking-[0.08em]">
+                    Why do you want to achieve this?
+                  </label>
+                  <div className="mx-5 border-t border-white/5" />
+                  <Textarea
+                    id="why-input"
+                    value={why}
+                    onChange={(e) => setWhy(e.target.value)}
+                    placeholder="Tell us what motivates you..."
+                    className="px-5 py-3 bg-transparent border-0 text-white placeholder:text-white/35 text-[17px] focus-visible:ring-0 rounded-none resize-none min-h-[80px] md:min-h-[120px]"
                     disabled={isGenerating}
-                    role="radio"
-                    aria-checked={experienceLevel === level.value}
-                    className={`p-4 transition-all text-left text-black font-bold flex items-center gap-4 ${experienceLevel === level.value ? 'ring-2 ring-white/40 scale-[1.02]' : 'opacity-70 hover:opacity-100'}`}
-                    style={{ backgroundColor: level.color, clipPath: SHARD_CLIPS[index % SHARD_CLIPS.length] }}
-                  >
-                    <div className={`w-7 h-7 flex-shrink-0 flex items-center justify-center border-2 border-black/40 transition-all ${experienceLevel === level.value ? 'bg-black' : 'bg-transparent'}`}>
-                      {experienceLevel === level.value && <Check className="w-5 h-5 text-white" strokeWidth={3} />}
+                    rows={3}
+                  />
+                </div>
+              </div>
+
+              {/* Experience level */}
+              <div className="mb-4 md:mb-8">
+                <label id="experience-level-label" className="block text-[14px] font-medium text-white/55 mb-2 md:mb-3">
+                  What&apos;s your experience level?
+                </label>
+                <div className="flex flex-col gap-2" role="radiogroup" aria-labelledby="experience-level-label">
+                  {([
+                    { value: 'beginner' as const, label: 'Beginner', desc: 'Just starting' },
+                    { value: 'intermediate' as const, label: 'Intermediate', desc: 'Some experience' },
+                    { value: 'advanced' as const, label: 'Advanced', desc: 'Experienced' },
+                  ]).map((level) => {
+                    const isSelected = experienceLevel === level.value;
+                    return (
+                      <Panel
+                        key={level.value}
+                        solid={isSelected}
+                        className={`cursor-pointer transition-all ${isSelected ? 'scale-[1.01]' : 'opacity-70 hover:opacity-100'}`}
+                        contentClassName="px-4 py-3"
+                      >
+                        <button
+                          onClick={() => setExperienceLevel(level.value)}
+                          disabled={isGenerating}
+                          role="radio"
+                          aria-checked={isSelected}
+                          className="w-full text-left flex items-center gap-3"
+                        >
+                          <div className={`w-6 h-6 rounded-full border flex items-center justify-center shrink-0 transition-all ${isSelected ? 'bg-black border-black' : 'bg-transparent border-white/25'}`}>
+                            {isSelected && <Check className="w-4 h-4 text-white" strokeWidth={2.5} />}
+                          </div>
+                          <div>
+                            <div className={`text-[15px] font-semibold tracking-[-0.01em] ${isSelected ? 'text-black' : 'text-white'}`} style={{ fontFamily: FONT }}>
+                              {level.label}
+                            </div>
+                            <div className={`text-[13px] ${isSelected ? 'text-black/60' : 'text-white/45'}`}>{level.desc}</div>
+                          </div>
+                        </button>
+                      </Panel>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Optional fields */}
+              <div className="mb-4 md:mb-8">
+                <button
+                  type="button"
+                  onClick={() => setShowOptional(!showOptional)}
+                  className="flex items-center gap-2 text-[14px] font-medium text-white/55 hover:text-white transition-colors"
+                  disabled={isGenerating}
+                  aria-expanded={showOptional}
+                >
+                  {showOptional ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  Tell us more (optional)
+                </button>
+                {showOptional && (
+                  <div className="mt-4 space-y-4 md:space-y-6">
+                    <div className="bg-white/5 border border-white/10 rounded-xl overflow-hidden focus-within:border-white/30 transition-colors">
+                      <label htmlFor="prior-experience-input" className="block px-5 pt-3 pb-1 text-white/40 text-[11px] font-medium uppercase tracking-[0.08em]">
+                        What have you tried before?
+                      </label>
+                      <div className="mx-5 border-t border-white/5" />
+                      <Input
+                        id="prior-experience-input"
+                        type="text"
+                        value={priorExperience}
+                        onChange={(e) => setPriorExperience(e.target.value)}
+                        placeholder="e.g., Took an online course, read a book..."
+                        className="px-5 py-3 bg-transparent border-0 text-white placeholder:text-white/35 text-[17px] focus-visible:ring-0 rounded-none"
+                        disabled={isGenerating}
+                      />
                     </div>
-                    <div>
-                      <div className="font-bold text-black">{level.label}</div>
-                      <div className="text-sm text-black/70">{level.desc}</div>
+                    <div className="bg-white/5 border border-white/10 rounded-xl overflow-hidden focus-within:border-white/30 transition-colors">
+                      <label htmlFor="preferred-tactics-input" className="block px-5 pt-3 pb-1 text-white/40 text-[11px] font-medium uppercase tracking-[0.08em]">
+                        How do you like to learn?
+                      </label>
+                      <div className="mx-5 border-t border-white/5" />
+                      <Input
+                        id="preferred-tactics-input"
+                        type="text"
+                        value={preferredTactics}
+                        onChange={(e) => setPreferredTactics(e.target.value)}
+                        placeholder="e.g., Videos, hands-on practice, reading..."
+                        className="px-5 py-3 bg-transparent border-0 text-white placeholder:text-white/35 text-[17px] focus-visible:ring-0 rounded-none"
+                        disabled={isGenerating}
+                      />
                     </div>
-                  </button>
-                ))}
+                  </div>
+                )}
+              </div>
+
+              {/* CTA — rounded-full primary button */}
+              <div className="flex flex-col gap-3">
+                <button
+                  onClick={handleGenerate}
+                  disabled={isGenerating}
+                  className="w-full rounded-full bg-white text-black text-[15px] font-semibold py-4 transition-transform hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:hover:scale-100 flex items-center justify-center gap-2"
+                >
+                  {isGenerating ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      <span>Generating your plan...</span>
+                    </>
+                  ) : (
+                    'Generate My Plan'
+                  )}
+                </button>
+                <button
+                  onClick={onCancel}
+                  disabled={isGenerating}
+                  className="self-center rounded-full border border-white/15 text-white/80 hover:bg-white/5 transition px-6 py-2.5 text-[14px] font-medium disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+              </div>
+
+              <div className="mt-6 text-center">
+                <p className="text-[13px] text-white/40">AI builds your first 7-day sprint right now — three more sprints generate as you finish each one.</p>
               </div>
             </div>
-            <div className="mb-4 md:mb-8">
-              <button type="button" onClick={() => setShowOptional(!showOptional)} className="flex items-center gap-2 text-sm font-bold text-white/80 hover:text-white transition-colors" disabled={isGenerating} aria-expanded={showOptional}>
-                {showOptional ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                Tell us more (optional)
-              </button>
-              {showOptional && (
-                <div className="mt-4 space-y-4 md:space-y-6">
-                  <div
-                    className="overflow-hidden"
-                    style={{ backgroundColor: monotone ? "#333333" : FIELD_COLORS[2], clipPath: SHARD_CLIPS[2] }}
-                  >
-                    <label htmlFor="prior-experience-input" className="block px-5 pt-3 pb-1 text-black/60 text-xs font-bold uppercase tracking-wider">What have you tried before?</label>
-                    <div className="mx-4 border-t border-black/10" />
-                    <Input id="prior-experience-input" type="text" value={priorExperience} onChange={(e) => setPriorExperience(e.target.value)} placeholder="e.g., Took an online course, read a book..." className="px-5 py-3 bg-transparent border-0 text-black placeholder:text-black/40 text-lg focus-visible:ring-0 rounded-none" disabled={isGenerating} />
-                  </div>
-                  <div
-                    className="overflow-hidden"
-                    style={{ backgroundColor: monotone ? "#333333" : FIELD_COLORS[3], clipPath: SHARD_CLIPS[3] }}
-                  >
-                    <label htmlFor="preferred-tactics-input" className="block px-5 pt-3 pb-1 text-black/60 text-xs font-bold uppercase tracking-wider">How do you like to learn?</label>
-                    <div className="mx-4 border-t border-black/10" />
-                    <Input id="preferred-tactics-input" type="text" value={preferredTactics} onChange={(e) => setPreferredTactics(e.target.value)} placeholder="e.g., Videos, hands-on practice, reading..." className="px-5 py-3 bg-transparent border-0 text-black placeholder:text-black/40 text-lg focus-visible:ring-0 rounded-none" disabled={isGenerating} />
-                  </div>
-                </div>
-              )}
-            </div>
-            <div className="flex flex-col gap-3">
-              {/* Generate My Plan — shard-bordered button */}
-              <button
-                onClick={handleGenerate}
-                disabled={isGenerating}
-                className="w-full relative hover:scale-105 transition-transform disabled:hover:scale-100 disabled:opacity-50 group"
-              >
-                {/* Shard bar border — top */}
-                <div className="flex gap-[2px] h-2 w-full mb-0">
-                  {Array.from({ length: 12 }, (_, i) => (
-                    <div key={`t${i}`} className="flex-1" style={{ backgroundColor: monotone ? "#555" : BRIGHT_COLORS[i % BRIGHT_COLORS.length], clipPath: SHARD_CLIPS[i % SHARD_CLIPS.length] }} />
-                  ))}
-                </div>
-                {/* Main button body */}
-                <div className="relative py-6 md:py-8 flex items-center justify-center gap-3 overflow-hidden">
-                  <VoronoiMosaic seed={1531} tileCount={36} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
-                  {isGenerating ? (
-                    <span className="relative z-10 flex items-center gap-3"><Loader2 className="w-8 h-8 animate-spin text-white" /><span className="text-4xl md:text-5xl font-black uppercase tracking-wide text-white" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>Generating...</span></span>
-                  ) : (
-                    <span className="relative z-10 flex items-center" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>
-                      {"GENERATE MY PLAN".split("").map((char, i) => (
-                        <span key={i} className="text-5xl md:text-6xl font-black uppercase tracking-wide" style={{ color: char === " " ? "transparent" : monotone ? "#ffffff" : BRIGHT_COLORS[i % BRIGHT_COLORS.length], width: char === " " ? "0.3em" : undefined, display: "inline-block", animation: char === " " ? "none" : `letterWave 2s ease-in-out ${i * 0.12}s infinite` }}>{char}</span>
-                      ))}
-                    </span>
-                  )}
-                </div>
-                {/* Shard bar border — bottom */}
-                <div className="flex gap-[2px] h-2 w-full mt-0">
-                  {Array.from({ length: 12 }, (_, i) => (
-                    <div key={`b${i}`} className="flex-1" style={{ backgroundColor: monotone ? "#555" : BRIGHT_COLORS[(i + 5) % BRIGHT_COLORS.length], clipPath: SHARD_CLIPS[(i + 2) % SHARD_CLIPS.length] }} />
-                  ))}
-                </div>
-              </button>
-              <button
-                onClick={onCancel}
-                disabled={isGenerating}
-                className="self-center inline-flex items-center px-3 py-2 text-sm font-bold text-white/50 hover:text-white/90 uppercase tracking-wide transition-colors disabled:opacity-50"
-              >
-                Cancel
-              </button>
-            </div>
-            <div className="mt-6 text-center">
-              <p className="text-sm text-white/50">AI will create a personalized 30-day plan just for you</p>
-            </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </div>
-      </div>
-      {/* Validation modal */}
+
+      {/* Validation modal — Panel solid so it pops over the dark backdrop */}
       <AnimatePresence>
         {showValidation && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-transparent"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm"
             onClick={() => setShowValidation(false)}
           >
             <motion.div
@@ -297,21 +370,24 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ type: "spring", stiffness: 400, damping: 25 }}
-              className="relative overflow-hidden p-8 mx-4 max-w-sm text-center"
-              style={{ clipPath: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" }}
+              className="mx-4 max-w-sm w-full"
               onClick={(e) => e.stopPropagation()}
             >
-              <VoronoiMosaic seed={1607} tileCount={22} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
-              <p id="validation-title" className="relative z-10 text-xl text-white font-black uppercase tracking-wide mb-2">Hold up!</p>
-              <p className="relative z-10 text-base text-white/80 font-medium mb-6">Just fill in your goal above and we&apos;ll build your plan</p>
-              <button
-                onClick={() => setShowValidation(false)}
-                className="relative z-10 px-8 py-3 font-black text-black uppercase tracking-wide hover:scale-105 transition-transform btn-shake"
-                style={{ backgroundColor: "#fcd02a", clipPath: "polygon(1% 0%, 100% 4%, 99% 96%, 0% 100%)" }}
-                autoFocus
-              >
-                Got It
-              </button>
+              <Panel solid contentClassName="p-8 text-center">
+                <p id="validation-title" className="text-[20px] font-semibold tracking-[-0.02em] text-black mb-2" style={{ fontFamily: FONT }}>
+                  Hold up!
+                </p>
+                <p className="text-[15px] leading-relaxed text-black/60 mb-6">
+                  Just fill in your goal above and we&apos;ll build your plan
+                </p>
+                <button
+                  onClick={() => setShowValidation(false)}
+                  className="rounded-full bg-black text-white text-[15px] font-semibold py-3 px-8 transition-transform hover:scale-[1.01] active:scale-[0.99]"
+                  autoFocus
+                >
+                  Got It
+                </button>
+              </Panel>
             </motion.div>
           </motion.div>
         )}

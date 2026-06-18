@@ -28,7 +28,11 @@ create index if not exists idx_public_rooms_public on public.public_rooms (is_pu
 create index if not exists idx_public_rooms_owner on public.public_rooms (owner_user_id);
 
 -- Mood tiles, not emoji. Five fixed kinds; reaction = a tile mortared into the wall.
-create type mood_tile_kind as enum ('warm', 'cool', 'spark', 'weight', 'quiet');
+do $$ begin
+  if not exists (select 1 from pg_type where typname = 'mood_tile_kind') then
+    create type mood_tile_kind as enum ('warm', 'cool', 'spark', 'weight', 'quiet');
+  end if;
+end $$;
 
 create table if not exists public.reactions (
   id              uuid primary key default gen_random_uuid(),
@@ -132,5 +136,11 @@ create policy "reactions delete own or owner" on public.reactions
   );
 
 -- Realtime publication so subscribeReactions / public_rooms UPDATE events fire.
-alter publication supabase_realtime add table public.public_rooms;
-alter publication supabase_realtime add table public.reactions;
+do $$ begin
+  alter publication supabase_realtime add table public.public_rooms;
+exception when duplicate_object then null;
+end $$;
+do $$ begin
+  alter publication supabase_realtime add table public.reactions;
+exception when duplicate_object then null;
+end $$;

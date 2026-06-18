@@ -1,9 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
-import { FirstDayLogo } from "./FirstDayLogo";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, BookOpen, Calendar, Lightbulb, Sparkles } from "lucide-react";
-import { VORONOI_LIGHT, SHARD_CLIPS } from "@/constants";
+import { Search, BookOpen, Calendar, Lightbulb, Sparkles, Loader2 } from "lucide-react";
+import { FONT } from "@/lib/design";
 
 interface LoadingScreenProps {
   showProgress?: boolean;
@@ -13,20 +12,14 @@ interface LoadingScreenProps {
 const PROGRESS_STEPS = [
   { message: "Analyzing your goal...", icon: Search },
   { message: "Researching best practices...", icon: BookOpen },
-  { message: "Building your 30-day plan...", icon: Calendar },
+  { message: "Building your first 7-day sprint...", icon: Calendar },
   { message: "Selecting resources...", icon: Lightbulb },
   { message: "Finalizing your plan...", icon: Sparkles },
 ];
 
-const SHARD_COUNT = 20;
-
-
-const MESSAGE_SHARD_CLIP = "polygon(2% 0%, 98% 3%, 100% 97%, 0% 100%)";
-
 export function LoadingScreen({ showProgress = false, estimatedDuration = 15000 }: LoadingScreenProps) {
   const [progress, setProgress] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
-  const [loopProgress, setLoopProgress] = useState(0);
 
   // Detailed progress for plan generation
   useEffect(() => {
@@ -51,49 +44,31 @@ export function LoadingScreen({ showProgress = false, estimatedDuration = 15000 
     return () => clearInterval(timer);
   }, [showProgress, estimatedDuration]);
 
-  // Looping animated bar for simple loading (no detailed progress)
-  useEffect(() => {
-    if (showProgress) return;
-
-    const timer = setInterval(() => {
-      setLoopProgress(prev => (prev + 1) % (SHARD_COUNT + 1));
-    }, 120);
-
-    return () => clearInterval(timer);
-  }, [showProgress]);
-
-  const filledShards = showProgress
-    ? Math.floor((progress / 100) * SHARD_COUNT)
-    : loopProgress;
-
-  // v207 — kill the bg-black/35 flat scrim that v26 introduced "for legibility"
-  // (~15s of plan-generation = the screen-recording window VISION's success
-  // criterion lives or dies on). The backdrop-blur alone separates copy from
-  // the room without painting a flat-black wash over the cosmos.
   return (
     <div className="fixed inset-0 z-[100] overflow-hidden pointer-events-none backdrop-blur-[2px]">
       <div className="absolute inset-0 z-[105] flex flex-col items-center justify-center gap-8 px-6">
-        <FirstDayLogo size="hero" showTagline={true} showLetters={false} className="w-full" />
+        {/* Sleek wordmark — replaces multicolor FirstDayLogo */}
+        <div className="flex flex-col items-center gap-3">
+          <span
+            className="text-[42px] font-semibold tracking-[-0.03em] text-white leading-none"
+            style={{ fontFamily: FONT }}
+          >
+            First Day
+          </span>
+          {/* Subtle spinner */}
+          <Loader2 className="w-5 h-5 text-white/40 animate-spin" />
+        </div>
 
-        <div className="w-full max-w-md space-y-6 animate-fadeIn">
-          {/* Shard progress bar — always visible */}
-          <div className="flex gap-[2px] h-3 w-full">
-            {Array.from({ length: SHARD_COUNT }, (_, i) => {
-              const isFilled = i <= filledShards;
-              const color = VORONOI_LIGHT[i % VORONOI_LIGHT.length];
-              return (
-                <div
-                  key={i}
-                  className="flex-1 transition-all duration-200"
-                  style={{
-                    backgroundColor: isFilled ? color : "rgba(255,255,255,0.08)",
-                    clipPath: SHARD_CLIPS[i % SHARD_CLIPS.length],
-                    boxShadow: isFilled ? `0 0 8px ${color}60` : "none",
-                  }}
-                />
-              );
-            })}
-          </div>
+        <div className="w-full max-w-md space-y-6">
+          {/* Sleek progress bar — track + fill, no bright shards */}
+          {showProgress && (
+            <div className="h-1 w-full rounded-full bg-white/10 overflow-hidden">
+              <div
+                className="h-full rounded-full bg-white/85 transition-all duration-300"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+          )}
 
           {/* Step messages only for detailed progress */}
           {showProgress && (
@@ -106,21 +81,15 @@ export function LoadingScreen({ showProgress = false, estimatedDuration = 15000 
                 transition={{ duration: 0.3 }}
                 className="flex justify-center"
               >
-                <div
-                  className="inline-flex items-center gap-3 px-6 py-3"
-                  style={{
-                    backgroundColor: VORONOI_LIGHT[currentStep % VORONOI_LIGHT.length],
-                    clipPath: MESSAGE_SHARD_CLIP,
-                  }}
-                >
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10">
                   {(() => {
                     const Icon = PROGRESS_STEPS[currentStep].icon;
-                    return <Icon className="w-5 h-5 text-black" />;
+                    return <Icon className="w-4 h-4 text-white/50 shrink-0" />;
                   })()}
-                  <span className="text-base font-black text-black uppercase tracking-wide">
+                  <span className="text-[13px] font-medium text-white/60">
                     {PROGRESS_STEPS[currentStep].message}
                   </span>
-                  <span className="text-base font-black text-black">
+                  <span className="text-[13px] font-medium text-white/40 tabular-nums">
                     {Math.round(progress)}%
                   </span>
                 </div>

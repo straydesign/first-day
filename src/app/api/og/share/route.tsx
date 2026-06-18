@@ -8,7 +8,8 @@ export const runtime = "nodejs";
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const goal = (searchParams.get("g") || "").slice(0, 60);
-  const days = parseInt(searchParams.get("d") || "30", 10);
+  const parsedDays = parseInt(searchParams.get("d") || "28", 10);
+  const days = Number.isFinite(parsedDays) ? parsedDays : 28;
   const streak = parseInt(searchParams.get("s") || "0", 10);
   const xp = parseInt(searchParams.get("x") || "0", 10);
   const level = (searchParams.get("l") || "Master").slice(0, 16);
@@ -36,7 +37,7 @@ export async function GET(req: NextRequest) {
   ];
 
   const stats: Array<[string, string, string]> = [
-    [`${days}/30`, "DAYS", "#fcd02a"],
+    [`${days}/${days}`, "DAYS", "#fcd02a"],
     [`${streak}d`, "STREAK", "#fb7025"],
     [xp >= 1000 ? `${(xp / 1000).toFixed(1)}k` : `${xp}`, "XP", "#f31b5e"],
     [String(achievements), "BADGES", "#3075e1"],

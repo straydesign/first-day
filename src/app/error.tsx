@@ -44,7 +44,7 @@ export default function Error({
         </div>
 
         {error.digest && (
-          <p className="text-white/20 text-xs text-center font-mono">
+          <p className="text-white/55 text-xs text-center font-mono">
             Error ID: {error.digest}
           </p>
         )}

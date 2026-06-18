@@ -7,6 +7,8 @@ interface UseAuthOptions {
   onSignIn?: () => void;
   /** Called after checking the initial session (whether or not it exists). */
   onSessionChecked?: (hasSession: boolean) => void;
+  /** Called when the user arrives via a password-recovery email link. */
+  onPasswordRecovery?: () => void;
 }
 
 interface UseAuthReturn {
@@ -29,8 +31,10 @@ export function useAuth(options: UseAuthOptions = {}): UseAuthReturn {
   // Refs to avoid stale closures in the auth listener
   const onSignInRef = useRef(options.onSignIn);
   const onSessionCheckedRef = useRef(options.onSessionChecked);
+  const onPasswordRecoveryRef = useRef(options.onPasswordRecovery);
   onSignInRef.current = options.onSignIn;
   onSessionCheckedRef.current = options.onSessionChecked;
+  onPasswordRecoveryRef.current = options.onPasswordRecovery;
 
   useEffect(() => {
     const supabase = createClient();
@@ -59,6 +63,11 @@ export function useAuth(options: UseAuthOptions = {}): UseAuthReturn {
     checkSession();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      if (_event === "PASSWORD_RECOVERY") {
+        // User followed a reset-password email link — show the reset view.
+        onPasswordRecoveryRef.current?.();
+        return;
+      }
       if (_event === "SIGNED_IN" && session) {
         setAccessToken(session.access_token);
         setUserId(session.user.id);

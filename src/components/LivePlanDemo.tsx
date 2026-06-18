@@ -16,6 +16,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, ArrowRight, Share2, Check } from "lucide-react";
 import { ShardEngine } from "./lab/ShardEngine";
 import { TOKENS } from "@/tokens";
+import { Panel } from "@/components/ui/Panel";
+import { FONT, GREY_VORONOI } from "@/lib/design";
 import { QUICK_GOALS, planFor } from "@/data/sample-plans";
 
 interface LivePlanDemoProps {
@@ -162,18 +164,17 @@ export function LivePlanDemo({ onGetStarted, onPlanGenerated, externalSeed }: Li
               transition={TOKENS.motion.spring.snappy}
               className="text-center mb-8"
             >
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-4 bg-white/10"
-                   style={{ clipPath: TOKENS.clipPaths.button[0] }}>
-                <Sparkles className="w-4 h-4 text-[#FFE633]" />
-                <span className="text-xs uppercase tracking-widest text-white/80">Try it — no signup</span>
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-4 rounded-full bg-white/5 border border-white/10">
+                <Sparkles className="w-4 h-4 text-white/60" />
+                <span className="text-xs uppercase tracking-[0.08em] text-white/40">Try it — no signup</span>
               </div>
               <h2
-                className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-2"
-                style={{ fontFamily: TOKENS.typography.fontFamily.display, letterSpacing: TOKENS.typography.letterSpacing.display }}
+                className="text-3xl md:text-5xl lg:text-6xl font-semibold tracking-[-0.02em] text-white mb-2"
+                style={{ fontFamily: FONT }}
               >
                 See your plan in 2 seconds
               </h2>
-              <p className="text-white/70 md:text-lg">
+              <p className="text-white/55 md:text-lg">
                 Pick a goal — watch your week assemble.
               </p>
             </motion.div>
@@ -203,14 +204,12 @@ export function LivePlanDemo({ onGetStarted, onPlanGenerated, externalSeed }: Li
                   value={goal}
                   onChange={(e) => setGoal(e.target.value)}
                   placeholder={PLACEHOLDER_GOALS[placeholderIdx]}
-                  className="flex-1 bg-white/5 border border-white/10 px-5 py-4 text-white text-lg placeholder:text-white/40 focus:outline-none focus:border-white/30 transition-colors"
-                  style={{ clipPath: TOKENS.clipPaths.button[1] }}
+                  className="flex-1 rounded-xl bg-white/5 border border-white/10 px-5 py-4 text-white text-lg placeholder:text-white/35 focus:outline-none focus:border-white/30 transition-colors"
                 />
                 <button
                   type="submit"
                   disabled={!goal.trim()}
-                  className="px-6 py-4 bg-[#FFE633] text-black font-black uppercase tracking-wider text-base disabled:opacity-40 disabled:cursor-not-allowed transition-all hover:scale-[1.02]"
-                  style={{ clipPath: TOKENS.clipPaths.button[0] }}
+                  className="px-6 py-4 rounded-full bg-white text-black text-base font-semibold disabled:opacity-40 disabled:cursor-not-allowed transition-transform hover:scale-[1.02] active:scale-[0.99]"
                 >
                   <span className="inline-flex items-center gap-2">
                     Generate <ArrowRight className="w-4 h-4" />
@@ -225,8 +224,7 @@ export function LivePlanDemo({ onGetStarted, onPlanGenerated, externalSeed }: Li
                     key={g}
                     type="button"
                     onClick={() => generate(g)}
-                    className="text-xs px-3 py-1.5 bg-white/5 hover:bg-white/15 text-white/80 transition-colors"
-                    style={{ clipPath: TOKENS.clipPaths.button[2] }}
+                    className="text-xs px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white/80 hover:bg-white/10 transition-colors"
                   >
                     {g}
                   </button>
@@ -244,10 +242,10 @@ export function LivePlanDemo({ onGetStarted, onPlanGenerated, externalSeed }: Li
               className="relative"
             >
               <div className="text-center mb-6">
-                <p className="text-xs uppercase tracking-widest text-white/50 mb-1">Your goal</p>
+                <p className="text-xs uppercase tracking-[0.08em] text-white/40 mb-1">Your goal</p>
                 <p
-                  className="text-2xl md:text-4xl font-bold text-white"
-                  style={{ fontFamily: TOKENS.typography.fontFamily.display, letterSpacing: TOKENS.typography.letterSpacing.display }}
+                  className="text-2xl md:text-4xl font-semibold tracking-[-0.02em] text-white"
+                  style={{ fontFamily: FONT }}
                 >
                   {goal}
                 </p>
@@ -263,6 +261,7 @@ export function LivePlanDemo({ onGetStarted, onPlanGenerated, externalSeed }: Li
                     seed={goal.length * 7 + 13}
                     maxOpacity={phase === "assembling" ? 1 : 0.7}
                     drift={phase === "scattered"}
+                    palette={GREY_VORONOI}
                   />
                 </div>
               )}
@@ -275,7 +274,7 @@ export function LivePlanDemo({ onGetStarted, onPlanGenerated, externalSeed }: Li
                     {Array.from({ length: 18 }).map((_, i) => {
                       const angle = (i / 18) * Math.PI * 2;
                       const dist = 120 + (i % 3) * 24;
-                      const color = TOKENS.colors.bright[i % TOKENS.colors.bright.length];
+                      const confettiColor = i % 3 === 0 ? "rgba(255,255,255,0.9)" : i % 3 === 1 ? "rgba(255,255,255,0.5)" : "rgba(255,255,255,0.25)";
                       return (
                         <motion.div
                           key={i}
@@ -287,8 +286,8 @@ export function LivePlanDemo({ onGetStarted, onPlanGenerated, externalSeed }: Li
                             opacity: [1, 1, 0],
                           }}
                           transition={{ duration: 0.9, ease: "easeOut", delay: 0.05 }}
-                          className="absolute w-2 h-2"
-                          style={{ backgroundColor: color, clipPath: TOKENS.clipPaths.shard[i % TOKENS.clipPaths.shard.length] }}
+                          className="absolute w-2 h-2 rounded-sm"
+                          style={{ backgroundColor: confettiColor }}
                         />
                       );
                     })}
@@ -300,16 +299,14 @@ export function LivePlanDemo({ onGetStarted, onPlanGenerated, externalSeed }: Li
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       whileHover={{ y: -4, scale: 1.04 }}
                       transition={{ ...TOKENS.motion.spring.gentle, delay: 0.05 * i }}
-                      className="relative p-4 md:p-5 flex flex-col gap-2 min-h-[140px] md:min-h-[160px] cursor-default"
-                      style={{
-                        backgroundColor: TOKENS.colors.bright[i % TOKENS.colors.bright.length],
-                        clipPath: TOKENS.clipPaths.shard[i % TOKENS.clipPaths.shard.length],
-                      }}
+                      className="cursor-default"
                     >
-                      <div className="text-[10px] uppercase tracking-widest text-black/60 font-bold">Day {i + 1}</div>
-                      <div className="text-xs md:text-sm font-bold text-black leading-snug">
-                        {activity}
-                      </div>
+                      <Panel contentClassName="p-4 md:p-5 flex flex-col gap-2 min-h-[140px] md:min-h-[160px]">
+                        <div className="text-[10px] uppercase tracking-[0.08em] text-white/40 font-medium">Day {i + 1}</div>
+                        <div className="text-xs md:text-sm font-semibold text-white leading-snug">
+                          {activity}
+                        </div>
+                      </Panel>
                     </motion.div>
                   ))}
                 </div>
@@ -322,30 +319,19 @@ export function LivePlanDemo({ onGetStarted, onPlanGenerated, externalSeed }: Li
                   transition={{ ...TOKENS.motion.spring.gentle, delay: 0.6 }}
                   className="flex flex-col sm:flex-row items-center justify-center gap-3"
                 >
-                  <span className="relative inline-block">
-                    <motion.span
-                      aria-hidden
-                      animate={{ scale: [1, 1.15, 1], opacity: [0.45, 0, 0] }}
-                      transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
-                      className="absolute inset-0 pointer-events-none"
-                      style={{ backgroundColor: "#FF2D55", clipPath: TOKENS.clipPaths.button[0] }}
-                    />
-                    <motion.button
-                      onClick={onGetStarted}
-                      animate={{ scale: [1, 1.03, 1] }}
-                      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                      whileHover={{ scale: 1.06 }}
-                      whileTap={{ scale: 0.96 }}
-                      className="relative px-8 py-4 bg-[#FF2D55] text-black font-black uppercase tracking-wider text-base md:text-lg"
-                      style={{ clipPath: TOKENS.clipPaths.button[0] }}
-                    >
-                      Start your real plan →
-                    </motion.button>
-                  </span>
+                  <motion.button
+                    onClick={onGetStarted}
+                    animate={{ scale: [1, 1.03, 1] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                    whileHover={{ scale: 1.06 }}
+                    whileTap={{ scale: 0.96 }}
+                    className="rounded-full bg-white text-black font-semibold px-8 py-4 text-base md:text-lg transition-transform"
+                  >
+                    Start your real plan →
+                  </motion.button>
                   <button
                     onClick={sharePlan}
-                    className="px-5 py-3 bg-white/10 hover:bg-white/20 text-white text-sm font-bold uppercase tracking-wider transition-colors inline-flex items-center gap-2"
-                    style={{ clipPath: TOKENS.clipPaths.button[2] }}
+                    className="rounded-full border border-white/15 text-white/80 hover:bg-white/5 px-5 py-3 text-sm font-medium transition inline-flex items-center gap-2"
                   >
                     {shareCopied ? (
                       <>
@@ -359,7 +345,7 @@ export function LivePlanDemo({ onGetStarted, onPlanGenerated, externalSeed }: Li
                   </button>
                   <button
                     onClick={reset}
-                    className="px-5 py-3 text-white/70 hover:text-white text-sm uppercase tracking-wider transition-colors"
+                    className="rounded-full border border-white/15 text-white/80 hover:bg-white/5 px-5 py-3 text-sm font-medium transition"
                   >
                     Try another goal
                   </button>

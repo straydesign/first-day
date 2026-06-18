@@ -205,15 +205,17 @@
   }
 
   body {
-    @apply text-foreground tile-substrate;
-    font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    @apply text-foreground;
+    background-color: #08080a;
+    font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
     font-weight: 500;
   }
 
+  /* Apple-sleek: headings inherit the body sans, tight tracking, no forced uppercase. */
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-bebas), system-ui, sans-serif;
-    letter-spacing: 0.06em;
-    font-weight: 700;
+    font-family: inherit;
+    letter-spacing: -0.02em;
+    font-weight: 600;
   }
 
   p, span, label, a, li, td, th, div {
@@ -431,93 +433,59 @@ html {
    clip-path from a corner-cut octagon (an unbuilt tile) to the settled
    shard. Kept outside @layer components so lightning-css doesn't drop it. */
 [data-sonner-toaster] [data-sonner-toast] {
-  background: #fb7025 !important;
-  color: #000 !important;
-  border: none !important;
-  border-radius: 0 !important;
-  box-shadow: 0 0 14px rgba(251, 112, 37, 0.44), 0 4px 18px rgba(0, 0, 0, 0.45) !important;
-  clip-path: polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%) !important;
-  padding: 18px 22px !important;
-  min-height: 56px !important;
-  font-weight: 900 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.04em !important;
-  animation: toastTilePop 0.42s cubic-bezier(0.16, 0.84, 0.44, 1) both !important;
-  will-change: opacity, transform, clip-path;
-}
-[data-sonner-toaster] [data-sonner-toast]:nth-child(4n+2) {
-  clip-path: polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%) !important;
-}
-[data-sonner-toaster] [data-sonner-toast]:nth-child(4n+3) {
-  clip-path: polygon(1% 0%, 100% 2%, 99% 100%, 0% 98%) !important;
-}
-[data-sonner-toaster] [data-sonner-toast]:nth-child(4n) {
-  clip-path: polygon(3% 2%, 100% 0%, 97% 98%, 0% 100%) !important;
-}
-[data-sonner-toaster] [data-sonner-toast][data-type="success"] {
-  background: #fcd02a !important;
-  box-shadow: 0 0 14px rgba(252, 208, 42, 0.5), 0 4px 18px rgba(0, 0, 0, 0.45) !important;
-}
-[data-sonner-toaster] [data-sonner-toast][data-type="error"] {
-  background: #f31b5e !important;
-  box-shadow: 0 0 14px rgba(243, 27, 94, 0.5), 0 4px 18px rgba(0, 0, 0, 0.45) !important;
-}
-[data-sonner-toaster] [data-sonner-toast][data-type="info"],
-[data-sonner-toaster] [data-sonner-toast][data-type="loading"] {
-  background: #3075e1 !important;
-  box-shadow: 0 0 14px rgba(48, 117, 225, 0.5), 0 4px 18px rgba(0, 0, 0, 0.45) !important;
-}
-[data-sonner-toaster] [data-sonner-toast][data-type="warning"] {
-  background: #fb7025 !important;
-  box-shadow: 0 0 14px rgba(251, 112, 37, 0.5), 0 4px 18px rgba(0, 0, 0, 0.45) !important;
+  background: rgba(20, 20, 24, 0.82) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255, 255, 255, 0.10) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5) !important;
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+  padding: 14px 16px !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.01em !important;
 }
 [data-sonner-toaster] [data-sonner-toast] [data-title] {
-  color: #000 !important;
-  font-weight: 900 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.04em !important;
-  font-size: 0.95rem !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+  font-size: 0.9rem !important;
 }
 [data-sonner-toaster] [data-sonner-toast] [data-description] {
-  color: rgba(0, 0, 0, 0.78) !important;
-  font-weight: 700 !important;
-  text-transform: none !important;
-  letter-spacing: 0 !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+  font-weight: 400 !important;
   font-size: 0.82rem !important;
-  margin-top: 4px !important;
+  margin-top: 2px !important;
 }
 [data-sonner-toaster] [data-sonner-toast] [data-icon] {
-  color: #000 !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+[data-sonner-toaster] [data-sonner-toast][data-type="success"] [data-icon] {
+  color: #6ee7b7 !important;
+}
+[data-sonner-toaster] [data-sonner-toast][data-type="error"] [data-icon] {
+  color: #fda4af !important;
 }
 [data-sonner-toaster] [data-sonner-toast] [data-button],
 [data-sonner-toaster] [data-sonner-toast] [data-action] {
-  background: #000 !important;
-  color: #fff !important;
+  background: #fff !important;
+  color: #000 !important;
   border: none !important;
-  border-radius: 0 !important;
-  clip-path: polygon(4% 0%, 100% 6%, 96% 100%, 0% 94%) !important;
-  font-weight: 900 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.05em !important;
+  border-radius: 9999px !important;
+  font-weight: 600 !important;
   padding: 6px 14px !important;
 }
 [data-sonner-toaster] [data-sonner-toast] [data-cancel] {
-  background: rgba(0, 0, 0, 0.18) !important;
-  color: #000 !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #fff !important;
   border: none !important;
-  border-radius: 0 !important;
-  clip-path: polygon(4% 0%, 100% 6%, 96% 100%, 0% 94%) !important;
-  font-weight: 900 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.05em !important;
+  border-radius: 9999px !important;
+  font-weight: 600 !important;
   padding: 6px 14px !important;
 }
 [data-sonner-toaster] [data-sonner-toast] [data-close-button] {
-  background: #000 !important;
+  background: rgba(255, 255, 255, 0.08) !important;
   color: #fff !important;
-  border: none !important;
-  border-radius: 0 !important;
-  clip-path: polygon(8% 0%, 100% 8%, 92% 100%, 0% 92%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 9999px !important;
 }
 
 @keyframes toastTilePop {
@@ -712,17 +680,7 @@ button:focus-visible {
   filter: brightness(1.1);
 }
 
-/* 3D shell: subtle parallax bound to camera anchor (driven by AnchorDriver
-   inside the persistent r3f Canvas). Stays at 0,0 until P4 camera rig animates. */
-#main-content {
-  transform: translate3d(
-    calc(var(--app-anchor-dx) * 0.04),
-    calc(var(--app-anchor-dy) * 0.04),
-    0
-  );
-  transition: transform 120ms linear;
-  will-change: transform;
-}
+/* 3D shell removed — content no longer offsets to a camera anchor. */
 
 /* Reduced motion — disable animations, keep fades */
 @media (prefers-reduced-motion: reduce) {

@@ -92,7 +92,7 @@ export function BouncingButton({ onClick }: BouncingButtonProps) {
       <button
         ref={buttonRef}
         onClick={onClick}
-        className="absolute shadow-lg shadow-black/30 hover:shadow-xl hover:scale-105 transition-colors duration-300 px-10 py-7"
+        className="absolute hover:scale-105 transition-colors duration-300 px-10 py-7"
         style={{
           left: `${position.x}px`,
           top: `${position.y}px`,

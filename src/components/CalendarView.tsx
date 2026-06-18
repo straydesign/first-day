@@ -1,37 +1,18 @@
 "use client";
-import { BookOpen, Edit2, ChevronUp, ChevronDown, AlertTriangle, ArrowLeft, ArrowRight, Flame, Sparkles } from "lucide-react";
+import { BookOpen, Edit2, ChevronUp, ChevronDown, AlertTriangle, ArrowRight, Flame, Sparkles } from "lucide-react";
 import { WeekCalendar } from "./WeekCalendar";
 import { PlanCompleteCelebration } from "./PlanCompleteCelebration";
 import { OnboardingTour } from "./OnboardingTour";
-import { VORONOI_LIGHT, SHARD_CLIPS, LABEL_CLIPS, BUTTON_CLIPS, getClip } from "@/constants";
-import { VoronoiMosaic } from "./VoronoiMosaic";
-import { useState, useEffect } from "react";
+import { Panel } from "@/components/ui/Panel";
+import { TopBar } from "@/components/ui/TopBar";
+import { FONT } from "@/lib/design";
+import { useState } from "react";
 import { StreakBadge } from "./StreakBadge";
 import { fireCelebration, getRoomView } from "./3d-shell/RoomRegistry";
-
-const PANEL_DARK_PALETTE = ["#0a0a14", "#10122a", "#0f0e1f", "#181a3a", "#0c0d1e"] as const;
-
-function tonalPalette(hex: string): readonly string[] {
-  const h = hex.replace("#", "");
-  const r = parseInt(h.slice(0, 2), 16);
-  const g = parseInt(h.slice(2, 4), 16);
-  const b = parseInt(h.slice(4, 6), 16);
-  const mix = (a: number, t: number, target: number) => Math.round(a + (target - a) * t);
-  const toHex = (n: number) => Math.max(0, Math.min(255, n)).toString(16).padStart(2, "0");
-  const rgb = (rr: number, gg: number, bb: number) => `#${toHex(rr)}${toHex(gg)}${toHex(bb)}`;
-  return [
-    rgb(mix(r, 0.42, 0), mix(g, 0.42, 0), mix(b, 0.42, 0)),
-    rgb(mix(r, 0.20, 0), mix(g, 0.20, 0), mix(b, 0.20, 0)),
-    hex,
-    rgb(mix(r, 0.18, 255), mix(g, 0.18, 255), mix(b, 0.18, 255)),
-    rgb(mix(r, 0.34, 255), mix(g, 0.34, 255), mix(b, 0.34, 255)),
-  ];
-}
 import { StreakFreezeIndicator } from "./StreakFreezeIndicator";
 import { motion } from "framer-motion";
-import { useMonotone } from "./MonotoneContext";
 import { staggerContainerSlow, tileEnter, contentReveal } from "@/lib/animations";
-import { getNextAvailableDay, getCompletedDayCount } from "@/lib/engagement";
+import { getNextAvailableDay, getCompletedDayCount, getPlanTotalDays } from "@/lib/engagement";
 import type { Plan, ProgressMap, EngagementState, SelectedDay, Activity } from "@/types";
 
 interface CalendarViewProps {
@@ -77,15 +58,6 @@ function buildSelectedDay(dayNumber: number, planData: Plan | null): SelectedDay
 
 export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, progress = {}, onBack, engagement }: CalendarViewProps) {
   const [expandedWeeks, setExpandedWeeks] = useState(new Set<number>());
-  const [editColorIndex, setEditColorIndex] = useState(0);
-  const { monotone } = useMonotone();
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setEditColorIndex(prev => (prev + 1) % VORONOI_LIGHT.length);
-    }, 2000);
-    return () => clearInterval(timer);
-  }, []);
 
   const toggleWeekBook = (weekNumber: number) => {
     setExpandedWeeks(prev => {
@@ -96,263 +68,257 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, prog
     });
   };
 
-  const completedCount = getCompletedDayCount(progress);
-  const nextDay = getNextAvailableDay(progress);
-  const allDone = nextDay === 31;
+  const totalDays = getPlanTotalDays(planData);
+  const completedCount = getCompletedDayCount(progress, totalDays);
+  const nextDay = getNextAvailableDay(progress, totalDays);
+  const allDone = nextDay > totalDays;
   const nextDayData = !allDone ? planData?.days?.[nextDay] : null;
   const previewActivities = (nextDayData?.activities || []).slice(0, 3);
 
-  const getWeekLabel = (weekNumber: number) => {
+  const sprintsGenerated = planData?.sprintsGenerated ?? 4;
+  const planSprints = planData?.sprints;
+  const getSprintTitle = (sprintNumber: number): string => {
+    if (planSprints && planSprints[sprintNumber - 1]) return planSprints[sprintNumber - 1].title;
     const goalLower = (goalTitle || '').toLowerCase();
-    if (goalLower.includes('run') || goalLower.includes('fitness') || goalLower.includes('workout')) return ['Warming Up', 'Building Endurance', 'Hitting Stride', 'Peak Performance'][weekNumber - 1];
-    if (goalLower.includes('learn') || goalLower.includes('language') || goalLower.includes('study')) return ['Foundation', 'Building Blocks', 'Gaining Fluency', 'Mastery Mode'][weekNumber - 1];
-    if (goalLower.includes('draw') || goalLower.includes('write') || goalLower.includes('creative')) return ['Finding Your Voice', 'Building Skills', 'Creative Flow', 'Finishing Strong'][weekNumber - 1];
-    if (goalLower.includes('code') || goalLower.includes('business') || goalLower.includes('career')) return ['Foundations', 'Building Momentum', 'Deep Dive', 'Advanced Mastery'][weekNumber - 1];
-    return ['Getting Started', 'Building Momentum', 'Hitting Your Stride', 'Mastering It'][weekNumber - 1];
+    if (goalLower.includes('run') || goalLower.includes('fitness') || goalLower.includes('workout')) return `Sprint ${sprintNumber}: ${['Warming Up', 'Building Endurance', 'Hitting Stride', 'Peak Performance'][sprintNumber - 1]}`;
+    if (goalLower.includes('learn') || goalLower.includes('language') || goalLower.includes('study')) return `Sprint ${sprintNumber}: ${['Foundation', 'Building Blocks', 'Gaining Fluency', 'Mastery Mode'][sprintNumber - 1]}`;
+    if (goalLower.includes('draw') || goalLower.includes('write') || goalLower.includes('creative')) return `Sprint ${sprintNumber}: ${['Finding Your Voice', 'Building Skills', 'Creative Flow', 'Finishing Strong'][sprintNumber - 1]}`;
+    if (goalLower.includes('code') || goalLower.includes('business') || goalLower.includes('career')) return `Sprint ${sprintNumber}: ${['Foundations', 'Building Momentum', 'Deep Dive', 'Advanced Mastery'][sprintNumber - 1]}`;
+    return `Sprint ${sprintNumber}: ${['Foundations', 'Build Momentum', 'Stretch', 'Integrate'][sprintNumber - 1] ?? 'Keep Going'}`;
   };
+  const getSprintTheme = (sprintNumber: number): string | undefined => planSprints?.[sprintNumber - 1]?.theme;
 
   const weeks: WeekData[] = [];
-  for (let i = 0; i < 30; i += 7) {
-    const weekDays: WeekDay[] = Array.from({ length: Math.min(7, 30 - i) }, (_, j) => ({ dayNumber: i + j + 1 }));
+  for (let i = 0; i < totalDays; i += 7) {
+    const weekDays: WeekDay[] = Array.from({ length: Math.min(7, totalDays - i) }, (_, j) => ({ dayNumber: i + j + 1 }));
     const weekNumber = Math.floor(i / 7) + 1;
     const firstDayNumber = weekDays[0].dayNumber;
     const weeklyBook = planData?.days?.[firstDayNumber]?.weeklyBook || null;
-    weeks.push({ weekNumber, days: weekDays, weeklyBook, label: getWeekLabel(weekNumber) });
+    weeks.push({ weekNumber, days: weekDays, weeklyBook, label: getSprintTitle(weekNumber) });
   }
 
-  const heroAccent = monotone ? "#FFFFFF" : VORONOI_LIGHT[(nextDay - 1) % VORONOI_LIGHT.length];
-  const progressPct = Math.round((completedCount / 30) * 100);
+  const progressPct = Math.round((completedCount / totalDays) * 100);
 
   if (allDone) {
     return (
       <PlanCompleteCelebration
         goalTitle={goalTitle}
         engagement={engagement}
+        totalDays={totalDays}
         onStartNextGoal={() => onBack?.()}
       />
     );
   }
 
   return (
-    <div className="min-h-screen relative pb-20 md:pb-0" role="main" aria-label="30-day plan calendar">
+    <div className="min-h-screen relative pb-20 md:pb-0" role="main" aria-label={`${totalDays}-day plan calendar`}>
       <OnboardingTour />
-      <div className="relative z-10 p-4 md:p-8 pt-[120px] md:pt-[120px]">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            className="mb-8 md:mb-12"
-            variants={contentReveal}
-            initial="hidden"
-            animate="visible"
-          >
-            {onBack && (
+      <TopBar
+        title={goalTitle || "Your Plan"}
+        onBack={onBack}
+        right={
+          <div className="flex items-center gap-3">
+            {engagement && (engagement.currentStreak > 0 || engagement.isAtRisk) && (
+              <>
+                <StreakBadge streak={engagement.currentStreak} isAtRisk={engagement.isAtRisk} />
+                <StreakFreezeIndicator count={engagement.streakFreezes} isAtRisk={engagement.isAtRisk} />
+              </>
+            )}
+            {onEditGoal && (
               <button
-                onClick={onBack}
-                className="inline-flex items-center gap-2 mb-8 h-10 px-6 text-sm font-bold text-white bg-black hover:scale-105 transition-transform btn-shake"
+                onClick={onEditGoal}
+                className="rounded-full border border-white/15 text-white/80 hover:bg-white/5 transition px-3 py-1 text-[13px] font-medium flex items-center gap-1.5"
               >
-                <ArrowLeft className="w-5 h-5" />Back
+                <Edit2 className="w-3.5 h-3.5" />Edit
               </button>
             )}
-            {goalTitle && (<div className="text-center">
-              <div className="flex items-center justify-center gap-3 mb-4">
-                <div
-                  className="relative overflow-hidden inline-block px-8 py-3"
-                  style={{ clipPath: getClip(LABEL_CLIPS, 1) }}
-                >
-                  <VoronoiMosaic seed={2901} tileCount={28} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
-                  <h1 className="relative z-10 text-3xl md:text-7xl font-bold text-white">{goalTitle}</h1>
-                </div>
-                {engagement && (engagement.currentStreak > 0 || engagement.isAtRisk) && (
-                  <div className="flex items-center justify-center gap-2 flex-wrap">
-                    <StreakBadge streak={engagement.currentStreak} isAtRisk={engagement.isAtRisk} />
-                    <StreakFreezeIndicator count={engagement.streakFreezes} isAtRisk={engagement.isAtRisk} />
-                  </div>
-                )}
-              </div>
-              {engagement?.isAtRisk && (
-                <div className="mb-3 mx-auto max-w-md bg-black border border-coral-500/40 clip-tile-c px-4 py-2 flex items-center gap-2 animate-pulse">
-                  <AlertTriangle className="w-4 h-4 text-coral-400 flex-shrink-0" />
-                  <p className="text-sm text-coral-300 font-medium">
+          </div>
+        }
+      />
+
+      <div className="relative z-10 p-4 md:p-8 pt-6 md:pt-8">
+        <div className="max-w-7xl mx-auto">
+          {/* At-risk streak warning */}
+          {engagement?.isAtRisk && (
+            <motion.div variants={contentReveal} initial="hidden" animate="visible" className="mb-4">
+              <Panel contentClassName="px-4 py-3">
+                <div className="flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4 text-white/50 flex-shrink-0" />
+                  <p className="text-[13px] text-white/70 font-medium">
                     Complete a lesson today to keep your {engagement.currentStreak}-day streak alive
                     {engagement.streakFreezes > 0 ? ` — or your freeze will catch you.` : "."}
                   </p>
                 </div>
-              )}
-              {onEditGoal && (
-                <div className="flex justify-center mb-3">
-                  <button
-                    onClick={onEditGoal}
-                    className="relative inline-flex items-center justify-center h-10 px-6 text-sm font-bold text-black overflow-hidden hover:scale-105 transition-colors duration-500"
-                    style={{
-                      clipPath: getClip(BUTTON_CLIPS, 0),
-                      backgroundColor: VORONOI_LIGHT[editColorIndex],
-                    }}
-                  >
-                    <span className="relative z-10 flex items-center gap-1.5">
-                      <Edit2 className="w-4 h-4" />Edit Goal
-                    </span>
-                  </button>
-                </div>
-              )}
-            </div>)}
-          </motion.div>
+              </Panel>
+            </motion.div>
+          )}
 
-          {/* Section A — Hero "Next Lesson" / Goal Crushed card */}
+          {/* Section A — Hero "Next Lesson" card */}
           <motion.div
-            className="mb-10 md:mb-14"
+            className="mb-8 md:mb-10 sticky top-20 z-30"
             variants={contentReveal}
             initial="hidden"
             animate="visible"
           >
-            <div
-              className="relative overflow-hidden p-6 md:p-10"
-              style={{
-                clipPath: getClip(SHARD_CLIPS, (nextDay - 1) % SHARD_CLIPS.length),
-              }}
-            >
-                <VoronoiMosaic
-                  seed={2933 + nextDay * 7}
-                  tileCount={56}
-                  margin={4}
-                  gap={2}
-                  palette={tonalPalette(heroAccent)}
-                  className="absolute inset-0 w-full h-full pointer-events-none"
-                />
-                <div className="relative z-10 flex flex-col md:flex-row md:items-start md:justify-between gap-6">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-3 mb-3">
-                      <span className="inline-block bg-black text-white px-3 py-1 text-xs md:text-sm font-black uppercase tracking-[0.25em]" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>Next Lesson</span>
-                      <span className="text-black/70 text-sm md:text-base font-bold">Lesson {nextDay} of 30</span>
-                    </div>
-                    <h2 className="text-3xl md:text-5xl font-black text-black leading-tight mb-4" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>
-                      {nextDayData?.title || `Day ${nextDay}`}
-                    </h2>
-                    {previewActivities.length > 0 && (
-                      <ul className="space-y-1.5 mb-5">
-                        {previewActivities.map((a, i) => (
-                          <li key={i} className="flex items-start gap-2 text-sm md:text-base text-black/85">
-                            <span className="mt-1.5 w-1.5 h-1.5 bg-black flex-shrink-0" />
-                            <span className="truncate">{activityText(a)}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                    <div className="flex flex-wrap items-center gap-2 mb-5">
-                      {engagement && engagement.dailyMultiplier > 1 && (
-                        <span className="inline-flex items-center gap-1 bg-black text-[#fcd02a] px-3 py-1 text-xs md:text-sm font-black uppercase tracking-wider">
-                          <Sparkles className="w-3 h-3" />{engagement.dailyMultiplier}x XP
-                        </span>
-                      )}
-                      {engagement?.dailyChallenge && (
-                        <span className="inline-block bg-black/80 text-white px-3 py-1 text-xs md:text-sm font-semibold">
-                          {engagement.dailyChallenge.description} +{engagement.dailyChallenge.bonusXP}XP
-                        </span>
-                      )}
-                      {engagement?.isComeback && (
-                        <span className="inline-flex items-center gap-1 bg-orange-500 text-black px-3 py-1 text-xs md:text-sm font-black uppercase tracking-wider">
-                          <Flame className="w-3 h-3" />Comeback +50%
-                        </span>
-                      )}
-                    </div>
-                    <button
-                      onClick={() => {
-                        // Primary action — stronger pre-cascade impulse than day-card peek.
-                        // Room punches BEFORE wall-shatter exits toward day room.
-                        fireCelebration(getRoomView(), 0.65);
-                        onDayClick(buildSelectedDay(nextDay, planData));
-                      }}
-                      className="inline-flex items-center gap-2 bg-black text-white px-6 py-3 md:px-8 md:py-4 text-base md:text-lg font-black uppercase tracking-wider hover:scale-105 transition-transform"
-                      style={{ clipPath: getClip(BUTTON_CLIPS, 0), fontFamily: "var(--font-bebas), system-ui, sans-serif", letterSpacing: 3 }}
+            <Panel contentClassName="p-6 md:p-8">
+              <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-3 mb-2">
+                    <span
+                      className="text-[11px] font-medium uppercase tracking-[0.08em] text-white/40"
+                      style={{ fontFamily: FONT }}
                     >
-                      Start Lesson <ArrowRight className="w-5 h-5" />
-                    </button>
+                      Next Lesson
+                    </span>
+                    <span className="text-[12px] text-white/30 font-medium tabular-nums">
+                      {nextDay} of {totalDays}
+                    </span>
                   </div>
+                  <h2
+                    className="text-[28px] md:text-[36px] font-semibold tracking-[-0.02em] text-white leading-tight mb-4"
+                    style={{ fontFamily: FONT }}
+                  >
+                    {nextDayData?.title || `Day ${nextDay}`}
+                  </h2>
+                  {previewActivities.length > 0 && (
+                    <div className="space-y-2 mb-5">
+                      {previewActivities.map((a, i) => (
+                        <div key={i} className="flex items-start gap-3">
+                          <div className="mt-[6px] h-[18px] w-[18px] shrink-0 rounded-full border-[1.5px] border-white/25" />
+                          <span className="text-[14px] leading-snug text-white/75 truncate">{activityText(a)}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <div className="flex flex-wrap items-center gap-2 mb-5">
+                    {engagement && engagement.dailyMultiplier > 1 && (
+                      <span className="inline-flex items-center gap-1 rounded-full border border-white/15 px-3 py-1 text-[12px] font-medium uppercase tracking-[0.08em] text-white/40">
+                        <Sparkles className="w-3 h-3" />{engagement.dailyMultiplier}x XP
+                      </span>
+                    )}
+                    {engagement?.dailyChallenge && (
+                      <span className="inline-flex items-center gap-1 rounded-full border border-white/15 px-3 py-1 text-[12px] font-medium text-white/55">
+                        {engagement.dailyChallenge.description} <span className="text-white/40">+{engagement.dailyChallenge.bonusXP}XP</span>
+                      </span>
+                    )}
+                    {engagement?.isComeback && (
+                      <span className="inline-flex items-center gap-1 rounded-full border border-white/15 px-3 py-1 text-[12px] font-medium text-white/55">
+                        <Flame className="w-3 h-3 text-white/40" />Comeback +50%
+                      </span>
+                    )}
+                  </div>
+                  <button
+                    onClick={() => {
+                      fireCelebration(getRoomView(), 0.65);
+                      onDayClick(buildSelectedDay(nextDay, planData));
+                    }}
+                    className="rounded-full bg-white text-black text-[15px] font-semibold py-3 px-6 inline-flex items-center gap-2 transition-transform hover:scale-[1.01] active:scale-[0.99]"
+                    style={{ fontFamily: FONT }}
+                  >
+                    Start Lesson <ArrowRight className="w-4 h-4" />
+                  </button>
                 </div>
-            </div>
+              </div>
+            </Panel>
           </motion.div>
 
           {/* Section B — Progress summary */}
           <motion.div
-            className="mb-10 md:mb-14"
+            className="mb-8 md:mb-10"
             variants={contentReveal}
             initial="hidden"
             animate="visible"
           >
-            <div className="relative overflow-hidden p-5 md:p-7" style={{ clipPath: getClip(SHARD_CLIPS, 1) }}>
-              <VoronoiMosaic seed={2917} tileCount={48} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
-              <div className="relative z-10 flex items-baseline justify-between mb-4">
+            <Panel contentClassName="p-5 md:p-6">
+              <div className="flex items-baseline justify-between mb-3">
                 <div>
-                  <span className="text-3xl md:text-4xl font-black text-white" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>{completedCount}</span>
-                  <span className="text-white/60 text-base md:text-lg font-bold"> / 30 lessons</span>
+                  <span className="text-[32px] font-semibold tracking-[-0.02em] text-white tabular-nums leading-none">{completedCount}</span>
+                  <span className="text-white/40 text-[15px] font-medium ml-1">/ {totalDays} lessons</span>
                 </div>
-                <span className="text-white/70 text-sm md:text-base font-bold">{progressPct}%</span>
+                <span className="text-white/40 text-[13px] font-medium tabular-nums">{progressPct}%</span>
               </div>
-              <div className="relative z-10 flex gap-[2px] h-3 mb-4" aria-label={`${completedCount} of 30 lessons completed`}>
-                {Array.from({ length: 30 }, (_, i) => {
-                  const isDone = i < completedCount;
-                  return (
-                    <div
-                      key={i}
-                      className="flex-1"
-                      style={{
-                        backgroundColor: isDone ? (monotone ? "#FFFFFF" : VORONOI_LIGHT[i % VORONOI_LIGHT.length]) : "rgba(255,255,255,0.08)",
-                        clipPath: getClip(SHARD_CLIPS, i),
-                      }}
-                    />
-                  );
-                })}
+              {/* Progress bar: track bg-white/10, fill bg-white/85 */}
+              <div className="h-1 w-full rounded-full bg-white/10 overflow-hidden mb-4" aria-label={`${completedCount} of ${totalDays} lessons completed`}>
+                <div className="h-full rounded-full bg-white/85 transition-all" style={{ width: `${progressPct}%` }} />
               </div>
               {engagement && (
-                <div className="relative z-10 flex flex-wrap items-center gap-3 text-sm">
+                <div className="flex flex-wrap items-center gap-3 text-[13px]">
                   {engagement.currentStreak > 0 && (
-                    <span className="inline-flex items-center gap-1.5 text-orange-300 font-bold">
-                      <Flame className="w-4 h-4" />{engagement.currentStreak}-day streak
+                    <span className="inline-flex items-center gap-1.5 text-white/70 font-medium">
+                      <Flame className="w-3.5 h-3.5 text-white/40" />{engagement.currentStreak}-day streak
                     </span>
                   )}
-                  <span className="text-white/70 font-bold">{engagement.totalXP.toLocaleString()} XP</span>
-                  <span className="text-white/50">·</span>
-                  <span className="text-white/70 font-bold">{engagement.level.name}</span>
+                  <span className="text-white/55 font-medium">{engagement.totalXP.toLocaleString()} XP</span>
+                  <span className="text-white/25">·</span>
+                  <span className="text-white/55 font-medium">{engagement.level.name}</span>
                 </div>
               )}
-            </div>
+            </Panel>
           </motion.div>
 
           {/* Section C — Lesson path */}
-          <motion.div className="space-y-12 md:space-y-16" variants={staggerContainerSlow} initial="hidden" animate="visible">
+          <motion.div className="space-y-10 md:space-y-14" variants={staggerContainerSlow} initial="hidden" animate="visible">
             {weeks.map((week: WeekData) => {
+              const sprintNumber = week.weekNumber;
+              const isLocked = sprintNumber > sprintsGenerated;
+              const theme = getSprintTheme(sprintNumber);
               return (
                 <motion.div
                   key={week.weekNumber}
                   className="relative"
                   variants={tileEnter}
                 >
-                  <div className="mb-4 flex items-center gap-3">
-                    <div
-                      className="relative overflow-hidden inline-block px-5 py-2"
-                      style={{ clipPath: getClip(LABEL_CLIPS, 2) }}
+                  <div className="mb-3 flex flex-col items-start gap-1">
+                    <h3
+                      className={`text-[18px] md:text-[20px] font-semibold tracking-[-0.01em] ${isLocked ? "text-white/30" : "text-white"}`}
+                      style={{ fontFamily: FONT }}
                     >
-                      <VoronoiMosaic seed={2937 + week.weekNumber * 17} tileCount={20} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
-                      <h3 className="relative z-10 text-xl md:text-2xl font-black text-white uppercase tracking-wide" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>Week {week.weekNumber}: {week.label}</h3>
-                    </div>
-                  </div>
-                  <div className="space-y-3 md:space-y-4">
-                    {week.weeklyBook && (
-                      <div className="relative clip-tile-b overflow-hidden">
-                        <VoronoiMosaic seed={2967 + week.weekNumber * 23} tileCount={42} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
-                        <button onClick={() => toggleWeekBook(week.weekNumber)} className="relative z-10 w-full p-4 md:p-5 flex items-center justify-between hover:bg-white/5 transition-colors" aria-expanded={expandedWeeks.has(week.weekNumber)} aria-label={`Week ${week.weekNumber} reading recommendation`}>
-                          <div className="flex items-center gap-3"><BookOpen className="w-6 h-6 md:w-7 md:h-7 text-[#fcd02a]" /><h3 className="text-2xl md:text-3xl text-[#fcd02a] font-black uppercase tracking-wide">Week {week.weekNumber} Reading</h3></div>
-                          {expandedWeeks.has(week.weekNumber) ? <ChevronUp className="w-5 h-5 text-[#fcd02a]" /> : <ChevronDown className="w-5 h-5 text-[#fcd02a]" />}
-                        </button>
-                        {expandedWeeks.has(week.weekNumber) && (
-                          <div className="relative z-10 px-3 md:px-4 pb-3 md:pb-4 space-y-1 md:space-y-2">
-                            <p className="text-sm md:text-base text-yellow-100 font-semibold">{week.weeklyBook.title}</p>
-                            <p className="text-xs md:text-sm text-yellow-400">by {week.weeklyBook.author}</p>
-                            <p className="text-xs text-yellow-300/80 italic mt-1 md:mt-2">{week.weeklyBook.description || week.weeklyBook.reason}</p>
-                          </div>
-                        )}
-                      </div>
+                      {week.label}
+                    </h3>
+                    {theme && (
+                      <p className="text-[13px] text-white/45 max-w-2xl leading-snug">{theme}</p>
                     )}
-                    <WeekCalendar weekNumber={week.weekNumber} days={week.days} progress={progress} onDayClick={onDayClick} planData={planData} />
                   </div>
+                  {isLocked ? (
+                    <Panel contentClassName="p-6 md:p-8 text-center">
+                      <div className="flex flex-col items-center gap-2">
+                        <span className="text-3xl" aria-hidden>🔒</span>
+                        <p className="text-[13px] font-medium text-white/40 uppercase tracking-[0.08em]">Generates after Sprint {sprintNumber - 1}</p>
+                        <p className="text-[12px] text-white/30 max-w-md mt-1">Finish the current sprint and your next 7 days unlock automatically — tuned to what you just learned.</p>
+                      </div>
+                    </Panel>
+                  ) : (
+                    <div className="space-y-3 md:space-y-4">
+                      {week.weeklyBook && (
+                        <Panel contentClassName="p-0">
+                          <button
+                            onClick={() => toggleWeekBook(week.weekNumber)}
+                            className="w-full p-4 md:p-5 flex items-center justify-between hover:bg-white/5 transition-colors rounded-[inherit]"
+                            aria-expanded={expandedWeeks.has(week.weekNumber)}
+                            aria-label={`Sprint ${week.weekNumber} reading recommendation`}
+                          >
+                            <div className="flex items-center gap-3">
+                              <BookOpen className="w-5 h-5 text-white/50" />
+                              <span className="text-[15px] font-semibold text-white">Sprint {week.weekNumber} Reading</span>
+                            </div>
+                            {expandedWeeks.has(week.weekNumber) ? (
+                              <ChevronUp className="w-4 h-4 text-white/40" />
+                            ) : (
+                              <ChevronDown className="w-4 h-4 text-white/40" />
+                            )}
+                          </button>
+                          {expandedWeeks.has(week.weekNumber) && (
+                            <div className="px-4 md:px-5 pb-4 md:pb-5 space-y-1 md:space-y-2 border-t border-white/[0.06] pt-3">
+                              <p className="text-[14px] text-white font-semibold">{week.weeklyBook.title}</p>
+                              <p className="text-[12px] text-white/55">by {week.weeklyBook.author}</p>
+                              <p className="text-[12px] text-white/40 italic mt-1 md:mt-2">{week.weeklyBook.description || week.weeklyBook.reason}</p>
+                            </div>
+                          )}
+                        </Panel>
+                      )}
+                      <WeekCalendar weekNumber={week.weekNumber} days={week.days} progress={progress} onDayClick={onDayClick} planData={planData} />
+                    </div>
+                  )}
                 </motion.div>
               );
             })}

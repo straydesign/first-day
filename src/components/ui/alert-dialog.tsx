@@ -5,7 +5,6 @@ import { AlertDialog as AlertDialogPrimitive } from "radix-ui"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { VoronoiMosaic } from "@/components/VoronoiMosaic"
 import { useDomBridgeHost } from "@/components/3d-shell/DomBridge"
 
 function AlertDialog({
@@ -44,7 +43,7 @@ function AlertDialogOverlay({
     <AlertDialogPrimitive.Overlay
       data-slot="alert-dialog-overlay"
       className={cn(
-        "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 fixed inset-0 z-50 bg-transparent",
+        "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/85 backdrop-blur-md",
         className
       )}
       {...props}
@@ -67,13 +66,11 @@ function AlertDialogContent({
         data-slot="alert-dialog-content"
         data-size={size}
         className={cn(
-          "clip-dialog group/alert-dialog-content fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-none border border-white/10 p-6 shadow-lg data-[size=sm]:max-w-xs data-[size=default]:sm:max-w-lg overflow-hidden",
+          "group/alert-dialog-content fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-2xl border border-white/10 bg-[#0d0d0f] p-6 shadow-xl data-[size=sm]:max-w-xs data-[size=default]:sm:max-w-lg overflow-hidden",
           className
         )}
         {...props}
       >
-        <VoronoiMosaic seed={42} tileCount={20} margin={4} gap={2} className="absolute inset-0 w-full h-full" />
-        {/* No scrim — full brightness */}
         <div className="relative z-10 grid gap-4">
           {children}
         </div>

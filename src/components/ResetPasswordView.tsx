@@ -1,27 +1,22 @@
 "use client";
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
-import { API_BASE } from '@/lib/supabase/client';
+import { createClient } from '@/lib/supabase/client';
 import { validatePassword } from '@/lib/validation';
-import { FirstDayLogo } from './FirstDayLogo';
-import { VoronoiMosaic } from './VoronoiMosaic';
+import { TopBar } from '@/components/ui/TopBar';
+import { Panel } from '@/components/ui/Panel';
+import { FONT } from '@/lib/design';
 
-const PANEL_DARK_PALETTE = ["#0a0a14", "#10122a", "#0f0e1f", "#181a3a", "#0c0d1e"] as const;
 
 interface ResetPasswordViewProps {
-  token: string | null;
   onSuccess: () => void;
 }
 
-export function ResetPasswordView({ token, onSuccess }: ResetPasswordViewProps) {
+export function ResetPasswordView({ onSuccess }: ResetPasswordViewProps) {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
-
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,21 +32,16 @@ export function ResetPasswordView({ token, onSuccess }: ResetPasswordViewProps) 
 
     setLoading(true);
     try {
-      const response = await fetch(`${API_BASE}/api/reset-password`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${supabaseAnonKey}`,
-        },
-        body: JSON.stringify({ token, password }),
-      });
+      // Arriving via the recovery email link leaves an active recovery session,
+      // so updating the password just works.
+      const supabase = createClient();
+      const { error } = await supabase.auth.updateUser({ password });
 
-      if (response.ok) {
-        toast.success('Password reset successful! Please log in.');
-        onSuccess();
+      if (error) {
+        toast.error(error.message || 'Failed to reset password');
       } else {
-        const data = await response.json();
-        toast.error(data.error || 'Failed to reset password');
+        toast.success('Password updated! Please log in.');
+        onSuccess();
       }
     } catch {
       toast.error('Failed to reset password');
@@ -61,33 +51,59 @@ export function ResetPasswordView({ token, onSuccess }: ResetPasswordViewProps) 
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 pt-[84px] pb-4 md:px-8 md:pb-8 relative overflow-hidden">
-      <VoronoiMosaic seed={55} tileCount={40} margin={10} gap={3} className="absolute inset-0 w-full h-full" />
-      {/* No scrim — full brightness */}
-      <div className="relative z-10 max-w-md w-full space-y-6">
-        <div className="text-center">
-          <FirstDayLogo width={200} height={100} layout="horizontal" showTagline={false} />
-          <h2 className="text-2xl font-bold text-white mt-4">Reset Your Password</h2>
+    <div className="min-h-screen flex flex-col relative overflow-hidden">
+      <TopBar title="First Day" />
+      <div className="flex-1 flex items-center justify-center px-4 py-12">
+        <div className="w-full max-w-md space-y-6">
+          <div className="text-center mb-8">
+            <h1
+              className="text-[32px] font-semibold tracking-[-0.02em] text-white leading-[1.05]"
+              style={{ fontFamily: FONT }}
+            >
+              Reset Your Password
+            </h1>
+            <p className="mt-2 text-white/55 text-[15px]">Enter your new password below.</p>
+          </div>
+          <Panel contentClassName="p-6">
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div>
+                <Label htmlFor="new-password" className="text-white/70 text-sm font-medium mb-1.5 block">
+                  New Password
+                </Label>
+                <input
+                  id="new-password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  disabled={loading}
+                  placeholder="••••••••"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/35 focus:border-white/30 focus:outline-none px-4 py-3 text-[15px] transition"
+                />
+              </div>
+              <div>
+                <Label htmlFor="confirm-new-password" className="text-white/70 text-sm font-medium mb-1.5 block">
+                  Confirm Password
+                </Label>
+                <input
+                  id="confirm-new-password"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  disabled={loading}
+                  placeholder="••••••••"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/35 focus:border-white/30 focus:outline-none px-4 py-3 text-[15px] transition"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full rounded-full bg-white text-black text-[15px] font-semibold py-3 transition-transform hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:hover:scale-100 mt-2"
+              >
+                {loading ? 'Resetting...' : 'Reset Password'}
+              </button>
+            </form>
+          </Panel>
         </div>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <Label htmlFor="new-password" className="text-white/80">New Password</Label>
-            <div className="relative overflow-hidden rounded-md mt-1">
-              <VoronoiMosaic seed={3231} tileCount={28} margin={3} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
-              <Input id="new-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} disabled={loading} className="relative z-10 bg-transparent border-white/10" />
-            </div>
-          </div>
-          <div>
-            <Label htmlFor="confirm-new-password" className="text-white/80">Confirm Password</Label>
-            <div className="relative overflow-hidden rounded-md mt-1">
-              <VoronoiMosaic seed={3243} tileCount={28} margin={3} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
-              <Input id="confirm-new-password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} disabled={loading} className="relative z-10 bg-transparent border-white/10" />
-            </div>
-          </div>
-          <Button type="submit" className="w-full transition-smooth hover:scale-105 disabled:hover:scale-100" disabled={loading}>
-            {loading ? 'Resetting...' : 'Reset Password'}
-          </Button>
-        </form>
       </div>
     </div>
   );

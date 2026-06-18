@@ -1,5 +1,6 @@
 import type {
   ProgressMap,
+  Plan,
   DayProgress,
   EngagementState,
   Level,
@@ -10,6 +11,16 @@ import type {
   MilestoneIntensity,
   DailyChallenge,
 } from "@/types";
+
+/** The classic 4-sprint arc length. Every duration-bounded calculation below
+ *  defaults to this so existing 28-day goals are unaffected; goals with a
+ *  different cadence pass their own totalDays. */
+export const DEFAULT_TOTAL_DAYS = 28;
+
+/** Resolve a plan's length in days, falling back to the classic 28. */
+export function getPlanTotalDays(plan: Plan | null | undefined): number {
+  return plan?.totalDays ?? DEFAULT_TOTAL_DAYS;
+}
 
 // --- Helpers ---
 
@@ -28,8 +39,8 @@ function hasReflection(dp: DayProgress | undefined): boolean {
   return !!(dp?.feedback?.trim() || dp?.reflection?.trim());
 }
 
-/** Day number for "today" relative to the plan start (clamped 1–30). */
-export function getTodayDayNumber(planStartDate: string): number {
+/** Day number for "today" relative to the plan start (clamped 1–totalDays). */
+export function getTodayDayNumber(planStartDate: string, totalDays: number = DEFAULT_TOTAL_DAYS): number {
   const [y, m, d] = planStartDate.split("-").map(Number);
   const start = new Date(y, m - 1, d);
   start.setHours(0, 0, 0, 0);
@@ -38,29 +49,30 @@ export function getTodayDayNumber(planStartDate: string): number {
   const diff = Math.floor(
     (today.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)
   );
-  return Math.max(1, Math.min(diff + 1, 30));
+  return Math.max(1, Math.min(diff + 1, totalDays));
 }
 
 // --- Progression ---
 
-/** First day number (1–30) that is not completed. Returns 31 if all done. */
-export function getNextAvailableDay(progress: ProgressMap): number {
-  for (let d = 1; d <= 30; d++) {
+/** First day number (1–totalDays) that is not completed. Returns totalDays + 1
+ *  when every day is done (the "all complete" sentinel). */
+export function getNextAvailableDay(progress: ProgressMap, totalDays: number = DEFAULT_TOTAL_DAYS): number {
+  for (let d = 1; d <= totalDays; d++) {
     if (!isDayCompleted(progress[d])) return d;
   }
-  return 31;
+  return totalDays + 1;
 }
 
 /** Total count of completed days. */
-export function getCompletedDayCount(progress: ProgressMap): number {
+export function getCompletedDayCount(progress: ProgressMap, totalDays: number = DEFAULT_TOTAL_DAYS): number {
   let count = 0;
-  for (let d = 1; d <= 30; d++) if (isDayCompleted(progress[d])) count++;
+  for (let d = 1; d <= totalDays; d++) if (isDayCompleted(progress[d])) count++;
   return count;
 }
 
 /** Is a given day unlocked (completed already, or the next available one)? */
-export function isDayUnlocked(progress: ProgressMap, dayNumber: number): boolean {
-  return dayNumber <= getNextAvailableDay(progress);
+export function isDayUnlocked(progress: ProgressMap, dayNumber: number, totalDays: number = DEFAULT_TOTAL_DAYS): boolean {
+  return dayNumber <= getNextAvailableDay(progress, totalDays);
 }
 
 // --- Streaks (calendar-based on completedAt timestamps) ---
@@ -179,10 +191,10 @@ export function previewDayXP(
   return { base, activities, reflection, streakBonus, multiplier, challengeBonus: 0, comebackBonus: 0, total };
 }
 
-export function calculateTotalXP(progress: ProgressMap, _planStartDate: string): number {
+export function calculateTotalXP(progress: ProgressMap, _planStartDate: string, totalDays: number = DEFAULT_TOTAL_DAYS): number {
   let total = 0;
   let runningStreak = 0;
-  for (let d = 1; d <= 30; d++) {
+  for (let d = 1; d <= totalDays; d++) {
     if (isDayCompleted(progress[d])) {
       runningStreak++;
       const xp = calculateDayXP(progress[d], runningStreak, d, 0, progress);
@@ -246,7 +258,7 @@ const ACHIEVEMENT_DEFS: {
   name: string;
   description: string;
   icon: string;
-  check: (p: ProgressMap, streak: { current: number; longest: number }) => boolean;
+  check: (p: ProgressMap, streak: { current: number; longest: number }, totalDays: number) => boolean;
 }[] = [
   {
     id: "first_step",
@@ -267,9 +279,9 @@ const ACHIEVEMENT_DEFS: {
     name: "Week Warrior",
     description: "Complete 7 days total",
     icon: "⚔️",
-    check: (p) => {
+    check: (p, _s, totalDays) => {
       let count = 0;
-      for (let d = 1; d <= 30; d++) if (isDayCompleted(p[d])) count++;
+      for (let d = 1; d <= totalDays; d++) if (isDayCompleted(p[d])) count++;
       return count >= 7;
     },
   },
@@ -285,10 +297,10 @@ const ACHIEVEMENT_DEFS: {
     name: "Perfect Week",
     description: "Complete 7 consecutive days in a week",
     icon: "⭐",
-    check: (p) => {
+    check: (p, _s, totalDays) => {
       // Check any run of 7 consecutive completed days
       let run = 0;
-      for (let d = 1; d <= 30; d++) {
+      for (let d = 1; d <= totalDays; d++) {
         if (isDayCompleted(p[d])) { run++; if (run >= 7) return true; }
         else run = 0;
       }
@@ -298,12 +310,12 @@ const ACHIEVEMENT_DEFS: {
   {
     id: "halfway_hero",
     name: "Halfway Hero",
-    description: "Complete 15 days",
+    description: "Reach the halfway point",
     icon: "🏅",
-    check: (p) => {
+    check: (p, _s, totalDays) => {
       let count = 0;
-      for (let d = 1; d <= 30; d++) if (isDayCompleted(p[d])) count++;
-      return count >= 15;
+      for (let d = 1; d <= totalDays; d++) if (isDayCompleted(p[d])) count++;
+      return count >= Math.ceil(totalDays / 2);
     },
   },
   {
@@ -311,19 +323,19 @@ const ACHIEVEMENT_DEFS: {
     name: "Deep Thinker",
     description: "Write 10 reflections",
     icon: "🧠",
-    check: (p) => {
+    check: (p, _s, totalDays) => {
       let count = 0;
-      for (let d = 1; d <= 30; d++) if (hasReflection(p[d])) count++;
+      for (let d = 1; d <= totalDays; d++) if (hasReflection(p[d])) count++;
       return count >= 10;
     },
   },
   {
     id: "goal_crusher",
     name: "Goal Crusher",
-    description: "Complete all 30 days",
+    description: "Complete every day",
     icon: "🏆",
-    check: (p) => {
-      for (let d = 1; d <= 30; d++) if (!isDayCompleted(p[d])) return false;
+    check: (p, _s, totalDays) => {
+      for (let d = 1; d <= totalDays; d++) if (!isDayCompleted(p[d])) return false;
       return true;
     },
   },
@@ -331,14 +343,15 @@ const ACHIEVEMENT_DEFS: {
 
 export function calculateAchievements(
   progress: ProgressMap,
-  streaks: { current: number; longest: number }
+  streaks: { current: number; longest: number },
+  totalDays: number = DEFAULT_TOTAL_DAYS
 ): Achievement[] {
   return ACHIEVEMENT_DEFS.map((def) => ({
     id: def.id,
     name: def.name,
     description: def.description,
     icon: def.icon,
-    unlocked: def.check(progress, streaks),
+    unlocked: def.check(progress, streaks, totalDays),
   }));
 }
 
@@ -346,20 +359,43 @@ export function calculateAchievements(
 
 const DAY_MILESTONES: Record<number, { icon: string; title: string; message: string; intensity: MilestoneIntensity }> = {
   1:  { icon: "🚀", title: "Liftoff!", message: "You've taken the first step. The hardest part is starting.", intensity: "big" },
-  7:  { icon: "🔥", title: "One Week Down!", message: "7 days in — you're building real momentum.", intensity: "big" },
-  14: { icon: "⚡", title: "Two Weeks Strong!", message: "Halfway through the first half. You're locked in.", intensity: "big" },
-  15: { icon: "🏅", title: "Halfway There!", message: "15 days complete. You're officially in the second half.", intensity: "epic" },
-  21: { icon: "💎", title: "Three Weeks!", message: "21 days — they say it takes this long to build a habit.", intensity: "epic" },
-  30: { icon: "🏆", title: "Goal Crushed!", message: "30 days. You proved you can do anything you set your mind to.", intensity: "epic" },
+  7:  { icon: "🔥", title: "Sprint 1 Complete!", message: "7 days in — your first sprint is done. Sprint 2 is generating now.", intensity: "epic" },
+  14: { icon: "⚡", title: "Sprint 2 Complete!", message: "Halfway. Most quit before here — you didn't. Sprint 3 is ready.", intensity: "epic" },
+  21: { icon: "💎", title: "Sprint 3 Complete!", message: "Three sprints down. One more decides whether this becomes who you are.", intensity: "epic" },
+  28: { icon: "🏆", title: "Goal Crushed!", message: "4 sprints. 28 days. You did what most people never finish.", intensity: "epic" },
 };
 
 export function getMilestone(
   dayNumber: number,
-  currentStreak: number
+  currentStreak: number,
+  totalDays: number = DEFAULT_TOTAL_DAYS
 ): Milestone | null {
+  // Finale for non-28 goals — the curated DAY_MILESTONES finale lives at day 28,
+  // so a longer/shorter goal needs its "you finished" beat at its real last day.
+  if (totalDays !== DEFAULT_TOTAL_DAYS && dayNumber === totalDays) {
+    return {
+      type: "day",
+      icon: "🏆",
+      title: "Goal Crushed!",
+      message: `${totalDays} days done. You finished what most people never start.`,
+      intensity: "epic",
+    };
+  }
+
   // Day milestones take priority
   const dayM = DAY_MILESTONES[dayNumber];
   if (dayM) {
+    // For goals longer than 28, day 28 is NOT the end — downgrade its finale copy
+    // to a progress beat so we don't tell the user they're done early.
+    if (dayNumber === DEFAULT_TOTAL_DAYS && totalDays > DEFAULT_TOTAL_DAYS) {
+      return {
+        type: "day",
+        icon: "⚡",
+        title: "Four Weeks Strong!",
+        message: `28 days in, ${totalDays - dayNumber} to go. Keep the streak alive to the finish.`,
+        intensity: "big",
+      };
+    }
     return { type: "day", ...dayM };
   }
 
@@ -381,10 +417,10 @@ export function getMilestone(
 // --- Streak Freezes ---
 
 /** Count streak freezes earned: 1 per 7-streak milestone hit, max 3. */
-export function calculateStreakFreezes(progress: ProgressMap): number {
+export function calculateStreakFreezes(progress: ProgressMap, totalDays: number = DEFAULT_TOTAL_DAYS): number {
   let maxStreak = 0;
   let run = 0;
-  for (let d = 1; d <= 30; d++) {
+  for (let d = 1; d <= totalDays; d++) {
     if (isDayCompleted(progress[d])) {
       run++;
       if (run > maxStreak) maxStreak = run;
@@ -466,18 +502,19 @@ export function isComeback(progress: ProgressMap, dayNumber: number): boolean {
 
 export function computeEngagementState(
   progress: ProgressMap,
-  _planStartDate: string
+  _planStartDate: string,
+  totalDays: number = DEFAULT_TOTAL_DAYS
 ): EngagementState {
   const streaks = calculateStreaks(progress);
-  const totalXP = calculateTotalXP(progress, _planStartDate);
+  const totalXP = calculateTotalXP(progress, _planStartDate, totalDays);
   const level = getLevel(totalXP);
   const levelProgress = getLevelProgress(totalXP);
-  const achievements = calculateAchievements(progress, streaks);
-  const streakFreezes = calculateStreakFreezes(progress);
+  const achievements = calculateAchievements(progress, streaks, totalDays);
+  const streakFreezes = calculateStreakFreezes(progress, totalDays);
 
-  const totalDaysCompleted = getCompletedDayCount(progress);
-  const nextDay = getNextAvailableDay(progress);
-  const completionRate = Math.round((totalDaysCompleted / 30) * 100);
+  const totalDaysCompleted = getCompletedDayCount(progress, totalDays);
+  const nextDay = getNextAvailableDay(progress, totalDays);
+  const completionRate = Math.round((totalDaysCompleted / totalDays) * 100);
   const dailyMultiplier = getDailyMultiplier(nextDay);
   const dailyChallenge = getDailyChallenge(nextDay);
   const comebackCheck = isComeback(progress, nextDay);

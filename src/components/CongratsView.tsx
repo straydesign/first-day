@@ -3,13 +3,11 @@ import { useMemo } from "react";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { Calendar, ArrowRight, Zap } from "lucide-react";
-import { useMonotone } from "./MonotoneContext";
 import { wordReveal, scaleReveal, SPRING } from "@/lib/animations";
-import { BUTTON_CLIPS, SHARD_CLIPS, VORONOI_LIGHT, getClip } from "@/constants";
-import { VoronoiMosaic } from "./VoronoiMosaic";
+import { Panel } from "@/components/ui/Panel";
+import { FONT } from "@/lib/design";
 import type { ProgressMap, Milestone, XPBreakdown } from "@/types";
 
-const PANEL_DARK_PALETTE = ["#0a0a14", "#10122a", "#0f0e1f", "#181a3a", "#0c0d1e"] as const;
 
 const ShardContainer = dynamic(
   () =>
@@ -25,7 +23,6 @@ interface ConfettiPiece {
   y: number;
   rotation: number;
   scale: number;
-  color: string;
   delay: number;
 }
 
@@ -40,21 +37,35 @@ interface CongratsViewProps {
   xp?: XPBreakdown | null;
 }
 
-const CONFETTI_COLORS = ["#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF", "#FF10F0"];
-
 export function CongratsView({
   onViewCalendar,
   onDoMore,
   goalTitle,
   dayNumber,
-  totalDays = 30,
+  totalDays = 28,
   progress,
   milestone,
   xp,
 }: CongratsViewProps) {
-  const { monotone } = useMonotone();
   const daysRemaining = dayNumber ? totalDays - dayNumber : null;
-  const milestoneIntense = milestone && milestone.intensity !== "normal";
+
+  // Sprint progress — 7-day weeks (a 28-day goal has 4, a 30-day goal has 5 with
+  // a 2-day final week). dayNumber 1-7 = sprint 1, 8-14 = sprint 2, etc.
+  const sprintCount = Math.max(1, Math.ceil(totalDays / 7));
+  const currentSprint = dayNumber ? Math.min(sprintCount, Math.ceil(dayNumber / 7)) : 0;
+  const isSprintEnd = dayNumber !== undefined && dayNumber % 7 === 0;
+  const sprintDots: Array<{ sprint: number; daysIn: number; weekLen: number; status: "done" | "current" | "upcoming" }> = useMemo(() => {
+    if (!dayNumber) return [];
+    return Array.from({ length: sprintCount }, (_, i) => {
+      const sprint = i + 1;
+      const sprintStartDay = sprint * 7 - 6;
+      const weekLen = Math.min(7, totalDays - sprintStartDay + 1); // final week may be short
+      const lastDay = sprintStartDay + weekLen - 1;
+      if (dayNumber >= lastDay) return { sprint, daysIn: weekLen, weekLen, status: "done" as const };
+      if (dayNumber >= sprintStartDay) return { sprint, daysIn: dayNumber - sprintStartDay + 1, weekLen, status: "current" as const };
+      return { sprint, daysIn: 0, weekLen, status: "upcoming" as const };
+    });
+  }, [dayNumber, sprintCount, totalDays]);
 
   const xpLines = useMemo(() => {
     if (!xp) return [];
@@ -77,7 +88,6 @@ export function CongratsView({
         y: -(Math.random() * 300 + 100),
         rotation: Math.random() * 360,
         scale: Math.random() * 0.5 + 0.5,
-        color: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
         delay: Math.random() * 0.3,
       })),
     [],
@@ -86,13 +96,17 @@ export function CongratsView({
   return (
     <div className="min-h-screen relative overflow-hidden">
 
-      {/* Confetti layer */}
+      {/* Confetti layer — white/grey diamonds */}
       <div className="fixed inset-0 z-20 pointer-events-none overflow-hidden">
         {confettiPieces.map((piece) => (
           <motion.div
             key={piece.id}
             className="absolute w-2 h-2 clip-diamond"
-            style={{ backgroundColor: piece.color, left: "50%", top: "40%" }}
+            style={{
+              backgroundColor: piece.id % 3 === 0 ? "rgba(255,255,255,0.9)" : piece.id % 3 === 1 ? "rgba(255,255,255,0.45)" : "rgba(255,255,255,0.65)",
+              left: "50%",
+              top: "40%",
+            }}
             initial={{ opacity: 1, x: 0, y: 0, rotate: 0, scale: 0 }}
             animate={{
               opacity: [1, 1, 0],
@@ -109,7 +123,7 @@ export function CongratsView({
       <div className="relative z-10 flex items-center justify-center p-6 pt-[120px] min-h-[80vh] md:min-h-screen">
         <div className="max-w-2xl w-full text-center">
 
-          {/* Milestone banner — fires for day 1/7/14/15/21/30 + every-5 streaks */}
+          {/* Milestone banner */}
           {milestone && (
             <motion.div
               className="mb-6 flex justify-center"
@@ -117,53 +131,32 @@ export function CongratsView({
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ ...SPRING.bouncy, delay: 0.1 }}
             >
-              <div
-                className="relative overflow-hidden px-5 py-3 md:px-7 md:py-4 max-w-md"
-                style={{ clipPath: getClip(SHARD_CLIPS, 0) }}
-              >
-                <VoronoiMosaic seed={1707} tileCount={20} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
-                <div className="relative z-10 flex items-center gap-3 mb-1">
+              <Panel contentClassName="px-5 py-3 md:px-7 md:py-4 max-w-md">
+                <div className="flex items-center gap-3 mb-1">
                   <span className="text-3xl md:text-4xl" aria-hidden>{milestone.icon}</span>
                   <span
-                    className="text-xl md:text-2xl font-black uppercase leading-none"
-                    style={{
-                      fontFamily: "var(--font-bebas), system-ui, sans-serif",
-                      color: monotone ? "#ffffff" : (milestoneIntense ? VORONOI_LIGHT[0] : VORONOI_LIGHT[1]),
-                      letterSpacing: 1.5,
-                    }}
+                    className="text-xl md:text-2xl font-semibold tracking-[-0.01em] text-white leading-none"
+                    style={{ fontFamily: FONT }}
                   >
                     {milestone.title}
                   </span>
                 </div>
-                <p className="relative z-10 text-xs md:text-sm text-white/80 font-medium leading-snug pl-[3.25rem] md:pl-[3.75rem]">
+                <p className="text-xs md:text-sm text-white/70 leading-snug pl-[3.25rem] md:pl-[3.75rem]">
                   {milestone.message}
                 </p>
-              </div>
+              </Panel>
             </motion.div>
           )}
 
-          {/* Climax shard — headline + goal title ride a tile-mosaic panel
-              so the largest text element of the celebration reads as a
-              tile-built unit rather than a flat-bg leak through the cosmos. */}
+          {/* Headline panel */}
           <motion.div
             className="mb-6 flex justify-center px-2"
             initial={{ opacity: 0, y: 18, scale: 0.94 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ ...SPRING.bouncy, delay: 0.2 }}
           >
-            <div
-              className="relative overflow-hidden border border-white/10 px-6 py-5 md:px-10 md:py-7 w-full max-w-xl"
-              style={{ clipPath: getClip(SHARD_CLIPS, 2) }}
-            >
-              <VoronoiMosaic
-                seed={1823}
-                tileCount={32}
-                margin={4}
-                gap={2}
-                palette={PANEL_DARK_PALETTE}
-                className="absolute inset-0 w-full h-full pointer-events-none"
-              />
-              <h1 className="relative z-10 text-3xl md:text-5xl font-bold mb-2 text-white text-center">
+            <Panel contentClassName="px-6 py-5 md:px-10 md:py-7 w-full max-w-xl">
+              <h1 className="text-3xl md:text-5xl font-semibold tracking-[-0.02em] text-white leading-[1.05] mb-2 text-center" style={{ fontFamily: FONT }}>
                 {(dayNumber ? `Day ${dayNumber} Complete!` : "Congratulations!").split(" ").map((word, i) => (
                   <motion.span
                     key={i}
@@ -179,7 +172,7 @@ export function CongratsView({
               </h1>
               {goalTitle && (
                 <motion.p
-                  className="relative z-10 text-lg md:text-2xl text-white/80 font-bold text-center"
+                  className="text-lg md:text-2xl text-white/55 font-medium text-center"
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ ...SPRING.gentle, delay: 0.5 }}
@@ -187,8 +180,49 @@ export function CongratsView({
                   {goalTitle}
                 </motion.p>
               )}
-            </div>
+            </Panel>
           </motion.div>
+
+          {/* Sprint progress */}
+          {dayNumber && sprintDots.length > 0 && (
+            <motion.div
+              className="mb-6 flex justify-center px-4"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ ...SPRING.gentle, delay: 0.45 }}
+            >
+              <Panel contentClassName="px-5 py-4 md:px-7 md:py-5 w-full max-w-md">
+                <div className="mb-2 flex items-baseline justify-between">
+                  <span className="text-[10px] md:text-xs font-medium uppercase tracking-[0.08em] text-white/40">
+                    Sprint {currentSprint} of {sprintCount}
+                  </span>
+                  <span className="text-[10px] md:text-xs font-medium text-white/40">
+                    {isSprintEnd ? "Sprint complete" : `Day ${dayNumber} of ${totalDays}`}
+                  </span>
+                </div>
+                <div className="flex gap-2 md:gap-3">
+                  {sprintDots.map(({ sprint, daysIn, weekLen, status }) => (
+                    <div key={sprint} className="flex-1 flex flex-col gap-1">
+                      <div className="relative h-1 w-full rounded-full overflow-hidden bg-white/10">
+                        <motion.div
+                          className="absolute inset-y-0 left-0 rounded-full"
+                          style={{
+                            backgroundColor: status === "upcoming" ? "transparent" : "rgba(255,255,255,0.85)",
+                          }}
+                          initial={{ width: "0%" }}
+                          animate={{ width: `${(daysIn / weekLen) * 100}%` }}
+                          transition={{ ...SPRING.gentle, delay: 0.55 + sprint * 0.08 }}
+                        />
+                      </div>
+                      <span className={`text-[9px] md:text-[10px] font-medium uppercase tracking-[0.08em] text-center ${status === "current" ? "text-white" : status === "done" ? "text-white/55" : "text-white/30"}`}>
+                        S{sprint}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </Panel>
+            </motion.div>
+          )}
 
           {/* 3D Shard Container — shards drop into glass jar */}
           {dayNumber && progress && (
@@ -210,12 +244,8 @@ export function CongratsView({
               animate={{ opacity: 1, y: 0 }}
               transition={{ ...SPRING.gentle, delay: 0.6 }}
             >
-              <div
-                className="relative overflow-hidden border border-white/10 px-6 py-5 md:px-8 md:py-6 w-full max-w-sm"
-                style={{ clipPath: getClip(SHARD_CLIPS, 1) }}
-              >
-                <VoronoiMosaic seed={1789} tileCount={28} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
-                <div className="relative z-10 space-y-1.5 mb-4">
+              <Panel contentClassName="px-6 py-5 md:px-8 md:py-6 w-full max-w-sm">
+                <div className="space-y-1.5 mb-4">
                   {xpLines.map((line, i) => (
                     <motion.div
                       key={line.label}
@@ -225,91 +255,87 @@ export function CongratsView({
                       className="flex justify-between items-baseline text-sm md:text-base"
                     >
                       <span className="text-white/70 font-medium">{line.label}</span>
-                      <span
-                        className="font-black"
-                        style={{
-                          color: monotone
-                            ? "#ffffff"
-                            : line.highlight
-                              ? "#FFE633"
-                              : "#A4F542",
-                        }}
-                      >
+                      <span className="font-semibold text-white">
                         +{line.value}
                       </span>
                     </motion.div>
                   ))}
                 </div>
                 <motion.div
-                  className="relative z-10 pt-3 border-t border-white/10 flex flex-col items-center gap-1"
+                  className="pt-3 border-t border-white/10 flex flex-col items-center gap-1"
                   initial={{ opacity: 0, scale: 0.85 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ ...SPRING.bouncy, delay: 0.95 + xpLines.length * 0.08 }}
                 >
                   {hasMultiplier && (
-                    <span
-                      className="text-[10px] md:text-xs font-black uppercase tracking-[0.25em]"
-                      style={{ color: monotone ? "#ffffff" : "#FFE633" }}
-                    >
+                    <span className="text-[10px] md:text-xs font-medium uppercase tracking-[0.08em] text-white/40">
                       {xp.multiplier}× Multiplier Day
                     </span>
                   )}
                   <div className="flex items-center justify-center gap-2">
                     <Zap
-                      className="w-6 h-6 md:w-7 md:h-7"
-                      style={{ color: monotone ? "#ffffff" : "#FFE633" }}
+                      className="w-6 h-6 md:w-7 md:h-7 text-white/70"
                       fill="currentColor"
                     />
                     <span
-                      className="text-3xl md:text-4xl font-black uppercase leading-none text-white"
-                      style={{
-                        fontFamily: "var(--font-bebas), system-ui, sans-serif",
-                        letterSpacing: 1,
-                      }}
+                      className="text-3xl md:text-4xl font-semibold tracking-[-0.02em] text-white leading-none"
+                      style={{ fontFamily: FONT }}
                     >
                       +{xp.total} XP
                     </span>
                   </div>
                 </motion.div>
-              </div>
+              </Panel>
             </motion.div>
           )}
 
           {/* Come back message */}
           {daysRemaining !== null && daysRemaining > 0 && (
             <motion.p
-              className="text-base md:text-xl text-white/70 font-medium mb-8 md:mb-12 px-4"
+              className="text-base md:text-xl text-white/70 font-medium mb-8 md:mb-12 px-4 leading-relaxed"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ ...SPRING.soft, delay: 1.0 }}
             >
-              Come back tomorrow for another shard.
+              {isSprintEnd && totalDays === 28
+                ? `Sprint ${currentSprint + 1} generates tomorrow — your next 7 days are already being built.`
+                : isSprintEnd
+                  ? `Week ${currentSprint} done — ${totalDays - (dayNumber ?? 0)} ${totalDays - (dayNumber ?? 0) === 1 ? "day" : "days"} to go. Come back tomorrow.`
+                  : "Come back tomorrow for another shard."}
             </motion.p>
           )}
           {daysRemaining === 0 && (
             <motion.p
-              className="text-base md:text-xl text-white/70 font-medium mb-8 md:mb-12 px-4"
+              className="text-base md:text-xl text-white/55 font-medium mb-8 md:mb-12 px-4 leading-relaxed"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ ...SPRING.soft, delay: 1.0 }}
             >
-              You did it — all 30 days complete.
+              {totalDays === 28 ? "You did it — all 4 sprints complete." : `You did it — all ${totalDays} days complete.`}
             </motion.p>
           )}
           {daysRemaining === null && <div className="mb-8 md:mb-12" />}
 
-          {/* Buttons — primary CTA, secondary text link */}
+          {/* Buttons */}
           <motion.div
             className="flex flex-col items-center gap-3 md:gap-4 px-4"
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ ...SPRING.gentle, delay: 1.2 }}
           >
-            <button onClick={onViewCalendar} className="flex items-center justify-center gap-2 px-10 py-5 md:px-14 md:py-6 text-base md:text-lg font-black text-black uppercase tracking-wide hover:scale-105 transition-transform btn-shake" style={{ backgroundColor: monotone ? "#666666" : "#fcd02a", clipPath: getClip(BUTTON_CLIPS, 0) }}>
-              <Calendar className="w-5 h-5 flex-shrink-0" />View Calendar
+            <button
+              onClick={onViewCalendar}
+              className="flex items-center justify-center gap-2 rounded-full bg-white text-black text-[15px] font-semibold py-3 px-8 transition-transform hover:scale-[1.01] active:scale-[0.99]"
+            >
+              <Calendar className="w-5 h-5 flex-shrink-0" />
+              View Calendar
             </button>
-            <button onClick={onDoMore} className="inline-flex items-center gap-1.5 px-3 py-2 text-sm md:text-base font-bold text-white/60 hover:text-white uppercase tracking-wide transition-colors">
-              Back to Goals<ArrowRight className="w-4 h-4 flex-shrink-0" />
+            <button
+              onClick={onDoMore}
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/15 text-white/80 hover:bg-white/5 transition px-6 py-2.5 text-sm font-medium"
+            >
+              Back to Goals
+              <ArrowRight className="w-4 h-4 flex-shrink-0" />
             </button>
           </motion.div>
         </div>

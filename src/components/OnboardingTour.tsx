@@ -2,17 +2,13 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Calendar, Flame, Award, Share2, ArrowRight, X } from "lucide-react";
-import { BUTTON_CLIPS, LABEL_CLIPS, SHARD_CLIPS, VORONOI_LIGHT, getClip } from "@/constants";
-import { useMonotone } from "./MonotoneContext";
-import { VoronoiMosaic } from "./VoronoiMosaic";
-
-const PANEL_DARK_PALETTE = ["#0a0a14", "#10122a", "#0f0e1f", "#181a3a", "#0c0d1e"] as const;
+import { Panel } from "@/components/ui/Panel";
+import { FONT } from "@/lib/design";
 
 const STORAGE_KEY = "fd_onboarding_tour_v1";
 
 interface TourStep {
   readonly icon: typeof Calendar;
-  readonly accent: string;
   readonly heading: string;
   readonly body: string;
 }
@@ -20,32 +16,27 @@ interface TourStep {
 const STEPS: readonly TourStep[] = [
   {
     icon: Calendar,
-    accent: "#fcd02a",
-    heading: "30 Days. One Goal.",
-    body: "Each day unlocks a small set of activities. Tap a day to see today's mission.",
+    heading: "One Week At A Time.",
+    body: "Your goal becomes a series of 7-day sprints. Each day unlocks a small set of activities — tap to start.",
   },
   {
     icon: Flame,
-    accent: "#fb7025",
     heading: "Build A Streak.",
     body: "Show up daily and your streak climbs. Each streak day boosts your XP multiplier.",
   },
   {
     icon: Award,
-    accent: "#f31b5e",
     heading: "Unlock Achievements.",
     body: "Hit milestones — first day, week warrior, halfway hero — and we'll celebrate every win.",
   },
   {
     icon: Share2,
-    accent: "#3075e1",
     heading: "Finish Strong.",
-    body: "Crush all 30 days and earn a shareable certificate. Your story, your proof.",
+    body: "Finish every sprint and earn a shareable certificate. Your story, your proof.",
   },
 ];
 
 export function OnboardingTour() {
-  const { monotone } = useMonotone();
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(0);
 
@@ -72,7 +63,6 @@ export function OnboardingTour() {
 
   const current = STEPS[step];
   const Icon = current.icon;
-  const accent = monotone ? "#FFFFFF" : current.accent;
   const isLast = step === STEPS.length - 1;
 
   return (
@@ -82,7 +72,7 @@ export function OnboardingTour() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-transparent backdrop-blur-sm px-4"
+          className="fixed inset-0 z-[100] flex items-center justify-center backdrop-blur-sm px-4"
           role="dialog"
           aria-modal="true"
           aria-labelledby="tour-heading"
@@ -93,93 +83,85 @@ export function OnboardingTour() {
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.92, opacity: 0, y: -12 }}
             transition={{ type: "spring", stiffness: 320, damping: 26 }}
-            className="relative overflow-hidden w-full max-w-md p-8 md:p-10"
-            style={{ clipPath: getClip(SHARD_CLIPS, step) }}
+            className="w-full max-w-md"
           >
-            <VoronoiMosaic seed={2107 + step * 17} tileCount={32} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
-            <button
-              type="button"
-              onClick={finish}
-              className="absolute top-4 right-4 z-10 text-white/40 hover:text-white/80 transition-colors"
-              aria-label="Skip tour"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="relative z-10 flex justify-center mb-6">
-              <div
-                className="relative overflow-hidden flex items-center justify-center w-20 h-20 md:w-24 md:h-24 border-2"
-                style={{ clipPath: getClip(SHARD_CLIPS, step + 1), borderColor: accent }}
-              >
-                <VoronoiMosaic seed={2131 + step * 13} tileCount={10} margin={3} gap={1.5} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
-                <Icon className="relative z-10 w-10 h-10 md:w-12 md:h-12" style={{ color: accent }} strokeWidth={1.6} />
-              </div>
-            </div>
-
-            <h2
-              id="tour-heading"
-              className="relative z-10 text-center text-3xl md:text-5xl font-black uppercase text-white mb-3 leading-[0.95]"
-              style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif", letterSpacing: 1 }}
-            >
-              {current.heading}
-            </h2>
-
-            <p className="relative z-10 text-center text-base md:text-lg text-white/75 font-medium mb-8 max-w-sm mx-auto">
-              {current.body}
-            </p>
-
-            <div className="relative z-10 flex items-center justify-center gap-2 mb-6">
-              {STEPS.map((_, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => setStep(i)}
-                  aria-label={`Go to step ${i + 1}`}
-                  className="transition-all"
-                  style={{
-                    width: i === step ? 28 : 8,
-                    height: 8,
-                    backgroundColor: i === step ? accent : "rgba(255,255,255,0.2)",
-                    clipPath: "polygon(8% 0%, 100% 0%, 92% 100%, 0% 100%)",
-                  }}
-                />
-              ))}
-            </div>
-
-            <div className="relative z-10 flex items-center justify-between gap-3">
+            {/* Panel solid so the card pops clearly over the dark backdrop */}
+            <Panel solid contentClassName="p-8 md:p-10">
+              {/* Close button */}
               <button
                 type="button"
                 onClick={finish}
-                className="px-5 py-3 text-sm font-bold text-white/60 hover:text-white uppercase tracking-wide transition-colors"
+                className="absolute top-4 right-4 text-black/40 hover:text-black transition-colors"
+                aria-label="Skip tour"
               >
-                Skip
+                <X className="w-5 h-5" />
               </button>
-              <button
-                type="button"
-                onClick={next}
-                className="flex items-center justify-center gap-2 px-6 py-4 text-base font-black text-black uppercase tracking-wide hover:scale-105 transition-transform btn-shake"
-                style={{
-                  backgroundColor: monotone ? "#666666" : VORONOI_LIGHT[0],
-                  clipPath: getClip(BUTTON_CLIPS, step),
-                  fontFamily: "var(--font-bebas), system-ui, sans-serif",
-                  letterSpacing: 2,
-                }}
-              >
-                {isLast ? "Let's Go" : "Next"}
-                <ArrowRight className="w-4 h-4 flex-shrink-0" />
-              </button>
-            </div>
 
-            <div className="relative z-10 mt-6 flex justify-center">
-              <div
-                className="px-3 py-1 bg-white/5"
-                style={{ clipPath: getClip(LABEL_CLIPS, step) }}
+              {/* Icon */}
+              <div className="flex justify-center mb-6">
+                <div className="flex items-center justify-center w-16 h-16 rounded-2xl bg-black/5 border border-black/10">
+                  <Icon className="w-8 h-8 text-black/70" strokeWidth={1.6} />
+                </div>
+              </div>
+
+              {/* Heading */}
+              <h2
+                id="tour-heading"
+                className="text-center text-[26px] md:text-[30px] font-semibold tracking-[-0.02em] text-black leading-tight mb-3"
+                style={{ fontFamily: FONT }}
               >
-                <span className="text-[10px] uppercase tracking-[0.3em] font-black text-white/50">
+                {current.heading}
+              </h2>
+
+              {/* Body */}
+              <p className="text-center text-[15px] leading-relaxed text-black/60 mb-8 max-w-sm mx-auto">
+                {current.body}
+              </p>
+
+              {/* Dot indicators */}
+              <div className="flex items-center justify-center gap-2 mb-6">
+                {STEPS.map((_, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => setStep(i)}
+                    aria-label={`Go to step ${i + 1}`}
+                    className="rounded-full transition-all"
+                    style={{
+                      width: i === step ? 20 : 6,
+                      height: 6,
+                      backgroundColor: i === step ? "rgba(0,0,0,0.55)" : "rgba(0,0,0,0.15)",
+                    }}
+                  />
+                ))}
+              </div>
+
+              {/* Actions */}
+              <div className="flex items-center justify-between gap-3">
+                <button
+                  type="button"
+                  onClick={finish}
+                  className="px-4 py-2.5 text-[13px] font-medium text-black/40 hover:text-black/70 transition-colors"
+                >
+                  Skip
+                </button>
+                <button
+                  type="button"
+                  onClick={next}
+                  className="flex items-center gap-2 rounded-full bg-black text-white text-[15px] font-semibold py-3 px-6 transition-transform hover:scale-[1.01] active:scale-[0.99]"
+                >
+                  {isLast ? "Let's Go" : "Next"}
+                  <ArrowRight className="w-4 h-4 shrink-0" />
+                </button>
+              </div>
+
+              {/* Step counter */}
+              <div className="mt-5 flex justify-center">
+                <span className="text-[11px] uppercase tracking-[0.08em] font-medium text-black/30">
                   Step {step + 1} of {STEPS.length}
                 </span>
               </div>
-            </div>
+            </Panel>
           </motion.div>
         </motion.div>
       )}

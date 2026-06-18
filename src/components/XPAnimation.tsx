@@ -3,9 +3,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import type { XPBreakdown } from "@/types";
 import { Zap } from "lucide-react";
 import { SPRING } from "@/lib/animations";
-import { VoronoiMosaic } from "./VoronoiMosaic";
+import { Panel } from "@/components/ui/Panel";
+import { FONT } from "@/lib/design";
 
-const PANEL_DARK_PALETTE = ["#0a0a14", "#10122a", "#0f0e1f", "#181a3a", "#0c0d1e"] as const;
 
 interface XPAnimationProps {
   xp: XPBreakdown;
@@ -51,43 +51,54 @@ export function XPAnimation({ xp, show }: XPAnimationProps) {
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
         >
-          <div className="relative overflow-hidden backdrop-blur-sm clip-badge-b p-6 min-w-[240px] text-center pointer-events-auto border border-white/10">
-            <VoronoiMosaic seed={3701} tileCount={42} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
-            <div className="relative z-10 space-y-2 mb-4">
-              {lines.map((line, i) => (
-                <motion.div
-                  key={line.label}
-                  custom={i}
-                  variants={lineVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  className="flex justify-between text-white/80 text-sm"
-                >
-                  <span>{line.label}</span>
-                  <span className={`font-semibold ${line.highlight ? 'text-yellow-400' : 'text-lime-400'}`}>+{line.value}</span>
-                </motion.div>
-              ))}
-            </div>
-            <motion.div
-              variants={totalVariants}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-              className="relative z-10 pt-3"
-            >
-              <div className="flex flex-col items-center gap-1">
-                {hasMultiplier && (
-                  <span className="text-xs font-bold text-yellow-400 uppercase tracking-wider">
-                    {xp.multiplier}x Multiplier Day
-                  </span>
-                )}
-                <div className="flex items-center justify-center gap-2">
-                  <Zap className="w-6 h-6 text-yellow-400" />
-                  <span className="text-3xl font-bold text-white">+{xp.total} XP</span>
-                </div>
+          <div className="mx-4 min-w-[240px] pointer-events-auto">
+            <Panel contentClassName="p-6 text-center">
+              <div className="space-y-2 mb-4">
+                {lines.map((line, i) => (
+                  <motion.div
+                    key={line.label}
+                    custom={i}
+                    variants={lineVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    className="flex justify-between text-[13px]"
+                  >
+                    <span className="text-white/55">{line.label}</span>
+                    <span className={`font-semibold tabular-nums ${line.highlight ? 'text-white/80' : 'text-emerald-300/80'}`}>
+                      +{line.value}
+                    </span>
+                  </motion.div>
+                ))}
               </div>
-            </motion.div>
+              <motion.div
+                variants={totalVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                className="pt-3 border-t border-white/[0.08]"
+              >
+                <div className="flex flex-col items-center gap-1">
+                  {hasMultiplier && (
+                    <span
+                      className="text-[11px] font-medium uppercase tracking-[0.08em] text-white/40"
+                      style={{ fontFamily: FONT }}
+                    >
+                      {xp.multiplier}x Multiplier Day
+                    </span>
+                  )}
+                  <div className="flex items-center justify-center gap-2">
+                    <Zap className="w-5 h-5 text-white/50" />
+                    <span
+                      className="text-[28px] font-semibold tracking-[-0.02em] text-white tabular-nums"
+                      style={{ fontFamily: FONT }}
+                    >
+                      +{xp.total} XP
+                    </span>
+                  </div>
+                </div>
+              </motion.div>
+            </Panel>
           </div>
         </motion.div>
       )}

@@ -52,7 +52,7 @@ export function ShareJourneyView({
   }, [mounted]);
 
   const stats = [
-    { label: "Days Done", value: days, suffix: "/30", color: "#fcd02a", icon: Trophy },
+    { label: "Days Done", value: days, suffix: `/${days}`, color: "#fcd02a", icon: Trophy },
     { label: "Longest Streak", value: longestStreak, suffix: " days", color: "#fb7025", icon: Flame },
     { label: "XP Earned", value: totalXP, suffix: "", color: "#f31b5e", icon: Sparkles },
     { label: "Level", value: levelName || "Master", suffix: "", color: "#3075e1", icon: Award },
@@ -96,7 +96,7 @@ export function ShareJourneyView({
           animate="visible"
         >
           <div
-            className="relative flex items-center justify-center w-32 h-32 md:w-44 md:h-44 bg-black"
+            className="relative flex items-center justify-center w-32 h-32 md:w-44 md:h-44 bg-black ring-2 ring-white/25"
             style={{ clipPath: getClip(SHARD_CLIPS, 0) }}
           >
             <Trophy className="w-20 h-20 md:w-28 md:h-28 text-[#fcd02a]" strokeWidth={1.5} />
@@ -145,7 +145,9 @@ export function ShareJourneyView({
           animate={{ opacity: 1, y: 0 }}
           transition={{ ...SPRING.soft, delay: 0.7 }}
         >
-          30 lessons. 30 days. They proved they can do anything they set their mind to.
+          {days === 28
+            ? "28 lessons. 4 sprints. They proved they can do anything they set their mind to."
+            : `${days} days straight. They proved they can do anything they set their mind to.`}
         </motion.p>
 
         <motion.div
@@ -160,7 +162,7 @@ export function ShareJourneyView({
             return (
               <motion.div
                 key={stat.label}
-                className="relative bg-black p-4 md:p-5 overflow-hidden border border-white/10"
+                className="relative bg-black p-4 md:p-5 overflow-hidden ring-2 ring-white/25"
                 style={{ clipPath: getClip(SHARD_CLIPS, i) }}
                 initial={{ opacity: 0, y: 16, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -192,7 +194,7 @@ export function ShareJourneyView({
             animate={{ opacity: 1, y: 0 }}
             transition={{ ...SPRING.gentle, delay: 1.5 }}
           >
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-black border border-white/10" style={{ clipPath: getClip(LABEL_CLIPS, 0) }}>
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-black ring-2 ring-white/25" style={{ clipPath: getClip(LABEL_CLIPS, 0) }}>
               <Award className="w-5 h-5 text-[#fcd02a]" />
               <span className="text-xs md:text-sm uppercase tracking-[0.3em] font-black text-white/80">
                 {achievementCount} {achievementCount === 1 ? "Achievement" : "Achievements"} Unlocked

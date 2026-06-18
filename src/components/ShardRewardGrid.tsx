@@ -13,10 +13,12 @@ interface ShardRewardGridProps {
 
 export function ShardRewardGrid({
   progress,
-  totalDays = 30,
+  totalDays = 28,
   animatingDay,
 }: ShardRewardGridProps) {
-  // Always 5 full weeks — last week stays full, extra days beyond totalDays stay dark
+  // One square per week (ceil so a partial final week still gets a square).
+  // The final week's extra cells beyond totalDays render dark; its trophy
+  // completes on the real days only (ShardSquare clamps with totalDays).
   const weekCount = Math.ceil(totalDays / 7);
 
   const weeks = Array.from({ length: weekCount }, (_, i) => ({
@@ -39,6 +41,7 @@ export function ShardRewardGrid({
             startDay={week.startDay}
             animatingDay={animatingDay}
             size={64}
+            totalDays={totalDays}
           />
         </motion.div>
       ))}

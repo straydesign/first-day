@@ -1,10 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { VORONOI_LIGHT, SHARD_CLIPS } from "@/constants";
-import { VoronoiMosaic } from "./VoronoiMosaic";
+import { FONT } from "@/lib/design";
 
-const PANEL_DARK_PALETTE = ["#0a0a14", "#10122a", "#0f0e1f", "#181a3a", "#0c0d1e"] as const;
 
 interface BeastModeProps {
   onComplete: () => void;
@@ -48,28 +46,23 @@ export function BeastMode({ onComplete }: BeastModeProps) {
 
   return (
     <motion.div
-      className="fixed inset-0 z-[200] overflow-hidden flex flex-col items-center justify-center"
+      className="fixed inset-0 z-[200] overflow-hidden flex flex-col items-center justify-center bg-[#08080a]"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
     >
-      <VoronoiMosaic seed={2707} tileCount={64} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
-      {/* Top shard bar */}
+      {/* Top progress bar */}
       <div className="absolute top-[45%] left-4 right-4 -translate-y-16">
-        <div className="flex gap-[2px] h-2 w-full">
+        <div className="flex gap-[2px] h-1.5 w-full rounded-full overflow-hidden bg-white/10">
           {Array.from({ length: SHARD_COUNT }, (_, i) => {
             const isFilled = i < filledShards;
-            const color = VORONOI_LIGHT[i % VORONOI_LIGHT.length];
             return (
               <div
                 key={`top-${i}`}
-                className="flex-1"
+                className="flex-1 transition-colors duration-[40ms]"
                 style={{
-                  backgroundColor: isFilled ? color : "rgba(255,255,255,0.06)",
-                  clipPath: SHARD_CLIPS[i % SHARD_CLIPS.length],
-                  boxShadow: isFilled ? `0 0 12px ${color}80` : "none",
-                  transition: "background-color 40ms, box-shadow 40ms",
+                  backgroundColor: isFilled ? "rgba(255,255,255,0.85)" : "transparent",
                 }}
               />
             );
@@ -77,44 +70,36 @@ export function BeastMode({ onComplete }: BeastModeProps) {
         </div>
       </div>
 
-      {/* BEAST MODE text */}
+      {/* BEAST MODE text — greyscale, Inter, no Bebas */}
       <motion.h1
-        className="text-center font-black uppercase tracking-[0.2em]"
+        className="text-center font-semibold tracking-[-0.03em] text-white"
         style={{
-          fontFamily: "var(--font-bebas), system-ui, sans-serif",
-          fontSize: "clamp(4rem, 18vw, 12rem)",
+          fontFamily: FONT,
+          fontSize: "clamp(4rem, 18vw, 10rem)",
           lineHeight: 0.9,
         }}
         initial={{ scale: 0.5, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.1 }}
       >
-        {"BEAST".split("").map((char, i) => (
-          <span key={`b-${i}`} style={{ color: VORONOI_LIGHT[i % VORONOI_LIGHT.length] }}>{char}</span>
-        ))}
+        Beast
         <br />
-        {"MODE".split("").map((char, i) => (
-          <span key={`m-${i}`} style={{ color: VORONOI_LIGHT[(i + 2) % VORONOI_LIGHT.length] }}>{char}</span>
-        ))}
+        <span className="text-white/55">Mode</span>
       </motion.h1>
 
-      {/* Bottom shard bar */}
+      {/* Bottom progress bar */}
       <div className="absolute top-[55%] left-4 right-4 translate-y-12">
-        <div className="flex gap-[2px] h-2 w-full">
+        <div className="flex gap-[2px] h-1.5 w-full rounded-full overflow-hidden bg-white/10">
           {Array.from({ length: SHARD_COUNT }, (_, i) => {
             // Bottom bar fills in reverse for a wraparound effect
             const reverseIndex = SHARD_COUNT - 1 - i;
             const isFilled = reverseIndex < filledShards;
-            const color = VORONOI_LIGHT[i % VORONOI_LIGHT.length];
             return (
               <div
                 key={`bot-${i}`}
-                className="flex-1"
+                className="flex-1 transition-colors duration-[40ms]"
                 style={{
-                  backgroundColor: isFilled ? color : "rgba(255,255,255,0.06)",
-                  clipPath: SHARD_CLIPS[i % SHARD_CLIPS.length],
-                  boxShadow: isFilled ? `0 0 12px ${color}80` : "none",
-                  transition: "background-color 40ms, box-shadow 40ms",
+                  backgroundColor: isFilled ? "rgba(255,255,255,0.85)" : "transparent",
                 }}
               />
             );
@@ -127,11 +112,9 @@ export function BeastMode({ onComplete }: BeastModeProps) {
         {Array.from({ length: 3 }, (_, i) => (
           <div
             key={i}
-            className="w-3 h-3"
+            className="w-2 h-2 rounded-full transition-colors duration-150"
             style={{
-              backgroundColor: i < loop ? VORONOI_LIGHT[i % VORONOI_LIGHT.length] : "rgba(255,255,255,0.15)",
-              clipPath: "polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)",
-              boxShadow: i < loop ? `0 0 8px ${VORONOI_LIGHT[i % VORONOI_LIGHT.length]}60` : "none",
+              backgroundColor: i < loop ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.15)",
             }}
           />
         ))}

@@ -7,11 +7,9 @@ export type AppView =
   | "calendar"
   | "day"
   | "congrats"
-  | "settings"
   | "privacy"
   | "terms"
-  | "reset-password"
-  | "gallery";
+  | "reset-password";
 
 export interface ActivityResource {
   type: "youtube" | "link";
@@ -20,9 +18,70 @@ export interface ActivityResource {
   query?: string;
 }
 
+/** A single fretted (or open) note in a riff, in playing order.
+ *  Strings are numbered the way tab is read: 1 = high e (thinnest, top line),
+ *  6 = low E (thickest, bottom line). This matches every tab on the internet. */
+export interface RiffNote {
+  /** 1 (high e) … 6 (low E). */
+  string: number;
+  /** Fret pressed; 0 = open string. A muted/dead note uses technique "x". */
+  fret: number;
+  /** Optional playing technique that decorates this note:
+   *  "h" hammer-on into it · "p" pull-off into it · "/" slide up into it ·
+   *  "\\" slide down into it · "b" bend it · "~" vibrato · "x" dead/muted note. */
+  technique?: "h" | "p" | "/" | "\\" | "b" | "~" | "x";
+}
+
+/** A chord struck in a single step of a riff — references a {@link ChordShape}
+ *  by name (defined once in {@link GuitarRiff.chords}). In the tab it renders as
+ *  the shape's fretted numbers stacked in one column; the shape is also drawn as
+ *  a fingering diagram beneath the board so the player can learn it. */
+export interface ChordHit {
+  /** Name matching a ChordShape in the riff's `chords` list, e.g. "Em". */
+  chord: string;
+}
+
+/** One step in a riff, left → right: either a single note or a chord struck
+ *  together. Discriminated by the presence of `chord`. */
+export type RiffStep = RiffNote | ChordHit;
+
+/** A chord fingering, drawn as the standard 6-string chord box beneath the tab.
+ *  This is the "teach the chord" surface — name + shape + a plain-English hint. */
+export interface ChordShape {
+  /** Chord name, e.g. "Em", "G", "Cadd9". */
+  name: string;
+  /** Fret per string from LOW E (6th string) → high e (1st string).
+   *  0 = open, -1 = muted/not played, ≥1 = fretted. */
+  frets: [number, number, number, number, number, number];
+  /** One-line plain-English explanation shown under the diagram. */
+  hint?: string;
+}
+
+/** A structured guitar riff rendered as tablature in the day view. A sequence of
+ *  steps (single notes and/or chords), read left → right. 15–25 steps. Chords
+ *  used are defined once in `chords` and diagrammed beneath the board. */
+export interface GuitarRiff {
+  /** Short descriptive name, e.g. "Minor Pentatonic Climb". */
+  name: string;
+  /** 1 (easiest) … 5 (hardest) — drives the difficulty dots. */
+  difficulty?: 1 | 2 | 3 | 4 | 5;
+  /** Musical key/scale label, e.g. "E minor". Display only. */
+  key?: string;
+  /** Suggested practice tempo in beats per minute. */
+  bpm?: number;
+  /** The skill this riff drills, e.g. "hammer-ons & pull-offs". */
+  teaches?: string;
+  /** Ordered steps, left → right — each a single note or a chord. */
+  steps: RiffStep[];
+  /** Chord shapes used by any ChordHit steps — diagrammed + explained below. */
+  chords?: ChordShape[];
+}
+
 export interface Activity {
   text: string;
   resources?: ActivityResource[];
+  /** Optional structured riff to render (as tab) beneath this activity's text. */
+  riff?: GuitarRiff;
 }
 
 export interface DayPlan {
@@ -37,10 +96,32 @@ export interface DayPlan {
   };
 }
 
+/** One of the four 7-day sprints that make up a goal. Each sprint corresponds to
+ *  a quarter of the goal — Foundations → Build Momentum → Stretch → Integrate. */
+export interface SprintMeta {
+  /** 1-4. */
+  number: number;
+  /** "Sprint 1: Foundations" — short header used in calendar + congrats. */
+  title: string;
+  /** One-line description of what this quarter of the goal is about. */
+  theme: string;
+}
+
 export interface Plan {
   cleanedGoal?: string;
   startDate: string;
+  /** Total length of the goal in days. Absent = 28 (the classic 4-sprint arc).
+   *  Goals with a different cadence (e.g. a 30-day riff challenge) set this and
+   *  every duration-bounded calculation reads it instead of the 28 default. */
+  totalDays?: number;
+  /** Sparse — only days from generated sprints are present. */
   days: Record<number, DayPlan>;
+  /** Four entries describing each sprint's theme. Set at plan creation; never mutates. */
+  sprints?: SprintMeta[];
+  /** Number of sprints currently generated and visible to the user (1-4).
+   *  Sprint N covers days (N-1)*7+1 through N*7. Older fixtures without this
+   *  field are treated as fully generated (= 4). */
+  sprintsGenerated?: number;
   /** Owner identity for shared/published rooms. Optional — never required at load. */
   ownerUserId?: string;
 }

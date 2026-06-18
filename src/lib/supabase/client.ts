@@ -22,5 +22,3 @@ export function createClient() {
   }
   return supabaseInstance;
 }
-
-export const API_BASE = process.env.NEXT_PUBLIC_SUPABASE_FUNCTION_URL || '';

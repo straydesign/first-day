@@ -16,7 +16,6 @@ export default function Home() {
   const [currentView, setCurrentView] = useState<AppView>("landing");
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [loginModalMode, setLoginModalMode] = useState<"login" | "signup">("login");
-  const [resetToken, setResetToken] = useState<string | null>(null);
   const [demoMode, setDemoMode] = useState(false);
 
   const { isAuthenticated, accessToken, userId, userEmail, isLoading, login, logout } = useAuth({
@@ -30,6 +29,7 @@ export default function Home() {
         setCurrentView(hasSession ? "goals" : "landing");
       }
     },
+    onPasswordRecovery: () => setCurrentView("reset-password"),
   });
 
   // Handle URL-based routing on mount
@@ -43,14 +43,6 @@ export default function Home() {
     if (path === "/terms") {
       setCurrentView("terms");
       return;
-    }
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get("reset");
-    if (token) {
-      setResetToken(token);
-      setCurrentView("reset-password");
-      window.history.replaceState({}, "", window.location.pathname);
     }
   }, []);
 
@@ -116,9 +108,7 @@ export default function Home() {
   if (currentView === "reset-password") {
     return (
       <ResetPasswordView
-        token={resetToken}
         onSuccess={() => {
-          setResetToken(null);
           setCurrentView("landing");
           setShowLoginModal(true);
         }}

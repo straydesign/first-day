@@ -2,13 +2,9 @@
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Award, X } from "lucide-react";
-import { useMonotone } from "./MonotoneContext";
-import { LABEL_CLIPS, SHARD_CLIPS, VORONOI_LIGHT, getClip } from "@/constants";
 import { SPRING } from "@/lib/animations";
-import { VoronoiMosaic } from "./VoronoiMosaic";
+import { Panel } from "@/components/ui/Panel";
 import type { Achievement } from "@/types";
-
-const PANEL_DARK_PALETTE = ["#0a0a14", "#10122a", "#0f0e1f", "#181a3a", "#0c0d1e"] as const;
 
 interface AchievementUnlockToastProps {
   achievements: Achievement[];
@@ -18,8 +14,6 @@ interface AchievementUnlockToastProps {
 const VISIBLE_MS = 5400;
 
 export function AchievementUnlockToast({ achievements, onDismiss }: AchievementUnlockToastProps) {
-  const { monotone } = useMonotone();
-
   useEffect(() => {
     if (achievements.length === 0) return;
     const t = setTimeout(onDismiss, VISIBLE_MS);
@@ -39,58 +33,50 @@ export function AchievementUnlockToast({ achievements, onDismiss }: AchievementU
           role="status"
           aria-live="polite"
         >
-          <div
-            className="relative overflow-hidden p-5 pr-10 shadow-[0_8px_32px_rgba(0,0,0,0.6)]"
-            style={{ clipPath: getClip(SHARD_CLIPS, 0) }}
-          >
-            <VoronoiMosaic seed={1873} tileCount={22} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
+          <Panel contentClassName="p-5 pr-10">
             <button
               onClick={onDismiss}
-              className="absolute top-3 right-3 z-10 text-white/50 hover:text-white transition-colors"
+              className="absolute top-3 right-3 z-10 text-white/70 hover:text-white transition-colors"
               aria-label="Dismiss"
             >
               <X className="w-4 h-4" />
             </button>
 
-            <div className="relative z-10 flex items-center gap-2 mb-3">
-              <Award className="w-4 h-4 text-[#fcd02a]" />
-              <span className="text-[10px] uppercase tracking-[0.3em] font-black text-[#fcd02a]">
+            <div className="flex items-center gap-2 mb-3">
+              <Award className="w-4 h-4 text-emerald-300/80" />
+              <span className="text-[10px] uppercase tracking-[0.08em] font-semibold text-white/40">
                 {achievements.length === 1 ? "Achievement Unlocked" : `${achievements.length} Achievements Unlocked`}
               </span>
             </div>
 
-            <div className="relative z-10 space-y-3">
-              {achievements.slice(0, 3).map((a, i) => {
-                const accent = monotone ? "#FFFFFF" : VORONOI_LIGHT[i % VORONOI_LIGHT.length];
-                return (
-                  <motion.div
-                    key={a.id}
-                    className="flex items-start gap-3"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ ...SPRING.gentle, delay: 0.15 + i * 0.1 }}
+            <div className="space-y-3">
+              {achievements.slice(0, 3).map((a, i) => (
+                <motion.div
+                  key={a.id}
+                  className="flex items-start gap-3"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ ...SPRING.gentle, delay: 0.15 + i * 0.1 }}
+                >
+                  <div
+                    className="flex items-center justify-center w-10 h-10 flex-shrink-0 text-2xl rounded-full bg-white/10 border border-white/15"
+                    aria-hidden
                   >
-                    <div
-                      className="flex items-center justify-center w-11 h-11 flex-shrink-0 text-2xl"
-                      style={{ backgroundColor: accent, clipPath: getClip(LABEL_CLIPS, i) }}
-                      aria-hidden
-                    >
-                      {a.icon}
-                    </div>
-                    <div className="min-w-0 flex-1 pt-0.5">
-                      <p className="text-sm font-black text-white leading-tight">{a.name}</p>
-                      <p className="text-xs text-white/65 leading-snug mt-0.5">{a.description}</p>
-                    </div>
-                  </motion.div>
-                );
-              })}
+                    {a.icon}
+                  </div>
+                  <div className="min-w-0 flex-1 pt-0.5">
+                    <p className="text-[14px] font-semibold text-white leading-tight">{a.name}</p>
+                    <p className="text-[12px] text-white/55 leading-snug mt-0.5">{a.description}</p>
+                  </div>
+                </motion.div>
+              ))}
               {achievements.length > 3 && (
-                <p className="text-xs text-white/50 font-medium pl-14">
+                <p className="text-[12px] text-white/55 font-medium pl-14">
                   +{achievements.length - 3} more
                 </p>
               )}
             </div>
-          </div>
+          </Panel>
         </motion.div>
       )}
     </AnimatePresence>

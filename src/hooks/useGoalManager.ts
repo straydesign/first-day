@@ -1,7 +1,8 @@
 import { useState, useCallback } from "react";
 import { toast } from "sonner";
 import { api } from "@/lib/api";
-import { DEMO_GOAL_DETAILS } from "@/lib/demo-data";
+import { DEMO_GOAL_DETAILS, DEMO_GOALS_LIST, buildDemoGoalDetail, generateNextSprint } from "@/lib/demo-data";
+import { getPlanTotalDays } from "@/lib/engagement";
 import { getRoomView, setGenerating, fireCelebration } from "@/components/3d-shell/RoomRegistry";
 import type { Plan, ProgressMap, SelectedDay, GoalFormData } from "@/types";
 
@@ -34,7 +35,7 @@ interface UseGoalManagerReturn {
   setSelectedDay: (day: SelectedDay | null) => void;
   setEditingGoalData: (data: EditingGoalData | null) => void;
   loadGoalData: (goalId: string) => Promise<void>;
-  handleOnboardingComplete: (data: GoalFormData) => Promise<void>;
+  handleOnboardingComplete: (data: GoalFormData) => Promise<boolean>;
   handleSelectGoal: (goalId: string) => Promise<void>;
   handleEditGoal: (goalId: string) => Promise<void>;
   handleViewTodayActivities: (goalId: string) => Promise<void>;
@@ -178,13 +179,60 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
     }
   }, [onLogout, saveGoalData]);
 
-  const handleOnboardingComplete = useCallback(async (data: GoalFormData) => {
+  const handleOnboardingComplete = useCallback(async (data: GoalFormData): Promise<boolean> => {
     if (demoMode) {
-      toast("Sign up to create your own goals!", { description: "The demo shows pre-made goals to explore." });
-      return;
+      const existingId = editingGoalData?.goalId;
+      // Edit path: keep the same goalId, update fields + refresh sprint 1 content
+      // around the new goal text. Progress on already-completed days is preserved.
+      if (existingId && DEMO_GOAL_DETAILS[existingId]) {
+        const fresh = buildDemoGoalDetail(data);
+        const cleaned = fresh.detail.plan.cleanedGoal ?? fresh.detail.goal;
+        const existing = DEMO_GOAL_DETAILS[existingId];
+        DEMO_GOAL_DETAILS[existingId] = {
+          ...existing,
+          goal: fresh.detail.goal,
+          timeCommitment: fresh.detail.timeCommitment,
+          availableDays: fresh.detail.availableDays,
+          plan: {
+            ...existing.plan,
+            cleanedGoal: cleaned,
+            // Regenerating produces a standard 28-day, 4-sprint arc. Reset the
+            // length + generated-sprint count to match it — otherwise a goal with
+            // a custom totalDays (e.g. the 30-day riff goal) keeps its old length
+            // but loses its hand-authored days, stranding days 29–30 as empty.
+            totalDays: fresh.detail.plan.totalDays,
+            days: fresh.detail.plan.days, // sprint 1 only — later sprints regen on completion
+            sprints: fresh.detail.plan.sprints,
+            sprintsGenerated: fresh.detail.plan.sprintsGenerated ?? 1,
+          },
+        };
+        const listIdx = DEMO_GOALS_LIST.findIndex(g => g.id === existingId);
+        if (listIdx >= 0) {
+          DEMO_GOALS_LIST[listIdx] = { ...DEMO_GOALS_LIST[listIdx], title: cleaned, timeCommitment: fresh.detail.timeCommitment, totalDays: fresh.listItem.totalDays };
+        }
+        setGoalData({ goal: cleaned, timeCommitment: fresh.detail.timeCommitment, availableDays: fresh.detail.availableDays });
+        setPlanData(DEMO_GOAL_DETAILS[existingId].plan);
+        setCurrentGoalId(existingId);
+        setEditingGoalData(null);
+        toast.success("Goal updated!");
+        return true;
+      }
+      // Create path
+      const { goalId, detail, listItem } = buildDemoGoalDetail(data);
+      DEMO_GOAL_DETAILS[goalId] = detail;
+      DEMO_GOALS_LIST.push(listItem);
+      setGoalData({ goal: detail.goal, timeCommitment: detail.timeCommitment, availableDays: detail.availableDays });
+      setPlanData(detail.plan);
+      setProgress({});
+      setCurrentGoalId(goalId);
+      setEditingGoalData(null);
+      toast.success("Your plan is ready!");
+      fireCelebration(getRoomView(), 1.5);
+      return true;
     }
     setGoalData({ goal: data.goal, timeCommitment: data.timeCommitment, availableDays: data.availableDays });
-    await generatePlan(data, editingGoalData?.goalId || null);
+    const { goalId } = await generatePlan(data, editingGoalData?.goalId || null);
+    return goalId !== null;
   }, [editingGoalData, generatePlan, demoMode]);
 
   const handleSelectGoal = useCallback(async (goalId: string) => {
@@ -200,19 +248,31 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
 
   const handleEditGoal = useCallback(async (goalId: string) => {
     if (demoMode) {
-      toast("Sign up to edit goals!", { description: "Create an account to customize your plan." });
+      const detail = DEMO_GOAL_DETAILS[goalId];
+      if (!detail) {
+        toast.error("Goal not found");
+        return;
+      }
+      setEditingGoalData({
+        goalId,
+        goal: detail.goal,
+        timeCommitment: detail.timeCommitment,
+        availableDays: detail.availableDays,
+        contextAnswers: {},
+        wantsWeeklyBooks: false,
+      });
       return;
     }
     try {
       const data = await api.goals.get(goalId);
       setEditingGoalData({
         goalId,
-        goal: data.goal.goal,
-        contextAnswers: data.goal.contextAnswers,
-        timeCommitment: data.goal.timeCommitment,
-        timeSlot: data.goal.timeSlot,
-        wantsWeeklyBooks: data.goal.wantsWeeklyBooks,
-        availableDays: data.goal.availableDays,
+        goal: data.goal,
+        contextAnswers: data.contextAnswers,
+        timeCommitment: data.timeCommitment,
+        timeSlot: data.timeSlot,
+        wantsWeeklyBooks: data.wantsWeeklyBooks,
+        availableDays: data.availableDays,
       });
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : "Unknown error";
@@ -239,7 +299,7 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
       today.setHours(0, 0, 0, 0);
       const diffTime = today.getTime() - startDate.getTime();
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      const dayNumber = Math.max(1, Math.min(diffDays + 1, 30));
+      const dayNumber = Math.max(1, Math.min(diffDays + 1, getPlanTotalDays(planSource)));
 
       const todayDay = planSource.days[dayNumber];
       if (todayDay) {
@@ -311,6 +371,16 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
       },
     };
     setProgress(updatedProgress);
+
+    // Sprint-end trigger: if the user just finished day 7/14/21 in demo mode,
+    // synthesize the next sprint's content and update planData so the calendar
+    // reveals the new week. In production this is where we'd kick off an
+    // async LLM call that incorporates feedback from the sprint just finished.
+    if (demoMode && currentGoalId && dayKey % 7 === 0 && dayKey < getPlanTotalDays(planData)) {
+      const nextSprintNumber = dayKey / 7 + 1;
+      const updatedPlan = generateNextSprint(currentGoalId, nextSprintNumber);
+      if (updatedPlan) setPlanData(updatedPlan);
+    }
 
     // Fire-and-forget save (skip in demo mode)
     if (currentGoalId && !demoMode) {

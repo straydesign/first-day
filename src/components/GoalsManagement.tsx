@@ -1,20 +1,18 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { CardDescription } from "@/components/ui/card";
 import { MosaicCard } from "./MosaicCard";
-import { VoronoiMosaic } from "./VoronoiMosaic";
-import { VORONOI_LIGHT, SHARD_CLIPS, LABEL_CLIPS, BUTTON_CLIPS, getClip } from "@/constants";
+import { Panel } from "@/components/ui/Panel";
+import { TopBar } from "@/components/ui/TopBar";
+import { FONT } from "@/lib/design";
 
-const PANEL_DARK_PALETTE = ["#0a0a14", "#10122a", "#0f0e1f", "#181a3a", "#0c0d1e"] as const;
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, Flame } from "lucide-react";
 import { api } from "@/lib/api";
 import { BouncingButton } from "./BouncingButton";
 import { toast } from "sonner";
 import { StreakBadge } from "./StreakBadge";
 import { StatsCard } from "./StatsCard";
 import { AchievementsSheet } from "./AchievementsSheet";
-import { useMonotone } from "./MonotoneContext";
 import { ShardRewardGrid } from "./ShardRewardGrid";
 import { DEMO_GOALS_LIST, DEMO_GOAL_DETAILS } from "@/lib/demo-data";
 import { staggerContainer, tileEnter, contentReveal } from "@/lib/animations";
@@ -45,7 +43,6 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
   const [goals, setGoals] = useState<Goal[]>([]);
   const [goalProgress, setGoalProgress] = useState<Record<string, ProgressMap>>({});
   const [loading, setLoading] = useState(true);
-  const { monotone } = useMonotone();
 
   useEffect(() => { loadGoals(); }, []);
 
@@ -125,172 +122,145 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
     return (
       <div className="min-h-screen relative flex items-center justify-center">
         <div className="relative z-10 flex flex-col items-center gap-6 px-6 w-full max-w-md">
-          {/* Shard progress bar */}
-          <div className="flex gap-[2px] h-3 w-full">
-            {Array.from({ length: 20 }, (_, i) => (
-              <div
-                key={i}
-                className="flex-1"
-                style={{
-                  backgroundColor: VORONOI_LIGHT[i % VORONOI_LIGHT.length],
-                  clipPath: getClip(SHARD_CLIPS, i),
-                  animation: `shardPulse 1.5s ease-in-out ${i * 0.08}s infinite`,
-                }}
-              />
-            ))}
-          </div>
-          <div
-            className="relative overflow-hidden inline-block px-6 py-3"
-            style={{ clipPath: getClip(LABEL_CLIPS, 1) }}
-          >
-            <VoronoiMosaic seed={1001} tileCount={14} margin={3} gap={1.5} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
-            <p className="relative z-10 text-lg text-white font-black uppercase tracking-wide" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>Loading your goals...</p>
-          </div>
+          <Panel contentClassName="px-8 py-5">
+            <p className="text-[17px] font-semibold tracking-[-0.01em] text-white/70" style={{ fontFamily: FONT }}>
+              Loading your goals…
+            </p>
+          </Panel>
         </div>
       </div>
     );
   }
+
+  // Date + streak right slot for TopBar
+  const topBarRight = engagement && (engagement.currentStreak > 0 || engagement.isAtRisk) ? (
+    <div className="flex items-center gap-2">
+      <span className="text-[13px] font-medium text-white/40">
+        {new Date().toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}
+      </span>
+      <StreakBadge streak={engagement.currentStreak} isAtRisk={engagement.isAtRisk} size="sm" />
+    </div>
+  ) : (
+    <span className="text-[13px] font-medium text-white/40">
+      {new Date().toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}
+    </span>
+  );
 
   return (
     <div className="min-h-screen relative pb-20 md:pb-0" role="main" aria-label="Your goals">
       {/* Navigation handled by BottomNav (mobile) and NavigationMenu (desktop) in AuthenticatedApp */}
       <div className="relative z-10 w-full">
         {goals.length > 0 ? (
-          <motion.div variants={staggerContainer} initial="hidden" animate="visible" className="min-h-screen px-6 pb-6 md:px-10 md:pb-10 pt-[120px]">
-            {/* Date — sticky header */}
-            <motion.div variants={contentReveal} className="sticky top-0 z-20 text-center pb-4 pt-2">
-              <div
-                className="relative overflow-hidden inline-block px-6 py-2"
-                style={{ clipPath: getClip(LABEL_CLIPS, 1) }}
-              >
-                <VoronoiMosaic seed={1013} tileCount={18} margin={3} gap={1.5} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
-                <p className="relative z-10 text-xl md:text-3xl text-white font-bold">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</p>
-              </div>
-              {engagement && (engagement.currentStreak > 0 || engagement.isAtRisk) && (
-                <div className="flex items-center justify-center gap-2 mt-3">
-                  <StreakBadge streak={engagement.currentStreak} isAtRisk={engagement.isAtRisk} size="sm" />
-                </div>
-              )}
-            </motion.div>
-            {/* All goals stacked */}
-            <div className="space-y-6 md:space-y-8 mb-8">
+          <motion.div variants={staggerContainer} initial="hidden" animate="visible" className="min-h-screen pb-6 md:pb-10">
+            {/* Sticky date / streak header via TopBar */}
+            <TopBar
+              title="Your goals"
+              right={topBarRight}
+            />
+
+            <div className="px-6 md:px-10 pt-8 space-y-6 md:space-y-8 mb-8">
               {goals.map((goal, goalIndex) => (
                 <motion.div key={goal.id} variants={tileEnter} className="w-full relative">
-                  {/* Day X label — attached to top of goal card */}
-                  <div
-                    className="relative overflow-hidden inline-block px-5 py-2 ml-2 mb-0 z-10"
-                    style={{ clipPath: getClip(LABEL_CLIPS, goalIndex) }}
-                  >
-                    <VoronoiMosaic seed={1117 + goalIndex * 19} tileCount={12} margin={3} gap={1.5} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
-                    <CardDescription className="relative z-10 text-white font-black text-xl md:text-2xl uppercase tracking-wide" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>Lesson {getCompletedDayCount(goalProgress[goal.id] ?? {})} of 30</CardDescription>
-                  </div>
+                  {/* Lesson label */}
+                  <p className="text-[12px] font-medium uppercase tracking-[0.08em] text-white/40 mb-2 ml-1">
+                    Lesson {getCompletedDayCount(goalProgress[goal.id] ?? {}, goal.totalDays ?? 28)} of {goal.totalDays ?? 28}
+                  </p>
+
+                  {/* Goal card */}
                   <button
                     onClick={() => onSelectGoal(goal.id)}
-                    className="relative overflow-hidden px-6 py-8 md:px-10 md:py-12 w-full hover:scale-[1.02] transition-transform cursor-pointer -mt-1"
-                    style={{ clipPath: getClip(SHARD_CLIPS, goalIndex) }}
+                    className="w-full text-left hover:scale-[1.01] transition-transform"
                   >
-                    <VoronoiMosaic
-                      seed={111 + goalIndex * 17}
-                      tileCount={28}
-                      margin={4}
-                      gap={2}
-                      palette={PANEL_DARK_PALETTE}
-                      className="absolute inset-0 w-full h-full pointer-events-none"
-                    />
-                    <h1
-                      className="relative z-10 text-center font-black uppercase leading-[0.95] break-words"
-                      style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif", fontSize: "clamp(3rem, 12vw, 8rem)" }}
-                    >
-                      {goal.title.split(" ").map((word, i) => (
-                        <span key={i} style={{ color: monotone ? "#ffffff" : ["#FFE633","#FF6B2B","#FF2D55","#00EAFF","#FF10F0","#FF1493","#4FC3F7","#FF4500"][(i + goalIndex * 3) % 8] }}>
-                          {word}{" "}
-                        </span>
-                      ))}
-                    </h1>
+                    <Panel contentClassName="px-6 py-8 md:px-10 md:py-10">
+                      <h1
+                        className="text-[19px] font-semibold tracking-[-0.01em] text-white leading-tight"
+                        style={{ fontFamily: FONT }}
+                      >
+                        {goal.title}
+                      </h1>
+                    </Panel>
                   </button>
-                  {/* Trash icon on each goal */}
+
+                  {/* Trash icon */}
                   <button
                     onClick={(e) => { e.stopPropagation(); handleDeleteGoal(goal.id, goal.title); }}
                     aria-label="Delete goal"
-                    className="relative overflow-hidden absolute bottom-2 right-2 text-white/60 p-3 hover:scale-110 hover:text-white transition-all z-10"
-                    style={{ clipPath: getClip(BUTTON_CLIPS, goalIndex) }}
+                    className="absolute bottom-3 right-3 text-white/40 p-2 hover:text-white/80 transition-colors z-10"
                   >
-                    <VoronoiMosaic seed={1207 + goalIndex * 13} tileCount={8} margin={2} gap={1} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
-                    <Trash2 className="relative z-10 w-5 h-5" />
+                    <Trash2 className="w-4 h-4" />
                   </button>
+
                   {/* Shard reward grid */}
                   {goalProgress[goal.id] && (
                     <div className="mt-2 flex justify-center">
-                      <ShardRewardGrid progress={goalProgress[goal.id]} />
+                      <ShardRewardGrid progress={goalProgress[goal.id]} totalDays={goal.totalDays ?? 28} />
                     </div>
                   )}
                 </motion.div>
               ))}
             </div>
+
             {/* Hook mechanics — daily teaser */}
             {engagement && (
-              <motion.div variants={tileEnter} className="flex flex-wrap items-center justify-center gap-3 mb-6">
+              <motion.div variants={tileEnter} className="px-6 md:px-10 flex flex-wrap items-center gap-3 mb-6">
                 {engagement.dailyMultiplier > 1 && (
-                  <div className="bg-yellow-500/20 border border-yellow-500/40 px-5 py-3 text-base font-black text-yellow-300 uppercase tracking-wider" style={{ clipPath: getClip(SHARD_CLIPS, 0) }}>
-                    Today: {engagement.dailyMultiplier}x XP
-                  </div>
+                  <Panel contentClassName="px-5 py-3">
+                    <span className="text-[13px] font-semibold text-white">
+                      Today: {engagement.dailyMultiplier}× XP
+                    </span>
+                  </Panel>
                 )}
                 {engagement.streakFreezes > 0 && (
-                  <div className="bg-cyan-500/15 border border-cyan-500/30 px-5 py-3 text-sm font-bold text-cyan-300" style={{ clipPath: getClip(SHARD_CLIPS, 1) }}>
-                    {engagement.streakFreezes} Streak Freeze{engagement.streakFreezes > 1 ? "s" : ""}
-                  </div>
+                  <Panel contentClassName="px-5 py-3">
+                    <span className="text-[13px] font-semibold text-white/80">
+                      {engagement.streakFreezes} Streak Freeze{engagement.streakFreezes > 1 ? "s" : ""}
+                    </span>
+                  </Panel>
                 )}
                 {engagement.isComeback && (
-                  <div className="bg-orange-500/20 border border-orange-500/40 px-5 py-3 text-sm font-bold text-orange-300 uppercase tracking-wider" style={{ clipPath: getClip(SHARD_CLIPS, 2) }}>
-                    Welcome Back Bonus Active
-                  </div>
+                  <Panel contentClassName="px-5 py-3">
+                    <span className="text-[13px] font-semibold text-white/80">Welcome Back Bonus Active</span>
+                  </Panel>
                 )}
               </motion.div>
             )}
-            {/* Stats & Achievements — once */}
+
+            {/* Stats & Achievements */}
             {engagement && (
-              <motion.div variants={tileEnter} className="space-y-4 mb-8 px-2 md:px-6">
+              <motion.div variants={tileEnter} className="space-y-4 mb-8 px-6 md:px-10">
                 <StatsCard engagement={engagement} />
                 <div className="flex justify-center">
                   <AchievementsSheet achievements={engagement.achievements} />
                 </div>
               </motion.div>
             )}
-            {/* Add Goal — once at the bottom */}
-            <motion.button variants={tileEnter}
-              onClick={onCreateGoal}
-              className="relative overflow-hidden w-full py-4 md:py-5 text-xl md:text-2xl font-black uppercase tracking-wide hover:scale-105 transition-transform flex items-center justify-center gap-2"
-              style={{ clipPath: getClip(BUTTON_CLIPS, 0), fontFamily: "var(--font-bebas), system-ui, sans-serif", letterSpacing: 3 }}
-            >
-              <VoronoiMosaic
-                seed={91}
-                tileCount={18}
-                margin={3}
-                gap={2}
-                palette={PANEL_DARK_PALETTE}
-                className="absolute inset-0 w-full h-full pointer-events-none"
-              />
-              <Plus className="relative z-10 w-5 h-5 text-white" />
-              <span className="relative z-10 text-white">ADD NEW GOAL</span>
-            </motion.button>
+
+            {/* Add Goal */}
+            <div className="px-6 md:px-10">
+              <motion.button
+                variants={tileEnter}
+                onClick={onCreateGoal}
+                className="rounded-full bg-white text-black text-[15px] font-semibold py-3 px-6 w-full transition-transform hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2"
+                style={{ fontFamily: FONT }}
+              >
+                <Plus className="w-4 h-4" />
+                Add new goal
+              </motion.button>
+            </div>
           </motion.div>
         ) : (
-          <MosaicCard seed={0} className="min-h-screen p-6 md:p-10 flex flex-col items-center justify-center">
+          <MosaicCard seed={0} density="xl" className="min-h-screen p-6 md:p-10 flex flex-col items-center justify-center">
             <div className="text-center mb-4 md:mb-8 space-y-3">
-              <div
-                className="relative overflow-hidden inline-block px-8 py-3"
-                style={{ clipPath: getClip(LABEL_CLIPS, 3) }}
-              >
-                <VoronoiMosaic seed={1303} tileCount={20} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
-                <h1 className="relative z-10 text-3xl md:text-5xl font-bold text-white">Set Your First Goal</h1>
-              </div>
-              <div
-                className="relative overflow-hidden inline-block px-6 py-2"
-                style={{ clipPath: getClip(LABEL_CLIPS, 1) }}
-              >
-                <VoronoiMosaic seed={1319} tileCount={16} margin={3} gap={1.5} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
-                <p className="relative z-10 text-xl text-white font-bold">Pick any goal and get a personalized 30-day plan</p>
-              </div>
+              <Panel contentClassName="px-8 py-5">
+                <h1 className="text-[32px] font-semibold tracking-[-0.02em] text-white leading-[1.05]" style={{ fontFamily: FONT }}>
+                  Set Your First Goal
+                </h1>
+              </Panel>
+              <Panel contentClassName="px-6 py-4">
+                <p className="text-[16px] leading-relaxed text-white/70">
+                  Pick any goal — your first 7-day sprint is ready in seconds. Three more sprints generate as you go.
+                </p>
+              </Panel>
             </div>
             <BouncingButton onClick={onCreateGoal} />
           </MosaicCard>

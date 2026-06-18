@@ -12,8 +12,6 @@ import { AudioDriver } from "./AudioDriver";
 import { CongratsBloom } from "./CongratsBloom";
 import { TileVoid } from "./TileVoid";
 import { CosmosShapes } from "./CosmosShapes";
-import { GalleryMarkers } from "./GalleryMarkers";
-import { GalleryArrival } from "./GalleryArrival";
 import { VIEW_KEYS, advanceRoomPath, getCameraMotion, usePulse, getPendingPath } from "./RoomRegistry";
 import { setPresence } from "./presenceIntent";
 import { getDayWarmth } from "./timeOfDayIntent";
@@ -265,8 +263,6 @@ export function PersistentCanvas() {
           {VIEW_KEYS.map((v) => (
             <Room key={v} viewKey={v} />
           ))}
-          <GalleryMarkers />
-          <GalleryArrival />
           <ActivePanel />
         </Suspense>
         <CameraRig />

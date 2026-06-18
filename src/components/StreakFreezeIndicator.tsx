@@ -3,11 +3,8 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Snowflake, X } from "lucide-react";
-import { SHARD_CLIPS, BUTTON_CLIPS, getClip } from "@/constants";
-import { useMonotone } from "./MonotoneContext";
-import { VoronoiMosaic } from "./VoronoiMosaic";
-
-const PANEL_DARK_PALETTE = ["#0a0a14", "#10122a", "#0f0e1f", "#181a3a", "#0c0d1e"] as const;
+import { Panel } from "@/components/ui/Panel";
+import { FONT } from "@/lib/design";
 
 interface StreakFreezeIndicatorProps {
   count: number;
@@ -15,14 +12,11 @@ interface StreakFreezeIndicatorProps {
 }
 
 export function StreakFreezeIndicator({ count, isAtRisk = false }: StreakFreezeIndicatorProps) {
-  const { monotone } = useMonotone();
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
   if (count <= 0) return null;
-
-  const accent = monotone ? "#FFFFFF" : "#00EAFF";
 
   const modal = (
     <AnimatePresence>
@@ -42,60 +36,51 @@ export function StreakFreezeIndicator({ count, isAtRisk = false }: StreakFreezeI
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.92, opacity: 0 }}
             transition={{ type: "spring", stiffness: 320, damping: 26 }}
-            className="relative overflow-hidden w-full max-w-md p-8 md:p-10"
-            style={{ clipPath: getClip(SHARD_CLIPS, 0) }}
+            className="w-full max-w-md"
             onClick={(e) => e.stopPropagation()}
           >
-            <VoronoiMosaic seed={1907} tileCount={32} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
-            <button
-              type="button"
-              onClick={() => setOpen(false)}
-              className="absolute top-4 right-4 z-10 text-white/40 hover:text-white/80 transition-colors"
-              aria-label="Close"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="relative z-10 flex justify-center mb-6">
-              <div
-                className="relative overflow-hidden flex items-center justify-center w-20 h-20 md:w-24 md:h-24 border-2"
-                style={{ clipPath: getClip(SHARD_CLIPS, 1), borderColor: accent }}
-              >
-                <VoronoiMosaic seed={1913} tileCount={10} margin={3} gap={1.5} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
-                <Snowflake className="relative z-10 w-10 h-10 md:w-12 md:h-12" style={{ color: accent }} strokeWidth={1.6} />
-              </div>
-            </div>
-
-            <h2
-              id="freeze-modal-heading"
-              className="relative z-10 text-center text-3xl md:text-5xl font-black uppercase text-white mb-3 leading-[0.95]"
-              style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif", letterSpacing: 1 }}
-            >
-              Streak Freeze
-            </h2>
-
-            <p className="relative z-10 text-center text-base md:text-lg text-white/80 font-medium mb-2">
-              You have <span className="font-black" style={{ color: accent }}>{count}</span> streak {count === 1 ? "freeze" : "freezes"}.
-            </p>
-            <p className="relative z-10 text-center text-sm md:text-base text-white/60 font-medium mb-8 max-w-sm mx-auto">
-              Earn one for every 7-day streak you hit. They&apos;re your safety net — life happens, and a freeze keeps your streak alive on a missed day.
-            </p>
-
-            <div className="relative z-10 flex justify-center">
+            <Panel contentClassName="p-8 md:p-10 relative">
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="px-8 py-4 text-base font-black text-black uppercase tracking-wide hover:scale-105 transition-transform btn-shake"
-                style={{
-                  backgroundColor: accent,
-                  clipPath: getClip(BUTTON_CLIPS, 0),
-                  fontFamily: "var(--font-bebas), system-ui, sans-serif",
-                  letterSpacing: 2,
-                }}
+                className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors"
+                aria-label="Close"
               >
-                Got It
+                <X className="w-5 h-5" />
               </button>
-            </div>
+
+              <div className="flex justify-center mb-6">
+                <div className="flex items-center justify-center w-16 h-16 rounded-full bg-white/10 border border-white/15">
+                  <Snowflake className="w-8 h-8 text-white/70" strokeWidth={1.6} />
+                </div>
+              </div>
+
+              <h2
+                id="freeze-modal-heading"
+                className="text-center text-[32px] font-semibold tracking-[-0.02em] text-white mb-3 leading-[1.05]"
+                style={{ fontFamily: FONT }}
+              >
+                Streak Freeze
+              </h2>
+
+              <p className="text-center text-[16px] leading-relaxed text-white/70 mb-2">
+                You have <span className="font-semibold text-white">{count}</span> streak {count === 1 ? "freeze" : "freezes"}.
+              </p>
+              <p className="text-center text-[14px] leading-relaxed text-white/50 mb-8 max-w-sm mx-auto">
+                Earn one for every 7-day streak you hit. They&apos;re your safety net — life happens, and a freeze keeps your streak alive on a missed day.
+              </p>
+
+              <div className="flex justify-center">
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  className="rounded-full bg-white text-black text-[15px] font-semibold py-3 px-8 transition-transform hover:scale-[1.01] active:scale-[0.99]"
+                  style={{ fontFamily: FONT }}
+                >
+                  Got it
+                </button>
+              </div>
+            </Panel>
           </motion.div>
         </motion.div>
       )}
@@ -108,15 +93,9 @@ export function StreakFreezeIndicator({ count, isAtRisk = false }: StreakFreezeI
         type="button"
         onClick={() => setOpen(true)}
         aria-label={`${count} streak ${count === 1 ? "freeze" : "freezes"} available — tap to learn more`}
-        className={`inline-flex items-center gap-1.5 px-3 py-1 text-sm font-bold transition-transform hover:scale-105 ${isAtRisk ? "animate-pulse" : ""}`}
-        style={{
-          backgroundColor: monotone ? "rgba(255,255,255,0.08)" : "rgba(0,234,255,0.15)",
-          color: accent,
-          border: `1px solid ${monotone ? "rgba(255,255,255,0.25)" : "rgba(0,234,255,0.40)"}`,
-          clipPath: "polygon(8% 0%, 100% 4%, 96% 100%, 0% 96%)",
-        }}
+        className={`inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[13px] font-medium text-white/70 transition hover:bg-white/10 hover:text-white ${isAtRisk ? "animate-pulse" : ""}`}
       >
-        <Snowflake className="w-4 h-4" />
+        <Snowflake className="w-3.5 h-3.5" />
         <span>{count}</span>
       </button>
 

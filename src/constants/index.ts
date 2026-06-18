@@ -40,6 +40,10 @@ export const VORONOI_DARK = [
 /** Combined palette — default for VoronoiMosaic */
 export const VORONOI_PALETTE = [...VORONOI_LIGHT, ...VORONOI_DARK] as const;
 
+/** Pure-black panel mosaic — used as a backdrop behind text-bearing panels so the
+ *  bright 3D shell never competes with foreground contrast. */
+export const PANEL_DARK_PALETTE = ["#000000", "#050505", "#0a0a0a", "#020202", "#080808"] as const;
+
 /** Vibrant accent colors for goal pills, shard fills, and decorative elements. */
 export const BRIGHT_COLORS = [
   "#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF", "#FF10F0",

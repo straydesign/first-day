@@ -3,13 +3,11 @@ import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { Trophy, Flame, Sparkles, Award, Share2, ArrowRight, Check } from "lucide-react";
 import { toast } from "sonner";
-import { useMonotone } from "./MonotoneContext";
-import { BUTTON_CLIPS, SHARD_CLIPS, LABEL_CLIPS, VORONOI_LIGHT, getClip } from "@/constants";
 import { scaleReveal, wordReveal, contentReveal, popIn, SPRING } from "@/lib/animations";
-import { VoronoiMosaic } from "./VoronoiMosaic";
+import { Panel } from "@/components/ui/Panel";
+import { FONT } from "@/lib/design";
 import type { EngagementState, Achievement } from "@/types";
 
-const PANEL_DARK_PALETTE = ["#0a0a14", "#10122a", "#0f0e1f", "#181a3a", "#0c0d1e"] as const;
 
 interface ConfettiPiece {
   id: number;
@@ -17,20 +15,17 @@ interface ConfettiPiece {
   y: number;
   rotation: number;
   scale: number;
-  color: string;
   delay: number;
 }
 
 interface PlanCompleteCelebrationProps {
   goalTitle?: string;
   engagement?: EngagementState | null;
+  totalDays?: number;
   onStartNextGoal: () => void;
 }
 
-const CONFETTI_COLORS = ["#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF", "#FF10F0", "#fcd02a", "#fb7025"];
-
-export function PlanCompleteCelebration({ goalTitle, engagement, onStartNextGoal }: PlanCompleteCelebrationProps) {
-  const { monotone } = useMonotone();
+export function PlanCompleteCelebration({ goalTitle, engagement, totalDays = 28, onStartNextGoal }: PlanCompleteCelebrationProps) {
   const [shared, setShared] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -45,7 +40,6 @@ export function PlanCompleteCelebration({ goalTitle, engagement, onStartNextGoal
         y: -(Math.random() * 400 + 100),
         rotation: Math.random() * 360,
         scale: Math.random() * 0.6 + 0.5,
-        color: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
         delay: Math.random() * 0.6,
       }));
     },
@@ -58,16 +52,16 @@ export function PlanCompleteCelebration({ goalTitle, engagement, onStartNextGoal
   );
 
   const stats = [
-    { label: "Days Done", value: 30, suffix: "/30", color: "#fcd02a", icon: Trophy },
-    { label: "Longest Streak", value: engagement?.longestStreak ?? 0, suffix: " days", color: "#fb7025", icon: Flame },
-    { label: "XP Earned", value: engagement?.totalXP ?? 0, suffix: "", color: "#f31b5e", icon: Sparkles },
-    { label: "Level Reached", value: engagement?.level.name ?? "Master", suffix: "", color: "#3075e1", icon: Award },
+    { label: "Days Done", value: totalDays, suffix: `/${totalDays}`, icon: Trophy },
+    { label: "Longest Streak", value: engagement?.longestStreak ?? 0, suffix: " days", icon: Flame },
+    { label: "XP Earned", value: engagement?.totalXP ?? 0, suffix: "", icon: Sparkles },
+    { label: "Level Reached", value: engagement?.level.name ?? "Master", suffix: "", icon: Award },
   ] as const;
 
   const buildShareUrl = () => {
     const params = new URLSearchParams();
     if (goalTitle) params.set("g", goalTitle);
-    params.set("d", "30");
+    params.set("d", String(totalDays));
     params.set("s", String(engagement?.longestStreak ?? 0));
     params.set("x", String(engagement?.totalXP ?? 0));
     if (engagement?.level.name) params.set("l", engagement.level.name);
@@ -78,10 +72,10 @@ export function PlanCompleteCelebration({ goalTitle, engagement, onStartNextGoal
 
   const handleShare = async () => {
     const url = buildShareUrl();
-    const text = `I just crushed a 30-day sprint on First Day${goalTitle ? `: ${goalTitle}` : ""}.\n\n${30} days · ${engagement?.longestStreak ?? 0}-day streak · ${(engagement?.totalXP ?? 0).toLocaleString()} XP · ${unlockedAchievements.length} achievements`;
+    const text = `I just finished ${totalDays} days on First Day${goalTitle ? `: ${goalTitle}` : ""}.\n\n${totalDays} days · ${engagement?.longestStreak ?? 0}-day streak · ${(engagement?.totalXP ?? 0).toLocaleString()} XP · ${unlockedAchievements.length} achievements`;
     try {
       if (typeof navigator !== "undefined" && navigator.share) {
-        await navigator.share({ title: "I crushed a 30-day sprint", text, url });
+        await navigator.share({ title: `I finished ${totalDays} days`, text, url });
         return;
       }
       if (typeof navigator !== "undefined" && navigator.clipboard) {
@@ -96,18 +90,17 @@ export function PlanCompleteCelebration({ goalTitle, engagement, onStartNextGoal
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden" role="main" aria-label="30-day plan complete">
-      {/* Confetti layer */}
+    <div className="min-h-screen relative overflow-hidden" role="main" aria-label={`${totalDays} days complete`}>
+      {/* Confetti layer — white/grey diamonds */}
       <div className="fixed inset-0 z-20 pointer-events-none overflow-hidden">
         {confettiPieces.map((piece) => (
           <motion.div
             key={piece.id}
-            className="absolute w-2.5 h-2.5"
+            className="absolute w-2.5 h-2.5 rounded-sm"
             style={{
-              backgroundColor: monotone ? "#ffffff" : piece.color,
+              backgroundColor: piece.id % 4 === 0 ? "rgba(255,255,255,0.9)" : piece.id % 4 === 1 ? "rgba(255,255,255,0.5)" : piece.id % 4 === 2 ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.35)",
               left: "50%",
               top: "30%",
-              clipPath: getClip(SHARD_CLIPS, piece.id),
             }}
             initial={{ opacity: 1, x: 0, y: 0, rotate: 0, scale: 0 }}
             animate={{
@@ -130,32 +123,19 @@ export function PlanCompleteCelebration({ goalTitle, engagement, onStartNextGoal
           initial="hidden"
           animate="visible"
         >
-          <div
-            className="relative flex items-center justify-center w-32 h-32 md:w-44 md:h-44 overflow-hidden"
-            style={{ clipPath: getClip(SHARD_CLIPS, 0) }}
-          >
-            <VoronoiMosaic seed={2801} tileCount={18} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
-            <Trophy className="relative z-10 w-20 h-20 md:w-28 md:h-28 text-[#fcd02a]" strokeWidth={1.5} />
-          </div>
+          <Panel contentClassName="p-0" className="w-32 h-32 md:w-44 md:h-44 flex items-center justify-center">
+            <div className="flex items-center justify-center w-full h-full p-6">
+              <Trophy className="w-16 h-16 md:w-24 md:h-24 text-white/80" strokeWidth={1.5} />
+            </div>
+          </Panel>
         </motion.div>
 
-        {/* Headline — mosaic-backed so the gold congrats-room scene never bleeds through the text */}
+        {/* Headline */}
         <div className="flex justify-center mb-3">
-          <div
-            className="relative overflow-hidden px-6 py-4 md:px-10 md:py-6"
-            style={{ clipPath: getClip(SHARD_CLIPS, 1) }}
-          >
-            <VoronoiMosaic
-              seed={2821}
-              tileCount={42}
-              margin={4}
-              gap={2}
-              palette={PANEL_DARK_PALETTE}
-              className="absolute inset-0 w-full h-full pointer-events-none"
-            />
+          <Panel contentClassName="px-6 py-4 md:px-10 md:py-6">
             <h1
-              className="relative z-10 text-center text-5xl md:text-8xl font-black uppercase text-white leading-[0.95]"
-              style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif", letterSpacing: 1 }}
+              className="text-center text-5xl md:text-7xl font-semibold tracking-[-0.03em] text-white leading-[0.95]"
+              style={{ fontFamily: FONT }}
             >
               {"Goal Crushed".split(" ").map((word, i) => (
                 <motion.span
@@ -170,7 +150,7 @@ export function PlanCompleteCelebration({ goalTitle, engagement, onStartNextGoal
                 </motion.span>
               ))}
             </h1>
-          </div>
+          </Panel>
         </div>
 
         {/* Goal title chip */}
@@ -181,40 +161,28 @@ export function PlanCompleteCelebration({ goalTitle, engagement, onStartNextGoal
             animate={{ opacity: 1, y: 0 }}
             transition={{ ...SPRING.gentle, delay: 0.5 }}
           >
-            <div
-              className="inline-block bg-white px-6 py-2.5 max-w-full"
-              style={{ clipPath: getClip(LABEL_CLIPS, 1) }}
-            >
-              <p className="text-base md:text-xl font-black text-black uppercase tracking-wide truncate">
+            <Panel contentClassName="px-6 py-2.5 max-w-full">
+              <p className="text-base md:text-xl font-semibold text-white/80 truncate" style={{ fontFamily: FONT }}>
                 {goalTitle}
               </p>
-            </div>
+            </Panel>
           </motion.div>
         )}
 
-        {/* Sub-line — mosaic-backed shard so readability survives the celebration warmth */}
+        {/* Sub-line */}
         <motion.div
           className="flex justify-center mb-10 md:mb-14"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ ...SPRING.soft, delay: 0.7 }}
         >
-          <div
-            className="relative overflow-hidden px-6 py-3 md:px-10 md:py-4 max-w-xl"
-            style={{ clipPath: getClip(SHARD_CLIPS, 2) }}
-          >
-            <VoronoiMosaic
-              seed={2829}
-              tileCount={24}
-              margin={3}
-              gap={2}
-              palette={PANEL_DARK_PALETTE}
-              className="absolute inset-0 w-full h-full pointer-events-none"
-            />
-            <p className="relative z-10 text-center text-base md:text-xl text-white/85 font-medium">
-              30 lessons. 30 days. You proved you can do anything you set your mind to.
+          <Panel contentClassName="px-6 py-3 md:px-10 md:py-4 max-w-xl">
+            <p className="text-center text-base md:text-xl text-white/70 font-medium leading-relaxed">
+              {totalDays === 28
+                ? "28 lessons. 4 sprints. You proved you can do anything you set your mind to."
+                : `${totalDays} days straight. You proved you can do anything you set your mind to.`}
             </p>
-          </div>
+          </Panel>
         </motion.div>
 
         {/* Stats grid */}
@@ -227,27 +195,23 @@ export function PlanCompleteCelebration({ goalTitle, engagement, onStartNextGoal
         >
           {stats.map((stat, i) => {
             const Icon = stat.icon;
-            const accent = monotone ? "#FFFFFF" : stat.color;
             return (
               <motion.div
                 key={stat.label}
-                className="relative p-4 md:p-5 overflow-hidden"
-                style={{ clipPath: getClip(SHARD_CLIPS, i) }}
                 initial={{ opacity: 0, y: 16, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ ...SPRING.bouncy, delay: 1.0 + i * 0.08 }}
               >
-                <VoronoiMosaic seed={2811 + i * 7} tileCount={18} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
-                <div className="relative z-10">
-                  <Icon className="w-5 h-5 md:w-6 md:h-6 mb-2" style={{ color: accent }} />
-                  <div className="text-3xl md:text-5xl font-black text-white leading-none mb-1" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif" }}>
+                <Panel contentClassName="p-4 md:p-5">
+                  <Icon className="w-5 h-5 md:w-6 md:h-6 mb-2 text-white/55" />
+                  <div className="text-3xl md:text-4xl font-semibold tracking-[-0.02em] text-white leading-none mb-1" style={{ fontFamily: FONT }}>
                     {typeof stat.value === "number" ? stat.value.toLocaleString() : stat.value}
-                    <span className="text-base md:text-2xl text-white/55 font-bold">{stat.suffix}</span>
+                    <span className="text-base md:text-xl text-white/40 font-medium">{stat.suffix}</span>
                   </div>
-                  <div className="text-[10px] md:text-xs uppercase tracking-[0.2em] font-black" style={{ color: accent }}>
+                  <div className="text-[10px] md:text-xs uppercase tracking-[0.08em] font-medium text-white/40">
                     {stat.label}
                   </div>
-                </div>
+                </Panel>
               </motion.div>
             );
           })}
@@ -262,8 +226,8 @@ export function PlanCompleteCelebration({ goalTitle, engagement, onStartNextGoal
             transition={{ ...SPRING.gentle, delay: 1.5 }}
           >
             <div className="flex items-center justify-center gap-2 mb-4">
-              <Award className="w-5 h-5 text-[#fcd02a]" />
-              <h2 className="text-xs md:text-sm uppercase tracking-[0.3em] font-black text-white/80">
+              <Award className="w-5 h-5 text-white/55" />
+              <h2 className="text-xs md:text-sm uppercase tracking-[0.08em] font-medium text-white/55">
                 {unlockedAchievements.length} {unlockedAchievements.length === 1 ? "Achievement" : "Achievements"} Unlocked
               </h2>
             </div>
@@ -271,17 +235,16 @@ export function PlanCompleteCelebration({ goalTitle, engagement, onStartNextGoal
               {unlockedAchievements.map((a, i) => (
                 <motion.div
                   key={a.id}
-                  className="relative overflow-hidden px-3 py-2 md:px-4 md:py-2.5 flex items-center gap-2"
-                  style={{ clipPath: getClip(LABEL_CLIPS, i) }}
                   variants={popIn}
                   initial="hidden"
                   animate="visible"
                   transition={{ ...SPRING.snappy, delay: 1.7 + i * 0.05 }}
                   title={a.description}
                 >
-                  <VoronoiMosaic seed={2851 + i * 11} tileCount={10} margin={3} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
-                  <span className="relative z-10 text-base md:text-lg" aria-hidden>{a.icon}</span>
-                  <span className="relative z-10 text-xs md:text-sm font-bold text-white whitespace-nowrap">{a.name}</span>
+                  <Panel contentClassName="px-3 py-2 md:px-4 md:py-2.5 flex items-center gap-2">
+                    <span className="text-base md:text-lg" aria-hidden>{a.icon}</span>
+                    <span className="text-xs md:text-sm font-medium text-white whitespace-nowrap">{a.name}</span>
+                  </Panel>
                 </motion.div>
               ))}
             </div>
@@ -297,13 +260,7 @@ export function PlanCompleteCelebration({ goalTitle, engagement, onStartNextGoal
         >
           <button
             onClick={handleShare}
-            className="flex items-center justify-center gap-2 px-8 py-5 md:px-10 md:py-6 text-base md:text-lg font-black text-black uppercase tracking-wide hover:scale-105 transition-transform btn-shake"
-            style={{
-              backgroundColor: monotone ? "#666666" : VORONOI_LIGHT[0],
-              clipPath: getClip(BUTTON_CLIPS, 0),
-              fontFamily: "var(--font-bebas), system-ui, sans-serif",
-              letterSpacing: 3,
-            }}
+            className="flex items-center justify-center gap-2 rounded-full bg-white text-black text-[15px] font-semibold py-3 px-8 transition-transform hover:scale-[1.01] active:scale-[0.99]"
             aria-label={shared ? "Copied to clipboard" : "Share my journey"}
           >
             {shared ? <Check className="w-5 h-5 flex-shrink-0" /> : <Share2 className="w-5 h-5 flex-shrink-0" />}
@@ -311,13 +268,7 @@ export function PlanCompleteCelebration({ goalTitle, engagement, onStartNextGoal
           </button>
           <button
             onClick={onStartNextGoal}
-            className="flex items-center justify-center gap-2 px-8 py-5 md:px-10 md:py-6 text-base md:text-lg font-black text-black uppercase tracking-wide hover:scale-105 transition-transform btn-shake"
-            style={{
-              backgroundColor: monotone ? "#444444" : VORONOI_LIGHT[1],
-              clipPath: getClip(BUTTON_CLIPS, 1),
-              fontFamily: "var(--font-bebas), system-ui, sans-serif",
-              letterSpacing: 3,
-            }}
+            className="flex items-center justify-center gap-2 rounded-full border border-white/15 text-white/80 hover:bg-white/5 transition text-[15px] font-medium py-3 px-8"
           >
             Start Next Goal <ArrowRight className="w-5 h-5 flex-shrink-0" />
           </button>

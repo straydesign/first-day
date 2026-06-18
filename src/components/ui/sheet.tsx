@@ -5,7 +5,6 @@ import { XIcon } from "lucide-react"
 import { Dialog as SheetPrimitive } from "radix-ui"
 
 import { cn } from "@/lib/utils"
-import { VoronoiMosaic } from "@/components/VoronoiMosaic"
 import { useDomBridgeHost } from "@/components/3d-shell/DomBridge"
 
 function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>) {
@@ -46,20 +45,13 @@ function SheetOverlay({
     <SheetPrimitive.Overlay
       data-slot="sheet-overlay"
       className={cn(
-        "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 fixed inset-0 z-50 bg-transparent",
+        "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/85 backdrop-blur-md",
         className
       )}
       {...props}
     />
   )
 }
-
-const SHEET_CLIP = {
-  right: "clip-sheet-right",
-  left: "clip-sheet-left",
-  top: "clip-section-top",
-  bottom: "clip-section-bottom",
-} as const;
 
 function SheetContent({
   className,
@@ -77,8 +69,7 @@ function SheetContent({
       <SheetPrimitive.Content
         data-slot="sheet-content"
         className={cn(
-          SHEET_CLIP[side],
-          "overflow-hidden fixed z-50 flex flex-col gap-4 shadow-lg",
+          "overflow-hidden fixed z-50 flex flex-col gap-4 bg-[#0d0d0f] backdrop-blur-xl border-white/10 shadow-xl",
           side === "right" &&
             "data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right inset-y-0 right-0 h-full w-3/4 border-l sm:max-w-sm",
           side === "left" &&
@@ -91,15 +82,12 @@ function SheetContent({
         )}
         {...props}
       >
-        <VoronoiMosaic seed={77} tileCount={30} margin={6} gap={2} className="absolute inset-0 w-full h-full" />
-        {/* No scrim — full brightness */}
         <div className="relative z-10 flex flex-col gap-4 flex-1">
           {children}
         </div>
         {showCloseButton && (
           <SheetPrimitive.Close
-            className="absolute top-[100px] right-4 z-20 bg-black p-3 hover:scale-110 transition-transform"
-            style={{ clipPath: "polygon(3% 0%, 100% 5%, 97% 100%, 0% 92%)" }}
+            className="absolute top-4 right-4 z-20 grid place-items-center rounded-full bg-white/10 p-2 text-white transition hover:bg-white/15"
           >
             <XIcon className="size-5 text-white" />
             <span className="sr-only">Close</span>

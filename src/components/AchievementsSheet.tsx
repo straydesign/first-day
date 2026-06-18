@@ -20,7 +20,7 @@ export function AchievementsSheet({ achievements, children }: AchievementsSheetP
           <Button
             variant="outline"
             size="sm"
-            className="border-2 border-yellow-500 text-yellow-400 hover:bg-white/10"
+            className="ring-2 ring-yellow-500 text-yellow-300 bg-black hover:ring-yellow-300"
           >
             <Trophy className="w-4 h-4 mr-1" />
             {unlockedCount}/{achievements.length}
@@ -31,7 +31,7 @@ export function AchievementsSheet({ achievements, children }: AchievementsSheetP
         <SheetTitle className="text-xl font-bold text-white mb-1 pt-2">
           Achievements
         </SheetTitle>
-        <SheetDescription className="text-sm text-white/50 mb-4">
+        <SheetDescription className="text-sm text-white/80 mb-4">
           {unlockedCount} of {achievements.length} unlocked
         </SheetDescription>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pb-6">

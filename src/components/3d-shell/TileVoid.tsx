@@ -9,7 +9,9 @@ import { COSMOS_ACTIVATION } from "./cosmosActivation";
 import { COSMOS_DOORWAY_DIR } from "./cosmosDoorwayDir";
 import { getProgressFraction } from "./progressIntent";
 import { getPresence } from "./presenceIntent";
-import { getOwnVisitorCount, getOwnRoomReactionPulse } from "./presencePulseIntent";
+// Gallery removed — presence/reaction pulses are no-ops; cosmos stays at baseline.
+const getOwnVisitorCount = () => 0;
+const getOwnRoomReactionPulse = () => 0;
 import { getDayWarmth } from "./timeOfDayIntent";
 
 /**

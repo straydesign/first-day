@@ -1,21 +1,20 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { motion, useInView, useScroll, useSpring } from "framer-motion";
 import { Flame, Zap, Trophy, Target, Sparkles, Calendar, ListChecks, NotebookPen } from "lucide-react";
 import { FirstDayLogo } from "./FirstDayLogo";
 import { LivePlanDemo } from "./LivePlanDemo";
 import { DayCompleteDemo } from "./DayCompleteDemo";
 import { CountUp } from "./CountUp";
-import { Footer } from "./Footer";
-import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, BRIGHT_COLORS, SCROLL_SPEEDS } from "@/constants";
-import { useMonotone } from "./MonotoneContext";
+import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, SCROLL_SPEEDS } from "@/constants";
 import { SPRING } from "@/lib/animations";
-import { VoronoiMosaic } from "./VoronoiMosaic";
+import { FONT } from "@/lib/design";
+import { Panel } from "./ui/Panel";
 import { setActionIntent } from "./3d-shell/actionIntent";
 import { HeroAutoTour } from "./HeroAutoTour";
 
-const PANEL_DARK_PALETTE = ["#0a0a14", "#10122a", "#0f0e1f", "#181a3a", "#0c0d1e"] as const;
 
 interface LandingPageProps {
   onGetStarted: () => void;
@@ -24,8 +23,7 @@ interface LandingPageProps {
   onTermsOfService: () => void;
 }
 
-function SectionKicker({ num, label, color }: { num: string; label: string; color: string }) {
-  const { monotone } = useMonotone();
+function SectionKicker({ num, label }: { num: string; label: string }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
@@ -34,18 +32,8 @@ function SectionKicker({ num, label, color }: { num: string; label: string; colo
       transition={{ ...SPRING.gentle }}
       className="inline-flex items-center gap-2 mb-3"
     >
-      <span
-        className="inline-flex items-center justify-center w-8 h-8 lg:w-10 lg:h-10 text-xs lg:text-sm font-black text-black"
-        style={{
-          backgroundColor: monotone ? "#888" : color,
-          clipPath: "polygon(4% 8%, 95% 0%, 100% 85%, 8% 100%)",
-        }}
-      >
-        {num}
-      </span>
-      <span className="text-xs lg:text-sm uppercase tracking-[0.2em] text-white/60 font-bold">
-        {label}
-      </span>
+      <span className="text-[13px] font-semibold tabular-nums text-white/35">{num}</span>
+      <span className="text-[12px] uppercase tracking-[0.12em] text-white/40">{label}</span>
     </motion.div>
   );
 }
@@ -68,7 +56,6 @@ function AnimatedSection({ children, className, delay = 0 }: { children: React.R
 }
 
 export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfService }: LandingPageProps) {
-  const { monotone } = useMonotone();
   const [isNavSticky, setIsNavSticky] = useState(false);
   const [demoGoal, setDemoGoal] = useState<string | null>(null);
   const [demoPlan, setDemoPlan] = useState<string[] | null>(null);
@@ -93,11 +80,6 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const getGoalBgColor = (_goal: string, index: number) => {
-    // Scattered step avoids adjacent same-hue colors, feels infinite
-    return BRIGHT_COLORS[(index * 7 + 3) % BRIGHT_COLORS.length];
-  };
-
   const renderScrollRow = (goals: string[], direction: "left" | "right", rowIndex: number) => (
     <div className="overflow-hidden select-none group">
       <div
@@ -114,8 +96,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
             key={index}
             type="button"
             onClick={() => handlePillClick(goal)}
-            className={`${index % 2 === 0 ? "clip-badge-a" : "clip-badge-b"} inline-block px-5 py-2 text-black text-sm font-bold mx-1.5 select-none cursor-pointer hover:scale-110 active:scale-95 transition-transform`}
-            style={{ backgroundColor: monotone ? "#333333" : getGoalBgColor(goal, index) }}
+            className="inline-block rounded-full border border-white/10 bg-white/5 px-5 py-2 text-sm font-medium text-white/80 mx-1.5 select-none cursor-pointer hover:bg-white/10 hover:text-white active:scale-95 transition"
           >
             {goal}
           </button>
@@ -125,50 +106,32 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
   );
 
   return (
-    <div className="min-h-screen relative">
-      <HeroAutoTour />
-      {/* Scroll progress bar — sits above everything, brand yellow, springy */}
+    <div className="min-h-screen relative" style={{ fontFamily: FONT }}>
+      <HeroAutoTour enabled={false} />
+      {/* Scroll progress bar — sits above everything, sleek white, springy */}
       <motion.div
         aria-hidden
-        className="fixed top-0 left-0 right-0 h-[3px] z-[100] origin-left pointer-events-none"
-        style={{
-          scaleX: scrollProgressX,
-          backgroundColor: monotone ? "#999999" : "#FFE633",
-        }}
+        className="fixed top-0 left-0 right-0 h-[2px] z-[100] origin-left pointer-events-none bg-white/85"
+        style={{ scaleX: scrollProgressX }}
       />
 
       {/* Content */}
       <div className="relative z-10">
         {/* Hero Section */}
         <section
-          className="relative min-h-[800px] md:min-h-screen flex flex-col justify-center items-center px-0 pt-[180px]"
+          className="relative min-h-[800px] md:min-h-screen flex flex-col justify-center items-center px-4 pt-[180px]"
         >
 
-          {/* Top corners — Log In shard / Get Started — always colored */}
+          {/* Top corners — Log In (ghost) / Get Started (white) */}
           <div className="absolute top-[100px] md:top-6 left-4 lg:left-8 z-50">
             <button
               onClick={onLogin || onGetStarted}
-              className="px-5 py-3 md:px-8 md:py-4 lg:px-10 lg:py-5 font-black text-base md:text-lg lg:text-xl tracking-wide uppercase hover:scale-105 transition-all duration-300 btn-shake"
-              style={{
-                backgroundColor: "#FFE633",
-                color: "#000000",
-                clipPath: "polygon(3% 0%, 100% 8%, 97% 100%, 0% 88%)",
-              }}
+              className="rounded-full border border-white/15 text-white/80 text-[15px] font-semibold py-2.5 px-6 hover:bg-white/5 transition"
             >
               Log In
             </button>
           </div>
-          <div className="absolute top-[100px] md:top-6 right-4 lg:right-8 z-50 inline-block">
-            <motion.span
-              aria-hidden
-              animate={{ scale: [1, 1.18, 1], opacity: [0.5, 0, 0] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                backgroundColor: "#FF2D55",
-                clipPath: "polygon(0% 8%, 97% 0%, 100% 88%, 3% 100%)",
-              }}
-            />
+          <div className="absolute top-[100px] md:top-6 right-4 lg:right-8 z-50">
             <motion.button
               onClick={onGetStarted}
               onMouseEnter={() => setActionIntent(1)}
@@ -177,34 +140,44 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
               onBlur={() => setActionIntent(0)}
               onPointerDown={() => setActionIntent(1)}
               onPointerUp={() => setActionIntent(0)}
-              animate={{ scale: [1, 1.03, 1] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              whileHover={{ scale: 1.07 }}
-              whileTap={{ scale: 0.96 }}
-              className="relative px-5 py-3 md:px-8 md:py-4 lg:px-10 lg:py-5 font-black text-base md:text-lg lg:text-xl tracking-wide uppercase btn-shake"
-              style={{
-                backgroundColor: "#FF2D55",
-                color: "#000000",
-                clipPath: "polygon(0% 8%, 97% 0%, 100% 88%, 3% 100%)",
-              }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="rounded-full bg-white text-black text-[15px] font-semibold py-2.5 px-6 transition-transform"
             >
               Get Started
             </motion.button>
           </div>
 
-          {/* Tagline — shard word chips floating over hero */}
-          <div ref={heroNavRef} className="relative z-50 w-full max-w-3xl lg:max-w-5xl mx-auto px-4 md:px-8">
+          {/* Hero headline — sleek Apple-style wordmark + tagline */}
+          <div ref={heroNavRef} className="relative z-50 w-full max-w-3xl lg:max-w-5xl mx-auto px-4 md:px-8 text-center">
             <motion.div
-              initial={{ opacity: 0, y: -10 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={SPRING.bouncy}
+              transition={SPRING.gentle}
             >
-              {/* Mobile: default size, Desktop: hero size — both interactive */}
-              <div className="block md:hidden">
-                <FirstDayLogo showTagline={true} showLetters={false} interactive={true} />
-              </div>
-              <div className="hidden md:block">
-                <FirstDayLogo size="hero" showTagline={true} showLetters={false} interactive={true} />
+              <h1 className="font-semibold tracking-[-0.03em] leading-[1.02] text-white text-[clamp(2.5rem,7vw,5rem)]">
+                First Day
+              </h1>
+              <p className="mt-4 mx-auto max-w-xl text-[clamp(1rem,2.2vw,1.4rem)] leading-relaxed text-white/55">
+                The first day of the rest of your life. Pick a goal, get a 7-day plan, and show up.
+              </p>
+              <div className="mt-8 flex items-center justify-center gap-3">
+                <motion.button
+                  onClick={onGetStarted}
+                  onMouseEnter={() => setActionIntent(1)}
+                  onMouseLeave={() => setActionIntent(0)}
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}
+                  className="rounded-full bg-white text-black text-[15px] font-semibold py-3 px-7 transition-transform"
+                >
+                  Get Started
+                </motion.button>
+                <button
+                  onClick={onLogin || onGetStarted}
+                  className="rounded-full border border-white/15 text-white/80 text-[15px] font-semibold py-3 px-7 hover:bg-white/5 transition"
+                >
+                  Log In
+                </button>
               </div>
             </motion.div>
           </div>
@@ -219,36 +192,33 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
             className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 group cursor-pointer"
             aria-label="Scroll to live plan demo"
           >
-            <span className="text-[10px] uppercase tracking-[0.25em] text-white/50 group-hover:text-white/90 transition-colors font-bold">
+            <span className="text-[11px] uppercase tracking-[0.12em] text-white/40 group-hover:text-white/70 transition-colors">
               See it in 2s
             </span>
-            <div className="clip-tile-c w-6 h-10 border-2 border-white/40 group-hover:border-white/80 transition-colors flex justify-center pt-2">
+            <div className="w-6 h-10 rounded-full border border-white/20 group-hover:border-white/50 transition-colors flex justify-center pt-2">
               <motion.div
                 animate={{ y: [0, 8, 0] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
-                className="clip-diamond w-1.5 h-1.5 bg-white/60 group-hover:bg-white transition-colors"
+                className="w-1.5 h-1.5 rounded-full bg-white/60 group-hover:bg-white transition-colors"
               />
             </div>
           </motion.button>
         </section>
 
-        {/* Sticky nav — tagline bar with centered login/get-started */}
+        {/* Sticky nav — thin blurred bar with login/get-started */}
         {isNavSticky && (
           <motion.div
             initial={{ y: -60, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={SPRING.snappy}
-            className="fixed top-0 left-0 right-0 z-50 overflow-hidden px-4 pb-5"
-            style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 84px)" }}
+            className="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.06] bg-[#08080a]/70 backdrop-blur-xl"
           >
-            <VoronoiMosaic seed={2207} tileCount={48} margin={4} gap={2} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
-            <div className="relative z-10 flex items-center justify-between gap-2">
+            <div className="mx-auto max-w-3xl flex h-14 items-center justify-between gap-2 px-6">
               <motion.button
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 onClick={onLogin || onGetStarted}
-                className="bg-white/10 px-4 py-2.5 md:px-6 md:py-3 text-white font-black text-sm md:text-base tracking-wide uppercase hover:scale-105 hover:bg-white/15 transition-all flex-shrink-0"
-                style={{ clipPath: "polygon(3% 0%, 100% 8%, 97% 100%, 0% 88%)" }}
+                className="rounded-full border border-white/15 text-white/80 text-sm font-semibold py-2 px-4 hover:bg-white/5 transition flex-shrink-0"
               >
                 Log In
               </motion.button>
@@ -265,12 +235,10 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                 onBlur={() => setActionIntent(0)}
                 onPointerDown={() => setActionIntent(1)}
                 onPointerUp={() => setActionIntent(0)}
-                className="relative overflow-hidden px-4 py-2.5 md:px-6 md:py-3 text-white font-black text-sm tracking-wide uppercase hover:scale-105 transition-transform flex-shrink-0"
-                style={{ clipPath: "polygon(0% 8%, 97% 0%, 100% 88%, 3% 100%)" }}
+                className="rounded-full bg-white text-black text-sm font-semibold py-2 px-4 hover:scale-[1.02] transition-transform flex-shrink-0"
               >
-                <VoronoiMosaic seed={2287} tileCount={14} margin={3} gap={1.5} palette={PANEL_DARK_PALETTE} className="absolute inset-0 w-full h-full pointer-events-none" />
-                <span className="relative z-10 hidden sm:inline">Get Started</span>
-                <span className="relative z-10 sm:hidden">Start</span>
+                <span className="hidden sm:inline">Get Started</span>
+                <span className="sm:hidden">Start</span>
               </motion.button>
             </div>
           </motion.div>
@@ -286,11 +254,11 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
           >
             <div className="py-4 overflow-hidden space-y-1.5">
               <div className="flex items-center justify-center gap-2 mb-4 px-4">
-                <span className="h-px w-8 bg-white/30" aria-hidden />
-                <span className="text-xs lg:text-sm uppercase tracking-[0.25em] text-white/70 font-bold">
+                <span className="h-px w-8 bg-white/15" aria-hidden />
+                <span className="text-[12px] uppercase tracking-[0.12em] text-white/40">
                   Tap a goal to preview your week
                 </span>
-                <span className="h-px w-8 bg-white/30" aria-hidden />
+                <span className="h-px w-8 bg-white/15" aria-hidden />
               </div>
               {renderScrollRow(GOAL_SUGGESTIONS_ROW_1, "left", 0)}
               {renderScrollRow(GOAL_SUGGESTIONS_ROW_2, "right", 1)}
@@ -327,41 +295,35 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
         {/* How It Works */}
         <AnimatedSection>
           <section id="how-it-works" className="w-full py-8 md:py-16 lg:py-24 px-4 md:px-10">
-            <div className="max-w-5xl lg:max-w-7xl mx-auto">
+            <div className="max-w-5xl lg:max-w-6xl mx-auto">
               <div className="text-center mb-6 lg:mb-10">
-                <SectionKicker num="01" label="The System" color="#FFE633" />
-                <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-2">How It Works</h2>
-                <p className="text-white/80 md:text-lg lg:text-xl">No vague vision boards. A real 7-day battle plan.</p>
+                <SectionKicker num="01" label="The System" />
+                <h2 className="text-3xl md:text-5xl font-semibold tracking-[-0.02em] text-white mb-2">How It Works</h2>
+                <p className="text-white/55 md:text-lg">No vague vision boards. A real 7-day battle plan.</p>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 lg:gap-10">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
                 {[
-                  { n: 1, title: "Set Your Goal", line: "Pick what's been nagging you. One sentence.", color: "#FFE633", clip: "polygon(4% 8%, 95% 0%, 100% 85%, 8% 100%)", Icon: Target },
-                  { n: 2, title: "Get Your Plan", line: "AI builds your 7-day sprint. Specific. Actionable.", color: "#FF6B2B", clip: "polygon(0% 5%, 92% 0%, 98% 92%, 3% 95%)", Icon: Sparkles },
-                  { n: 3, title: "Show Up Daily", line: "Earn XP, build streaks, finish what you started.", color: "#FF2D55", clip: "polygon(6% 0%, 100% 10%, 94% 100%, 0% 88%)", Icon: Flame },
+                  { n: 1, title: "Set Your Goal", line: "Pick what's been nagging you. One sentence.", Icon: Target },
+                  { n: 2, title: "Get Your Plan", line: "AI builds your 7-day sprint. Specific. Actionable.", Icon: Sparkles },
+                  { n: 3, title: "Show Up Daily", line: "Earn XP, build streaks, finish what you started.", Icon: Flame },
                 ].map((s, i) => (
                   <motion.div
                     key={s.n}
                     initial={{ opacity: 0, y: 24 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    whileHover={{ y: -6, scale: 1.02 }}
+                    whileHover={{ y: -6 }}
                     viewport={{ once: true, margin: "-40px" }}
                     transition={{ ...SPRING.gentle, delay: i * 0.12 }}
-                    className="relative p-5 lg:p-8 text-center overflow-hidden cursor-default"
-                    style={{
-                      backgroundColor: monotone ? "#444" : s.color,
-                      clipPath: s.clip,
-                    }}
                   >
-                    <div className="absolute top-1 right-3 text-7xl md:text-8xl lg:text-[9rem] font-black text-black/10 leading-none pointer-events-none select-none">
-                      {s.n}
-                    </div>
-                    <div className="relative">
-                      <div className="clip-diamond inline-flex items-center justify-center w-14 h-14 lg:w-18 lg:h-18 bg-black/20 mb-3">
-                        <s.Icon className="w-7 h-7 lg:w-9 lg:h-9 text-black" />
+                    <Panel contentClassName="p-6 lg:p-8 text-center">
+                      <div className="relative">
+                        <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/5 border border-white/10 mb-4">
+                          <s.Icon className="w-6 h-6 text-white/70" />
+                        </div>
+                        <h3 className="text-xl md:text-2xl font-semibold tracking-[-0.01em] text-white mb-2">{s.title}</h3>
+                        <p className="text-white/55 text-sm lg:text-base leading-relaxed">{s.line}</p>
                       </div>
-                      <h3 className="text-xl md:text-3xl lg:text-4xl font-bold text-black mb-2">{s.title}</h3>
-                      <p className="text-black/80 text-sm lg:text-base">{s.line}</p>
-                    </div>
+                    </Panel>
                   </motion.div>
                 ))}
               </div>
@@ -372,147 +334,129 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
         {/* Stay Motivated */}
         <AnimatedSection>
           <section className="w-full py-8 md:py-16 lg:py-24 px-4 md:px-10">
-            <div className="max-w-5xl lg:max-w-7xl mx-auto">
+            <div className="max-w-5xl lg:max-w-6xl mx-auto">
               <div className="text-center mb-6 lg:mb-10">
-                <SectionKicker num="02" label="The Loop" color="#FF6B2B" />
-                <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-2">Stay Motivated</h2>
-                <p className="text-white/80 md:text-lg lg:text-xl">Built-in streaks, XP, and achievements keep you coming back</p>
+                <SectionKicker num="02" label="The Loop" />
+                <h2 className="text-3xl md:text-5xl font-semibold tracking-[-0.02em] text-white mb-2">Stay Motivated</h2>
+                <p className="text-white/55 md:text-lg">Built-in streaks, XP, and achievements keep you coming back</p>
               </div>
 
               <div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 lg:gap-10">
-                  {/* Streaks — single shard */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                  {/* Streaks */}
                   <motion.div
-                    whileHover={{ y: -6, scale: 1.02 }}
+                    whileHover={{ y: -6 }}
                     transition={SPRING.gentle}
-                    className="relative p-5 lg:p-8 text-center overflow-hidden cursor-default"
-                    style={{
-                      backgroundColor: monotone ? "#555555" : "#FFE633",
-                      clipPath: "polygon(4% 8%, 95% 0%, 100% 85%, 8% 100%)",
-                    }}
                   >
-                    <div className="clip-diamond inline-flex items-center justify-center w-14 h-14 lg:w-18 lg:h-18 bg-black/20 mb-3">
-                      <Flame className="w-7 h-7 lg:w-9 lg:h-9 text-black" />
-                    </div>
-                    <h3 className="text-xl md:text-3xl lg:text-4xl font-bold text-black mb-1">Daily Streaks</h3>
-                    <p className="text-black/80 text-sm lg:text-base mb-4">Keep your streak alive by showing up every day. The longer you go, the more bonus XP you earn.</p>
-                    <div className="clip-badge-a inline-flex items-center gap-1.5 bg-black/20 text-black px-5 py-1.5 font-bold text-lg">
-                      <Flame className="w-5 h-5" />
-                      <CountUp target={12} />
-                    </div>
-                    <p className="text-xs text-black/70 mt-1 font-medium">12-day streak</p>
+                    <Panel contentClassName="p-6 lg:p-8 text-center">
+                      <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/5 border border-white/10 mb-4">
+                        <Flame className="w-6 h-6 text-white/70" />
+                      </div>
+                      <h3 className="text-xl md:text-2xl font-semibold tracking-[-0.01em] text-white mb-1">Daily Streaks</h3>
+                      <p className="text-white/55 text-sm lg:text-base mb-4 leading-relaxed">Keep your streak alive by showing up every day. The longer you go, the more bonus XP you earn.</p>
+                      <div className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 text-white px-5 py-1.5 font-semibold text-lg">
+                        <Flame className="w-5 h-5 text-white/70" />
+                        <CountUp target={12} />
+                      </div>
+                      <p className="text-xs text-white/40 mt-2 font-medium">12-day streak</p>
+                    </Panel>
                   </motion.div>
 
-                  {/* XP & Levels — single shard */}
+                  {/* XP & Levels */}
                   <motion.div
-                    whileHover={{ y: -6, scale: 1.02 }}
+                    whileHover={{ y: -6 }}
                     transition={SPRING.gentle}
-                    className="relative p-5 lg:p-8 text-center overflow-hidden cursor-default"
-                    style={{
-                      backgroundColor: monotone ? "#444444" : "#FF6B2B",
-                      clipPath: "polygon(0% 5%, 92% 0%, 98% 92%, 3% 95%)",
-                    }}
                   >
-                    <div className="clip-diamond inline-flex items-center justify-center w-14 h-14 lg:w-18 lg:h-18 bg-black/20 mb-3">
-                      <Zap className="w-7 h-7 lg:w-9 lg:h-9 text-black" />
-                    </div>
-                    <h3 className="text-xl md:text-3xl lg:text-4xl font-bold text-black mb-1">Earn XP</h3>
-                    <p className="text-black/80 text-sm lg:text-base mb-4">Earn points for every activity you complete, every reflection you write, and every streak day.</p>
-                    <div className="space-y-2 max-w-[180px] mx-auto">
-                      <div className="flex justify-between text-sm">
-                        <span className="font-semibold text-black">Dedicated</span>
-                        <span className="text-black font-bold">
-                          <CountUp target={1450} suffix=" XP" />
-                        </span>
+                    <Panel contentClassName="p-6 lg:p-8 text-center">
+                      <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/5 border border-white/10 mb-4">
+                        <Zap className="w-6 h-6 text-white/70" />
                       </div>
-                      <div className="clip-progress w-full h-2.5 bg-black/20 overflow-hidden">
-                        <motion.div
-                          className="h-full bg-black/40"
-                          initial={{ width: "0%" }}
-                          whileInView={{ width: "62%" }}
-                          viewport={{ once: true, margin: "-40px" }}
-                          transition={{ duration: 1.4, ease: [0.22, 0.8, 0.3, 1], delay: 0.2 }}
-                        />
+                      <h3 className="text-xl md:text-2xl font-semibold tracking-[-0.01em] text-white mb-1">Earn XP</h3>
+                      <p className="text-white/55 text-sm lg:text-base mb-4 leading-relaxed">Earn points for every activity you complete, every reflection you write, and every streak day.</p>
+                      <div className="space-y-2 max-w-[180px] mx-auto">
+                        <div className="flex justify-between text-sm">
+                          <span className="font-semibold text-white">Dedicated</span>
+                          <span className="text-white/70 font-semibold">
+                            <CountUp target={1450} suffix=" XP" />
+                          </span>
+                        </div>
+                        <div className="h-1 w-full rounded-full bg-white/10 overflow-hidden">
+                          <motion.div
+                            className="h-full rounded-full bg-white/85"
+                            initial={{ width: "0%" }}
+                            whileInView={{ width: "62%" }}
+                            viewport={{ once: true, margin: "-40px" }}
+                            transition={{ duration: 1.4, ease: [0.22, 0.8, 0.3, 1], delay: 0.2 }}
+                          />
+                        </div>
+                        <p className="text-xs text-white/40">750 XP to Unstoppable</p>
                       </div>
-                      <p className="text-xs text-black/60">750 XP to Unstoppable</p>
-                    </div>
+                    </Panel>
                   </motion.div>
 
-                  {/* Achievements — single shard */}
+                  {/* Achievements */}
                   <motion.div
-                    whileHover={{ y: -6, scale: 1.02 }}
+                    whileHover={{ y: -6 }}
                     transition={SPRING.gentle}
-                    className="relative p-5 lg:p-8 text-center overflow-hidden cursor-default"
-                    style={{
-                      backgroundColor: monotone ? "#333333" : "#FF10F0",
-                      clipPath: "polygon(6% 0%, 100% 10%, 94% 100%, 0% 88%)",
-                    }}
                   >
-                    <div className="clip-diamond inline-flex items-center justify-center w-14 h-14 lg:w-18 lg:h-18 bg-black/20 mb-3">
-                      <Trophy className="w-7 h-7 lg:w-9 lg:h-9 text-black" />
-                    </div>
-                    <h3 className="text-xl md:text-3xl lg:text-4xl font-bold text-black mb-1">Unlock Badges</h3>
-                    <p className="text-black/80 text-sm lg:text-base mb-4">Hit milestones and earn achievements. Can you collect them all?</p>
-                    <div className="flex justify-center gap-2">
-                      {["First Step", "On Fire", "Perfect Week", "???"].map((label, i) => (
-                        <motion.div
-                          key={label}
-                          initial={{ opacity: 0, scale: 0 }}
-                          whileInView={{ opacity: 1, scale: 1 }}
-                          viewport={{ once: true, margin: "-40px" }}
-                          transition={{ ...SPRING.bouncy, delay: 0.15 + i * 0.12 }}
-                          className={`clip-diamond w-10 h-10 flex items-center justify-center text-xs font-bold ${
-                            i === 3
-                              ? "bg-black/10 text-black/30"
-                              : "bg-black/20 text-black"
-                          }`}
-                          title={label}
-                        >
-                          {i === 3 ? "?" : (i + 1)}
-                        </motion.div>
-                      ))}
-                    </div>
+                    <Panel contentClassName="p-6 lg:p-8 text-center">
+                      <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/5 border border-white/10 mb-4">
+                        <Trophy className="w-6 h-6 text-white/70" />
+                      </div>
+                      <h3 className="text-xl md:text-2xl font-semibold tracking-[-0.01em] text-white mb-1">Unlock Badges</h3>
+                      <p className="text-white/55 text-sm lg:text-base mb-4 leading-relaxed">Hit milestones and earn achievements. Can you collect them all?</p>
+                      <div className="flex justify-center gap-2">
+                        {["First Step", "On Fire", "Perfect Week", "???"].map((label, i) => (
+                          <motion.div
+                            key={label}
+                            initial={{ opacity: 0, scale: 0 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true, margin: "-40px" }}
+                            transition={{ ...SPRING.bouncy, delay: 0.15 + i * 0.12 }}
+                            className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-semibold border ${
+                              i === 3
+                                ? "bg-white/[0.03] border-white/5 text-white/25"
+                                : "bg-white/5 border-white/10 text-white/70"
+                            }`}
+                            title={label}
+                          >
+                            {i === 3 ? "?" : (i + 1)}
+                          </motion.div>
+                        ))}
+                      </div>
+                    </Panel>
                   </motion.div>
                 </div>
 
-                {/* Stat bar — single-color shards */}
+                {/* Stat bar */}
                 <div className="mt-6 lg:mt-10 grid grid-cols-3 gap-3 lg:gap-6 max-w-lg lg:max-w-3xl mx-auto">
-                  <div
-                    className="text-center py-4 lg:py-6 px-2 lg:px-4"
-                    style={{ backgroundColor: monotone ? "#555555" : "#00EAFF", clipPath: "polygon(4% 8%, 95% 0%, 100% 85%, 8% 100%)" }}
-                  >
-                    <div className="flex items-center justify-center gap-1 mb-0.5">
-                      <Target className="w-3.5 h-3.5 lg:w-5 lg:h-5 text-black" />
-                      <span className="text-xs lg:text-sm text-black/70 font-medium">Rate</span>
+                  <Panel contentClassName="text-center py-4 lg:py-6 px-2 lg:px-4">
+                    <div className="flex items-center justify-center gap-1 mb-1">
+                      <Target className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-white/50" />
+                      <span className="text-xs lg:text-sm text-white/45 font-medium">Rate</span>
                     </div>
-                    <p className="text-3xl md:text-5xl lg:text-6xl font-bold text-black">
+                    <p className="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-[-0.02em] text-white tabular-nums">
                       <CountUp target={87} suffix="%" />
                     </p>
-                  </div>
-                  <div
-                    className="text-center py-4 lg:py-6 px-2 lg:px-4"
-                    style={{ backgroundColor: monotone ? "#444444" : "#FF4500", clipPath: "polygon(0% 5%, 92% 0%, 98% 92%, 3% 95%)" }}
-                  >
-                    <div className="flex items-center justify-center gap-1 mb-0.5">
-                      <Flame className="w-3.5 h-3.5 lg:w-5 lg:h-5 text-black" />
-                      <span className="text-xs lg:text-sm text-black/70 font-medium">Streak</span>
+                  </Panel>
+                  <Panel contentClassName="text-center py-4 lg:py-6 px-2 lg:px-4">
+                    <div className="flex items-center justify-center gap-1 mb-1">
+                      <Flame className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-white/50" />
+                      <span className="text-xs lg:text-sm text-white/45 font-medium">Streak</span>
                     </div>
-                    <p className="text-3xl md:text-5xl lg:text-6xl font-bold text-black">
+                    <p className="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-[-0.02em] text-white tabular-nums">
                       <CountUp target={12} delay={0.1} />
                     </p>
-                  </div>
-                  <div
-                    className="text-center py-4 lg:py-6 px-2 lg:px-4"
-                    style={{ backgroundColor: monotone ? "#333333" : "#FF2D55", clipPath: "polygon(6% 0%, 100% 10%, 94% 100%, 0% 88%)" }}
-                  >
-                    <div className="flex items-center justify-center gap-1 mb-0.5">
-                      <Trophy className="w-3.5 h-3.5 lg:w-5 lg:h-5 text-black" />
-                      <span className="text-xs lg:text-sm text-black/70 font-medium">Badges</span>
+                  </Panel>
+                  <Panel contentClassName="text-center py-4 lg:py-6 px-2 lg:px-4">
+                    <div className="flex items-center justify-center gap-1 mb-1">
+                      <Trophy className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-white/50" />
+                      <span className="text-xs lg:text-sm text-white/45 font-medium">Badges</span>
                     </div>
-                    <p className="text-3xl md:text-5xl lg:text-6xl font-bold text-black">
+                    <p className="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-[-0.02em] text-white tabular-nums">
                       <CountUp target={5} delay={0.2} />/8
                     </p>
-                  </div>
+                  </Panel>
                 </div>
               </div>
             </div>
@@ -522,35 +466,35 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
         {/* What Your Plan Looks Like */}
         <AnimatedSection>
           <section className="w-full py-8 md:py-16 lg:py-24 px-4 md:px-10">
-              <div className="max-w-5xl lg:max-w-7xl mx-auto">
+              <div className="max-w-5xl lg:max-w-6xl mx-auto">
               <div className="text-center mb-6 lg:mb-10">
-                <SectionKicker num="03" label="The Sprint" color="#FF2D55" />
-                <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-2">What Your Plan Looks Like</h2>
-                <p className="text-white/80 md:text-lg lg:text-xl">Your personalized weekly sprint</p>
+                <SectionKicker num="03" label="The Sprint" />
+                <h2 className="text-3xl md:text-5xl font-semibold tracking-[-0.02em] text-white mb-2">What Your Plan Looks Like</h2>
+                <p className="text-white/55 md:text-lg">Your personalized weekly sprint</p>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5 lg:gap-8">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5 lg:gap-6">
                 {[
-                  { Icon: Calendar, label: "Weekly Sprint", desc: "Seven days. Beginning to finish line.", color: "#FFE633", clip: "polygon(2% 0%, 100% 3%, 98% 100%, 0% 97%)" },
-                  { Icon: ListChecks, label: "Daily Activities", desc: "Curated tasks, videos, and resources.", color: "#FF6B2B", clip: "polygon(0% 3%, 98% 0%, 100% 97%, 2% 100%)" },
-                  { Icon: NotebookPen, label: "Daily Reflection", desc: "Lock in what you learned in 30 seconds.", color: "#FF2D55", clip: "polygon(1% 0%, 100% 2%, 99% 100%, 0% 98%)" },
-                  { Icon: Trophy, label: "Finish Strong", desc: "Badges, trophies, and the proof you did it.", color: "#00EAFF", clip: "polygon(3% 2%, 100% 0%, 97% 98%, 0% 100%)" },
+                  { Icon: Calendar, label: "Weekly Sprint", desc: "Seven days. Beginning to finish line." },
+                  { Icon: ListChecks, label: "Daily Activities", desc: "Curated tasks, videos, and resources." },
+                  { Icon: NotebookPen, label: "Daily Reflection", desc: "Lock in what you learned in 30 seconds." },
+                  { Icon: Trophy, label: "Finish Strong", desc: "Badges, trophies, and the proof you did it." },
                 ].map((card, i) => (
                   <motion.div
                     key={card.label}
-                    initial={{ opacity: 0, y: 24, scale: 0.96 }}
-                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    initial={{ opacity: 0, y: 24 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-40px" }}
                     transition={{ ...SPRING.gentle, delay: i * 0.08 }}
-                    whileHover={{ scale: 1.04 }}
-                    className="p-5 md:p-6 lg:p-8 text-center cursor-default"
-                    style={{ backgroundColor: monotone ? "#222" : card.color, clipPath: card.clip }}
+                    whileHover={{ y: -4 }}
                   >
-                    <div className="clip-diamond inline-flex items-center justify-center w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-black/20 mb-3">
-                      <card.Icon className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 text-black" strokeWidth={2.5} />
-                    </div>
-                    <h3 className="text-base md:text-lg lg:text-xl font-bold text-black mb-1">{card.label}</h3>
-                    <p className="text-xs md:text-sm lg:text-base text-black/70">{card.desc}</p>
+                    <Panel contentClassName="p-5 md:p-6 lg:p-7 text-center">
+                      <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/5 border border-white/10 mb-3">
+                        <card.Icon className="w-6 h-6 text-white/70" strokeWidth={2} />
+                      </div>
+                      <h3 className="text-base md:text-lg font-semibold tracking-[-0.01em] text-white mb-1">{card.label}</h3>
+                      <p className="text-xs md:text-sm text-white/50 leading-relaxed">{card.desc}</p>
+                    </Panel>
                   </motion.div>
                 ))}
               </div>
@@ -559,38 +503,18 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
               <div className="text-center mt-8 md:mt-12 lg:mt-16">
                 <motion.button
                   onClick={onGetStarted}
-                  whileHover={{ scale: 1.04 }}
-                  whileTap={{ scale: 0.97 }}
-                  className="group relative inline-flex items-center gap-3 lg:gap-5 text-white font-black text-3xl md:text-5xl lg:text-7xl uppercase tracking-wide btn-shake"
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}
+                  className="group inline-flex items-center gap-2 rounded-full bg-white text-black text-[16px] md:text-[17px] font-semibold py-3.5 px-8 transition-transform"
                 >
-                  {["Create", "Your", "Plan"].map((word, i) => (
-                    <motion.span
-                      key={word}
-                      initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
-                      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                      viewport={{ once: true, margin: "-40px" }}
-                      transition={{ ...SPRING.bouncy, delay: 0.15 + i * 0.1 }}
-                      className="inline-block"
-                    >
-                      {word}
-                    </motion.span>
-                  ))}
+                  <span>Create Your Plan</span>
                   <motion.span
                     aria-hidden
-                    initial={{ opacity: 0, x: -16 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true, margin: "-40px" }}
-                    transition={{ ...SPRING.bouncy, delay: 0.55 }}
-                    className="inline-flex"
+                    animate={{ x: [0, 5, 0] }}
+                    transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
+                    className="inline-block"
                   >
-                    <motion.span
-                      animate={{ x: [0, 8, 0] }}
-                      transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
-                      className="inline-block transition-colors"
-                      style={{ color: "#FFE633" }}
-                    >
-                      →
-                    </motion.span>
+                    →
                   </motion.span>
                 </motion.button>
                 <motion.p
@@ -598,7 +522,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: true, margin: "-40px" }}
                   transition={{ delay: 0.7, duration: 0.6 }}
-                  className="text-sm lg:text-base text-white/70 mt-3"
+                  className="text-sm lg:text-base text-white/50 mt-4"
                 >
                   Every plan is unique — personalized to your goal and experience
                 </motion.p>
@@ -607,8 +531,61 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
           </section>
         </AnimatedSection>
 
-        <Footer onPrivacyClick={onPrivacyPolicy} onTermsClick={onTermsOfService} />
       </div>
+
+      <StickyCTA onGetStarted={onGetStarted} onLogin={onLogin} />
     </div>
+  );
+}
+
+function StickyCTA({ onGetStarted, onLogin }: { onGetStarted: () => void; onLogin?: () => void }) {
+  const [visible, setVisible] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    const onScroll = () => {
+      const y = window.scrollY;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      setVisible(y > window.innerHeight * 0.8 && y < max - 600);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  if (!mounted) return null;
+
+  // Portal to document.body: <main> in this app applies a transform
+  // (3D shell breath / camera-driven motion), which creates a containing
+  // block and breaks `position: fixed` for any in-tree descendant.
+  return createPortal(
+    <motion.div
+      aria-hidden={!visible}
+      initial={false}
+      animate={{ y: visible ? 0 : 96, opacity: visible ? 1 : 0 }}
+      transition={{ type: "spring", stiffness: 380, damping: 32 }}
+      className="fixed bottom-0 inset-x-0 z-[80] pointer-events-none"
+    >
+      <div className="pointer-events-auto mx-auto max-w-3xl px-3 md:px-4 pb-3 md:pb-4">
+        <div className="flex items-center gap-2 md:gap-3 p-2 md:p-3 rounded-2xl border border-white/10 bg-[#08080a]/82 backdrop-blur-xl">
+          <button
+            onClick={onGetStarted}
+            className="flex-1 rounded-full bg-white text-black text-base md:text-lg font-semibold py-3 md:py-3.5 hover:scale-[1.01] active:scale-[0.99] transition-transform"
+          >
+            Create Your Plan →
+          </button>
+          {onLogin && (
+            <button
+              onClick={onLogin}
+              className="rounded-full border border-white/15 px-4 md:px-5 py-3 md:py-3.5 text-sm md:text-base font-semibold text-white/80 hover:bg-white/5 transition"
+            >
+              Log In
+            </button>
+          )}
+        </div>
+      </div>
+    </motion.div>,
+    document.body
   );
 }
