@@ -1,5 +1,15 @@
 import { createClient } from "@/lib/supabase/client";
-import type { Plan, ProgressMap, GoalFormData } from "@/types";
+import type { Plan, ProgressMap, GoalFormData, SprintMeta } from "@/types";
+import type { SprintGenResult } from "@/lib/anthropic";
+
+/** Payload for generating a single sprint forward (see /api/generate-plan). */
+export type SprintGenRequest = GoalFormData & {
+  startDate?: string;
+  sprint?: number;
+  sprints?: SprintMeta[];
+  priorReflections?: string[];
+  priorCompletion?: { completed: number; total: number };
+};
 
 /**
  * Get a fresh access token, refreshing the session if needed.
@@ -185,11 +195,40 @@ export const api = {
       if (error) throw new Error(error.message || "Failed to save progress");
       return { success: true };
     },
+
+    /** Persist just the plan column — used when a new sprint is generated forward. */
+    async savePlan(goalId: string, plan: Plan) {
+      await requireUserId();
+      const supabase = createClient();
+      const { error } = await supabase.from("goals").update({ plan } as never).eq("id", goalId);
+      if (error) throw new Error(error.message || "Failed to save plan");
+      return { success: true };
+    },
+  },
+
+  account: {
+    /**
+     * Permanently erase every goal (with its plan + progress) the user owns.
+     * RLS already scopes deletes to the caller; the explicit user_id filter is
+     * a belt-and-braces guard. This is the data side of the Privacy Policy's
+     * "right to delete" — the caller signs the user out afterward.
+     */
+    async deleteAllData() {
+      const userId = await requireUserId();
+      const supabase = createClient();
+      const { error } = await supabase.from("goals").delete().eq("user_id", userId);
+      if (error) throw new Error(error.message || "Failed to delete your data");
+      return { success: true };
+    },
   },
 
   plan: {
-    /** Generate a fresh plan via the Next.js route handler (same-origin). */
-    async generate(data: GoalFormData & { startDate?: string }): Promise<Plan> {
+    /**
+     * Generate ONE sprint forward via the Next.js route handler (same-origin).
+     * Pass `sprint: 1` at creation; for later sprints pass the prior sprint's
+     * reflections + completion so the AI can adapt the next week.
+     */
+    async generateSprint(data: SprintGenRequest): Promise<SprintGenResult> {
       const token = await getAuthToken();
       if (!token) throw new Error("Session expired");
       const res = await fetch("/api/generate-plan", {
@@ -202,7 +241,7 @@ export const api = {
         const err = await res.json().catch(() => ({}));
         throw new Error((err as { error?: string }).error || "Failed to generate plan");
       }
-      return res.json() as Promise<Plan>;
+      return res.json() as Promise<SprintGenResult>;
     },
   },
 };

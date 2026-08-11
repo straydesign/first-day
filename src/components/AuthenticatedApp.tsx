@@ -7,8 +7,17 @@ import { computeEngagementState, getMilestone, getLatestDayXP, calculateStreaks,
 import { setProgressFraction } from "@/components/3d-shell/progressIntent";
 import { useGoalManager } from "@/hooks/useGoalManager";
 import { useKeyboardNav } from "@/hooks/useKeyboardNav";
-import { LogoutPill } from "@/components/LogoutPill";
+import { SettingsPill } from "@/components/SettingsPill";
+import { api } from "@/lib/api";
+import { COPY } from "@/content/copy";
+import { toast } from "sonner";
 import type { AppView, EngagementState, Milestone, XPBreakdown, Achievement, SelectedDay } from "@/types";
+import { backTarget } from "@/content/flow";
+
+const NOTIF_KEY = "fd_notifications";
+
+const Settings = dynamic(() => import("@/components/Settings").then(m => ({ default: m.Settings })), { loading: () => <LoadingScreen /> });
+const SprintRecap = dynamic(() => import("@/components/SprintRecap").then(m => ({ default: m.SprintRecap })), { loading: () => <LoadingScreen /> });
 
 const CalendarView = dynamic(() => import("@/components/CalendarView").then(m => ({ default: m.CalendarView })), { loading: () => <LoadingScreen /> });
 const DayView = dynamic(() => import("@/components/DayView").then(m => ({ default: m.DayView })), { loading: () => <LoadingScreen /> });
@@ -54,14 +63,21 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
     handleViewTodayActivities: viewTodayApi,
     handleRegeneratePlan,
     handleDayComplete: dayCompleteLogic,
+    generateNextSprint,
     resetGoalState,
   } = goalManager;
+  // When the user finishes the last day of a sprint (and more remain), we show
+  // the between-sprints recap instead of the generic congrats screen.
+  const [sprintRecap, setSprintRecap] = useState<{ priorSprint: number } | null>(null);
 
-  // Keyboard nav: Escape goes back contextually
+  // Keyboard nav: Escape backs out along the flow registry's `back` targets.
+  // The creation wizard is intentionally left alone so a stray keypress can't
+  // discard an in-progress goal (use its Cancel button instead).
   useKeyboardNav(() => {
-    if (currentView === "day") setCurrentView("calendar");
-    else if (currentView === "calendar") handleBackToGoals();
-    else if (currentView === "congrats") setCurrentView("calendar");
+    if (currentView === "onboarding") return;
+    const back = backTarget(currentView);
+    if (back === "goals") handleBackToGoals(); // also resets in-flight goal state
+    else if (back) setCurrentView(back);
   });
 
   const totalDays = getPlanTotalDays(planData);
@@ -104,6 +120,35 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [currentView]);
+
+  // Daily-reminder preference persists across sessions (the one user setting).
+  useEffect(() => {
+    const saved = window.localStorage.getItem(NOTIF_KEY);
+    if (saved !== null) setNotificationsEnabled(saved === "1");
+  }, []);
+
+  const handleToggleNotifications = () => {
+    setNotificationsEnabled((prev) => {
+      const next = !prev;
+      window.localStorage.setItem(NOTIF_KEY, next ? "1" : "0");
+      toast.success(next ? COPY.toasts.notificationsOn : COPY.toasts.notificationsOff);
+      return next;
+    });
+  };
+
+  // Right-to-delete: erase every goal/plan/progress the user owns, then sign out.
+  const handleDeleteData = async () => {
+    if (demoMode) return;
+    if (!window.confirm(COPY.confirms.deleteAccount)) return;
+    try {
+      await api.account.deleteAllData();
+      toast.success(COPY.toasts.accountDeleted);
+    } catch {
+      toast.error(COPY.toasts.deleteAccountFailed);
+      return;
+    }
+    await handleLogoutAndReset();
+  };
 
   // Sync 3D camera rig to current view
   useEffect(() => {
@@ -168,6 +213,18 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
     const milestone = getMilestone(dayKey, streaks.current, totalDays);
     setLatestMilestone(milestone);
 
+    // Finishing the last day of a sprint closes the loop: show the recap, which
+    // reads reflections back and builds the NEXT sprint forward. Only when that
+    // next sprint still needs generating — a standard 4-sprint arc grows one at a
+    // time. The final day of the goal, and custom all-upfront plans (every sprint
+    // already generated), fall through to the normal congrats screen.
+    const priorSprint = dayKey / 7;
+    const totalSprints = planData.sprints?.length ?? 4;
+    const nextAlreadyGenerated = (planData.sprintsGenerated ?? 1) >= priorSprint + 1;
+    const isSprintBoundary =
+      dayKey % 7 === 0 && dayKey < totalDays && priorSprint + 1 <= totalSprints && !nextAlreadyGenerated;
+    setSprintRecap(isSprintBoundary ? { priorSprint } : null);
+
     setCurrentView("congrats");
     setShowBeastMode(true);
   };
@@ -221,7 +278,6 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
                 progress={progress}
                 onBack={handleBackToGoals}
                 engagement={engagement}
-                onLogout={handleLogoutAndReset}
               />
             )}
 
@@ -231,12 +287,26 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
                 onComplete={handleDayComplete}
                 isCompleted={progress[selectedDay.number]?.completed ? true : false}
                 savedProgress={progress[selectedDay.number] || null}
-                onBack={() => setCurrentView("calendar")}
+                onBack={() => setCurrentView(backTarget("day")!)}
                 currentStreak={engagement?.currentStreak ?? 0}
               />
             )}
 
-            {currentView === "congrats" && (
+            {currentView === "congrats" && sprintRecap && (
+              <SprintRecap
+                priorSprintNumber={sprintRecap.priorSprint}
+                progress={progress}
+                currentStreak={engagement?.currentStreak ?? 0}
+                sprints={planData?.sprints}
+                generateNextSprint={generateNextSprint}
+                onContinue={() => {
+                  setSprintRecap(null);
+                  setCurrentView("calendar");
+                }}
+              />
+            )}
+
+            {currentView === "congrats" && !sprintRecap && (
               <CongratsView
                 onViewCalendar={() => setCurrentView("calendar")}
                 onDoMore={handleBackToGoals}
@@ -246,6 +316,18 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
                 progress={progress}
                 milestone={latestMilestone}
                 xp={latestDayXP}
+              />
+            )}
+
+            {currentView === "settings" && (
+              <Settings
+                userEmail={userEmail}
+                demoMode={demoMode}
+                notificationsEnabled={notificationsEnabled}
+                onToggleNotifications={handleToggleNotifications}
+                onSignOut={handleLogoutAndReset}
+                onDeleteData={handleDeleteData}
+                onBack={() => setCurrentView("goals")}
               />
             )}
 
@@ -266,8 +348,8 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
           onDismiss={() => setNewAchievements([])}
         />
 
-        {(currentView === "goals" || currentView === "calendar" || currentView === "day") && !demoMode && (
-          <LogoutPill onLogout={handleLogoutAndReset} />
+        {(currentView === "goals" || currentView === "calendar" || currentView === "day") && (
+          <SettingsPill onOpen={() => setCurrentView("settings")} />
         )}
       </div>
     </div>

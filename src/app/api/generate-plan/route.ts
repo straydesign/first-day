@@ -1,20 +1,31 @@
 /**
- * POST /api/generate-plan — builds a 28-day plan for the authenticated user.
+ * POST /api/generate-plan — generates ONE 7-day sprint for the authenticated user.
  *
- * Replaces the old custom Supabase Edge Function. Auth is verified by validating
- * the caller's Supabase JWT. Plan generation uses Anthropic when a key is set,
- * and always falls back to a deterministic generator so it never hard-fails.
+ * The plan is built forward, a sprint at a time. The body carries `sprint` (1-4,
+ * default 1) plus, for sprints 2+, the prior sprint's `priorReflections` and
+ * `priorCompletion` so the AI can ADAPT the next week to how the last one went.
+ * Anthropic is used when a key is set; otherwise a deterministic fallback returns
+ * the fixed template sprint (no adaptation). The response reports `adapted` so the
+ * client never over-claims that feedback shaped the plan.
  *
- * This route does NOT write to the DB — the client persists the returned plan
- * via the (RLS-protected) goals table.
+ * This route does NOT write to the DB — the client persists the result via the
+ * (RLS-protected) goals table.
  */
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { generatePlanDeterministic } from "@/lib/plan-generator";
-import { generatePlanWithAI } from "@/lib/anthropic";
-import type { GoalFormData } from "@/types";
+import { generateSprintDeterministic } from "@/lib/plan-generator";
+import { generateSprintWithAI, type SprintGenContext } from "@/lib/anthropic";
+import type { GoalFormData, SprintMeta } from "@/types";
 
 export const runtime = "nodejs";
+
+type SprintRequest = GoalFormData & {
+  startDate?: string;
+  sprint?: number;
+  sprints?: SprintMeta[];
+  priorReflections?: string[];
+  priorCompletion?: { completed: number; total: number };
+};
 
 export async function POST(req: Request) {
   const authHeader = req.headers.get("authorization") || "";
@@ -34,9 +45,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  let body: GoalFormData & { startDate?: string };
+  let body: SprintRequest;
   try {
-    body = (await req.json()) as GoalFormData & { startDate?: string };
+    body = (await req.json()) as SprintRequest;
   } catch {
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }
@@ -44,16 +55,21 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "A goal is required" }, { status: 400 });
   }
 
-  const startDate = body.startDate || new Date().toISOString().split("T")[0];
+  const sprintNumber = Number.isInteger(body.sprint) && body.sprint! >= 1 && body.sprint! <= 4 ? body.sprint! : 1;
+  const ctx: SprintGenContext = {
+    sprints: body.sprints,
+    priorReflections: body.priorReflections,
+    priorCompletion: body.priorCompletion,
+  };
 
   // AI path first (only fires if ANTHROPIC_API_KEY is set); deterministic fallback.
   try {
-    const aiPlan = await generatePlanWithAI(body, startDate);
-    if (aiPlan) return NextResponse.json(aiPlan);
+    const ai = await generateSprintWithAI(body, sprintNumber, ctx);
+    if (ai) return NextResponse.json(ai);
   } catch (e) {
     console.error("[generate-plan] AI path failed, falling back to deterministic:", e);
   }
 
-  const plan = generatePlanDeterministic(body, startDate);
-  return NextResponse.json(plan);
+  const sprint = generateSprintDeterministic(body, sprintNumber);
+  return NextResponse.json(sprint);
 }

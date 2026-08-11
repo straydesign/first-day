@@ -10,6 +10,7 @@ import { fireCelebration, getRoomView } from "./3d-shell/RoomRegistry";
 import { previewDayXP, getDailyMultiplier, getDailyChallenge } from "@/lib/engagement";
 import { GuitarTab } from "./GuitarTab";
 import { FONT } from "@/lib/design";
+import { COPY } from "@/content/copy";
 import { staggerContainer, tileEnter, contentReveal, popIn, SPRING } from "@/lib/animations";
 import type { SelectedDay, DayProgress, Activity, ActivityResource } from "@/types";
 
@@ -63,7 +64,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
     <div className="min-h-screen relative pb-20 md:pb-0" role="main" aria-label="Day activities">
       {/* Background mosaic provided by AuthenticatedApp */}
       <TopBar
-        title={isToday ? `Today · Day ${day.number}` : `Day ${day.number}`}
+        title={isToday ? COPY.day.todayTitle(day.number) : COPY.day.dayTitle(day.number)}
         onBack={onBack}
         right={
           <div className="flex items-center gap-3">
@@ -87,10 +88,10 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
               <div className="flex items-center justify-center gap-2">
                 <Check className="w-5 h-5 text-emerald-300/80" />
                 <span className="text-[15px] font-semibold text-white">
-                  Day Completed{savedProgress?.completedAt ? ` · ${new Date(savedProgress.completedAt).toLocaleDateString()}` : ''}
+                  {COPY.day.completedBadge}{savedProgress?.completedAt ? ` · ${new Date(savedProgress.completedAt).toLocaleDateString()}` : ''}
                 </span>
               </div>
-              <p className="text-[13px] text-white/55 text-center mt-1">Your activities and notes are saved below.</p>
+              <p className="text-[13px] text-white/55 text-center mt-1">{COPY.day.completedNote}</p>
             </Panel>
           </motion.div>
         )}
@@ -105,11 +106,11 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
           >
             {dailyMultiplier > 1 && (
               <span className="inline-flex items-center gap-1.5 rounded-full border border-white/15 px-3 py-1 text-[12px] font-medium uppercase tracking-[0.08em] text-white/40">
-                {dailyMultiplier}x XP Day
+                {COPY.day.multiplierChip(dailyMultiplier)}
               </span>
             )}
             <span className="inline-flex items-center gap-1.5 rounded-full border border-white/15 px-3 py-1 text-[12px] font-medium text-white/55">
-              Challenge: {dailyChallenge.description} <span className="text-white/40">(+{dailyChallenge.bonusXP} XP)</span>
+              {COPY.day.challengePrefix} {dailyChallenge.description} <span className="text-white/40">{COPY.day.challengeBonus(dailyChallenge.bonusXP)}</span>
             </span>
           </motion.div>
         )}
@@ -122,7 +123,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
           >
             <div className="mb-4 md:mb-6">
               <motion.div variants={contentReveal}>
-                <p className="text-[12px] font-medium uppercase tracking-[0.08em] text-white/40 mb-3">Your Activities</p>
+                <p className="text-[12px] font-medium uppercase tracking-[0.08em] text-white/40 mb-3">{COPY.day.activitiesLabel}</p>
               </motion.div>
 
               {/* All activities as checklist items inside one Panel */}
@@ -172,7 +173,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
                                   <div key={rIndex} onClick={(e) => e.preventDefault()}>
                                     {resource.type === 'youtube' && (
                                       <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent(resource.query ?? '')}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 rounded-full border border-white/15 px-3 py-1 text-[12px] text-white/70 hover:text-white transition-colors" onClick={(e) => e.stopPropagation()}>
-                                        <Youtube className="w-3 h-3" />Search YouTube: {resource.query}
+                                        <Youtube className="w-3 h-3" />{COPY.day.youtubePrefix} {resource.query}
                                       </a>
                                     )}
                                     {resource.type === 'link' && (
@@ -200,20 +201,20 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
 
               {/* How did today go? */}
               <div className="mt-4">
-                <p className="text-[12px] font-medium uppercase tracking-[0.08em] text-white/40 mb-3">How did today go?</p>
+                <p className="text-[12px] font-medium uppercase tracking-[0.08em] text-white/40 mb-3">{COPY.day.feedbackLabel}</p>
                 <Panel contentClassName="p-4">
                   <Textarea
                     id="day-feedback"
                     aria-label="How did today go?"
                     value={feedback}
                     onChange={(e) => !isCompleted && setFeedback(e.target.value)}
-                    placeholder="Share your thoughts, challenges, or wins from today..."
+                    placeholder={COPY.day.feedbackPlaceholder}
                     className="min-h-32 text-[15px] border-0 focus-visible:ring-0 bg-transparent text-white/75 placeholder:text-white/30 resize-none leading-relaxed"
                     disabled={isCompleted}
                   />
                 </Panel>
                 {!isCompleted && (
-                  <p className="text-[12px] text-white/40 mt-2 px-1">Reflect on your progress — what went well and what you can improve.</p>
+                  <p className="text-[12px] text-white/40 mt-2 px-1">{COPY.day.feedbackHelper}</p>
                 )}
               </div>
             </div>
@@ -225,8 +226,8 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
             animate="visible"
           >
             <Panel contentClassName="p-8 text-center">
-              <p className="text-white/60 text-[15px]">Activities for this day are not available yet.</p>
-              <p className="text-white/40 text-[13px] mt-2">Check back later or contact support if this persists.</p>
+              <p className="text-white/60 text-[15px]">{COPY.day.emptyTitle}</p>
+              <p className="text-white/40 text-[13px] mt-2">{COPY.day.emptyHelper}</p>
             </Panel>
           </motion.div>
         )}
@@ -243,7 +244,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
                 className="rounded-full bg-white text-black text-[15px] font-semibold py-3 px-8 transition-transform hover:scale-[1.01] active:scale-[0.99]"
                 style={{ fontFamily: FONT }}
               >
-                Complete Day
+                {COPY.day.completeButton}
               </button>
             </div>
             {canSubmit && (
@@ -254,7 +255,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
                 className="flex items-center justify-center gap-2 mt-3 text-[13px] text-white/55 font-medium"
               >
                 <Zap className="w-3.5 h-3.5 text-white/40" />
-                <span>You&apos;ll earn ~<strong className="text-white/70">{xpPreview.total} XP</strong>{dailyMultiplier > 1 && <span className="text-white/40 ml-1">({dailyMultiplier}x)</span>}</span>
+                <span>{COPY.day.xpPreviewPrefix}<strong className="text-white/70">{xpPreview.total} {COPY.day.xpPreviewSuffix}</strong>{dailyMultiplier > 1 && <span className="text-white/40 ml-1">{COPY.day.xpMultiplierNote(dailyMultiplier)}</span>}</span>
               </motion.div>
             )}
           </motion.div>
@@ -283,14 +284,14 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
               >
                 <Panel contentClassName="p-8 text-center">
                   <p id="day-validation-title" className="text-[17px] font-semibold text-white mb-6 leading-snug">
-                    Check at least one activity or add a reflection to continue
+                    {COPY.day.validationTitle}
                   </p>
                   <button
                     onClick={() => setShowValidation(false)}
                     className="rounded-full bg-white text-black text-[15px] font-semibold py-3 px-8 transition-transform hover:scale-[1.01] active:scale-[0.99] btn-shake"
                     autoFocus
                   >
-                    Got It
+                    {COPY.day.validationButton}
                   </button>
                 </Panel>
               </motion.div>

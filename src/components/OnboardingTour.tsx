@@ -4,37 +4,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Calendar, Flame, Award, Share2, ArrowRight, X } from "lucide-react";
 import { Panel } from "@/components/ui/Panel";
 import { FONT } from "@/lib/design";
+import { COPY } from "@/content/copy";
 
 const STORAGE_KEY = "fd_onboarding_tour_v1";
 
-interface TourStep {
-  readonly icon: typeof Calendar;
-  readonly heading: string;
-  readonly body: string;
-}
-
-const STEPS: readonly TourStep[] = [
-  {
-    icon: Calendar,
-    heading: "One Week At A Time.",
-    body: "Your goal becomes a series of 7-day sprints. Each day unlocks a small set of activities — tap to start.",
-  },
-  {
-    icon: Flame,
-    heading: "Build A Streak.",
-    body: "Show up daily and your streak climbs. Each streak day boosts your XP multiplier.",
-  },
-  {
-    icon: Award,
-    heading: "Unlock Achievements.",
-    body: "Hit milestones — first day, week warrior, halfway hero — and we'll celebrate every win.",
-  },
-  {
-    icon: Share2,
-    heading: "Finish Strong.",
-    body: "Finish every sprint and earn a shareable certificate. Your story, your proof.",
-  },
-];
+const STEP_ICONS = [Calendar, Flame, Award, Share2] as const;
 
 export function OnboardingTour() {
   const [open, setOpen] = useState(false);
@@ -57,13 +31,13 @@ export function OnboardingTour() {
   };
 
   const next = () => {
-    if (step < STEPS.length - 1) setStep(step + 1);
+    if (step < COPY.tour.steps.length - 1) setStep(step + 1);
     else finish();
   };
 
-  const current = STEPS[step];
-  const Icon = current.icon;
-  const isLast = step === STEPS.length - 1;
+  const current = COPY.tour.steps[step];
+  const Icon = STEP_ICONS[step];
+  const isLast = step === COPY.tour.steps.length - 1;
 
   return (
     <AnimatePresence>
@@ -120,7 +94,7 @@ export function OnboardingTour() {
 
               {/* Dot indicators */}
               <div className="flex items-center justify-center gap-2 mb-6">
-                {STEPS.map((_, i) => (
+                {COPY.tour.steps.map((_, i) => (
                   <button
                     key={i}
                     type="button"
@@ -143,14 +117,14 @@ export function OnboardingTour() {
                   onClick={finish}
                   className="px-4 py-2.5 text-[13px] font-medium text-black/40 hover:text-black/70 transition-colors"
                 >
-                  Skip
+                  {COPY.tour.skipButton}
                 </button>
                 <button
                   type="button"
                   onClick={next}
                   className="flex items-center gap-2 rounded-full bg-black text-white text-[15px] font-semibold py-3 px-6 transition-transform hover:scale-[1.01] active:scale-[0.99]"
                 >
-                  {isLast ? "Let's Go" : "Next"}
+                  {isLast ? COPY.tour.finishButton : COPY.tour.nextButton}
                   <ArrowRight className="w-4 h-4 shrink-0" />
                 </button>
               </div>
@@ -158,7 +132,7 @@ export function OnboardingTour() {
               {/* Step counter */}
               <div className="mt-5 flex justify-center">
                 <span className="text-[11px] uppercase tracking-[0.08em] font-medium text-black/30">
-                  Step {step + 1} of {STEPS.length}
+                  {COPY.tour.stepCounter(step + 1, COPY.tour.steps.length)}
                 </span>
               </div>
             </Panel>

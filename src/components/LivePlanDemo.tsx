@@ -175,7 +175,7 @@ export function LivePlanDemo({ onGetStarted, onPlanGenerated, externalSeed }: Li
                 See your plan in 2 seconds
               </h2>
               <p className="text-white/55 md:text-lg">
-                Pick a goal — watch your week assemble.
+                Pick a goal — watch your first sprint assemble.
               </p>
             </motion.div>
           )}

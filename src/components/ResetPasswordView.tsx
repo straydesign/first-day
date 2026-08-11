@@ -7,6 +7,8 @@ import { validatePassword } from '@/lib/validation';
 import { TopBar } from '@/components/ui/TopBar';
 import { Panel } from '@/components/ui/Panel';
 import { FONT } from '@/lib/design';
+import { COPY } from '@/content/copy';
+import { screenTitle } from '@/content/flow';
 
 
 interface ResetPasswordViewProps {
@@ -21,7 +23,7 @@ export function ResetPasswordView({ onSuccess }: ResetPasswordViewProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      toast.error('Passwords do not match');
+      toast.error(COPY.toasts.passwordsNoMatch);
       return;
     }
     const passwordError = validatePassword(password);
@@ -38,13 +40,13 @@ export function ResetPasswordView({ onSuccess }: ResetPasswordViewProps) {
       const { error } = await supabase.auth.updateUser({ password });
 
       if (error) {
-        toast.error(error.message || 'Failed to reset password');
+        toast.error(error.message || COPY.toasts.resetFailed);
       } else {
-        toast.success('Password updated! Please log in.');
+        toast.success(COPY.toasts.passwordUpdated);
         onSuccess();
       }
     } catch {
-      toast.error('Failed to reset password');
+      toast.error(COPY.toasts.resetFailed);
     } finally {
       setLoading(false);
     }
@@ -52,7 +54,7 @@ export function ResetPasswordView({ onSuccess }: ResetPasswordViewProps) {
 
   return (
     <div className="min-h-screen flex flex-col relative overflow-hidden">
-      <TopBar title="First Day" />
+      <TopBar title={screenTitle("reset-password")} />
       <div className="flex-1 flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-md space-y-6">
           <div className="text-center mb-8">
@@ -60,15 +62,15 @@ export function ResetPasswordView({ onSuccess }: ResetPasswordViewProps) {
               className="text-[32px] font-semibold tracking-[-0.02em] text-white leading-[1.05]"
               style={{ fontFamily: FONT }}
             >
-              Reset Your Password
+              {COPY.resetPassword.title}
             </h1>
-            <p className="mt-2 text-white/55 text-[15px]">Enter your new password below.</p>
+            <p className="mt-2 text-white/55 text-[15px]">{COPY.resetPassword.subtitle}</p>
           </div>
           <Panel contentClassName="p-6">
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
                 <Label htmlFor="new-password" className="text-white/70 text-sm font-medium mb-1.5 block">
-                  New Password
+                  {COPY.resetPassword.newPasswordLabel}
                 </Label>
                 <input
                   id="new-password"
@@ -76,13 +78,13 @@ export function ResetPasswordView({ onSuccess }: ResetPasswordViewProps) {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={loading}
-                  placeholder="••••••••"
+                  placeholder={COPY.resetPassword.passwordPlaceholder}
                   className="w-full bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/35 focus:border-white/30 focus:outline-none px-4 py-3 text-[15px] transition"
                 />
               </div>
               <div>
                 <Label htmlFor="confirm-new-password" className="text-white/70 text-sm font-medium mb-1.5 block">
-                  Confirm Password
+                  {COPY.resetPassword.confirmPasswordLabel}
                 </Label>
                 <input
                   id="confirm-new-password"
@@ -90,7 +92,7 @@ export function ResetPasswordView({ onSuccess }: ResetPasswordViewProps) {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   disabled={loading}
-                  placeholder="••••••••"
+                  placeholder={COPY.resetPassword.passwordPlaceholder}
                   className="w-full bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/35 focus:border-white/30 focus:outline-none px-4 py-3 text-[15px] transition"
                 />
               </div>
@@ -99,7 +101,7 @@ export function ResetPasswordView({ onSuccess }: ResetPasswordViewProps) {
                 disabled={loading}
                 className="w-full rounded-full bg-white text-black text-[15px] font-semibold py-3 transition-transform hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:hover:scale-100 mt-2"
               >
-                {loading ? 'Resetting...' : 'Reset Password'}
+                {loading ? COPY.resetPassword.submitLoading : COPY.resetPassword.submitIdle}
               </button>
             </form>
           </Panel>

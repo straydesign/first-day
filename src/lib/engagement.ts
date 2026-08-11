@@ -257,28 +257,24 @@ const ACHIEVEMENT_DEFS: {
   id: string;
   name: string;
   description: string;
-  icon: string;
   check: (p: ProgressMap, streak: { current: number; longest: number }, totalDays: number) => boolean;
 }[] = [
   {
     id: "first_step",
     name: "First Step",
     description: "Complete your first day",
-    icon: "👟",
     check: (p) => isDayCompleted(p[1]),
   },
   {
     id: "on_fire",
     name: "On Fire",
     description: "Achieve a 3-day streak",
-    icon: "🔥",
     check: (_, s) => s.longest >= 3,
   },
   {
     id: "week_warrior",
     name: "Week Warrior",
     description: "Complete 7 days total",
-    icon: "⚔️",
     check: (p, _s, totalDays) => {
       let count = 0;
       for (let d = 1; d <= totalDays; d++) if (isDayCompleted(p[d])) count++;
@@ -289,14 +285,12 @@ const ACHIEVEMENT_DEFS: {
     id: "unstoppable",
     name: "Unstoppable",
     description: "Achieve a 7-day streak",
-    icon: "💪",
     check: (_, s) => s.longest >= 7,
   },
   {
     id: "perfect_week",
     name: "Perfect Week",
     description: "Complete 7 consecutive days in a week",
-    icon: "⭐",
     check: (p, _s, totalDays) => {
       // Check any run of 7 consecutive completed days
       let run = 0;
@@ -311,7 +305,6 @@ const ACHIEVEMENT_DEFS: {
     id: "halfway_hero",
     name: "Halfway Hero",
     description: "Reach the halfway point",
-    icon: "🏅",
     check: (p, _s, totalDays) => {
       let count = 0;
       for (let d = 1; d <= totalDays; d++) if (isDayCompleted(p[d])) count++;
@@ -322,7 +315,6 @@ const ACHIEVEMENT_DEFS: {
     id: "deep_thinker",
     name: "Deep Thinker",
     description: "Write 10 reflections",
-    icon: "🧠",
     check: (p, _s, totalDays) => {
       let count = 0;
       for (let d = 1; d <= totalDays; d++) if (hasReflection(p[d])) count++;
@@ -333,7 +325,6 @@ const ACHIEVEMENT_DEFS: {
     id: "goal_crusher",
     name: "Goal Crusher",
     description: "Complete every day",
-    icon: "🏆",
     check: (p, _s, totalDays) => {
       for (let d = 1; d <= totalDays; d++) if (!isDayCompleted(p[d])) return false;
       return true;
@@ -350,19 +341,18 @@ export function calculateAchievements(
     id: def.id,
     name: def.name,
     description: def.description,
-    icon: def.icon,
     unlocked: def.check(progress, streaks, totalDays),
   }));
 }
 
 // --- Milestones ---
 
-const DAY_MILESTONES: Record<number, { icon: string; title: string; message: string; intensity: MilestoneIntensity }> = {
-  1:  { icon: "🚀", title: "Liftoff!", message: "You've taken the first step. The hardest part is starting.", intensity: "big" },
-  7:  { icon: "🔥", title: "Sprint 1 Complete!", message: "7 days in — your first sprint is done. Sprint 2 is generating now.", intensity: "epic" },
-  14: { icon: "⚡", title: "Sprint 2 Complete!", message: "Halfway. Most quit before here — you didn't. Sprint 3 is ready.", intensity: "epic" },
-  21: { icon: "💎", title: "Sprint 3 Complete!", message: "Three sprints down. One more decides whether this becomes who you are.", intensity: "epic" },
-  28: { icon: "🏆", title: "Goal Crushed!", message: "4 sprints. 28 days. You did what most people never finish.", intensity: "epic" },
+const DAY_MILESTONES: Record<number, { title: string; message: string; intensity: MilestoneIntensity }> = {
+  1:  { title: "Liftoff!", message: "You've taken the first step. The hardest part is starting.", intensity: "big" },
+  7:  { title: "Sprint 1 Complete!", message: "7 days in — your first sprint is done. Sprint 2 is generating now.", intensity: "epic" },
+  14: { title: "Sprint 2 Complete!", message: "Halfway. Most quit before here — you didn't. Sprint 3 is ready.", intensity: "epic" },
+  21: { title: "Sprint 3 Complete!", message: "Three sprints down. One more decides whether this becomes who you are.", intensity: "epic" },
+  28: { title: "Goal Crushed!", message: "4 sprints. 28 days. You did what most people never finish.", intensity: "epic" },
 };
 
 export function getMilestone(
@@ -375,7 +365,6 @@ export function getMilestone(
   if (totalDays !== DEFAULT_TOTAL_DAYS && dayNumber === totalDays) {
     return {
       type: "day",
-      icon: "🏆",
       title: "Goal Crushed!",
       message: `${totalDays} days done. You finished what most people never start.`,
       intensity: "epic",
@@ -390,7 +379,6 @@ export function getMilestone(
     if (dayNumber === DEFAULT_TOTAL_DAYS && totalDays > DEFAULT_TOTAL_DAYS) {
       return {
         type: "day",
-        icon: "⚡",
         title: "Four Weeks Strong!",
         message: `28 days in, ${totalDays - dayNumber} to go. Keep the streak alive to the finish.`,
         intensity: "big",
@@ -404,7 +392,6 @@ export function getMilestone(
     const intensity: MilestoneIntensity = currentStreak >= 20 ? "epic" : currentStreak >= 10 ? "big" : "normal";
     return {
       type: "streak",
-      icon: "🔥",
       title: `${currentStreak}-Day Streak!`,
       message: `You've been consistent for ${currentStreak} days straight. Incredible!`,
       intensity,

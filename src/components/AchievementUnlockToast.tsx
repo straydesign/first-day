@@ -58,12 +58,6 @@ export function AchievementUnlockToast({ achievements, onDismiss }: AchievementU
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ ...SPRING.gentle, delay: 0.15 + i * 0.1 }}
                 >
-                  <div
-                    className="flex items-center justify-center w-10 h-10 flex-shrink-0 text-2xl rounded-full bg-white/10 border border-white/15"
-                    aria-hidden
-                  >
-                    {a.icon}
-                  </div>
                   <div className="min-w-0 flex-1 pt-0.5">
                     <p className="text-[14px] font-semibold text-white leading-tight">{a.name}</p>
                     <p className="text-[12px] text-white/55 leading-snug mt-0.5">{a.description}</p>

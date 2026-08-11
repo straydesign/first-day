@@ -7,6 +7,7 @@ export type AppView =
   | "calendar"
   | "day"
   | "congrats"
+  | "settings"
   | "privacy"
   | "terms"
   | "reset-password";
@@ -272,7 +273,6 @@ export type MilestoneIntensity = "normal" | "big" | "epic";
 
 export interface Milestone {
   type: "day" | "streak";
-  icon: string;
   title: string;
   message: string;
   intensity: MilestoneIntensity;
@@ -282,7 +282,6 @@ export interface Achievement {
   id: string;
   name: string;
   description: string;
-  icon: string;
   unlocked: boolean;
 }
 

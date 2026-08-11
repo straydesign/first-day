@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FONT } from "@/lib/design";
+import { COPY } from "@/content/copy";
 
 
 interface BeastModeProps {
@@ -82,9 +83,9 @@ export function BeastMode({ onComplete }: BeastModeProps) {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.1 }}
       >
-        Beast
+        {COPY.beastMode.label.split(" ")[0]}
         <br />
-        <span className="text-white/55">Mode</span>
+        <span className="text-white/55">{COPY.beastMode.label.split(" ")[1]}</span>
       </motion.h1>
 
       {/* Bottom progress bar */}

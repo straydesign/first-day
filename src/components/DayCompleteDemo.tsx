@@ -289,20 +289,6 @@ export function DayCompleteDemo({
                     transition={TOKENS.motion.spring.bouncy}
                     className="flex flex-col items-center gap-2"
                   >
-                    <motion.div
-                      className="text-6xl md:text-7xl"
-                      animate={{
-                        scale: [1, 1.08, 1],
-                        rotate: [0, -4, 4, 0],
-                      }}
-                      transition={{
-                        duration: 1.6,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
-                    >
-                      🏆
-                    </motion.div>
                     <div
                       className="text-2xl md:text-3xl font-semibold tracking-[-0.02em] text-black text-center leading-tight"
                       style={{ fontFamily: FONT }}

@@ -1,10 +1,11 @@
 import { useState, useCallback } from "react";
 import { toast } from "sonner";
 import { api } from "@/lib/api";
-import { DEMO_GOAL_DETAILS, DEMO_GOALS_LIST, buildDemoGoalDetail, generateNextSprint } from "@/lib/demo-data";
+import { DEMO_GOAL_DETAILS, DEMO_GOALS_LIST, buildDemoGoalDetail, generateNextSprint as generateNextSprintDemo } from "@/lib/demo-data";
 import { getPlanTotalDays } from "@/lib/engagement";
 import { getRoomView, setGenerating, fireCelebration } from "@/components/3d-shell/RoomRegistry";
 import type { Plan, ProgressMap, SelectedDay, GoalFormData } from "@/types";
+import { COPY } from "@/content/copy";
 
 interface GoalDisplayData {
   goal: string;
@@ -41,6 +42,7 @@ interface UseGoalManagerReturn {
   handleViewTodayActivities: (goalId: string) => Promise<void>;
   handleRegeneratePlan: () => Promise<void>;
   handleDayComplete: (dayData: { completed: Record<number, boolean>; feedback: string }) => ProgressMap | null;
+  generateNextSprint: (priorSprintNumber: number) => Promise<{ ok: boolean; adapted: boolean; nextTitle: string }>;
   resetGoalState: () => void;
 }
 
@@ -88,10 +90,10 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : "Unknown error";
       if (message.includes("Session expired") || message.includes("session")) {
-        toast.error("Session expired. Please log in again.");
+        toast.error(COPY.toasts.sessionExpired);
         await onLogout();
       } else {
-        toast.error("Failed to load goal data. Please try again.");
+        toast.error(COPY.toasts.loadGoalDataRetry);
       }
       throw error;
     }
@@ -121,7 +123,7 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
         return data.goalId;
       }
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Failed to save goal";
+      const message = error instanceof Error ? error.message : COPY.toasts.saveFailed;
       toast.error(message);
       return null;
     }
@@ -140,7 +142,17 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
       localToday.setHours(0, 0, 0, 0);
       const localStartDate = localToday.toISOString().split("T")[0];
 
-      const plan = await api.plan.generate({ ...data, startDate: localStartDate });
+      // Generate ONLY sprint 1 + the 4-sprint arc. Later sprints are generated
+      // forward (with feedback) when the user finishes each one.
+      const result = await api.plan.generateSprint({ ...data, startDate: localStartDate, sprint: 1 });
+      const plan: Plan = {
+        cleanedGoal: result.cleanedGoal ?? data.goal,
+        startDate: localStartDate,
+        totalDays: 28,
+        days: result.days,
+        sprints: result.sprints ?? [],
+        sprintsGenerated: 1,
+      };
       setPlanData(plan);
 
       const goalId = await saveGoalData(data, plan, existingGoalId);
@@ -149,7 +161,7 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
         setCurrentGoalId(goalId);
         setEditingGoalData(null);
         toast.success(
-          existingGoalId ? "Your plan has been updated!" : "Your plan is ready!"
+          existingGoalId ? COPY.toasts.planUpdated : COPY.toasts.planReady
         );
         // VISCERAL plan-arrival room event — wave stops, room ERUPTS, then view switches.
         // Burst intensity scales with plan size (7-day → 1.5, 14+-day → 2.0).
@@ -166,10 +178,10 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : "Unknown error";
       if (message.includes("Session expired")) {
-        toast.error("Session expired. Please log in again.");
+        toast.error(COPY.toasts.sessionExpired);
         await onLogout();
       } else {
-        toast.error(`Failed to generate plan: ${message}`);
+        toast.error(COPY.toasts.generatePlanFailed(message));
       }
       return { goalId: null, view: null };
     } finally {
@@ -214,7 +226,7 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
         setPlanData(DEMO_GOAL_DETAILS[existingId].plan);
         setCurrentGoalId(existingId);
         setEditingGoalData(null);
-        toast.success("Goal updated!");
+        toast.success(COPY.toasts.goalUpdated);
         return true;
       }
       // Create path
@@ -226,7 +238,7 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
       setProgress({});
       setCurrentGoalId(goalId);
       setEditingGoalData(null);
-      toast.success("Your plan is ready!");
+      toast.success(COPY.toasts.planReady);
       fireCelebration(getRoomView(), 1.5);
       return true;
     }
@@ -250,7 +262,7 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
     if (demoMode) {
       const detail = DEMO_GOAL_DETAILS[goalId];
       if (!detail) {
-        toast.error("Goal not found");
+        toast.error(COPY.toasts.goalNotFound);
         return;
       }
       setEditingGoalData({
@@ -277,10 +289,10 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : "Unknown error";
       if (message.includes("Session expired")) {
-        toast.error("Session expired. Please log in again.");
+        toast.error(COPY.toasts.sessionExpired);
         await onLogout();
       } else {
-        toast.error("Failed to load goal data");
+        toast.error(COPY.toasts.loadGoalData);
       }
       throw error;
     }
@@ -316,28 +328,26 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
         };
         setSelectedDay(day);
       } else {
-        toast.error("Today's activities are not available yet");
+        toast.error(COPY.toasts.todayUnavailable);
         throw new Error("Today's activities not available");
       }
     } catch {
-      toast.error("Failed to load today's activities");
+      toast.error(COPY.toasts.loadTodayFailed);
       throw new Error("Failed to load today's activities");
     }
   }, [loadGoalData, demoMode]);
 
   const handleRegeneratePlan = useCallback(async () => {
     if (demoMode) {
-      toast("Sign up to regenerate plans!", { description: "Create an account to get AI-powered custom plans." });
+      toast(COPY.toasts.signUpRegenerate.title, { description: COPY.toasts.signUpRegenerate.description });
       return;
     }
     if (!goalData || !currentGoalId) {
-      toast.error("No goal data to regenerate");
+      toast.error(COPY.toasts.noGoalToRegenerate);
       return;
     }
 
-    const confirmed = window.confirm(
-      "Are you sure you want to regenerate this plan? This will create a completely new 30-day plan."
-    );
+    const confirmed = window.confirm(COPY.confirms.regeneratePlan);
     if (!confirmed) return;
 
     try {
@@ -354,7 +364,7 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
         currentGoalId
       );
     } catch {
-      toast.error("Failed to regenerate plan. Please try again.");
+      toast.error(COPY.toasts.regenerateFailed);
     }
   }, [goalData, currentGoalId, generatePlan, demoMode]);
 
@@ -372,17 +382,9 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
     };
     setProgress(updatedProgress);
 
-    // Sprint-end trigger: if the user just finished day 7/14/21 in demo mode,
-    // synthesize the next sprint's content and update planData so the calendar
-    // reveals the new week. In production this is where we'd kick off an
-    // async LLM call that incorporates feedback from the sprint just finished.
-    if (demoMode && currentGoalId && dayKey % 7 === 0 && dayKey < getPlanTotalDays(planData)) {
-      const nextSprintNumber = dayKey / 7 + 1;
-      const updatedPlan = generateNextSprint(currentGoalId, nextSprintNumber);
-      if (updatedPlan) setPlanData(updatedPlan);
-    }
-
-    // Fire-and-forget save (skip in demo mode)
+    // Fire-and-forget save (skip in demo mode). Sprint-boundary forward-generation
+    // is handled by the between-sprints recap via generateNextSprint(), not here —
+    // so the recap can show a real loading state while the next sprint is built.
     if (currentGoalId && !demoMode) {
       api.goals.saveProgress(currentGoalId, updatedProgress).catch(() => {
         // Progress save failure is non-critical
@@ -391,6 +393,78 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
 
     return updatedProgress;
   }, [selectedDay, planData?.startDate, progress, currentGoalId, demoMode]);
+
+  /**
+   * Generate the sprint AFTER `priorSprintNumber`, forward, using that sprint's
+   * reflections + completion as input (production) so the AI adapts the next
+   * week. Demo mode uses the synchronous template helper. Returns whether it
+   * succeeded, whether feedback actually shaped it (`adapted`), and the new
+   * sprint's title for the recap.
+   */
+  const generateNextSprint = useCallback(async (
+    priorSprintNumber: number,
+  ): Promise<{ ok: boolean; adapted: boolean; nextTitle: string }> => {
+    const nextSprintNumber = priorSprintNumber + 1;
+    const totalSprints = planData?.sprints?.length ?? 4;
+    if (!planData || !currentGoalId || nextSprintNumber > totalSprints) {
+      return { ok: false, adapted: false, nextTitle: "" };
+    }
+    const titleFor = (plan: Plan) => plan.sprints?.[nextSprintNumber - 1]?.title ?? `Sprint ${nextSprintNumber}`;
+
+    if (demoMode) {
+      const updated = generateNextSprintDemo(currentGoalId, nextSprintNumber);
+      if (!updated) return { ok: false, adapted: false, nextTitle: "" };
+      setPlanData(updated);
+      return { ok: true, adapted: false, nextTitle: titleFor(updated) };
+    }
+
+    try {
+      // Goal context comes from the DB; the just-finished sprint's reflections +
+      // completion come from LOCAL progress (the day we just completed is saved
+      // fire-and-forget, so a re-fetch could miss it).
+      const full = await api.goals.get(currentGoalId);
+      const lo = (priorSprintNumber - 1) * 7 + 1;
+      const hi = priorSprintNumber * 7;
+      const reflections: string[] = [];
+      let completed = 0;
+      for (let n = lo; n <= hi; n++) {
+        const dp = progress[n];
+        if (!dp) continue;
+        const fb = (dp.feedback ?? dp.reflection ?? "").toString().trim();
+        if (fb) reflections.push(fb);
+        const c = dp.completed;
+        if (c === true || (c && typeof c === "object" && Object.values(c).length > 0 && Object.values(c).every(Boolean))) {
+          completed++;
+        }
+      }
+
+      const result = await api.plan.generateSprint({
+        goal: full.goal,
+        contextAnswers: full.contextAnswers,
+        timeCommitment: full.timeCommitment,
+        timeSlot: full.timeSlot,
+        availableDays: full.availableDays,
+        wantsWeeklyBooks: full.wantsWeeklyBooks,
+        sprint: nextSprintNumber,
+        sprints: planData.sprints,
+        priorReflections: reflections,
+        priorCompletion: { completed, total: hi - lo + 1 },
+      });
+
+      const mergedPlan: Plan = {
+        ...planData,
+        days: { ...planData.days, ...result.days },
+        sprints: result.sprints ?? planData.sprints,
+        sprintsGenerated: Math.max(planData.sprintsGenerated ?? 1, nextSprintNumber),
+      };
+      setPlanData(mergedPlan);
+      await api.goals.savePlan(currentGoalId, mergedPlan);
+      return { ok: true, adapted: result.adapted, nextTitle: titleFor(mergedPlan) };
+    } catch {
+      toast.error(COPY.toasts.nextSprintFailed);
+      return { ok: false, adapted: false, nextTitle: "" };
+    }
+  }, [planData, currentGoalId, demoMode, progress]);
 
   return {
     currentGoalId,
@@ -411,6 +485,7 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
     handleViewTodayActivities,
     handleRegeneratePlan,
     handleDayComplete,
+    generateNextSprint,
     resetGoalState,
   };
 }

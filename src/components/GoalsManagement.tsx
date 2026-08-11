@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { MosaicCard } from "./MosaicCard";
 import { Panel } from "@/components/ui/Panel";
 import { TopBar } from "@/components/ui/TopBar";
+import { screenTitle } from "@/content/flow";
 import { FONT } from "@/lib/design";
 
 import { Plus, Trash2, Flame } from "lucide-react";
@@ -17,6 +18,7 @@ import { ShardRewardGrid } from "./ShardRewardGrid";
 import { DEMO_GOALS_LIST, DEMO_GOAL_DETAILS } from "@/lib/demo-data";
 import { staggerContainer, tileEnter, contentReveal } from "@/lib/animations";
 import { getCompletedDayCount } from "@/lib/engagement";
+import { COPY } from "@/content/copy";
 import type { EngagementState, ProgressMap } from "@/types";
 
 interface Goal {
@@ -94,28 +96,28 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : "Unknown error";
       if (message.includes("Session expired")) {
-        toast.error("Session expired. Please log in again.");
+        toast.error(COPY.toasts.sessionExpired);
         setLoading(false);
         onLogout();
         return;
       }
-      toast.error(`Failed to load your goals: ${message}`);
+      toast.error(COPY.toasts.loadGoalsFailed(message));
       setLoading(false);
     }
   };
 
   const handleDeleteGoal = async (goalId: string, goalTitle: string) => {
     if (demoMode) {
-      toast("Sign up to manage goals!", { description: "Create an account to add and delete your own goals." });
+      toast(COPY.toasts.signUpManage.title, { description: COPY.toasts.signUpManage.description });
       return;
     }
-    const confirmed = window.confirm(`Are you sure you want to delete "${goalTitle}"? This action cannot be undone.`);
+    const confirmed = window.confirm(COPY.confirms.deleteGoal(goalTitle));
     if (!confirmed) return;
     try {
       await api.goals.delete(goalId);
-      toast.success("Goal deleted successfully");
+      toast.success(COPY.toasts.goalDeleted);
       setGoals(prev => prev.filter(g => g.id !== goalId));
-    } catch { toast.error("Failed to delete goal"); }
+    } catch { toast.error(COPY.toasts.deleteGoalFailed); }
   };
 
   if (loading) {
@@ -124,7 +126,7 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
         <div className="relative z-10 flex flex-col items-center gap-6 px-6 w-full max-w-md">
           <Panel contentClassName="px-8 py-5">
             <p className="text-[17px] font-semibold tracking-[-0.01em] text-white/70" style={{ fontFamily: FONT }}>
-              Loading your goals…
+              {COPY.goals.loading}
             </p>
           </Panel>
         </div>
@@ -154,7 +156,7 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
           <motion.div variants={staggerContainer} initial="hidden" animate="visible" className="min-h-screen pb-6 md:pb-10">
             {/* Sticky date / streak header via TopBar */}
             <TopBar
-              title="Your goals"
+              title={screenTitle("goals")}
               right={topBarRight}
             />
 
@@ -163,7 +165,7 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
                 <motion.div key={goal.id} variants={tileEnter} className="w-full relative">
                   {/* Lesson label */}
                   <p className="text-[12px] font-medium uppercase tracking-[0.08em] text-white/40 mb-2 ml-1">
-                    Lesson {getCompletedDayCount(goalProgress[goal.id] ?? {}, goal.totalDays ?? 28)} of {goal.totalDays ?? 28}
+                    {COPY.goals.lessonLabel(getCompletedDayCount(goalProgress[goal.id] ?? {}, goal.totalDays ?? 28), goal.totalDays ?? 28)}
                   </p>
 
                   {/* Goal card */}
@@ -206,20 +208,20 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
                 {engagement.dailyMultiplier > 1 && (
                   <Panel contentClassName="px-5 py-3">
                     <span className="text-[13px] font-semibold text-white">
-                      Today: {engagement.dailyMultiplier}× XP
+                      {COPY.goals.hooks.dailyMultiplier(engagement.dailyMultiplier)}
                     </span>
                   </Panel>
                 )}
                 {engagement.streakFreezes > 0 && (
                   <Panel contentClassName="px-5 py-3">
                     <span className="text-[13px] font-semibold text-white/80">
-                      {engagement.streakFreezes} Streak Freeze{engagement.streakFreezes > 1 ? "s" : ""}
+                      {COPY.goals.hooks.streakFreeze(engagement.streakFreezes)}
                     </span>
                   </Panel>
                 )}
                 {engagement.isComeback && (
                   <Panel contentClassName="px-5 py-3">
-                    <span className="text-[13px] font-semibold text-white/80">Welcome Back Bonus Active</span>
+                    <span className="text-[13px] font-semibold text-white/80">{COPY.goals.hooks.comeback}</span>
                   </Panel>
                 )}
               </motion.div>
@@ -244,7 +246,7 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
                 style={{ fontFamily: FONT }}
               >
                 <Plus className="w-4 h-4" />
-                Add new goal
+                {COPY.goals.addGoal}
               </motion.button>
             </div>
           </motion.div>
@@ -253,12 +255,12 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
             <div className="text-center mb-4 md:mb-8 space-y-3">
               <Panel contentClassName="px-8 py-5">
                 <h1 className="text-[32px] font-semibold tracking-[-0.02em] text-white leading-[1.05]" style={{ fontFamily: FONT }}>
-                  Set Your First Goal
+                  {COPY.goals.emptyState.heading}
                 </h1>
               </Panel>
               <Panel contentClassName="px-6 py-4">
                 <p className="text-[16px] leading-relaxed text-white/70">
-                  Pick any goal — your first 7-day sprint is ready in seconds. Three more sprints generate as you go.
+                  {COPY.goals.emptyState.body}
                 </p>
               </Panel>
             </div>

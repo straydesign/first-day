@@ -1,10 +1,11 @@
 "use client";
-import { BookOpen, Edit2, ChevronUp, ChevronDown, AlertTriangle, ArrowRight, Flame, Sparkles } from "lucide-react";
+import { BookOpen, Edit2, ChevronUp, ChevronDown, AlertTriangle, ArrowRight, Flame, Sparkles, Lock } from "lucide-react";
 import { WeekCalendar } from "./WeekCalendar";
 import { PlanCompleteCelebration } from "./PlanCompleteCelebration";
 import { OnboardingTour } from "./OnboardingTour";
 import { Panel } from "@/components/ui/Panel";
 import { TopBar } from "@/components/ui/TopBar";
+import { COPY } from "@/content/copy";
 import { FONT } from "@/lib/design";
 import { useState } from "react";
 import { StreakBadge } from "./StreakBadge";
@@ -24,7 +25,6 @@ interface CalendarViewProps {
   progress?: ProgressMap;
   onBack?: () => void;
   engagement?: EngagementState | null;
-  onLogout?: () => void;
 }
 
 interface WeekDay {
@@ -50,7 +50,7 @@ function buildSelectedDay(dayNumber: number, planData: Plan | null): SelectedDay
     date: today.toISOString(),
     dateDisplay: today.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }),
     isToday: true,
-    title: dayData?.title || `Day ${dayNumber}`,
+    title: dayData?.title || COPY.calendar.dayTitleFallback(dayNumber),
     activities: dayData?.activities || [],
     tip: dayData?.tip,
   };
@@ -80,11 +80,13 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, prog
   const getSprintTitle = (sprintNumber: number): string => {
     if (planSprints && planSprints[sprintNumber - 1]) return planSprints[sprintNumber - 1].title;
     const goalLower = (goalTitle || '').toLowerCase();
-    if (goalLower.includes('run') || goalLower.includes('fitness') || goalLower.includes('workout')) return `Sprint ${sprintNumber}: ${['Warming Up', 'Building Endurance', 'Hitting Stride', 'Peak Performance'][sprintNumber - 1]}`;
-    if (goalLower.includes('learn') || goalLower.includes('language') || goalLower.includes('study')) return `Sprint ${sprintNumber}: ${['Foundation', 'Building Blocks', 'Gaining Fluency', 'Mastery Mode'][sprintNumber - 1]}`;
-    if (goalLower.includes('draw') || goalLower.includes('write') || goalLower.includes('creative')) return `Sprint ${sprintNumber}: ${['Finding Your Voice', 'Building Skills', 'Creative Flow', 'Finishing Strong'][sprintNumber - 1]}`;
-    if (goalLower.includes('code') || goalLower.includes('business') || goalLower.includes('career')) return `Sprint ${sprintNumber}: ${['Foundations', 'Building Momentum', 'Deep Dive', 'Advanced Mastery'][sprintNumber - 1]}`;
-    return `Sprint ${sprintNumber}: ${['Foundations', 'Build Momentum', 'Stretch', 'Integrate'][sprintNumber - 1] ?? 'Keep Going'}`;
+    const prefix = COPY.calendar.sprintPrefix(sprintNumber);
+    const sets = COPY.calendar.sprintTitleSets;
+    if (goalLower.includes('run') || goalLower.includes('fitness') || goalLower.includes('workout')) return `${prefix}${sets.fitness[sprintNumber - 1]}`;
+    if (goalLower.includes('learn') || goalLower.includes('language') || goalLower.includes('study')) return `${prefix}${sets.learning[sprintNumber - 1]}`;
+    if (goalLower.includes('draw') || goalLower.includes('write') || goalLower.includes('creative')) return `${prefix}${sets.creative[sprintNumber - 1]}`;
+    if (goalLower.includes('code') || goalLower.includes('business') || goalLower.includes('career')) return `${prefix}${sets.career[sprintNumber - 1]}`;
+    return `${prefix}${sets.generic[sprintNumber - 1] ?? COPY.calendar.sprintTitleFallback}`;
   };
   const getSprintTheme = (sprintNumber: number): string | undefined => planSprints?.[sprintNumber - 1]?.theme;
 
@@ -114,7 +116,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, prog
     <div className="min-h-screen relative pb-20 md:pb-0" role="main" aria-label={`${totalDays}-day plan calendar`}>
       <OnboardingTour />
       <TopBar
-        title={goalTitle || "Your Plan"}
+        title={goalTitle || COPY.calendar.planTitleFallback}
         onBack={onBack}
         right={
           <div className="flex items-center gap-3">
@@ -129,7 +131,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, prog
                 onClick={onEditGoal}
                 className="rounded-full border border-white/15 text-white/80 hover:bg-white/5 transition px-3 py-1 text-[13px] font-medium flex items-center gap-1.5"
               >
-                <Edit2 className="w-3.5 h-3.5" />Edit
+                <Edit2 className="w-3.5 h-3.5" />{COPY.calendar.editButton}
               </button>
             )}
           </div>
@@ -145,8 +147,8 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, prog
                 <div className="flex items-center gap-2">
                   <AlertTriangle className="w-4 h-4 text-white/50 flex-shrink-0" />
                   <p className="text-[13px] text-white/70 font-medium">
-                    Complete a lesson today to keep your {engagement.currentStreak}-day streak alive
-                    {engagement.streakFreezes > 0 ? ` — or your freeze will catch you.` : "."}
+                    {COPY.calendar.streakRiskWarning(engagement.currentStreak)}
+                    {engagement.streakFreezes > 0 ? COPY.calendar.streakRiskWithFreeze : COPY.calendar.streakRiskNoFreeze}
                   </p>
                 </div>
               </Panel>
@@ -168,17 +170,17 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, prog
                       className="text-[11px] font-medium uppercase tracking-[0.08em] text-white/40"
                       style={{ fontFamily: FONT }}
                     >
-                      Next Lesson
+                      {COPY.calendar.nextLessonEyebrow}
                     </span>
                     <span className="text-[12px] text-white/30 font-medium tabular-nums">
-                      {nextDay} of {totalDays}
+                      {COPY.calendar.nextLessonCount(nextDay, totalDays)}
                     </span>
                   </div>
                   <h2
                     className="text-[28px] md:text-[36px] font-semibold tracking-[-0.02em] text-white leading-tight mb-4"
                     style={{ fontFamily: FONT }}
                   >
-                    {nextDayData?.title || `Day ${nextDay}`}
+                    {nextDayData?.title || COPY.calendar.dayTitleFallback(nextDay)}
                   </h2>
                   {previewActivities.length > 0 && (
                     <div className="space-y-2 mb-5">
@@ -193,17 +195,17 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, prog
                   <div className="flex flex-wrap items-center gap-2 mb-5">
                     {engagement && engagement.dailyMultiplier > 1 && (
                       <span className="inline-flex items-center gap-1 rounded-full border border-white/15 px-3 py-1 text-[12px] font-medium uppercase tracking-[0.08em] text-white/40">
-                        <Sparkles className="w-3 h-3" />{engagement.dailyMultiplier}x XP
+                        <Sparkles className="w-3 h-3" />{COPY.calendar.xpMultiplier(engagement.dailyMultiplier)}
                       </span>
                     )}
                     {engagement?.dailyChallenge && (
                       <span className="inline-flex items-center gap-1 rounded-full border border-white/15 px-3 py-1 text-[12px] font-medium text-white/55">
-                        {engagement.dailyChallenge.description} <span className="text-white/40">+{engagement.dailyChallenge.bonusXP}XP</span>
+                        {engagement.dailyChallenge.description} <span className="text-white/40">{COPY.calendar.bonusXp(engagement.dailyChallenge.bonusXP)}</span>
                       </span>
                     )}
                     {engagement?.isComeback && (
                       <span className="inline-flex items-center gap-1 rounded-full border border-white/15 px-3 py-1 text-[12px] font-medium text-white/55">
-                        <Flame className="w-3 h-3 text-white/40" />Comeback +50%
+                        <Flame className="w-3 h-3 text-white/40" />{COPY.calendar.comebackBadge}
                       </span>
                     )}
                   </div>
@@ -215,7 +217,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, prog
                     className="rounded-full bg-white text-black text-[15px] font-semibold py-3 px-6 inline-flex items-center gap-2 transition-transform hover:scale-[1.01] active:scale-[0.99]"
                     style={{ fontFamily: FONT }}
                   >
-                    Start Lesson <ArrowRight className="w-4 h-4" />
+                    {COPY.calendar.startLessonButton} <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
               </div>
@@ -233,9 +235,9 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, prog
               <div className="flex items-baseline justify-between mb-3">
                 <div>
                   <span className="text-[32px] font-semibold tracking-[-0.02em] text-white tabular-nums leading-none">{completedCount}</span>
-                  <span className="text-white/40 text-[15px] font-medium ml-1">/ {totalDays} lessons</span>
+                  <span className="text-white/40 text-[15px] font-medium ml-1">{COPY.calendar.lessonsSuffix(totalDays)}</span>
                 </div>
-                <span className="text-white/40 text-[13px] font-medium tabular-nums">{progressPct}%</span>
+                <span className="text-white/40 text-[13px] font-medium tabular-nums">{COPY.calendar.progressPercent(progressPct)}</span>
               </div>
               {/* Progress bar: track bg-white/10, fill bg-white/85 */}
               <div className="h-1 w-full rounded-full bg-white/10 overflow-hidden mb-4" aria-label={`${completedCount} of ${totalDays} lessons completed`}>
@@ -245,11 +247,11 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, prog
                 <div className="flex flex-wrap items-center gap-3 text-[13px]">
                   {engagement.currentStreak > 0 && (
                     <span className="inline-flex items-center gap-1.5 text-white/70 font-medium">
-                      <Flame className="w-3.5 h-3.5 text-white/40" />{engagement.currentStreak}-day streak
+                      <Flame className="w-3.5 h-3.5 text-white/40" />{COPY.calendar.streakLabel(engagement.currentStreak)}
                     </span>
                   )}
-                  <span className="text-white/55 font-medium">{engagement.totalXP.toLocaleString()} XP</span>
-                  <span className="text-white/25">·</span>
+                  <span className="text-white/55 font-medium">{COPY.calendar.xpLabel(engagement.totalXP.toLocaleString())}</span>
+                  <span className="text-white/25">{COPY.calendar.separator}</span>
                   <span className="text-white/55 font-medium">{engagement.level.name}</span>
                 </div>
               )}
@@ -282,9 +284,9 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, prog
                   {isLocked ? (
                     <Panel contentClassName="p-6 md:p-8 text-center">
                       <div className="flex flex-col items-center gap-2">
-                        <span className="text-3xl" aria-hidden>🔒</span>
-                        <p className="text-[13px] font-medium text-white/40 uppercase tracking-[0.08em]">Generates after Sprint {sprintNumber - 1}</p>
-                        <p className="text-[12px] text-white/30 max-w-md mt-1">Finish the current sprint and your next 7 days unlock automatically — tuned to what you just learned.</p>
+                        <Lock className="w-7 h-7" aria-hidden />
+                        <p className="text-[13px] font-medium text-white/40 uppercase tracking-[0.08em]">{COPY.calendar.lockedSprintLabel(sprintNumber)}</p>
+                        <p className="text-[12px] text-white/30 max-w-md mt-1">{COPY.calendar.lockedSprintBody}</p>
                       </div>
                     </Panel>
                   ) : (
@@ -299,7 +301,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, prog
                           >
                             <div className="flex items-center gap-3">
                               <BookOpen className="w-5 h-5 text-white/50" />
-                              <span className="text-[15px] font-semibold text-white">Sprint {week.weekNumber} Reading</span>
+                              <span className="text-[15px] font-semibold text-white">{COPY.calendar.sprintReading(week.weekNumber)}</span>
                             </div>
                             {expandedWeeks.has(week.weekNumber) ? (
                               <ChevronUp className="w-4 h-4 text-white/40" />
@@ -310,7 +312,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, prog
                           {expandedWeeks.has(week.weekNumber) && (
                             <div className="px-4 md:px-5 pb-4 md:pb-5 space-y-1 md:space-y-2 border-t border-white/[0.06] pt-3">
                               <p className="text-[14px] text-white font-semibold">{week.weeklyBook.title}</p>
-                              <p className="text-[12px] text-white/55">by {week.weeklyBook.author}</p>
+                              <p className="text-[12px] text-white/55">{COPY.calendar.bookByAuthor(week.weeklyBook.author)}</p>
                               <p className="text-[12px] text-white/40 italic mt-1 md:mt-2">{week.weeklyBook.description || week.weeklyBook.reason}</p>
                             </div>
                           )}

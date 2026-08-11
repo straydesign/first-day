@@ -3,19 +3,14 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, BookOpen, Calendar, Lightbulb, Sparkles, Loader2 } from "lucide-react";
 import { FONT } from "@/lib/design";
+import { COPY } from "@/content/copy";
 
 interface LoadingScreenProps {
   showProgress?: boolean;
   estimatedDuration?: number;
 }
 
-const PROGRESS_STEPS = [
-  { message: "Analyzing your goal...", icon: Search },
-  { message: "Researching best practices...", icon: BookOpen },
-  { message: "Building your first 7-day sprint...", icon: Calendar },
-  { message: "Selecting resources...", icon: Lightbulb },
-  { message: "Finalizing your plan...", icon: Sparkles },
-];
+const PROGRESS_ICONS = [Search, BookOpen, Calendar, Lightbulb, Sparkles] as const;
 
 export function LoadingScreen({ showProgress = false, estimatedDuration = 15000 }: LoadingScreenProps) {
   const [progress, setProgress] = useState(0);
@@ -26,7 +21,7 @@ export function LoadingScreen({ showProgress = false, estimatedDuration = 15000 
     if (!showProgress) return;
 
     const startTime = Date.now();
-    const stepInterval = estimatedDuration / PROGRESS_STEPS.length;
+    const stepInterval = estimatedDuration / COPY.loading.steps.length;
 
     const timer = setInterval(() => {
       const elapsed = Date.now() - startTime;
@@ -36,7 +31,7 @@ export function LoadingScreen({ showProgress = false, estimatedDuration = 15000 
 
       const stepIndex = Math.min(
         Math.floor(elapsed / stepInterval),
-        PROGRESS_STEPS.length - 1
+        COPY.loading.steps.length - 1
       );
       setCurrentStep(stepIndex);
     }, 50);
@@ -53,7 +48,7 @@ export function LoadingScreen({ showProgress = false, estimatedDuration = 15000 
             className="text-[42px] font-semibold tracking-[-0.03em] text-white leading-none"
             style={{ fontFamily: FONT }}
           >
-            First Day
+            {COPY.loading.wordmark}
           </span>
           {/* Subtle spinner */}
           <Loader2 className="w-5 h-5 text-white/40 animate-spin" />
@@ -83,11 +78,11 @@ export function LoadingScreen({ showProgress = false, estimatedDuration = 15000 
               >
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10">
                   {(() => {
-                    const Icon = PROGRESS_STEPS[currentStep].icon;
+                    const Icon = PROGRESS_ICONS[currentStep];
                     return <Icon className="w-4 h-4 text-white/50 shrink-0" />;
                   })()}
                   <span className="text-[13px] font-medium text-white/60">
-                    {PROGRESS_STEPS[currentStep].message}
+                    {COPY.loading.steps[currentStep]}
                   </span>
                   <span className="text-[13px] font-medium text-white/40 tabular-nums">
                     {Math.round(progress)}%

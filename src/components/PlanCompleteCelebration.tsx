@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { scaleReveal, wordReveal, contentReveal, popIn, SPRING } from "@/lib/animations";
 import { Panel } from "@/components/ui/Panel";
 import { FONT } from "@/lib/design";
+import { COPY } from "@/content/copy";
 import type { EngagementState, Achievement } from "@/types";
 
 
@@ -52,10 +53,10 @@ export function PlanCompleteCelebration({ goalTitle, engagement, totalDays = 28,
   );
 
   const stats = [
-    { label: "Days Done", value: totalDays, suffix: `/${totalDays}`, icon: Trophy },
-    { label: "Longest Streak", value: engagement?.longestStreak ?? 0, suffix: " days", icon: Flame },
-    { label: "XP Earned", value: engagement?.totalXP ?? 0, suffix: "", icon: Sparkles },
-    { label: "Level Reached", value: engagement?.level.name ?? "Master", suffix: "", icon: Award },
+    { label: COPY.planComplete.stats.daysDone, value: totalDays, suffix: `/${totalDays}`, icon: Trophy },
+    { label: COPY.planComplete.stats.longestStreak, value: engagement?.longestStreak ?? 0, suffix: COPY.planComplete.statSuffixes.longestStreak, icon: Flame },
+    { label: COPY.planComplete.stats.xpEarned, value: engagement?.totalXP ?? 0, suffix: "", icon: Sparkles },
+    { label: COPY.planComplete.stats.levelReached, value: engagement?.level.name ?? COPY.planComplete.levelFallback, suffix: "", icon: Award },
   ] as const;
 
   const buildShareUrl = () => {
@@ -72,16 +73,22 @@ export function PlanCompleteCelebration({ goalTitle, engagement, totalDays = 28,
 
   const handleShare = async () => {
     const url = buildShareUrl();
-    const text = `I just finished ${totalDays} days on First Day${goalTitle ? `: ${goalTitle}` : ""}.\n\n${totalDays} days · ${engagement?.longestStreak ?? 0}-day streak · ${(engagement?.totalXP ?? 0).toLocaleString()} XP · ${unlockedAchievements.length} achievements`;
+    const text = COPY.planComplete.share.text(
+      totalDays,
+      goalTitle,
+      engagement?.longestStreak ?? 0,
+      engagement?.totalXP ?? 0,
+      unlockedAchievements.length,
+    );
     try {
       if (typeof navigator !== "undefined" && navigator.share) {
-        await navigator.share({ title: `I finished ${totalDays} days`, text, url });
+        await navigator.share({ title: COPY.planComplete.share.title(totalDays), text, url });
         return;
       }
       if (typeof navigator !== "undefined" && navigator.clipboard) {
         await navigator.clipboard.writeText(`${text}\n\n${url}`);
         setShared(true);
-        toast.success("Copied — paste it anywhere.");
+        toast.success(COPY.toasts.copied);
         setTimeout(() => setShared(false), 2400);
       }
     } catch {
@@ -137,7 +144,7 @@ export function PlanCompleteCelebration({ goalTitle, engagement, totalDays = 28,
               className="text-center text-5xl md:text-7xl font-semibold tracking-[-0.03em] text-white leading-[0.95]"
               style={{ fontFamily: FONT }}
             >
-              {"Goal Crushed".split(" ").map((word, i) => (
+              {COPY.planComplete.headline.split(" ").map((word, i) => (
                 <motion.span
                   key={i}
                   custom={i}
@@ -179,8 +186,8 @@ export function PlanCompleteCelebration({ goalTitle, engagement, totalDays = 28,
           <Panel contentClassName="px-6 py-3 md:px-10 md:py-4 max-w-xl">
             <p className="text-center text-base md:text-xl text-white/70 font-medium leading-relaxed">
               {totalDays === 28
-                ? "28 lessons. 4 sprints. You proved you can do anything you set your mind to."
-                : `${totalDays} days straight. You proved you can do anything you set your mind to.`}
+                ? COPY.planComplete.subLine.full
+                : COPY.planComplete.subLine.short(totalDays)}
             </p>
           </Panel>
         </motion.div>
@@ -228,7 +235,7 @@ export function PlanCompleteCelebration({ goalTitle, engagement, totalDays = 28,
             <div className="flex items-center justify-center gap-2 mb-4">
               <Award className="w-5 h-5 text-white/55" />
               <h2 className="text-xs md:text-sm uppercase tracking-[0.08em] font-medium text-white/55">
-                {unlockedAchievements.length} {unlockedAchievements.length === 1 ? "Achievement" : "Achievements"} Unlocked
+                {COPY.planComplete.achievementsHeading(unlockedAchievements.length)}
               </h2>
             </div>
             <div className="flex flex-wrap justify-center gap-2 md:gap-3">
@@ -242,7 +249,6 @@ export function PlanCompleteCelebration({ goalTitle, engagement, totalDays = 28,
                   title={a.description}
                 >
                   <Panel contentClassName="px-3 py-2 md:px-4 md:py-2.5 flex items-center gap-2">
-                    <span className="text-base md:text-lg" aria-hidden>{a.icon}</span>
                     <span className="text-xs md:text-sm font-medium text-white whitespace-nowrap">{a.name}</span>
                   </Panel>
                 </motion.div>
@@ -264,13 +270,13 @@ export function PlanCompleteCelebration({ goalTitle, engagement, totalDays = 28,
             aria-label={shared ? "Copied to clipboard" : "Share my journey"}
           >
             {shared ? <Check className="w-5 h-5 flex-shrink-0" /> : <Share2 className="w-5 h-5 flex-shrink-0" />}
-            {shared ? "Copied" : "Share My Journey"}
+            {shared ? COPY.planComplete.buttons.copied : COPY.planComplete.buttons.shareMyJourney}
           </button>
           <button
             onClick={onStartNextGoal}
             className="flex items-center justify-center gap-2 rounded-full border border-white/15 text-white/80 hover:bg-white/5 transition text-[15px] font-medium py-3 px-8"
           >
-            Start Next Goal <ArrowRight className="w-5 h-5 flex-shrink-0" />
+            {COPY.planComplete.buttons.startNextGoal} <ArrowRight className="w-5 h-5 flex-shrink-0" />
           </button>
         </motion.div>
       </div>

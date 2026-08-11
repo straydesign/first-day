@@ -129,7 +129,6 @@ export const GOAL_SUGGESTIONS_ROW_3 = [
 /** Curated full-form templates — one tap pre-fills the entire goal creation form. */
 export interface GoalTemplate {
   readonly id: string;
-  readonly icon: string;
   readonly title: string;
   readonly goal: string;
   readonly why: string;
@@ -141,7 +140,6 @@ export interface GoalTemplate {
 export const GOAL_TEMPLATES: readonly GoalTemplate[] = [
   {
     id: 'guitar',
-    icon: '🎸',
     title: 'Learn Guitar',
     goal: 'Learn to play guitar — open chords, basic strumming, and a few full songs',
     why: 'I want to be able to pick up a guitar at a party or around a campfire and actually play something people recognize.',
@@ -151,7 +149,6 @@ export const GOAL_TEMPLATES: readonly GoalTemplate[] = [
   },
   {
     id: 'morning-routine',
-    icon: '🌅',
     title: 'Morning Routine',
     goal: 'Build a consistent 60-minute morning routine I actually look forward to',
     why: 'My mornings feel chaotic and I want to start each day with intention instead of reacting to my phone.',
@@ -161,7 +158,6 @@ export const GOAL_TEMPLATES: readonly GoalTemplate[] = [
   },
   {
     id: 'fitness',
-    icon: '💪',
     title: 'Get In Shape',
     goal: 'Build a sustainable strength + cardio habit, 4 days a week',
     why: 'I want more energy, better sleep, and to feel strong in my own body again.',
@@ -171,7 +167,6 @@ export const GOAL_TEMPLATES: readonly GoalTemplate[] = [
   },
   {
     id: 'spanish',
-    icon: '🇪🇸',
     title: 'Learn Spanish',
     goal: 'Reach conversational Spanish — order food, hold a basic conversation, watch a show with subtitles off',
     why: 'I travel often and want to actually connect with people instead of pointing at menus.',
@@ -181,7 +176,6 @@ export const GOAL_TEMPLATES: readonly GoalTemplate[] = [
   },
   {
     id: 'meditation',
-    icon: '🧘',
     title: 'Daily Meditation',
     goal: 'Build a daily meditation practice — 10 minutes a day, every day',
     why: 'My mind races constantly and I want a tool to slow it down and actually be present.',
@@ -191,7 +185,6 @@ export const GOAL_TEMPLATES: readonly GoalTemplate[] = [
   },
   {
     id: 'writing',
-    icon: '✍️',
     title: 'Write A Novel',
     goal: 'Write the first 30,000 words of a novel I have been thinking about for years',
     why: 'I have ideas that have been stuck in my head and I want to finally see them on the page.',

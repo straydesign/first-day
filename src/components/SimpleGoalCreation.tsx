@@ -8,7 +8,16 @@ import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3,
 import { SCROLL_SPEEDS } from '@/tokens';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Panel } from '@/components/ui/Panel';
+import { COPY } from '@/content/copy';
 import { FONT } from '@/lib/design';
+import {
+  OPTIONAL_FIELDS,
+  wizardField,
+  initialWizardValues,
+  type WizardField,
+  type WizardFieldKey,
+  type WizardValues,
+} from '@/content/steps';
 import { fireCelebration, getRoomView } from './3d-shell/RoomRegistry';
 import type { GoalFormData } from '@/types';
 
@@ -28,13 +37,8 @@ interface SimpleGoalCreationProps {
 }
 
 export function SimpleGoalCreation({ onComplete, onCancel, initialData }: SimpleGoalCreationProps) {
-  const [goal, setGoal] = useState(initialData?.goal || '');
-  const [why, setWhy] = useState(initialData?.contextAnswers?.why || '');
-  const [experienceLevel, setExperienceLevel] = useState<'beginner' | 'intermediate' | 'advanced'>(
-    (initialData?.contextAnswers?.experienceLevel as 'beginner' | 'intermediate' | 'advanced') || 'beginner'
-  );
-  const [priorExperience, setPriorExperience] = useState(initialData?.contextAnswers?.priorExperience || '');
-  const [preferredTactics, setPreferredTactics] = useState(initialData?.contextAnswers?.preferredTactics || '');
+  // One values object keyed by field — driven by WIZARD_FIELDS, not 5 useStates.
+  const [values, setValues] = useState<WizardValues>(() => initialWizardValues(initialData));
   const [isGenerating, setIsGenerating] = useState(false);
   const [showOptional, setShowOptional] = useState(
     !!(initialData?.contextAnswers?.priorExperience || initialData?.contextAnswers?.preferredTactics)
@@ -42,29 +46,123 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
   const [error, setError] = useState<string | null>(null);
   const [showValidation, setShowValidation] = useState(false);
 
-  const handleSuggestionClick = (suggestion: string) => { setGoal(suggestion); setError(null); };
+  const setValue = (key: WizardFieldKey, v: string) =>
+    setValues((prev) => ({ ...prev, [key]: v }));
+
+  const handleSuggestionClick = (suggestion: string) => { setValue('goal', suggestion); setError(null); };
 
   const handleTemplateClick = (template: GoalTemplate) => {
-    setGoal(template.goal);
-    setWhy(template.why);
-    setExperienceLevel(template.experienceLevel);
-    setPriorExperience(template.priorExperience);
-    setPreferredTactics(template.preferredTactics);
+    setValues({
+      goal: template.goal,
+      why: template.why,
+      experienceLevel: template.experienceLevel,
+      priorExperience: template.priorExperience,
+      preferredTactics: template.preferredTactics,
+    });
     setShowOptional(true);
     setError(null);
   };
 
   const handleGenerate = async () => {
-    if (!goal.trim()) { setShowValidation(true); return; }
+    if (!values.goal.trim()) { setShowValidation(true); return; }
     setIsGenerating(true);
     setError(null);
     fireCelebration(getRoomView(), 1.2);
+    const contextAnswers = {
+      why: values.why.trim(),
+      experienceLevel: values.experienceLevel,
+      priorExperience: values.priorExperience.trim(),
+      preferredTactics: values.preferredTactics.trim(),
+    };
     try {
-      await onComplete({ goal: goal.trim(), why: why.trim(), experienceLevel, priorExperience: priorExperience.trim(), preferredTactics: preferredTactics.trim(), contextAnswers: { why: why.trim(), experienceLevel, priorExperience: priorExperience.trim(), preferredTactics: preferredTactics.trim() }, timestamp: Date.now() });
+      await onComplete({
+        goal: values.goal.trim(),
+        why: values.why.trim(),
+        experienceLevel: values.experienceLevel as 'beginner' | 'intermediate' | 'advanced',
+        priorExperience: values.priorExperience.trim(),
+        preferredTactics: values.preferredTactics.trim(),
+        contextAnswers,
+        timestamp: Date.now(),
+      });
     } finally {
       setIsGenerating(false);
     }
   };
+
+  // ---- Field renderers (drive markup off the WIZARD_FIELDS config) ----
+
+  const renderTextField = (field: WizardField) => {
+    const isArea = field.type === 'textarea';
+    return (
+      <div key={field.key} className="bg-white/5 border border-white/10 rounded-xl overflow-hidden focus-within:border-white/30 transition-colors">
+        <label htmlFor={`${field.key}-input`} className="block px-5 pt-3 pb-1 text-white/40 text-[11px] font-medium uppercase tracking-[0.08em]">
+          {field.label}
+        </label>
+        <div className="mx-5 border-t border-white/5" />
+        {isArea ? (
+          <Textarea
+            id={`${field.key}-input`}
+            value={values[field.key]}
+            onChange={(e) => { setValue(field.key, e.target.value); if (field.key === 'goal') setError(null); }}
+            placeholder={field.placeholder}
+            className="px-5 py-3 bg-transparent border-0 text-white placeholder:text-white/35 text-[17px] focus-visible:ring-0 rounded-none resize-none min-h-[80px] md:min-h-[120px]"
+            disabled={isGenerating}
+            autoFocus={field.autoFocus}
+            rows={3}
+          />
+        ) : (
+          <Input
+            id={`${field.key}-input`}
+            type="text"
+            value={values[field.key]}
+            onChange={(e) => setValue(field.key, e.target.value)}
+            placeholder={field.placeholder}
+            className="px-5 py-3 bg-transparent border-0 text-white placeholder:text-white/35 text-[17px] focus-visible:ring-0 rounded-none"
+            disabled={isGenerating}
+          />
+        )}
+      </div>
+    );
+  };
+
+  const renderChoiceField = (field: WizardField) => (
+    <>
+      <label id={`${field.key}-label`} className="block text-[14px] font-medium text-white/55 mb-2 md:mb-3">
+        {field.label}
+      </label>
+      <div className="flex flex-col gap-2" role="radiogroup" aria-labelledby={`${field.key}-label`}>
+        {(field.choices ?? []).map((choice) => {
+          const isSelected = values[field.key] === choice.value;
+          return (
+            <Panel
+              key={choice.value}
+              solid={isSelected}
+              className={`cursor-pointer transition-all ${isSelected ? 'scale-[1.01]' : 'opacity-70 hover:opacity-100'}`}
+              contentClassName="px-4 py-3"
+            >
+              <button
+                onClick={() => setValue(field.key, choice.value)}
+                disabled={isGenerating}
+                role="radio"
+                aria-checked={isSelected}
+                className="w-full text-left flex items-center gap-3"
+              >
+                <div className={`w-6 h-6 rounded-full border flex items-center justify-center shrink-0 transition-all ${isSelected ? 'bg-black border-black' : 'bg-transparent border-white/25'}`}>
+                  {isSelected && <Check className="w-4 h-4 text-white" strokeWidth={2.5} />}
+                </div>
+                <div>
+                  <div className={`text-[15px] font-semibold tracking-[-0.01em] ${isSelected ? 'text-black' : 'text-white'}`} style={{ fontFamily: FONT }}>
+                    {choice.label}
+                  </div>
+                  <div className={`text-[13px] ${isSelected ? 'text-black/60' : 'text-white/45'}`}>{choice.desc}</div>
+                </div>
+              </button>
+            </Panel>
+          );
+        })}
+      </div>
+    </>
+  );
 
   const renderScrollRow = (goals: string[], direction: 'left' | 'right', rowIndex: number) => (
     <div className="overflow-hidden select-none">
@@ -80,7 +178,7 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
             onClick={() => handleSuggestionClick(suggestion)}
             disabled={isGenerating}
             className={`inline-block rounded-full px-4 py-1.5 text-[13px] font-medium mx-1.5 select-none hover:scale-105 transition-transform disabled:opacity-50 border ${
-              goal === suggestion
+              values.goal === suggestion
                 ? 'bg-white text-black border-white/0 scale-105'
                 : 'bg-white/5 text-white/70 border-white/10 hover:bg-white/10'
             }`}
@@ -107,10 +205,10 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
                   className="text-[32px] md:text-[40px] font-semibold tracking-[-0.02em] text-white leading-[1.05] mb-2"
                   style={{ fontFamily: FONT }}
                 >
-                  Let&apos;s Create Your Goal
+                  {COPY.goalCreation.title}
                 </h1>
                 <p className="text-[16px] leading-relaxed text-white/55">
-                  Tell us what you want to achieve
+                  {COPY.goalCreation.subtitle}
                 </p>
               </div>
 
@@ -131,24 +229,9 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
                 )}
               </AnimatePresence>
 
-              {/* Goal input — dark glass */}
+              {/* Goal input — the primary field */}
               <div className="mb-0">
-                <div className="bg-white/5 border border-white/10 rounded-xl overflow-hidden focus-within:border-white/30 transition-colors">
-                  <label htmlFor="goal-input" className="block px-5 pt-3 pb-1 text-white/40 text-[11px] font-medium uppercase tracking-[0.08em]">
-                    What&apos;s your goal?
-                  </label>
-                  <div className="mx-5 border-t border-white/5" />
-                  <Textarea
-                    id="goal-input"
-                    value={goal}
-                    onChange={(e) => { setGoal(e.target.value); setError(null); }}
-                    placeholder="Type your goal here..."
-                    className="px-5 py-3 bg-transparent border-0 text-white placeholder:text-white/35 text-[17px] focus-visible:ring-0 rounded-none resize-none min-h-[80px] md:min-h-[120px]"
-                    disabled={isGenerating}
-                    autoFocus
-                    rows={3}
-                  />
-                </div>
+                {renderTextField(wizardField('goal'))}
               </div>
             </div>
           </motion.div>
@@ -159,12 +242,12 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
           <div className="w-full max-w-4xl mx-auto px-4 md:px-12 pb-2 md:pb-6">
             <div className="flex items-center gap-3 mb-3 md:mb-4">
               <div className="h-px flex-1 bg-white/10" />
-              <p className="text-[11px] uppercase tracking-[0.08em] font-medium text-white/40">Or start from a template</p>
+              <p className="text-[11px] uppercase tracking-[0.08em] font-medium text-white/40">{COPY.goalCreation.templateDivider}</p>
               <div className="h-px flex-1 bg-white/10" />
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3">
               {GOAL_TEMPLATES.map((template) => {
-                const isActive = goal === template.goal;
+                const isActive = values.goal === template.goal;
                 return (
                   <Panel
                     key={template.id}
@@ -179,7 +262,6 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
                       aria-label={`Use ${template.title} template`}
                     >
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-xl md:text-2xl" aria-hidden>{template.icon}</span>
                         <span
                           className={`text-[13px] md:text-[14px] font-semibold tracking-[-0.01em] truncate ${isActive ? 'text-black' : 'text-white'}`}
                           style={{ fontFamily: FONT }}
@@ -210,68 +292,17 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-4xl mx-auto">
             <div className="p-4 md:p-12">
 
-              {/* Why input — dark glass */}
+              {/* Why input */}
               <div className="mb-4 md:mb-8">
-                <div className="bg-white/5 border border-white/10 rounded-xl overflow-hidden focus-within:border-white/30 transition-colors">
-                  <label htmlFor="why-input" className="block px-5 pt-3 pb-1 text-white/40 text-[11px] font-medium uppercase tracking-[0.08em]">
-                    Why do you want to achieve this?
-                  </label>
-                  <div className="mx-5 border-t border-white/5" />
-                  <Textarea
-                    id="why-input"
-                    value={why}
-                    onChange={(e) => setWhy(e.target.value)}
-                    placeholder="Tell us what motivates you..."
-                    className="px-5 py-3 bg-transparent border-0 text-white placeholder:text-white/35 text-[17px] focus-visible:ring-0 rounded-none resize-none min-h-[80px] md:min-h-[120px]"
-                    disabled={isGenerating}
-                    rows={3}
-                  />
-                </div>
+                {renderTextField(wizardField('why'))}
               </div>
 
               {/* Experience level */}
               <div className="mb-4 md:mb-8">
-                <label id="experience-level-label" className="block text-[14px] font-medium text-white/55 mb-2 md:mb-3">
-                  What&apos;s your experience level?
-                </label>
-                <div className="flex flex-col gap-2" role="radiogroup" aria-labelledby="experience-level-label">
-                  {([
-                    { value: 'beginner' as const, label: 'Beginner', desc: 'Just starting' },
-                    { value: 'intermediate' as const, label: 'Intermediate', desc: 'Some experience' },
-                    { value: 'advanced' as const, label: 'Advanced', desc: 'Experienced' },
-                  ]).map((level) => {
-                    const isSelected = experienceLevel === level.value;
-                    return (
-                      <Panel
-                        key={level.value}
-                        solid={isSelected}
-                        className={`cursor-pointer transition-all ${isSelected ? 'scale-[1.01]' : 'opacity-70 hover:opacity-100'}`}
-                        contentClassName="px-4 py-3"
-                      >
-                        <button
-                          onClick={() => setExperienceLevel(level.value)}
-                          disabled={isGenerating}
-                          role="radio"
-                          aria-checked={isSelected}
-                          className="w-full text-left flex items-center gap-3"
-                        >
-                          <div className={`w-6 h-6 rounded-full border flex items-center justify-center shrink-0 transition-all ${isSelected ? 'bg-black border-black' : 'bg-transparent border-white/25'}`}>
-                            {isSelected && <Check className="w-4 h-4 text-white" strokeWidth={2.5} />}
-                          </div>
-                          <div>
-                            <div className={`text-[15px] font-semibold tracking-[-0.01em] ${isSelected ? 'text-black' : 'text-white'}`} style={{ fontFamily: FONT }}>
-                              {level.label}
-                            </div>
-                            <div className={`text-[13px] ${isSelected ? 'text-black/60' : 'text-white/45'}`}>{level.desc}</div>
-                          </div>
-                        </button>
-                      </Panel>
-                    );
-                  })}
-                </div>
+                {renderChoiceField(wizardField('experienceLevel'))}
               </div>
 
-              {/* Optional fields */}
+              {/* Optional fields — mapped from config */}
               <div className="mb-4 md:mb-8">
                 <button
                   type="button"
@@ -281,40 +312,11 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
                   aria-expanded={showOptional}
                 >
                   {showOptional ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                  Tell us more (optional)
+                  {COPY.goalCreation.optionalToggle}
                 </button>
                 {showOptional && (
                   <div className="mt-4 space-y-4 md:space-y-6">
-                    <div className="bg-white/5 border border-white/10 rounded-xl overflow-hidden focus-within:border-white/30 transition-colors">
-                      <label htmlFor="prior-experience-input" className="block px-5 pt-3 pb-1 text-white/40 text-[11px] font-medium uppercase tracking-[0.08em]">
-                        What have you tried before?
-                      </label>
-                      <div className="mx-5 border-t border-white/5" />
-                      <Input
-                        id="prior-experience-input"
-                        type="text"
-                        value={priorExperience}
-                        onChange={(e) => setPriorExperience(e.target.value)}
-                        placeholder="e.g., Took an online course, read a book..."
-                        className="px-5 py-3 bg-transparent border-0 text-white placeholder:text-white/35 text-[17px] focus-visible:ring-0 rounded-none"
-                        disabled={isGenerating}
-                      />
-                    </div>
-                    <div className="bg-white/5 border border-white/10 rounded-xl overflow-hidden focus-within:border-white/30 transition-colors">
-                      <label htmlFor="preferred-tactics-input" className="block px-5 pt-3 pb-1 text-white/40 text-[11px] font-medium uppercase tracking-[0.08em]">
-                        How do you like to learn?
-                      </label>
-                      <div className="mx-5 border-t border-white/5" />
-                      <Input
-                        id="preferred-tactics-input"
-                        type="text"
-                        value={preferredTactics}
-                        onChange={(e) => setPreferredTactics(e.target.value)}
-                        placeholder="e.g., Videos, hands-on practice, reading..."
-                        className="px-5 py-3 bg-transparent border-0 text-white placeholder:text-white/35 text-[17px] focus-visible:ring-0 rounded-none"
-                        disabled={isGenerating}
-                      />
-                    </div>
+                    {OPTIONAL_FIELDS.map((field) => renderTextField(field))}
                   </div>
                 )}
               </div>
@@ -329,10 +331,10 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
                   {isGenerating ? (
                     <>
                       <Loader2 className="w-5 h-5 animate-spin" />
-                      <span>Generating your plan...</span>
+                      <span>{COPY.goalCreation.generatingButton}</span>
                     </>
                   ) : (
-                    'Generate My Plan'
+                    COPY.goalCreation.generateButton
                   )}
                 </button>
                 <button
@@ -340,12 +342,12 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
                   disabled={isGenerating}
                   className="self-center rounded-full border border-white/15 text-white/80 hover:bg-white/5 transition px-6 py-2.5 text-[14px] font-medium disabled:opacity-50"
                 >
-                  Cancel
+                  {COPY.goalCreation.cancelButton}
                 </button>
               </div>
 
               <div className="mt-6 text-center">
-                <p className="text-[13px] text-white/40">AI builds your first 7-day sprint right now — three more sprints generate as you finish each one.</p>
+                <p className="text-[13px] text-white/40">{COPY.goalCreation.footerMicrocopy}</p>
               </div>
             </div>
           </motion.div>
@@ -375,17 +377,17 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
             >
               <Panel solid contentClassName="p-8 text-center">
                 <p id="validation-title" className="text-[20px] font-semibold tracking-[-0.02em] text-black mb-2" style={{ fontFamily: FONT }}>
-                  Hold up!
+                  {COPY.goalCreation.validationTitle}
                 </p>
                 <p className="text-[15px] leading-relaxed text-black/60 mb-6">
-                  Just fill in your goal above and we&apos;ll build your plan
+                  {COPY.goalCreation.validationBody}
                 </p>
                 <button
                   onClick={() => setShowValidation(false)}
                   className="rounded-full bg-black text-white text-[15px] font-semibold py-3 px-8 transition-transform hover:scale-[1.01] active:scale-[0.99]"
                   autoFocus
                 >
-                  Got It
+                  {COPY.goalCreation.validationConfirm}
                 </button>
               </Panel>
             </motion.div>

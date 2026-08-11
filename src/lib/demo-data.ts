@@ -1387,14 +1387,14 @@ export const DEMO_GOAL_DETAILS: Record<string, DemoGoalDetail> = {
 // =========================================================
 
 const DEMO_ACHIEVEMENTS: Achievement[] = [
-  { id: "first-step", name: "First Step", description: "Complete your first day", icon: "🚀", unlocked: true },
-  { id: "on-fire", name: "On Fire", description: "3-day streak", icon: "🔥", unlocked: true },
-  { id: "week-warrior", name: "Week Warrior", description: "Complete 7 days total", icon: "⭐", unlocked: false },
-  { id: "unstoppable", name: "Unstoppable", description: "7-day streak", icon: "💪", unlocked: false },
-  { id: "perfect-week", name: "Perfect Week", description: "7 consecutive days", icon: "🏅", unlocked: false },
-  { id: "halfway-hero", name: "Halfway Hero", description: "Complete 15 days", icon: "🎯", unlocked: false },
-  { id: "deep-thinker", name: "Deep Thinker", description: "Write 10 reflections", icon: "🧠", unlocked: false },
-  { id: "goal-crusher", name: "Goal Crusher", description: "Complete every day of a goal", icon: "🏆", unlocked: false },
+  { id: "first-step", name: "First Step", description: "Complete your first day", unlocked: true },
+  { id: "on-fire", name: "On Fire", description: "3-day streak", unlocked: true },
+  { id: "week-warrior", name: "Week Warrior", description: "Complete 7 days total", unlocked: false },
+  { id: "unstoppable", name: "Unstoppable", description: "7-day streak", unlocked: false },
+  { id: "perfect-week", name: "Perfect Week", description: "7 consecutive days", unlocked: false },
+  { id: "halfway-hero", name: "Halfway Hero", description: "Complete 15 days", unlocked: false },
+  { id: "deep-thinker", name: "Deep Thinker", description: "Write 10 reflections", unlocked: false },
+  { id: "goal-crusher", name: "Goal Crusher", description: "Complete every day of a goal", unlocked: false },
 ];
 
 export const DEMO_ENGAGEMENT: EngagementState = {

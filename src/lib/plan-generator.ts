@@ -8,6 +8,7 @@
  * a richer, personalized plan instead.
  */
 import type { Plan, DayPlan, SprintMeta, GoalFormData } from "@/types";
+import type { SprintGenResult } from "@/lib/anthropic";
 
 const SPRINTS: ReadonlyArray<{ title: string; theme: string; tip: string }> = [
   {
@@ -139,5 +140,28 @@ export function generatePlanDeterministic(
     days,
     sprints,
     sprintsGenerated: 4,
+  };
+}
+
+/**
+ * Deterministic single-sprint generator — the keyless fallback for the
+ * forward-generation loop. Slices one sprint's 7 days out of the full template
+ * arc. The content is fixed per (sprint, day), so it never adapts to feedback:
+ * `adapted` is always false here, and the recap must not claim otherwise.
+ */
+export function generateSprintDeterministic(
+  input: GoalFormData,
+  sprintNumber: number,
+): SprintGenResult {
+  const full = generatePlanDeterministic(input, "");
+  const lo = (sprintNumber - 1) * 7 + 1;
+  const hi = sprintNumber * 7;
+  const days: Record<number, DayPlan> = {};
+  for (let n = lo; n <= hi; n++) if (full.days[n]) days[n] = full.days[n];
+  return {
+    days,
+    sprints: sprintNumber === 1 ? full.sprints : undefined,
+    cleanedGoal: sprintNumber === 1 ? full.cleanedGoal : undefined,
+    adapted: false,
   };
 }

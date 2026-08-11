@@ -14,6 +14,7 @@ import { FONT } from "@/lib/design";
 import { Panel } from "./ui/Panel";
 import { setActionIntent } from "./3d-shell/actionIntent";
 import { HeroAutoTour } from "./HeroAutoTour";
+import { COPY } from "@/content/copy";
 
 
 interface LandingPageProps {
@@ -128,7 +129,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
               onClick={onLogin || onGetStarted}
               className="rounded-full border border-white/15 text-white/80 text-[15px] font-semibold py-2.5 px-6 hover:bg-white/5 transition"
             >
-              Log In
+              {COPY.landing.nav.logIn}
             </button>
           </div>
           <div className="absolute top-[100px] md:top-6 right-4 lg:right-8 z-50">
@@ -144,7 +145,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
               whileTap={{ scale: 0.98 }}
               className="rounded-full bg-white text-black text-[15px] font-semibold py-2.5 px-6 transition-transform"
             >
-              Get Started
+              {COPY.landing.nav.getStarted}
             </motion.button>
           </div>
 
@@ -156,10 +157,10 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
               transition={SPRING.gentle}
             >
               <h1 className="font-semibold tracking-[-0.03em] leading-[1.02] text-white text-[clamp(2.5rem,7vw,5rem)]">
-                First Day
+                {COPY.landing.hero.title}
               </h1>
               <p className="mt-4 mx-auto max-w-xl text-[clamp(1rem,2.2vw,1.4rem)] leading-relaxed text-white/55">
-                The first day of the rest of your life. Pick a goal, get a 7-day plan, and show up.
+                {COPY.landing.hero.tagline}
               </p>
               <div className="mt-8 flex items-center justify-center gap-3">
                 <motion.button
@@ -170,13 +171,13 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                   whileTap={{ scale: 0.99 }}
                   className="rounded-full bg-white text-black text-[15px] font-semibold py-3 px-7 transition-transform"
                 >
-                  Get Started
+                  {COPY.landing.hero.getStarted}
                 </motion.button>
                 <button
                   onClick={onLogin || onGetStarted}
                   className="rounded-full border border-white/15 text-white/80 text-[15px] font-semibold py-3 px-7 hover:bg-white/5 transition"
                 >
-                  Log In
+                  {COPY.landing.hero.logIn}
                 </button>
               </div>
             </motion.div>
@@ -193,7 +194,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
             aria-label="Scroll to live plan demo"
           >
             <span className="text-[11px] uppercase tracking-[0.12em] text-white/40 group-hover:text-white/70 transition-colors">
-              See it in 2s
+              {COPY.landing.hero.scrollHint}
             </span>
             <div className="w-6 h-10 rounded-full border border-white/20 group-hover:border-white/50 transition-colors flex justify-center pt-2">
               <motion.div
@@ -220,7 +221,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                 onClick={onLogin || onGetStarted}
                 className="rounded-full border border-white/15 text-white/80 text-sm font-semibold py-2 px-4 hover:bg-white/5 transition flex-shrink-0"
               >
-                Log In
+                {COPY.landing.nav.logIn}
               </motion.button>
               <div className="flex-1 min-w-0 flex justify-center">
                 <FirstDayLogo compact={true} />
@@ -237,8 +238,8 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                 onPointerUp={() => setActionIntent(0)}
                 className="rounded-full bg-white text-black text-sm font-semibold py-2 px-4 hover:scale-[1.02] transition-transform flex-shrink-0"
               >
-                <span className="hidden sm:inline">Get Started</span>
-                <span className="sm:hidden">Start</span>
+                <span className="hidden sm:inline">{COPY.landing.nav.getStarted}</span>
+                <span className="sm:hidden">{COPY.landing.nav.getStartedShort}</span>
               </motion.button>
             </div>
           </motion.div>
@@ -256,7 +257,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
               <div className="flex items-center justify-center gap-2 mb-4 px-4">
                 <span className="h-px w-8 bg-white/15" aria-hidden />
                 <span className="text-[12px] uppercase tracking-[0.12em] text-white/40">
-                  Tap a goal to preview your week
+                  {COPY.landing.pills.prompt}
                 </span>
                 <span className="h-px w-8 bg-white/15" aria-hidden />
               </div>
@@ -297,15 +298,15 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
           <section id="how-it-works" className="w-full py-8 md:py-16 lg:py-24 px-4 md:px-10">
             <div className="max-w-5xl lg:max-w-6xl mx-auto">
               <div className="text-center mb-6 lg:mb-10">
-                <SectionKicker num="01" label="The System" />
-                <h2 className="text-3xl md:text-5xl font-semibold tracking-[-0.02em] text-white mb-2">How It Works</h2>
-                <p className="text-white/55 md:text-lg">No vague vision boards. A real 7-day battle plan.</p>
+                <SectionKicker num="01" label={COPY.landing.howItWorks.kicker} />
+                <h2 className="text-3xl md:text-5xl font-semibold tracking-[-0.02em] text-white mb-2">{COPY.landing.howItWorks.title}</h2>
+                <p className="text-white/55 md:text-lg">{COPY.landing.howItWorks.subtitle}</p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
                 {[
-                  { n: 1, title: "Set Your Goal", line: "Pick what's been nagging you. One sentence.", Icon: Target },
-                  { n: 2, title: "Get Your Plan", line: "AI builds your 7-day sprint. Specific. Actionable.", Icon: Sparkles },
-                  { n: 3, title: "Show Up Daily", line: "Earn XP, build streaks, finish what you started.", Icon: Flame },
+                  { n: 1, title: COPY.landing.howItWorks.steps[0].title, line: COPY.landing.howItWorks.steps[0].line, Icon: Target },
+                  { n: 2, title: COPY.landing.howItWorks.steps[1].title, line: COPY.landing.howItWorks.steps[1].line, Icon: Sparkles },
+                  { n: 3, title: COPY.landing.howItWorks.steps[2].title, line: COPY.landing.howItWorks.steps[2].line, Icon: Flame },
                 ].map((s, i) => (
                   <motion.div
                     key={s.n}
@@ -336,9 +337,9 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
           <section className="w-full py-8 md:py-16 lg:py-24 px-4 md:px-10">
             <div className="max-w-5xl lg:max-w-6xl mx-auto">
               <div className="text-center mb-6 lg:mb-10">
-                <SectionKicker num="02" label="The Loop" />
-                <h2 className="text-3xl md:text-5xl font-semibold tracking-[-0.02em] text-white mb-2">Stay Motivated</h2>
-                <p className="text-white/55 md:text-lg">Built-in streaks, XP, and achievements keep you coming back</p>
+                <SectionKicker num="02" label={COPY.landing.stayMotivated.kicker} />
+                <h2 className="text-3xl md:text-5xl font-semibold tracking-[-0.02em] text-white mb-2">{COPY.landing.stayMotivated.title}</h2>
+                <p className="text-white/55 md:text-lg">{COPY.landing.stayMotivated.subtitle}</p>
               </div>
 
               <div>
@@ -352,13 +353,13 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                       <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/5 border border-white/10 mb-4">
                         <Flame className="w-6 h-6 text-white/70" />
                       </div>
-                      <h3 className="text-xl md:text-2xl font-semibold tracking-[-0.01em] text-white mb-1">Daily Streaks</h3>
-                      <p className="text-white/55 text-sm lg:text-base mb-4 leading-relaxed">Keep your streak alive by showing up every day. The longer you go, the more bonus XP you earn.</p>
+                      <h3 className="text-xl md:text-2xl font-semibold tracking-[-0.01em] text-white mb-1">{COPY.landing.stayMotivated.streaks.title}</h3>
+                      <p className="text-white/55 text-sm lg:text-base mb-4 leading-relaxed">{COPY.landing.stayMotivated.streaks.body}</p>
                       <div className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 text-white px-5 py-1.5 font-semibold text-lg">
                         <Flame className="w-5 h-5 text-white/70" />
                         <CountUp target={12} />
                       </div>
-                      <p className="text-xs text-white/40 mt-2 font-medium">12-day streak</p>
+                      <p className="text-xs text-white/40 mt-2 font-medium">{COPY.landing.stayMotivated.streaks.caption}</p>
                     </Panel>
                   </motion.div>
 
@@ -371,11 +372,11 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                       <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/5 border border-white/10 mb-4">
                         <Zap className="w-6 h-6 text-white/70" />
                       </div>
-                      <h3 className="text-xl md:text-2xl font-semibold tracking-[-0.01em] text-white mb-1">Earn XP</h3>
-                      <p className="text-white/55 text-sm lg:text-base mb-4 leading-relaxed">Earn points for every activity you complete, every reflection you write, and every streak day.</p>
+                      <h3 className="text-xl md:text-2xl font-semibold tracking-[-0.01em] text-white mb-1">{COPY.landing.stayMotivated.xp.title}</h3>
+                      <p className="text-white/55 text-sm lg:text-base mb-4 leading-relaxed">{COPY.landing.stayMotivated.xp.body}</p>
                       <div className="space-y-2 max-w-[180px] mx-auto">
                         <div className="flex justify-between text-sm">
-                          <span className="font-semibold text-white">Dedicated</span>
+                          <span className="font-semibold text-white">{COPY.landing.stayMotivated.xp.tierLabel}</span>
                           <span className="text-white/70 font-semibold">
                             <CountUp target={1450} suffix=" XP" />
                           </span>
@@ -389,7 +390,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                             transition={{ duration: 1.4, ease: [0.22, 0.8, 0.3, 1], delay: 0.2 }}
                           />
                         </div>
-                        <p className="text-xs text-white/40">750 XP to Unstoppable</p>
+                        <p className="text-xs text-white/40">{COPY.landing.stayMotivated.xp.progressNote}</p>
                       </div>
                     </Panel>
                   </motion.div>
@@ -403,8 +404,8 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                       <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/5 border border-white/10 mb-4">
                         <Trophy className="w-6 h-6 text-white/70" />
                       </div>
-                      <h3 className="text-xl md:text-2xl font-semibold tracking-[-0.01em] text-white mb-1">Unlock Badges</h3>
-                      <p className="text-white/55 text-sm lg:text-base mb-4 leading-relaxed">Hit milestones and earn achievements. Can you collect them all?</p>
+                      <h3 className="text-xl md:text-2xl font-semibold tracking-[-0.01em] text-white mb-1">{COPY.landing.stayMotivated.achievements.title}</h3>
+                      <p className="text-white/55 text-sm lg:text-base mb-4 leading-relaxed">{COPY.landing.stayMotivated.achievements.body}</p>
                       <div className="flex justify-center gap-2">
                         {["First Step", "On Fire", "Perfect Week", "???"].map((label, i) => (
                           <motion.div
@@ -433,7 +434,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                   <Panel contentClassName="text-center py-4 lg:py-6 px-2 lg:px-4">
                     <div className="flex items-center justify-center gap-1 mb-1">
                       <Target className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-white/50" />
-                      <span className="text-xs lg:text-sm text-white/45 font-medium">Rate</span>
+                      <span className="text-xs lg:text-sm text-white/45 font-medium">{COPY.landing.stayMotivated.stats.rate}</span>
                     </div>
                     <p className="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-[-0.02em] text-white tabular-nums">
                       <CountUp target={87} suffix="%" />
@@ -442,7 +443,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                   <Panel contentClassName="text-center py-4 lg:py-6 px-2 lg:px-4">
                     <div className="flex items-center justify-center gap-1 mb-1">
                       <Flame className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-white/50" />
-                      <span className="text-xs lg:text-sm text-white/45 font-medium">Streak</span>
+                      <span className="text-xs lg:text-sm text-white/45 font-medium">{COPY.landing.stayMotivated.stats.streak}</span>
                     </div>
                     <p className="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-[-0.02em] text-white tabular-nums">
                       <CountUp target={12} delay={0.1} />
@@ -451,7 +452,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                   <Panel contentClassName="text-center py-4 lg:py-6 px-2 lg:px-4">
                     <div className="flex items-center justify-center gap-1 mb-1">
                       <Trophy className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-white/50" />
-                      <span className="text-xs lg:text-sm text-white/45 font-medium">Badges</span>
+                      <span className="text-xs lg:text-sm text-white/45 font-medium">{COPY.landing.stayMotivated.stats.badges}</span>
                     </div>
                     <p className="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-[-0.02em] text-white tabular-nums">
                       <CountUp target={5} delay={0.2} />/8
@@ -468,17 +469,17 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
           <section className="w-full py-8 md:py-16 lg:py-24 px-4 md:px-10">
               <div className="max-w-5xl lg:max-w-6xl mx-auto">
               <div className="text-center mb-6 lg:mb-10">
-                <SectionKicker num="03" label="The Sprint" />
-                <h2 className="text-3xl md:text-5xl font-semibold tracking-[-0.02em] text-white mb-2">What Your Plan Looks Like</h2>
-                <p className="text-white/55 md:text-lg">Your personalized weekly sprint</p>
+                <SectionKicker num="03" label={COPY.landing.plan.kicker} />
+                <h2 className="text-3xl md:text-5xl font-semibold tracking-[-0.02em] text-white mb-2">{COPY.landing.plan.title}</h2>
+                <p className="text-white/55 md:text-lg">{COPY.landing.plan.subtitle}</p>
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5 lg:gap-6">
                 {[
-                  { Icon: Calendar, label: "Weekly Sprint", desc: "Seven days. Beginning to finish line." },
-                  { Icon: ListChecks, label: "Daily Activities", desc: "Curated tasks, videos, and resources." },
-                  { Icon: NotebookPen, label: "Daily Reflection", desc: "Lock in what you learned in 30 seconds." },
-                  { Icon: Trophy, label: "Finish Strong", desc: "Badges, trophies, and the proof you did it." },
+                  { Icon: Calendar, label: COPY.landing.plan.cards[0].label, desc: COPY.landing.plan.cards[0].desc },
+                  { Icon: ListChecks, label: COPY.landing.plan.cards[1].label, desc: COPY.landing.plan.cards[1].desc },
+                  { Icon: NotebookPen, label: COPY.landing.plan.cards[2].label, desc: COPY.landing.plan.cards[2].desc },
+                  { Icon: Trophy, label: COPY.landing.plan.cards[3].label, desc: COPY.landing.plan.cards[3].desc },
                 ].map((card, i) => (
                   <motion.div
                     key={card.label}
@@ -507,7 +508,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                   whileTap={{ scale: 0.99 }}
                   className="group inline-flex items-center gap-2 rounded-full bg-white text-black text-[16px] md:text-[17px] font-semibold py-3.5 px-8 transition-transform"
                 >
-                  <span>Create Your Plan</span>
+                  <span>{COPY.landing.plan.ctaButton}</span>
                   <motion.span
                     aria-hidden
                     animate={{ x: [0, 5, 0] }}
@@ -524,7 +525,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                   transition={{ delay: 0.7, duration: 0.6 }}
                   className="text-sm lg:text-base text-white/50 mt-4"
                 >
-                  Every plan is unique — personalized to your goal and experience
+                  {COPY.landing.plan.ctaNote}
                 </motion.p>
               </div>
               </div>
@@ -573,14 +574,14 @@ function StickyCTA({ onGetStarted, onLogin }: { onGetStarted: () => void; onLogi
             onClick={onGetStarted}
             className="flex-1 rounded-full bg-white text-black text-base md:text-lg font-semibold py-3 md:py-3.5 hover:scale-[1.01] active:scale-[0.99] transition-transform"
           >
-            Create Your Plan →
+            {COPY.landing.stickyCta.createPlan}
           </button>
           {onLogin && (
             <button
               onClick={onLogin}
               className="rounded-full border border-white/15 px-4 md:px-5 py-3 md:py-3.5 text-sm md:text-base font-semibold text-white/80 hover:bg-white/5 transition"
             >
-              Log In
+              {COPY.landing.stickyCta.logIn}
             </button>
           )}
         </div>

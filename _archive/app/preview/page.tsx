@@ -91,14 +91,14 @@ const MOCK_DAY: SelectedDay = {
 };
 
 const MOCK_ACHIEVEMENTS: Achievement[] = [
-  { id: "first-step", name: "First Step", description: "Complete your first day", icon: "🚀", unlocked: true },
-  { id: "on-fire", name: "On Fire", description: "3-day streak", icon: "🔥", unlocked: true },
-  { id: "week-warrior", name: "Week Warrior", description: "Complete 7 days total", icon: "⭐", unlocked: false },
-  { id: "unstoppable", name: "Unstoppable", description: "7-day streak", icon: "💪", unlocked: false },
-  { id: "perfect-week", name: "Perfect Week", description: "7 consecutive days", icon: "🏅", unlocked: false },
-  { id: "halfway-hero", name: "Halfway Hero", description: "Complete 15 days", icon: "🎯", unlocked: false },
-  { id: "deep-thinker", name: "Deep Thinker", description: "Write 10 reflections", icon: "🧠", unlocked: false },
-  { id: "goal-crusher", name: "Goal Crusher", description: "Complete all 30 days", icon: "🏆", unlocked: false },
+  { id: "first-step", name: "First Step", description: "Complete your first day", unlocked: true },
+  { id: "on-fire", name: "On Fire", description: "3-day streak", unlocked: true },
+  { id: "week-warrior", name: "Week Warrior", description: "Complete 7 days total", unlocked: false },
+  { id: "unstoppable", name: "Unstoppable", description: "7-day streak", unlocked: false },
+  { id: "perfect-week", name: "Perfect Week", description: "7 consecutive days", unlocked: false },
+  { id: "halfway-hero", name: "Halfway Hero", description: "Complete 15 days", unlocked: false },
+  { id: "deep-thinker", name: "Deep Thinker", description: "Write 10 reflections", unlocked: false },
+  { id: "goal-crusher", name: "Goal Crusher", description: "Complete all 30 days", unlocked: false },
 ];
 
 const MOCK_ENGAGEMENT: EngagementState = {
@@ -119,7 +119,6 @@ const MOCK_ENGAGEMENT: EngagementState = {
 
 const MOCK_MILESTONE: Milestone = {
   type: "day",
-  icon: "✅",
   title: "Day 5 Complete!",
   message: "You're building real momentum. Keep showing up!",
   intensity: "normal",
@@ -137,7 +136,7 @@ const MOCK_XP: XPBreakdown = {
 };
 
 const NEW_ACHIEVEMENTS: Achievement[] = [
-  { id: "on-fire", name: "On Fire", description: "Maintain a 3-day streak", icon: "🔥", unlocked: true },
+  { id: "on-fire", name: "On Fire", description: "Maintain a 3-day streak", unlocked: true },
 ];
 
 // Phone frame wrapper — only used for ?screen=N screenshots

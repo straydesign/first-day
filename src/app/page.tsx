@@ -2,11 +2,13 @@
 import { useState, useEffect, useCallback } from "react";
 import dynamic from "next/dynamic";
 import { toast } from "sonner";
+import { COPY } from "@/content/copy";
 import { LandingPage } from "@/components/LandingPage";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { AuthenticatedApp } from "@/components/AuthenticatedApp";
 import { useAuth } from "@/hooks/useAuth";
 import type { AppView } from "@/types";
+import { viewForPath, isPublicSubpage } from "@/content/flow";
 
 const LoginModal = dynamic(() => import("@/components/LoginModal").then(m => ({ default: m.LoginModal })));
 const LegalPage = dynamic(() => import("@/components/LegalPage").then(m => ({ default: m.LegalPage })));
@@ -21,29 +23,21 @@ export default function Home() {
   const { isAuthenticated, accessToken, userId, userEmail, isLoading, login, logout } = useAuth({
     onSignIn: () => {
       setCurrentView("goals");
-      toast.success("Welcome!");
+      toast.success(COPY.toasts.welcome);
     },
     onSessionChecked: (hasSession) => {
-      // Only set view if not already on a public page
-      if (currentView !== "privacy" && currentView !== "terms" && currentView !== "reset-password") {
+      // Only set view if not already on a public sub-page (privacy/terms/reset)
+      if (!isPublicSubpage(currentView)) {
         setCurrentView(hasSession ? "goals" : "landing");
       }
     },
     onPasswordRecovery: () => setCurrentView("reset-password"),
   });
 
-  // Handle URL-based routing on mount
+  // Handle URL-based routing on mount — resolve the path via the flow registry
   useEffect(() => {
-    const path = window.location.pathname;
-
-    if (path === "/privacy") {
-      setCurrentView("privacy");
-      return;
-    }
-    if (path === "/terms") {
-      setCurrentView("terms");
-      return;
-    }
+    const view = viewForPath(window.location.pathname);
+    if (view) setCurrentView(view);
   }, []);
 
   const handleLogout = useCallback(async () => {

@@ -7,14 +7,13 @@ interface AchievementCardProps {
 }
 
 export function AchievementCard({ achievement }: AchievementCardProps) {
-  const { icon, name, description, unlocked } = achievement;
+  const { name, description, unlocked } = achievement;
 
   return (
     <Panel
       className={`transition-opacity ${unlocked ? "" : "opacity-50 grayscale"}`}
       contentClassName="p-3 flex flex-col items-center text-center"
     >
-      <span className="text-3xl mb-1 block">{icon}</span>
       <p className={`text-[13px] font-semibold leading-tight ${unlocked ? "text-white" : "text-white/50"}`}>
         {name}
       </p>

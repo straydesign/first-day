@@ -1,6 +1,7 @@
 "use client";
 import { CheckCircle2, Lock, Play } from "lucide-react";
 import { Panel } from "@/components/ui/Panel";
+import { COPY } from "@/content/copy";
 import { FONT } from "@/lib/design";
 import { getNextAvailableDay, isDayCompleted, getPlanTotalDays } from "@/lib/engagement";
 import { fireCelebration, getRoomView } from "./3d-shell/RoomRegistry";
@@ -57,8 +58,8 @@ export function WeekCalendar({ days, progress = {}, onDayClick, planData }: Week
                   {day.dayNumber}
                 </div>
                 <div className="flex-1 text-left min-w-0">
-                  <p className="text-[14px] font-medium text-white/30">—</p>
-                  <p className="text-[12px] text-white/25">Locked</p>
+                  <p className="text-[14px] font-medium text-white/30">{COPY.calendar.dayTitleDash}</p>
+                  <p className="text-[12px] text-white/25">{COPY.calendar.dayLockedLabel}</p>
                 </div>
                 <div className="flex-shrink-0">
                   <Lock className="w-4 h-4 md:w-5 md:h-5 text-white/25" />
@@ -68,7 +69,7 @@ export function WeekCalendar({ days, progress = {}, onDayClick, planData }: Week
           );
         }
 
-        const title = dayData?.title || `Day ${day.dayNumber}`;
+        const title = dayData?.title || COPY.calendar.dayTitleFallback(day.dayNumber);
         const activities = dayData?.activities || [];
         const activityCount = activities.length;
         const previewActivity = current && activities.length > 0 ? activityText(activities[0]) : null;
@@ -129,16 +130,16 @@ export function WeekCalendar({ days, progress = {}, onDayClick, planData }: Week
                         className="rounded-full bg-black/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-black/60 flex-shrink-0"
                         style={{ fontFamily: FONT }}
                       >
-                        START
+                        {COPY.calendar.startBadge}
                       </span>
                     )}
                   </div>
                   <p className={`text-[12px] truncate mt-0.5 ${current ? "text-black/50" : "text-white/40"}`}>
                     {completed && completedDate
-                      ? `Completed ${completedDate}`
+                      ? COPY.calendar.completedDate(completedDate)
                       : previewActivity
                         ? previewActivity
-                        : `${activityCount} ${activityCount === 1 ? "activity" : "activities"}`}
+                        : COPY.calendar.activityCount(activityCount)}
                   </p>
                 </div>
 

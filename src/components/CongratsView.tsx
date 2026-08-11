@@ -6,6 +6,7 @@ import { Calendar, ArrowRight, Zap } from "lucide-react";
 import { wordReveal, scaleReveal, SPRING } from "@/lib/animations";
 import { Panel } from "@/components/ui/Panel";
 import { FONT } from "@/lib/design";
+import { COPY } from "@/content/copy";
 import type { ProgressMap, Milestone, XPBreakdown } from "@/types";
 
 
@@ -70,12 +71,12 @@ export function CongratsView({
   const xpLines = useMemo(() => {
     if (!xp) return [];
     const lines: { label: string; value: number; highlight?: boolean }[] = [];
-    if (xp.base > 0) lines.push({ label: "Day complete", value: xp.base });
-    if (xp.activities > 0) lines.push({ label: "Activities", value: xp.activities });
-    if (xp.reflection > 0) lines.push({ label: "Reflection", value: xp.reflection });
-    if (xp.streakBonus > 0) lines.push({ label: "Streak bonus", value: xp.streakBonus });
-    if (xp.challengeBonus > 0) lines.push({ label: "Challenge bonus", value: xp.challengeBonus, highlight: true });
-    if (xp.comebackBonus > 0) lines.push({ label: "Comeback bonus", value: xp.comebackBonus, highlight: true });
+    if (xp.base > 0) lines.push({ label: COPY.congrats.xpLines.base, value: xp.base });
+    if (xp.activities > 0) lines.push({ label: COPY.congrats.xpLines.activities, value: xp.activities });
+    if (xp.reflection > 0) lines.push({ label: COPY.congrats.xpLines.reflection, value: xp.reflection });
+    if (xp.streakBonus > 0) lines.push({ label: COPY.congrats.xpLines.streakBonus, value: xp.streakBonus });
+    if (xp.challengeBonus > 0) lines.push({ label: COPY.congrats.xpLines.challengeBonus, value: xp.challengeBonus, highlight: true });
+    if (xp.comebackBonus > 0) lines.push({ label: COPY.congrats.xpLines.comebackBonus, value: xp.comebackBonus, highlight: true });
     return lines;
   }, [xp]);
   const hasMultiplier = xp && xp.multiplier > 1;
@@ -133,7 +134,6 @@ export function CongratsView({
             >
               <Panel contentClassName="px-5 py-3 md:px-7 md:py-4 max-w-md">
                 <div className="flex items-center gap-3 mb-1">
-                  <span className="text-3xl md:text-4xl" aria-hidden>{milestone.icon}</span>
                   <span
                     className="text-xl md:text-2xl font-semibold tracking-[-0.01em] text-white leading-none"
                     style={{ fontFamily: FONT }}
@@ -141,7 +141,7 @@ export function CongratsView({
                     {milestone.title}
                   </span>
                 </div>
-                <p className="text-xs md:text-sm text-white/70 leading-snug pl-[3.25rem] md:pl-[3.75rem]">
+                <p className="text-xs md:text-sm text-white/70 leading-snug">
                   {milestone.message}
                 </p>
               </Panel>
@@ -157,7 +157,7 @@ export function CongratsView({
           >
             <Panel contentClassName="px-6 py-5 md:px-10 md:py-7 w-full max-w-xl">
               <h1 className="text-3xl md:text-5xl font-semibold tracking-[-0.02em] text-white leading-[1.05] mb-2 text-center" style={{ fontFamily: FONT }}>
-                {(dayNumber ? `Day ${dayNumber} Complete!` : "Congratulations!").split(" ").map((word, i) => (
+                {(dayNumber ? COPY.congrats.headline.dayComplete(dayNumber) : COPY.congrats.headline.fallback).split(" ").map((word, i) => (
                   <motion.span
                     key={i}
                     custom={i}
@@ -194,10 +194,10 @@ export function CongratsView({
               <Panel contentClassName="px-5 py-4 md:px-7 md:py-5 w-full max-w-md">
                 <div className="mb-2 flex items-baseline justify-between">
                   <span className="text-[10px] md:text-xs font-medium uppercase tracking-[0.08em] text-white/40">
-                    Sprint {currentSprint} of {sprintCount}
+                    {COPY.congrats.sprint.progressLabel(currentSprint, sprintCount)}
                   </span>
                   <span className="text-[10px] md:text-xs font-medium text-white/40">
-                    {isSprintEnd ? "Sprint complete" : `Day ${dayNumber} of ${totalDays}`}
+                    {isSprintEnd ? COPY.congrats.sprint.complete : COPY.congrats.sprint.dayOfTotal(dayNumber, totalDays)}
                   </span>
                 </div>
                 <div className="flex gap-2 md:gap-3">
@@ -215,7 +215,7 @@ export function CongratsView({
                         />
                       </div>
                       <span className={`text-[9px] md:text-[10px] font-medium uppercase tracking-[0.08em] text-center ${status === "current" ? "text-white" : status === "done" ? "text-white/55" : "text-white/30"}`}>
-                        S{sprint}
+                        {COPY.congrats.sprint.dotLabel(sprint)}
                       </span>
                     </div>
                   ))}
@@ -269,7 +269,7 @@ export function CongratsView({
                 >
                   {hasMultiplier && (
                     <span className="text-[10px] md:text-xs font-medium uppercase tracking-[0.08em] text-white/40">
-                      {xp.multiplier}× Multiplier Day
+                      {COPY.congrats.multiplierLabel(xp.multiplier)}
                     </span>
                   )}
                   <div className="flex items-center justify-center gap-2">
@@ -281,7 +281,7 @@ export function CongratsView({
                       className="text-3xl md:text-4xl font-semibold tracking-[-0.02em] text-white leading-none"
                       style={{ fontFamily: FONT }}
                     >
-                      +{xp.total} XP
+                      {COPY.congrats.xpTotal(xp.total)}
                     </span>
                   </div>
                 </motion.div>
@@ -297,11 +297,9 @@ export function CongratsView({
               animate={{ opacity: 1, y: 0 }}
               transition={{ ...SPRING.soft, delay: 1.0 }}
             >
-              {isSprintEnd && totalDays === 28
-                ? `Sprint ${currentSprint + 1} generates tomorrow — your next 7 days are already being built.`
-                : isSprintEnd
-                  ? `Week ${currentSprint} done — ${totalDays - (dayNumber ?? 0)} ${totalDays - (dayNumber ?? 0) === 1 ? "day" : "days"} to go. Come back tomorrow.`
-                  : "Come back tomorrow for another shard."}
+              {isSprintEnd
+                ? COPY.congrats.comeback.weekDone(currentSprint, totalDays - (dayNumber ?? 0))
+                : COPY.congrats.comeback.tomorrow}
             </motion.p>
           )}
           {daysRemaining === 0 && (
@@ -311,7 +309,7 @@ export function CongratsView({
               animate={{ opacity: 1, y: 0 }}
               transition={{ ...SPRING.soft, delay: 1.0 }}
             >
-              {totalDays === 28 ? "You did it — all 4 sprints complete." : `You did it — all ${totalDays} days complete.`}
+              {totalDays === 28 ? COPY.congrats.completed.allSprints : COPY.congrats.completed.allDays(totalDays)}
             </motion.p>
           )}
           {daysRemaining === null && <div className="mb-8 md:mb-12" />}
@@ -328,13 +326,13 @@ export function CongratsView({
               className="flex items-center justify-center gap-2 rounded-full bg-white text-black text-[15px] font-semibold py-3 px-8 transition-transform hover:scale-[1.01] active:scale-[0.99]"
             >
               <Calendar className="w-5 h-5 flex-shrink-0" />
-              View Calendar
+              {COPY.congrats.buttons.viewCalendar}
             </button>
             <button
               onClick={onDoMore}
               className="inline-flex items-center gap-1.5 rounded-full border border-white/15 text-white/80 hover:bg-white/5 transition px-6 py-2.5 text-sm font-medium"
             >
-              Back to Goals
+              {COPY.congrats.buttons.backToGoals}
               <ArrowRight className="w-4 h-4 flex-shrink-0" />
             </button>
           </motion.div>

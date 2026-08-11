@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
+import { COPY } from "@/content/copy";
 
 interface UseAuthOptions {
   /** Called when Supabase fires a SIGNED_IN auth state change. */
@@ -94,9 +95,9 @@ export function useAuth(options: UseAuthOptions = {}): UseAuthReturn {
       setUserId(null);
       setUserEmail(null);
       await createClient().auth.signOut();
-      toast.success("Logged out successfully");
+      toast.success(COPY.toasts.loggedOut);
     } catch {
-      toast.error("Failed to logout");
+      toast.error(COPY.toasts.logoutFailed);
     }
   }, []);
 
