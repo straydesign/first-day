@@ -19,6 +19,13 @@ import type { GoalFormData, SprintMeta } from "@/types";
 
 export const runtime = "nodejs";
 
+/**
+ * AI generations allowed per user per calendar day. 12 = three complete goals
+ * (4 sprints each) in a day, which is far past honest use and far short of a
+ * bill worth noticing. Override with PLAN_DAILY_LIMIT.
+ */
+const DAILY_AI_LIMIT = Number(process.env.PLAN_DAILY_LIMIT) || 12;
+
 type SprintRequest = GoalFormData & {
   startDate?: string;
   sprint?: number;
@@ -45,6 +52,13 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  // Acts AS the caller, so every read/write below is bounded by the same RLS
+  // policies the browser gets. A forged user_id can't reach another user's quota.
+  const asUser = createClient(url, anon, {
+    global: { headers: { Authorization: `Bearer ${token}` } },
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+
   let body: SprintRequest;
   try {
     body = (await req.json()) as SprintRequest;
@@ -63,11 +77,37 @@ export async function POST(req: Request) {
   };
 
   // AI path first (only fires if ANTHROPIC_API_KEY is set); deterministic fallback.
-  try {
-    const ai = await generateSprintWithAI(body, sprintNumber, ctx);
-    if (ai) return NextResponse.json(ai);
-  } catch (e) {
-    console.error("[generate-plan] AI path failed, falling back to deterministic:", e);
+  //
+  // The cap guards the API key, not the feature: signup is open to anyone with a
+  // Google account and each call bills real money, so an uncapped route is an
+  // uncapped bill. It only gates the AI path — the deterministic fallback is free
+  // and stays available, so hitting the limit degrades quality, never access.
+  if (process.env.ANTHROPIC_API_KEY) {
+    const midnight = new Date();
+    midnight.setHours(0, 0, 0, 0);
+    const { count, error: countErr } = await asUser
+      .from("plan_generations")
+      .select("id", { count: "exact", head: true })
+      .gte("created_at", midnight.toISOString());
+
+    // A failed count must not open the gate — treat it as at-limit and fall back.
+    const used = countErr ? DAILY_AI_LIMIT : (count ?? 0);
+    if (countErr) console.error("[generate-plan] quota read failed, using fallback:", countErr);
+
+    if (used < DAILY_AI_LIMIT) {
+      try {
+        const ai = await generateSprintWithAI(body, sprintNumber, ctx);
+        if (ai) {
+          // Logged only on success — a failed model call shouldn't cost the user a slot.
+          await asUser
+            .from("plan_generations")
+            .insert({ user_id: userData.user.id, sprint: sprintNumber });
+          return NextResponse.json(ai);
+        }
+      } catch (e) {
+        console.error("[generate-plan] AI path failed, falling back to deterministic:", e);
+      }
+    }
   }
 
   const sprint = generateSprintDeterministic(body, sprintNumber);

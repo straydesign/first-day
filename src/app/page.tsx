@@ -4,15 +4,32 @@ import dynamic from "next/dynamic";
 import { toast } from "sonner";
 import { COPY } from "@/content/copy";
 import { LandingPage } from "@/components/LandingPage";
+// Statically imported on purpose: /privacy and /terms are the two URLs Google's
+// OAuth consent screen links to, so their text has to be in the served HTML.
+// A dynamic() import would hide them in a streamed <div hidden> (see below).
+import { LegalPage } from "@/components/LegalPage";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { AuthenticatedApp } from "@/components/AuthenticatedApp";
 import { useAuth } from "@/hooks/useAuth";
 import type { AppView } from "@/types";
 import { viewForPath, isPublicSubpage } from "@/content/flow";
 
-const LoginModal = dynamic(() => import("@/components/LoginModal").then(m => ({ default: m.LoginModal })));
-const LegalPage = dynamic(() => import("@/components/LegalPage").then(m => ({ default: m.LegalPage })));
-const ResetPasswordView = dynamic(() => import("@/components/ResetPasswordView").then(m => ({ default: m.ResetPasswordView })));
+/**
+ * `ssr: false` is load-bearing, not an optimisation.
+ *
+ * A bare `dynamic()` is a lazy boundary: React suspends it during SSR, streams
+ * the shell with a <template> placeholder, and delivers the real markup at the
+ * end of <body> inside `<div hidden>` for a client script to move into place.
+ * That is invisible to anything that doesn't run JS — and because these two sit
+ * as SIBLINGS of the landing page, they dragged the ENTIRE page into that hidden
+ * div. Google's crawler saw an empty document.
+ *
+ * Neither of these needs to exist server-side: a login modal only opens on click
+ * and the reset view only renders behind a recovery link. Rendering them
+ * client-only removes the suspension, so the landing page streams into <main>.
+ */
+const LoginModal = dynamic(() => import("@/components/LoginModal").then(m => ({ default: m.LoginModal })), { ssr: false });
+const ResetPasswordView = dynamic(() => import("@/components/ResetPasswordView").then(m => ({ default: m.ResetPasswordView })), { ssr: false });
 
 export default function Home() {
   const [currentView, setCurrentView] = useState<AppView>("landing");
@@ -39,6 +56,19 @@ export default function Home() {
     const view = viewForPath(window.location.pathname);
     if (view) setCurrentView(view);
   }, []);
+
+  /**
+   * True only after hydration. Gates the lazily-imported LoginModal so the
+   * server pass has no React.lazy children at all.
+   *
+   * Belt to the braces of deleting `app/loading.tsx` (see the isLoading branch
+   * below): a route-level <Suspense> plus any lazy child makes React serve the
+   * FALLBACK as the page and ship the real markup at the end of <body> inside
+   * `<div hidden>` for a client script to swap in — invisible to anything that
+   * doesn't run JS. The modal is closed on first paint, so nothing is lost.
+   */
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
 
   const handleLogout = useCallback(async () => {
     setCurrentView("landing");
@@ -110,9 +140,38 @@ export default function Home() {
     );
   }
 
-  // Loading state
+  // Loading state — an OVERLAY over the landing page, never a replacement for it.
+  //
+  // `isLoading` starts true, so returning only <LoadingScreen/> here meant the
+  // server-rendered HTML for firstday.life contained 46 characters: "Skip to
+  // content First Day". Anything that doesn't run JS — Google's crawler included
+  // — saw an empty shell, which is why OAuth branding verification kept failing
+  // with "your home page is behind a login page" and why the site had nothing to
+  // index. The session lives in localStorage, so the server cannot know who is
+  // asking; the landing page is the correct answer for everyone except a
+  // returning signed-in user, and the overlay covers those few hundred ms for
+  // them. Do not turn this back into an early return.
+  //
+  // This overlay is ALSO why there is no `app/loading.tsx` any more. That file
+  // created a route-level <Suspense> whose fallback React served in place of the
+  // whole page, streaming the real markup into a trailing `<div hidden>`. Even
+  // with the page fully SSR-able, its content never reached <main>. Re-adding a
+  // loading.tsx re-breaks the served HTML — this in-component overlay covers the
+  // same wait without costing the page its body.
   if (isLoading) {
-    return <LoadingScreen />;
+    return (
+      <>
+        <LandingPage
+          onGetStarted={handleGetStarted}
+          onLogin={handleOpenLogin}
+          onPrivacyPolicy={handleShowPrivacyPolicy}
+          onTermsOfService={handleShowTermsOfService}
+        />
+        <div className="boot-veil fixed inset-0 z-[300]" aria-hidden="true">
+          <LoadingScreen />
+        </div>
+      </>
+    );
   }
 
   // Public pages — Privacy + Terms share a single tabbed component
@@ -153,14 +212,16 @@ export default function Home() {
           onPrivacyPolicy={handleShowPrivacyPolicy}
           onTermsOfService={handleShowTermsOfService}
         />
-        <LoginModal
-          isOpen={showLoginModal}
-          onClose={() => setShowLoginModal(false)}
-          onAuthSuccess={handleAuthSuccess}
-          onShowTerms={handleShowTermsOfService}
-          onTryDemo={handleTryDemo}
-          defaultMode={loginModalMode}
-        />
+        {hydrated && (
+          <LoginModal
+            isOpen={showLoginModal}
+            onClose={() => setShowLoginModal(false)}
+            onAuthSuccess={handleAuthSuccess}
+            onShowTerms={handleShowTermsOfService}
+            onTryDemo={handleTryDemo}
+            defaultMode={loginModalMode}
+          />
+        )}
       </>
     );
   }

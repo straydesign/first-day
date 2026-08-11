@@ -19,7 +19,7 @@
 import type { DayPlan, SprintMeta, GoalFormData } from "@/types";
 
 const ANTHROPIC_URL = "https://api.anthropic.com/v1/messages";
-const DEFAULT_MODEL = "claude-sonnet-4-6";
+const DEFAULT_MODEL = "claude-sonnet-5";
 
 /** The four-quarter arc every goal follows. Themes are fixed; days are generated. */
 export const SPRINT_ARC: ReadonlyArray<{ title: string; theme: string }> = [

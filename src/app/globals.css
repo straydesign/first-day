@@ -722,3 +722,29 @@ body[data-keyboard-nav] [tabindex]:focus-visible {
   .clip-section-top { clip-path: polygon(0% 2%, 100% 0%, 100% 100%, 0% 100%); }
   .clip-section-bottom { clip-path: polygon(0% 0%, 100% 0%, 100% 98%, 0% 100%); }
 }
+
+/* ── No-JS fallback: the page must be readable without JavaScript ──────────
+   framer-motion serialises `initial={{ opacity: 0, y: 32 }}` straight into the
+   server-rendered HTML as inline styles, then animates it away on mount. That
+   is fine for a browser and fatal for anything that fetches HTML and stops:
+   the entire landing page arrived invisible. Google's OAuth verification
+   crawler read it as "your home page is behind a login page" and "does not
+   explain the purpose of your app", and search engines had nothing to index.
+
+   `.js` is set by an inline <head> script in layout.tsx, synchronously, before
+   first paint — so a real visitor never matches these rules and the intro
+   animation is untouched. Only a JS-less reader falls through to the end state.
+   The content is identical either way; this is progressive enhancement, not a
+   different page for crawlers. */
+html:not(.js) [style*="opacity"] { opacity: 1 !important; }
+html:not(.js) [style*="visibility"] { visibility: visible !important; }
+
+/* Transforms are deliberately LEFT ALONE. Neutralising them too collapsed
+   elements that are positioned by translate onto each other — the wordmark
+   landed on top of the headline. A 32px offset that never animates away reads
+   fine; overlapping text does not. Only the properties that make content
+   *unreadable* get overridden. */
+
+/* Without JS the auth check can never resolve, so a loading veil would sit there
+   for ever on top of a page that is already fully rendered underneath it. */
+html:not(.js) .boot-veil { display: none !important; }

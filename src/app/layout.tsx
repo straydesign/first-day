@@ -84,6 +84,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${bebasNeue.variable}`}>
       <head>
+        {/* Marks the document as JS-capable BEFORE first paint, which is what
+            lets globals.css force every framer-motion element to its visible
+            end state when JS never runs. Real visitors get `.js` synchronously
+            here, so they never see the fallback and there is no flash. Keep this
+            inline and keep it in <head> — deferring it would reintroduce one. */}
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
