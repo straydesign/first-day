@@ -16,7 +16,8 @@
  *
  * Cost note: every call here spends Anthropic credits on the configured key.
  */
-import type { DayPlan, SprintMeta, GoalFormData } from "@/types";
+import type { Activity, DayPlan, SprintMeta, GoalFormData } from "@/types";
+import { artifactSpecsFor, coerceArtifact, type ArtifactSpec } from "@/lib/artifacts";
 
 const ANTHROPIC_URL = "https://api.anthropic.com/v1/messages";
 const DEFAULT_MODEL = "claude-sonnet-5";
@@ -49,11 +50,16 @@ export interface SprintGenResult {
   adapted: boolean;
 }
 
+/** An activity as the model may return it: a bare string, or an object carrying
+ *  an artifact. Both forms are accepted on every goal; the object form only
+ *  survives coercion when a spec for its kind was actually offered. */
+type RawActivity = string | { text?: unknown; artifact?: unknown };
+
 interface RawDay {
   day?: number;
   number?: number;
   title?: string;
-  activities?: string[];
+  activities?: RawActivity[];
   tip?: string;
 }
 interface RawSprintPayload {
@@ -117,7 +123,7 @@ function buildPrompt(input: GoalFormData, sprintNumber: number, ctx: SprintGenCo
   return lines.join("\n");
 }
 
-function systemPrompt(sprintNumber: number): string {
+function systemPrompt(sprintNumber: number, specs: ReadonlyArray<ArtifactSpec> = []): string {
   const start = (sprintNumber - 1) * 7 + 1;
   const end = sprintNumber * 7;
   const sprintsClause =
@@ -130,6 +136,10 @@ function systemPrompt(sprintNumber: number): string {
     { "number": 4, "title": "Sprint 4: Integrate", "theme": "one sentence" }
   ],\n`
       : "";
+  // Only goals that matched a spec are told artifacts exist. Everyone else gets
+  // the original prompt verbatim, unchanged in length or behaviour.
+  const artifactClause = specs.length ? `\n\n${specs.map((s) => s.prompt).join("\n\n")}` : "";
+
   return `You are a coach who designs focused 7-day learning sprints.
 Return ONLY a single JSON object (no markdown, no prose) with this exact shape:
 {
@@ -139,7 +149,7 @@ ${sprintsClause}  "days": [                                    // EXACTLY 7 entr
 }
 Rules: 2-3 concrete, doable activities per day sized to the user's daily time budget.
 Day numbers MUST be ${start} through ${end} inclusive. Be specific to the goal.
-Do NOT invent book titles, product names, URLs, statistics, or any factual claim you are unsure of.`;
+Do NOT invent book titles, product names, URLs, statistics, or any factual claim you are unsure of.${artifactClause}`;
 }
 
 export async function generateSprintWithAI(
@@ -148,8 +158,18 @@ export async function generateSprintWithAI(
   ctx: SprintGenContext = {},
 ): Promise<SprintGenResult | null> {
   const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) return null;
+  if (!apiKey) {
+    console.error("[plan] ANTHROPIC_API_KEY unset — serving the deterministic template");
+    return null;
+  }
   const model = process.env.ANTHROPIC_PLAN_MODEL || DEFAULT_MODEL;
+
+  // Which domain artifacts this goal can carry — decided from the goal text
+  // before spending a token, so a goal about running never pays for guitar tab.
+  const specs = artifactSpecsFor(input.goal || "");
+  // Artifacts are JSON-heavy. Without headroom the model truncates mid-object,
+  // extractJson fails, and the whole sprint falls back to the template.
+  const maxTokens = 4000 + specs.reduce((n, s) => n + s.tokenBudget, 0);
 
   let res: Response;
   try {
@@ -162,42 +182,87 @@ export async function generateSprintWithAI(
       },
       body: JSON.stringify({
         model,
-        max_tokens: 4000,
-        system: systemPrompt(sprintNumber),
+        max_tokens: maxTokens,
+        system: systemPrompt(sprintNumber, specs),
         messages: [{ role: "user", content: buildPrompt(input, sprintNumber, ctx) }],
       }),
     });
-  } catch {
+  } catch (e) {
+    console.error("[plan] anthropic fetch failed", e);
     return null;
   }
-  if (!res.ok) return null;
+  if (!res.ok) {
+    console.error(`[plan] anthropic ${res.status}`, (await res.text()).slice(0, 400));
+    return null;
+  }
 
   let text: string;
   try {
-    const json = (await res.json()) as { content?: Array<{ type: string; text?: string }> };
+    const json = (await res.json()) as {
+      content?: Array<{ type: string; text?: string }>;
+      stop_reason?: string;
+    };
+    // Truncation is the failure mode that looks identical to a bad response:
+    // the JSON simply ends mid-object and every parse below fails. Name it.
+    if (json.stop_reason === "max_tokens") {
+      console.error(`[plan] response hit max_tokens (${maxTokens}) — raise the artifact budget`);
+    }
     text = (json.content || []).filter((b) => b.type === "text").map((b) => b.text || "").join("");
-  } catch {
+  } catch (e) {
+    console.error("[plan] anthropic response was not JSON", e);
     return null;
   }
 
   const raw = extractJson(text);
   if (!raw) return null;
-  return coerceSprint(raw, sprintNumber, ctx);
+  return coerceSprint(raw, sprintNumber, ctx, specs);
 }
 
 function extractJson(text: string): RawSprintPayload | null {
   const start = text.indexOf("{");
   const end = text.lastIndexOf("}");
-  if (start === -1 || end === -1 || end <= start) return null;
+  if (start === -1 || end === -1 || end <= start) {
+    console.error("[plan] no JSON object in response", text.slice(0, 200));
+    return null;
+  }
   try {
     return JSON.parse(text.slice(start, end + 1)) as RawSprintPayload;
-  } catch {
+  } catch (e) {
+    console.error("[plan] JSON.parse failed", (e as Error).message, "tail:", text.slice(-160));
     return null;
   }
 }
 
-function coerceSprint(raw: RawSprintPayload, sprintNumber: number, ctx: SprintGenContext): SprintGenResult | null {
-  if (!Array.isArray(raw.days) || raw.days.length < 5) return null;
+/**
+ * One model activity → a string or an Activity, or null to drop it.
+ *
+ * An activity is only ever upgraded to the object form when it carries an
+ * artifact that survived validation. A day full of `{ text }` objects with no
+ * artifact would be the same content in a heavier shape, so those collapse back
+ * to plain strings and the rest of the app sees exactly what it always has.
+ */
+function coerceActivity(raw: RawActivity, specs: ReadonlyArray<ArtifactSpec>): string | Activity | null {
+  if (typeof raw === "string") return raw.trim() || null;
+  if (!raw || typeof raw !== "object") return null;
+
+  const text = typeof raw.text === "string" ? raw.text.trim() : "";
+  if (!text) return null;
+  if (!specs.length || raw.artifact == null) return text;
+
+  const artifact = coerceArtifact(raw.artifact, specs);
+  return artifact ? { text, artifact } : text;
+}
+
+function coerceSprint(
+  raw: RawSprintPayload,
+  sprintNumber: number,
+  ctx: SprintGenContext,
+  specs: ReadonlyArray<ArtifactSpec> = [],
+): SprintGenResult | null {
+  if (!Array.isArray(raw.days) || raw.days.length < 5) {
+    console.error("[plan] payload had no usable days array");
+    return null;
+  }
   const lo = (sprintNumber - 1) * 7 + 1;
   const hi = sprintNumber * 7;
 
@@ -206,7 +271,7 @@ function coerceSprint(raw: RawSprintPayload, sprintNumber: number, ctx: SprintGe
     const n = d.day ?? d.number;
     if (!n || n < lo || n > hi) continue;
     const activities = Array.isArray(d.activities)
-      ? d.activities.filter((a): a is string => typeof a === "string" && a.trim().length > 0)
+      ? d.activities.map((a) => coerceActivity(a, specs)).filter((a): a is string | Activity => a !== null)
       : [];
     if (activities.length === 0) continue;
     days[n] = {
@@ -216,7 +281,10 @@ function coerceSprint(raw: RawSprintPayload, sprintNumber: number, ctx: SprintGe
     };
   }
   // Require a near-complete sprint; otherwise let the caller fall back.
-  if (Object.keys(days).length < 6) return null;
+  if (Object.keys(days).length < 6) {
+    console.error(`[plan] only ${Object.keys(days).length} of 7 days survived (${lo}-${hi})`);
+    return null;
+  }
 
   let sprints: SprintMeta[] | undefined;
   let cleanedGoal: string | undefined;

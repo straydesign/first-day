@@ -78,10 +78,31 @@ export interface GuitarRiff {
   chords?: ChordShape[];
 }
 
+/**
+ * A domain-specific thing an activity can render instead of being a line of text.
+ *
+ * "Practise the E minor pentatonic" is a sentence. Actual tablature is the
+ * product. Same for a routine's schedule, a recipe's ingredients, a chapter
+ * outline — each goal type has a shape that a generic bullet list cannot carry.
+ *
+ * Adding a domain means: one entry in this union, one validator + prompt
+ * fragment in `src/lib/artifacts/`, one component in the renderer registry.
+ * Nothing in DayView, the API route, or the plan schema changes. Unknown kinds
+ * (old plans, a newer model, a renderer that failed to load) render nothing —
+ * the activity's own text always stands on its own.
+ */
+export type Artifact = { kind: "guitar-riff"; data: GuitarRiff };
+
+export type ArtifactKind = Artifact["kind"];
+
 export interface Activity {
   text: string;
   resources?: ActivityResource[];
-  /** Optional structured riff to render (as tab) beneath this activity's text. */
+  /** The structured thing this activity is really about, if it has one. */
+  artifact?: Artifact;
+  /** @deprecated Pre-seam field, still present in stored plans and the demo
+   *  fixtures. Never read it directly — `activityArtifact()` folds it into an
+   *  Artifact so there is exactly one path through the renderer. */
   riff?: GuitarRiff;
 }
 

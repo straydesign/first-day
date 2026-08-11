@@ -8,7 +8,8 @@ import { Panel } from "@/components/ui/Panel";
 import { TopBar } from "@/components/ui/TopBar";
 import { fireCelebration, getRoomView } from "./3d-shell/RoomRegistry";
 import { previewDayXP, getDailyMultiplier, getDailyChallenge } from "@/lib/engagement";
-import { GuitarTab } from "./GuitarTab";
+import { ArtifactSlot } from "./artifacts/ArtifactSlot";
+import { activityArtifact } from "@/lib/artifacts";
 import { FONT } from "@/lib/design";
 import { COPY } from "@/content/copy";
 import { staggerContainer, tileEnter, contentReveal, popIn, SPRING } from "@/lib/animations";
@@ -132,7 +133,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
                   {activities.map((activity: string | Activity, index: number) => {
                     const activityText = typeof activity === 'string' ? activity : activity.text;
                     const resources = typeof activity === 'object' ? activity.resources : null;
-                    const riff = typeof activity === 'object' ? activity.riff : null;
+                    const artifact = activityArtifact(activity);
                     return (
                       <motion.div
                         key={index}
@@ -185,11 +186,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
                                 ))}
                               </div>
                             )}
-                            {riff && (
-                              <div onClick={(e) => e.preventDefault()}>
-                                <GuitarTab riff={riff} />
-                              </div>
-                            )}
+                            <ArtifactSlot artifact={artifact} />
                           </label>
                           {completedActivities[index] && <CheckCircle2 className="w-4 h-4 text-emerald-300/80 flex-shrink-0 animate-scaleIn mt-0.5" />}
                         </div>
