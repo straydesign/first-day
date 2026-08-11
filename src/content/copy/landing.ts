@@ -56,7 +56,7 @@ export const landing = {
     subtitle: "Four 7-day sprints — one week unlocked at a time",
     cards: [
       { label: "One Week at a Time", desc: "Your first sprint now; each next one generates as you finish." },
-      { label: "Daily Activities", desc: "Curated tasks, videos, and resources." },
+      { label: "Daily Activities", desc: "Tasks, videos, and reading picked for that day." },
       { label: "Daily Reflection", desc: "A line a day — it shapes the sprint that comes next." },
       { label: "Finish Strong", desc: "Badges, trophies, and the proof you did it." },
     ],

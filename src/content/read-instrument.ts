@@ -164,7 +164,7 @@ const staticQuestions: ReadQuestion[] = [
     id: "constraints.hours",
     section: "constraints",
     kind: "choice",
-    q: "How many hours a week can you genuinely give this?",
+    q: "How many hours a week can you actually give this?",
     sub: "The number you'd still hit in a bad week — not a good one.",
     options: [
       { v: "1", label: "Under 2 hours" },

@@ -65,7 +65,7 @@ const jsonLd = {
     "AI-generated personalized 7-day goal sprints",
     "Daily activity tracking with reflections",
     "XP system, streaks, and achievement badges",
-    "Curated resources (videos, articles, books)",
+    "Videos, articles, and books attached to each day",
     "Multiple simultaneous goal management",
     "Calendar view for progress overview",
   ],

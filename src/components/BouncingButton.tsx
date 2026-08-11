@@ -23,10 +23,10 @@ export function BouncingButton({ onClick }: BouncingButtonProps) {
     let colorIndex = 23;
 
     const pickNextColor = () => {
-      // Cycle through the vibrant colors (skip the near-blacks)
-      const vibrant = HERO_PALETTE.filter((_, i) => i > 2 && i !== 28);
-      colorIndex = (colorIndex + 1) % vibrant.length;
-      return vibrant[colorIndex];
+      // Cycle through the saturated colors (skip the near-blacks)
+      const bright = HERO_PALETTE.filter((_, i) => i > 2 && i !== 28);
+      colorIndex = (colorIndex + 1) % bright.length;
+      return bright[colorIndex];
     };
 
     const update = () => {

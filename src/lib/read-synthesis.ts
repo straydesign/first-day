@@ -186,7 +186,7 @@ export function synthesise(a: Answers, nudge = 0): Read {
       id: "ambitiongap",
       claim:
         "This matters to you far more than your week currently has room for. That gap is not a motivation problem — it's the exact condition that produces an over-ambitious plan and a collapse in week three.",
-      basis: `You rated how much this matters at ${matters}/10, and said you can genuinely give it ${capacityHours <= 1 ? "under 2" : "2 to 4"} hours a week.`,
+      basis: `You rated how much this matters at ${matters}/10, and said you can actually give it ${capacityHours <= 1 ? "under 2" : "2 to 4"} hours a week.`,
     });
   }
 

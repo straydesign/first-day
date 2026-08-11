@@ -7,7 +7,6 @@ import { Flame, Zap, Trophy, Target, Sparkles, Calendar, ListChecks, NotebookPen
 import { FirstDayLogo } from "./FirstDayLogo";
 import { LivePlanDemo } from "./LivePlanDemo";
 import { DayCompleteDemo } from "./DayCompleteDemo";
-import { CountUp } from "./CountUp";
 import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, SCROLL_SPEEDS } from "@/constants";
 import { SPRING } from "@/lib/animations";
 import { FONT } from "@/lib/design";
@@ -357,7 +356,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                       <p className="text-white/55 text-sm lg:text-base mb-4 leading-relaxed">{COPY.landing.stayMotivated.streaks.body}</p>
                       <div className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 text-white px-5 py-1.5 font-semibold text-lg">
                         <Flame className="w-5 h-5 text-white/70" />
-                        <CountUp target={12} />
+                        <span className="tabular-nums">12</span>
                       </div>
                       <p className="text-xs text-white/40 mt-2 font-medium">{COPY.landing.stayMotivated.streaks.caption}</p>
                     </Panel>
@@ -377,9 +376,9 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                       <div className="space-y-2 max-w-[180px] mx-auto">
                         <div className="flex justify-between text-sm">
                           <span className="font-semibold text-white">{COPY.landing.stayMotivated.xp.tierLabel}</span>
-                          <span className="text-white/70 font-semibold">
-                            <CountUp target={1450} suffix=" XP" />
-                          </span>
+                          {/* Static, not a counting animation — this is a picture of the
+                              app's own XP row, not a stat to impress anyone with. */}
+                          <span className="text-white/70 font-semibold tabular-nums">1,450 XP</span>
                         </div>
                         <div className="h-1 w-full rounded-full bg-white/10 overflow-hidden">
                           <motion.div
@@ -429,36 +428,12 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
                   </motion.div>
                 </div>
 
-                {/* Stat bar */}
-                <div className="mt-6 lg:mt-10 grid grid-cols-3 gap-3 lg:gap-6 max-w-lg lg:max-w-3xl mx-auto">
-                  <Panel contentClassName="text-center py-4 lg:py-6 px-2 lg:px-4">
-                    <div className="flex items-center justify-center gap-1 mb-1">
-                      <Target className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-white/50" />
-                      <span className="text-xs lg:text-sm text-white/45 font-medium">{COPY.landing.stayMotivated.stats.rate}</span>
-                    </div>
-                    <p className="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-[-0.02em] text-white tabular-nums">
-                      <CountUp target={87} suffix="%" />
-                    </p>
-                  </Panel>
-                  <Panel contentClassName="text-center py-4 lg:py-6 px-2 lg:px-4">
-                    <div className="flex items-center justify-center gap-1 mb-1">
-                      <Flame className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-white/50" />
-                      <span className="text-xs lg:text-sm text-white/45 font-medium">{COPY.landing.stayMotivated.stats.streak}</span>
-                    </div>
-                    <p className="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-[-0.02em] text-white tabular-nums">
-                      <CountUp target={12} delay={0.1} />
-                    </p>
-                  </Panel>
-                  <Panel contentClassName="text-center py-4 lg:py-6 px-2 lg:px-4">
-                    <div className="flex items-center justify-center gap-1 mb-1">
-                      <Trophy className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-white/50" />
-                      <span className="text-xs lg:text-sm text-white/45 font-medium">{COPY.landing.stayMotivated.stats.badges}</span>
-                    </div>
-                    <p className="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-[-0.02em] text-white tabular-nums">
-                      <CountUp target={5} delay={0.2} />/8
-                    </p>
-                  </Panel>
-                </div>
+                {/* The three-column counting stat bar that used to sit here is gone.
+                    "Rate 87%" was a number with no source behind it — First Day has no
+                    completion-rate data to quote — and an animated counter strip is the
+                    single most recognisable AI-generated landing-page tell (design
+                    standard §5). The three feature cards above already show what the
+                    loop does, using the app's own UI. */}
               </div>
             </div>
           </section>

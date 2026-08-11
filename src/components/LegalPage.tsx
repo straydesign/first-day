@@ -121,6 +121,10 @@ function PrivacyContent() {
 
       <h2 className="text-xl font-semibold tracking-[-0.01em] text-white">{COPY.legal.privacy.headings.cookies}</h2>
       <p className="text-white/70 leading-relaxed">First Day uses essential cookies required for authentication and session management. We do not use third-party advertising cookies or tracking pixels. We may use privacy-respecting analytics to understand general usage patterns and improve the service.</p>
+      {/* CalOPPA (Cal. Bus. & Prof. Code §22575) requires an explicit statement of how the
+          site answers Do Not Track. It has no revenue threshold, so it applies here. This
+          is the one clause small-business policies always miss. */}
+      <p className="text-white/70 leading-relaxed"><span className="font-semibold text-white">Do Not Track.</span> First Day runs no analytics and no advertising trackers today, and does not follow you across other websites. If we ever add analytics, a Do Not Track or Global Privacy Control signal from your browser will switch it off for that visit — the only cookies you get are the ones that keep you signed in.</p>
 
       <h2 className="text-xl font-semibold tracking-[-0.01em] text-white">{COPY.legal.privacy.headings.retention}</h2>
       <p className="text-white/70 leading-relaxed">We retain your data for as long as your account is active. If you delete your account, all associated data — including goals, plans, and progress — is permanently removed from our systems within 30 days. Backups containing your data are purged within 90 days of account deletion.</p>
