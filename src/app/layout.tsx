@@ -29,6 +29,10 @@ export const metadata: Metadata = {
   title: "First Day — your 7-day sprint, in 2 seconds",
   description: "Type a goal, watch your week assemble. Daily activities, streaks, and the dopamine to keep going.",
   metadataBase: new URL("https://firstday.life"),
+  // There was no canonical tag on the site at all, which is half of why Google
+  // filed firstday.life as a duplicate of the old .xyz domain. Resolved against
+  // metadataBase, so it names firstday.life whichever host served the response.
+  alternates: { canonical: "/" },
   openGraph: {
     title: "First Day — your 7-day sprint, in 2 seconds",
     description: "Type a goal, watch your week assemble. Daily activities, streaks, and the dopamine to keep going.",
