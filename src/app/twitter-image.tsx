@@ -9,7 +9,7 @@ export const contentType = "image/png"
 export default async function Image() {
   const notoPath = join(
     process.cwd(),
-    "node_modules/next/dist/compiled/@vercel/og/noto-sans-v27-latin-regular.ttf"
+    "src/app/fonts/noto-sans-v27-latin-regular.ttf"
   )
   const notoFont = await readFile(notoPath)
 

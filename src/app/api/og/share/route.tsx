@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
 
   const notoPath = join(
     process.cwd(),
-    "node_modules/next/dist/compiled/@vercel/og/noto-sans-v27-latin-regular.ttf",
+    "src/app/fonts/noto-sans-v27-latin-regular.ttf",
   );
   const notoFont = await readFile(notoPath);
 
