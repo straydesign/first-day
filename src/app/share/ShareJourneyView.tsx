@@ -5,6 +5,7 @@ import { Trophy, Flame, Sparkles, Award, ArrowRight } from "lucide-react";
 import { FirstDayLogo } from "@/components/FirstDayLogo";
 import { BUTTON_CLIPS, SHARD_CLIPS, LABEL_CLIPS, VORONOI_LIGHT, getClip } from "@/constants";
 import { scaleReveal, wordReveal, contentReveal, SPRING } from "@/lib/animations";
+import Link from "next/link";
 
 interface ShareJourneyViewProps {
   goalTitle?: string;
@@ -212,7 +213,7 @@ export function ShareJourneyView({
           <p className="text-center text-lg md:text-2xl text-white font-black uppercase tracking-wide" style={{ fontFamily: "var(--font-bebas), system-ui, sans-serif", letterSpacing: 2 }}>
             Your turn.
           </p>
-          <a
+          <Link
             href="/"
             className="flex items-center justify-center gap-2 px-10 py-6 md:px-14 md:py-7 text-lg md:text-xl font-black text-black uppercase tracking-wide hover:scale-105 transition-transform"
             style={{
@@ -223,7 +224,7 @@ export function ShareJourneyView({
             }}
           >
             Start Your 30-Day Sprint <ArrowRight className="w-6 h-6 flex-shrink-0" />
-          </a>
+          </Link>
           <p className="text-xs md:text-sm text-white/50 font-medium">
             firstday.life · The first day of the rest of your life.
           </p>
