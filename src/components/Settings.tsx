@@ -16,6 +16,7 @@ import { TopBar } from "@/components/ui/TopBar";
 import { screenTitle } from "@/content/flow";
 import { COPY } from "@/content/copy";
 import { createClient } from "@/lib/supabase/client";
+import { isNativeApp } from "@/lib/native/auth";
 import { FONT } from "@/lib/design";
 import { staggerContainer, tileEnter } from "@/lib/animations";
 
@@ -70,6 +71,8 @@ export function Settings({
 }: SettingsProps) {
   const C = COPY.settings;
   const [provider, setProvider] = useState<string | null>(null);
+  // Settings only renders client-side (after the auth check), so this is safe.
+  const [showReminders] = useState(isNativeApp);
   useEffect(() => {
     if (demoMode) return;
     void createClient().auth.getSession().then(({ data }) => {
@@ -140,7 +143,8 @@ export function Settings({
           </Panel>
         </motion.div>
 
-        {/* Daily reminders */}
+        {/* Daily reminders — the iOS app only; the web has no way to deliver them */}
+        {showReminders && (
         <motion.div variants={tileEnter}>
           <SectionLabel>{C.notifications.heading}</SectionLabel>
           <Panel contentClassName="p-6">
@@ -164,6 +168,7 @@ export function Settings({
             </div>
           </Panel>
         </motion.div>
+        )}
 
         {/* Your data */}
         <motion.div variants={tileEnter}>

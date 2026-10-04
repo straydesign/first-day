@@ -45,8 +45,9 @@ export const toasts = {
   // settings / account
   notificationsOn: "Daily reminders on",
   notificationsOff: "Daily reminders off",
-  accountDeleted: "Your goals and progress have been deleted",
-  deleteAccountFailed: "Couldn't delete your data. Please try again.",
+  notificationsFailed: "Couldn't change reminders. Please try again.",
+  accountDeleted: "Your account has been deleted",
+  deleteAccountFailed: "Couldn't delete your account. Please try again.",
 
   // reset password
   passwordsNoMatch: "Passwords do not match",
@@ -71,5 +72,5 @@ export const confirms = {
   regeneratePlan:
     "Are you sure you want to regenerate this plan? This will create a completely new 30-day plan.",
   deleteAccount:
-    "This permanently erases every goal, plan, and day of progress, then signs you out. This cannot be undone. Delete everything?",
+    "This deletes your account and every goal, plan, and day of progress. You can't undo it. Delete your account?",
 } as const;

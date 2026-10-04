@@ -1,4 +1,5 @@
 "use client";
+import { enableDailyReminder, disableDailyReminder } from "@/lib/native/reminders";
 import { useState, useEffect, useMemo, useRef } from "react";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
@@ -41,9 +42,8 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
   // This component only mounts client-side (after the auth check), so the
   // stored value can seed the state directly.
   const [notificationsEnabled, setNotificationsEnabled] = useState(() => {
-    if (typeof window === "undefined") return true;
-    const saved = window.localStorage.getItem(NOTIF_KEY);
-    return saved === null || saved === "1";
+    if (typeof window === "undefined") return false;
+    return window.localStorage.getItem(NOTIF_KEY) === "1";
   });
   const [latestDayXP, setLatestDayXP] = useState<XPBreakdown | null>(null);
   const [latestMilestone, setLatestMilestone] = useState<Milestone | null>(null);
@@ -121,21 +121,35 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [currentView]);
 
-  const handleToggleNotifications = () => {
-    setNotificationsEnabled((prev) => {
-      const next = !prev;
-      window.localStorage.setItem(NOTIF_KEY, next ? "1" : "0");
-      toast.success(next ? COPY.toasts.notificationsOn : COPY.toasts.notificationsOff);
-      return next;
-    });
+  // Off until the user turns it on; turning it on asks iOS for permission and
+  // schedules the evening reminder on the device.
+  const handleToggleNotifications = async () => {
+    const next = !notificationsEnabled;
+    try {
+      if (next) {
+        const granted = await enableDailyReminder();
+        if (!granted) {
+          toast.error(COPY.settings.notifications.denied);
+          return;
+        }
+      } else {
+        await disableDailyReminder();
+      }
+    } catch {
+      toast.error(COPY.toasts.notificationsFailed);
+      return;
+    }
+    window.localStorage.setItem(NOTIF_KEY, next ? "1" : "0");
+    setNotificationsEnabled(next);
+    toast.success(next ? COPY.toasts.notificationsOn : COPY.toasts.notificationsOff);
   };
 
-  // Right-to-delete: erase every goal/plan/progress the user owns, then sign out.
+  // Right-to-delete: remove the account and everything in it, then sign out.
   const handleDeleteData = async () => {
     if (demoMode) return;
     if (!window.confirm(COPY.confirms.deleteAccount)) return;
     try {
-      await api.account.deleteAllData();
+      await api.account.deleteAccount();
       toast.success(COPY.toasts.accountDeleted);
     } catch {
       toast.error(COPY.toasts.deleteAccountFailed);

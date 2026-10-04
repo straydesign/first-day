@@ -214,16 +214,15 @@ export const api = {
 
   account: {
     /**
-     * Permanently erase every goal (with its plan + progress) the user owns.
-     * RLS already scopes deletes to the caller; the explicit user_id filter is
-     * a belt-and-braces guard. This is the data side of the Privacy Policy's
-     * "right to delete" — the caller signs the user out afterward.
+     * Permanently delete the signed-in account. The delete_my_account() RPC
+     * removes the auth user, and every table cascades from it (see
+     * supabase/migrations/20261004_delete_my_account.sql). The caller signs
+     * the user out afterward.
      */
-    async deleteAllData() {
-      const userId = await requireUserId();
-      const supabase = createClient();
-      const { error } = await supabase.from("goals").delete().eq("user_id", userId);
-      if (error) throw new Error(error.message || "Failed to delete your data");
+    async deleteAccount() {
+      await requireUserId();
+      const { error } = await createClient().rpc("delete_my_account");
+      if (error) throw new Error(error.message || "Failed to delete your account");
       return { success: true };
     },
   },

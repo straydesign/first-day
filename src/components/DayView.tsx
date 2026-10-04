@@ -1,4 +1,5 @@
 "use client";
+import { tapLight, tapSuccess } from "@/lib/native/haptics";
 import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Textarea } from "@/components/ui/textarea";
@@ -38,11 +39,13 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
   const hasActivities = activities && activities.length > 0;
 
   const toggleActivity = (index: number) => {
+    tapLight();
     setCompletedActivities(prev => ({ ...prev, [index]: !prev[index] }));
   };
 
   const handleSubmit = () => {
     if (!canSubmit) { setShowValidation(true); return; }
+    tapSuccess();
     onComplete({ dayNumber: day.number, completed: completedActivities, feedback });
   };
 

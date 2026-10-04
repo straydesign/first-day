@@ -25,7 +25,10 @@ export const settings = {
   notifications: {
     heading: "Daily reminders",
     label: "Remind me to show up",
-    description: "A single daily nudge to keep your streak alive. Off by default elsewhere.",
+    description: "One nudge each evening to keep your streak alive.",
+    pushTitle: "Today's plan is ready",
+    pushBody: "A few small steps. Keep your streak going.",
+    denied: "Turn on notifications for First Day in iOS Settings.",
   },
 
   data: {
@@ -35,9 +38,9 @@ export const settings = {
 
   danger: {
     heading: "Danger zone",
-    label: "Delete all my data",
+    label: "Delete account",
     description:
-      "Permanently erases every goal, plan, and day of progress, then signs you out. This can't be undone.",
-    button: "Delete everything",
+      "Deletes your account and every goal, plan, and day of progress. You can't undo this.",
+    button: "Delete account",
   },
 } as const;
