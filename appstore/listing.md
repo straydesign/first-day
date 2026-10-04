@@ -25,6 +25,7 @@ Keep a streak. Earn points for each task and each note. Win badges as you go.
 You can run more than one plan at a time.
 
 ## Review notes (for Apple, not public)
-Demo account: <TODO — Tom creates one test login>
-Plan generation calls our server; a new plan takes ~20 seconds.
-Account deletion: Settings → Delete account.
+No login is needed to look around: tap "Try the demo" on the first screen.
+To build a real plan, sign in with Apple (or Google). The first plan asks for OK before your goal is sent to Anthropic to write the plan; a plan takes about 20 seconds.
+Account deletion: Settings → Delete account. It deletes the account and all its data.
+Daily reminder: Settings → Daily reminders (off by default; asks for notification permission).
