@@ -45,6 +45,7 @@ export const toasts = {
   // settings / account
   notificationsOn: "Daily reminders on",
   notificationsOff: "Daily reminders off",
+  planConsentDeclined: "We need your OK to build a plan.",
   notificationsFailed: "Couldn't change reminders. Please try again.",
   accountDeleted: "Your account has been deleted",
   deleteAccountFailed: "Couldn't delete your account. Please try again.",
@@ -71,6 +72,8 @@ export const confirms = {
     `Are you sure you want to delete "${title}"? This action cannot be undone.`,
   regeneratePlan:
     "Are you sure you want to regenerate this plan? This will create a completely new 30-day plan.",
+  planConsent:
+    "To build your plan, we send your goal and your daily notes to Anthropic. They make the tool that writes the plan. Is that OK?",
   deleteAccount:
     "This deletes your account and every goal, plan, and day of progress. You can't undo it. Delete your account?",
 } as const;

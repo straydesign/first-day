@@ -92,10 +92,9 @@ function PrivacyContent() {
       <h2 className="text-xl font-semibold tracking-[-0.01em] text-white">{COPY.legal.privacy.headings.collect}</h2>
       <p className="text-white/70 leading-relaxed">We collect information you provide directly when you create an account and use First Day:</p>
       <ul className="list-disc pl-6 text-white/70 leading-relaxed space-y-1">
-        <li><strong className="text-white/90 font-medium">Account information:</strong> Email address and authentication credentials</li>
+        <li><strong className="text-white/90 font-medium">Account information:</strong> Your name and email address from Google or Apple when you sign in. If you choose Hide My Email with Apple, we only get Apple&apos;s private relay address.</li>
         <li><strong className="text-white/90 font-medium">Goal data:</strong> Goals you create, your experience level, motivations, and preferences</li>
         <li><strong className="text-white/90 font-medium">Progress data:</strong> Activity completions, daily reflections, and streak information</li>
-        <li><strong className="text-white/90 font-medium">Usage data:</strong> Pages visited, features used, and general interaction patterns to improve the service</li>
       </ul>
 
       <h2 className="text-xl font-semibold tracking-[-0.01em] text-white">{COPY.legal.privacy.headings.use}</h2>
@@ -104,7 +103,7 @@ function PrivacyContent() {
         <li>Create and manage your account</li>
         <li>Generate personalized 4-sprint plans using AI (see Section 4)</li>
         <li>Track your progress and provide daily activities</li>
-        <li>Send daily email reminders if you have notifications enabled</li>
+        <li>Show a daily reminder on your iPhone if you turn reminders on (it is scheduled on your device; we send no email)</li>
         <li>Improve and maintain the service</li>
       </ul>
 
@@ -112,12 +111,13 @@ function PrivacyContent() {
       <p className="text-white/70 leading-relaxed">Your data is stored securely using Supabase infrastructure with encryption at rest and in transit. We implement industry-standard security measures to protect your personal information. We do not sell, rent, or share your personal information with third parties for marketing purposes.</p>
 
       <h2 className="text-xl font-semibold tracking-[-0.01em] text-white">{COPY.legal.privacy.headings.ai}</h2>
-      <p className="text-white/70 leading-relaxed">First Day uses AI (powered by Anthropic&apos;s Claude API) to generate your personalized 4-sprint plans. When you create a goal, the following data is sent to the AI service for plan generation:</p>
+      <p className="text-white/70 leading-relaxed">First Day uses AI (powered by Anthropic&apos;s Claude API) to generate your personalized 4-sprint plans. We ask for your OK in the app before the first plan is built. When a plan or its next sprint is generated, the following is sent to Anthropic:</p>
       <ul className="list-disc pl-6 text-white/70 leading-relaxed space-y-1">
         <li>Your goal description and motivation</li>
         <li>Your experience level and learning preferences</li>
+        <li>For the next sprint: your daily notes and how many activities you finished</li>
       </ul>
-      <p className="text-white/70 leading-relaxed">This data is used solely to generate your plan and is not stored by the AI provider beyond the request. We do not use your data to train AI models.</p>
+      <p className="text-white/70 leading-relaxed">Your name and email are not sent. Anthropic processes this data to return your plan, under its commercial terms, which do not allow it to train its models on this data. We do not use your data to train models either.</p>
 
       <h2 className="text-xl font-semibold tracking-[-0.01em] text-white">{COPY.legal.privacy.headings.cookies}</h2>
       <p className="text-white/70 leading-relaxed">First Day uses essential cookies required for authentication and session management. We do not use third-party advertising cookies or tracking pixels. We may use privacy-respecting analytics to understand general usage patterns and improve the service.</p>
@@ -133,10 +133,10 @@ function PrivacyContent() {
       <p className="text-white/70 leading-relaxed">You have the right to:</p>
       <ul className="list-disc pl-6 text-white/70 leading-relaxed space-y-1">
         <li><strong className="text-white/90 font-medium">Access:</strong> Request a copy of your personal data at any time</li>
-        <li><strong className="text-white/90 font-medium">Delete:</strong> Permanently erase all your data — every goal, plan, and day of progress — from the Settings page</li>
+        <li><strong className="text-white/90 font-medium">Delete:</strong> Delete your account and all its data — every goal, plan, and day of progress — from Settings → Delete account</li>
         <li><strong className="text-white/90 font-medium">Correct:</strong> Update your account information</li>
         <li><strong className="text-white/90 font-medium">Portability:</strong> Request your data in a machine-readable format</li>
-        <li><strong className="text-white/90 font-medium">Opt out:</strong> Disable email notifications at any time</li>
+        <li><strong className="text-white/90 font-medium">Opt out:</strong> Turn daily reminders off in Settings at any time</li>
       </ul>
       <p className="text-white/70 leading-relaxed">If you are located in the EU/EEA (GDPR) or California (CCPA), you may have additional rights including the right to restrict processing and the right to object to processing. To exercise any of these rights, contact us at the address below.</p>
 

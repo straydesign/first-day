@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/client";
+import { ensurePlanConsent } from "@/lib/consent";
 import type { Plan, ProgressMap, GoalFormData, SprintMeta } from "@/types";
 import type { SprintGenResult } from "@/lib/anthropic";
 
@@ -234,6 +235,7 @@ export const api = {
      * reflections + completion so the AI can adapt the next week.
      */
     async generateSprint(data: SprintGenRequest): Promise<SprintGenResult> {
+      ensurePlanConsent();
       const token = await getAuthToken();
       if (!token) throw new Error("Session expired");
       const res = await fetch(`${API_BASE}/api/generate-plan`, {

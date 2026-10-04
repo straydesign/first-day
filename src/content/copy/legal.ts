@@ -7,7 +7,7 @@ export const legal = {
     tabTerms: "Terms",
   },
   // Shared microcopy
-  lastUpdated: "Last updated: March 1, 2026",
+  lastUpdated: "Last updated: October 4, 2026",
   // Privacy Policy section headings
   privacy: {
     headings: {
