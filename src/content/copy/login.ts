@@ -4,6 +4,10 @@ export const login = {
     label: "Continue with Google",
     loading: "Connecting…",
   },
+  apple: {
+    label: "Continue with Apple",
+    loading: "Connecting…",
+  },
   dividerOr: "or",
   demo: {
     label: "Try the demo",

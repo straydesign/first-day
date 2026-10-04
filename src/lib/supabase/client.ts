@@ -1,4 +1,5 @@
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
+import { Capacitor } from '@capacitor/core';
 
 let supabaseInstance: ReturnType<typeof createSupabaseClient> | null = null;
 
@@ -16,6 +17,9 @@ export function createClient() {
         autoRefreshToken: true,
         persistSession: true,
         detectSessionInUrl: true,
+        // The iOS shell returns from Safari with a ?code= to exchange (PKCE);
+        // the web keeps the implicit #access_token redirect it has always used.
+        flowType: Capacitor.isNativePlatform() ? 'pkce' : 'implicit',
         storage: typeof window !== 'undefined' ? window.localStorage : undefined,
       },
     });

@@ -11,6 +11,8 @@ export const toasts = {
   welcome: "Welcome!",
   sessionExpired: "Session expired. Please log in again.",
   googleFailed: "Google sign-in failed",
+  appleFailed: "Apple sign-in failed",
+  signInFailed: "Sign-in failed",
 
   // goal data / plan generation
   loadGoalDataRetry: "Failed to load goal data. Please try again.",

@@ -1,7 +1,7 @@
 "use client";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { createClient } from '@/lib/supabase/client';
+import { isNativeApp, signInWithProvider, type OAuthProvider } from '@/lib/native/auth';
 import { FirstDayLogo } from './FirstDayLogo';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { FONT } from '@/lib/design';
@@ -17,25 +17,24 @@ interface LoginModalProps {
 }
 
 export function LoginModal({ isOpen, onClose, onShowTerms, onTryDemo }: LoginModalProps) {
-  const [googleLoading, setGoogleLoading] = useState(false);
+  const [pending, setPending] = useState<OAuthProvider | null>(null);
+  // Sign in with Apple is required on iOS because Google is offered there.
+  // Read after mount so the static export's HTML matches the first render.
+  const [showApple, setShowApple] = useState(false);
+  useEffect(() => { setShowApple(isNativeApp()); }, []);
 
-  const handleGoogleSignIn = async () => {
-    setGoogleLoading(true);
+  const handleSignIn = async (provider: OAuthProvider) => {
+    const failed = provider === 'apple' ? COPY.toasts.appleFailed : COPY.toasts.googleFailed;
+    setPending(provider);
     try {
-      const supabase = createClient();
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: { redirectTo: window.location.origin },
-      });
-      if (error) {
-        toast.error(error.message || COPY.toasts.googleFailed);
-        setGoogleLoading(false);
-      }
-      // On success Supabase redirects the browser — detectSessionInUrl +
-      // onAuthStateChange handle the return trip.
+      const { error } = await signInWithProvider(provider);
+      if (error) toast.error(error.message || failed);
+      // Web: Supabase redirects the page — detectSessionInUrl + onAuthStateChange
+      // handle the return trip. iOS: useAuth finishes it on the app-URL callback.
     } catch {
-      toast.error(COPY.toasts.googleFailed);
-      setGoogleLoading(false);
+      toast.error(failed);
+    } finally {
+      setPending(null);
     }
   };
 
@@ -56,10 +55,24 @@ export function LoginModal({ isOpen, onClose, onShowTerms, onTryDemo }: LoginMod
             {COPY.login.subtitle}
           </p>
 
+          {showApple && (
+            <button
+              type="button"
+              onClick={() => handleSignIn('apple')}
+              disabled={pending !== null}
+              className="mb-3 flex w-full items-center justify-center gap-3 rounded-full bg-white py-3.5 text-[15px] font-semibold text-black transition-transform hover:scale-[1.01] active:scale-[0.99] disabled:opacity-60 disabled:hover:scale-100"
+            >
+              <svg width="16" height="19" viewBox="0 0 814 1000" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{ flexShrink: 0 }}>
+                <path d="M788 341c-6 4-108 62-108 190 0 148 130 200 134 202-1 3-21 72-69 142-43 62-88 124-156 124s-86-40-165-40c-77 0-104 41-166 41s-106-57-156-127C44 791 0 671 0 557c0-183 119-280 236-280 62 0 114 41 153 41 37 0 95-43 166-43 27 0 124 2 188 95zM554 170c29-35 50-83 50-131 0-7-1-13-2-19-47 2-104 32-138 72-27 30-52 79-52 128 0 7 1 15 2 17 3 1 8 1 12 1 43 0 97-29 128-68z" />
+              </svg>
+              {pending === 'apple' ? COPY.login.apple.loading : COPY.login.apple.label}
+            </button>
+          )}
+
           <button
             type="button"
-            onClick={handleGoogleSignIn}
-            disabled={googleLoading}
+            onClick={() => handleSignIn('google')}
+            disabled={pending !== null}
             className="flex w-full items-center justify-center gap-3 rounded-full bg-white py-3.5 text-[15px] font-semibold text-black transition-transform hover:scale-[1.01] active:scale-[0.99] disabled:opacity-60 disabled:hover:scale-100"
           >
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{ flexShrink: 0 }}>
@@ -68,7 +81,7 @@ export function LoginModal({ isOpen, onClose, onShowTerms, onTryDemo }: LoginMod
               <path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05" />
               <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z" fill="#EA4335" />
             </svg>
-            {googleLoading ? COPY.login.google.loading : COPY.login.google.label}
+            {pending === 'google' ? COPY.login.google.loading : COPY.login.google.label}
           </button>
 
           {onTryDemo && (

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { listenForNativeAuthCallback } from "@/lib/native/auth";
 import { toast } from "sonner";
 import { COPY } from "@/content/copy";
 
@@ -78,7 +79,16 @@ export function useAuth(options: UseAuthOptions = {}): UseAuthReturn {
       }
     });
 
-    return () => { subscription.unsubscribe(); };
+    // iOS shell: Safari hands the OAuth callback back to the app; exchanging
+    // the code fires SIGNED_IN above like the web redirect does.
+    const stopNativeCallback = listenForNativeAuthCallback((error) => {
+      toast.error(error.message || COPY.toasts.signInFailed);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+      stopNativeCallback();
+    };
   }, []);
 
   const login = useCallback((token: string, uid: string, email?: string) => {
