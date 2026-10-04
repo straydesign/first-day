@@ -20,6 +20,15 @@ import type { GoalFormData, SprintMeta } from "@/types";
 export const runtime = "nodejs";
 
 /**
+ * CORS preflight for the iOS shell, whose pages load from capacitor://localhost
+ * and call this route cross-origin. The allow headers themselves are set in
+ * next.config.ts so every response (errors included) carries them.
+ */
+export function OPTIONS() {
+  return new Response(null, { status: 204 });
+}
+
+/**
  * AI generations allowed per user per calendar day. 12 = three complete goals
  * (4 sprints each) in a day, which is far past honest use and far short of a
  * bill worth noticing. Override with PLAN_DAILY_LIMIT.

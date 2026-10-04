@@ -49,3 +49,6 @@ yarn-error.log*
 next-env.d.ts
 .design-gate-pass
 /.next */
+
+# iOS shell build output
+/ios-web

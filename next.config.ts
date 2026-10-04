@@ -1,6 +1,16 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
+/**
+ * IOS_EXPORT=1 builds the static bundle the iOS shell ships (see
+ * scripts/build-ios.mjs). Static export has no server, so rewrites, redirects
+ * and headers are web-only.
+ */
+const iosExport = process.env.IOS_EXPORT === "1";
+
+/** The iOS shell's WKWebView origin. Bearer auth, no cookies, so no credentials. */
+const IOS_ORIGIN = "capacitor://localhost";
+
+const webOnly: NextConfig = {
   // Source maps disabled in prod — reduces payload and avoids leaking source
   productionBrowserSourceMaps: false,
 
@@ -38,6 +48,27 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async headers() {
+    return [
+      {
+        source: "/api/generate-plan",
+        headers: [
+          { key: "Access-Control-Allow-Origin", value: IOS_ORIGIN },
+          { key: "Access-Control-Allow-Methods", value: "POST, OPTIONS" },
+          { key: "Access-Control-Allow-Headers", value: "Content-Type, Authorization" },
+          { key: "Access-Control-Max-Age", value: "86400" },
+        ],
+      },
+    ];
+  },
 };
+
+const nextConfig: NextConfig = iosExport
+  ? {
+      output: "export",
+      productionBrowserSourceMaps: false,
+      images: { unoptimized: true },
+    }
+  : webOnly;
 
 export default nextConfig;

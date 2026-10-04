@@ -2,6 +2,12 @@ import { createClient } from "@/lib/supabase/client";
 import type { Plan, ProgressMap, GoalFormData, SprintMeta } from "@/types";
 import type { SprintGenResult } from "@/lib/anthropic";
 
+/**
+ * Empty on the web (same-origin). The iOS shell is a static export served from
+ * capacitor://localhost, so it sets NEXT_PUBLIC_API_BASE to the live site.
+ */
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE ?? "";
+
 /** Payload for generating a single sprint forward (see /api/generate-plan). */
 export type SprintGenRequest = GoalFormData & {
   startDate?: string;
@@ -231,7 +237,7 @@ export const api = {
     async generateSprint(data: SprintGenRequest): Promise<SprintGenResult> {
       const token = await getAuthToken();
       if (!token) throw new Error("Session expired");
-      const res = await fetch("/api/generate-plan", {
+      const res = await fetch(`${API_BASE}/api/generate-plan`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify(data),
