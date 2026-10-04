@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 import dynamic from "next/dynamic";
 import { toast } from "sonner";
 import { COPY } from "@/content/copy";
-import { LandingPage } from "@/components/LandingPage";
+import { WelcomeScreen } from "@/components/WelcomeScreen";
 // Statically imported on purpose: /privacy and /terms are the two URLs Google's
 // OAuth consent screen links to, so their text has to be in the served HTML.
 // A dynamic() import would hide them in a streamed <div hidden> (see below).
@@ -28,16 +28,12 @@ import { viewForPath, isPublicSubpage } from "@/content/flow";
  * and the reset view only renders behind a recovery link. Rendering them
  * client-only removes the suspension, so the landing page streams into <main>.
  */
-const LoginModal = dynamic(() => import("@/components/LoginModal").then(m => ({ default: m.LoginModal })), { ssr: false });
-const ResetPasswordView = dynamic(() => import("@/components/ResetPasswordView").then(m => ({ default: m.ResetPasswordView })), { ssr: false });
 
 export default function Home() {
   const [currentView, setCurrentView] = useState<AppView>("landing");
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [loginModalMode, setLoginModalMode] = useState<"login" | "signup">("login");
   const [demoMode, setDemoMode] = useState(false);
 
-  const { isAuthenticated, accessToken, userId, userEmail, isLoading, login, logout } = useAuth({
+  const { isAuthenticated, accessToken, userId, userEmail, isLoading, logout } = useAuth({
     onSignIn: () => {
       setCurrentView("goals");
       toast.success(COPY.toasts.welcome);
@@ -48,7 +44,6 @@ export default function Home() {
         setCurrentView(hasSession ? "goals" : "landing");
       }
     },
-    onPasswordRecovery: () => setCurrentView("reset-password"),
   });
 
   // Handle URL-based routing on mount — resolve the path via the flow registry
@@ -57,60 +52,19 @@ export default function Home() {
     if (view) setCurrentView(view);
   }, []);
 
-  /**
-   * True only after hydration. Gates the lazily-imported LoginModal so the
-   * server pass has no React.lazy children at all.
-   *
-   * Belt to the braces of deleting `app/loading.tsx` (see the isLoading branch
-   * below): a route-level <Suspense> plus any lazy child makes React serve the
-   * FALLBACK as the page and ship the real markup at the end of <body> inside
-   * `<div hidden>` for a client script to swap in — invisible to anything that
-   * doesn't run JS. The modal is closed on first paint, so nothing is lost.
-   */
-  const [hydrated, setHydrated] = useState(false);
-  useEffect(() => setHydrated(true), []);
-
   const handleLogout = useCallback(async () => {
     setCurrentView("landing");
-    setShowLoginModal(false);
     window.history.pushState({}, "", "/");
     await logout();
   }, [logout]);
 
-  const handleAuthSuccess = useCallback((token: string, uid: string) => {
-    login(token, uid);
-    setShowLoginModal(false);
-    setCurrentView("goals");
-  }, [login]);
-
-  const handleGetStarted = useCallback(() => {
-    if (!isAuthenticated) {
-      setLoginModalMode("signup");
-      if (currentView === "privacy" || currentView === "terms") {
-        window.history.pushState({}, "", "/");
-        setCurrentView("landing");
-        setTimeout(() => setShowLoginModal(true), 100);
-      } else {
-        setShowLoginModal(true);
-      }
-    } else {
-      setCurrentView("goals");
-    }
-  }, [isAuthenticated, currentView]);
-
   const handleTryDemo = useCallback(() => {
     setDemoMode(true);
-    setShowLoginModal(false);
   }, []);
 
   const handleExitDemo = useCallback(async () => {
     setDemoMode(false);
     setCurrentView("landing");
-  }, []);
-
-  const handleOpenLogin = useCallback(() => {
-    setLoginModalMode("login");
-    setShowLoginModal(true);
   }, []);
 
   const handleBackToLanding = useCallback(() => {
@@ -127,18 +81,6 @@ export default function Home() {
     window.history.pushState({}, "", "/terms");
     setCurrentView("terms");
   }, []);
-
-  // Password reset page
-  if (currentView === "reset-password") {
-    return (
-      <ResetPasswordView
-        onSuccess={() => {
-          setCurrentView("landing");
-          setShowLoginModal(true);
-        }}
-      />
-    );
-  }
 
   // Loading state — an OVERLAY over the landing page, never a replacement for it.
   //
@@ -161,11 +103,10 @@ export default function Home() {
   if (isLoading) {
     return (
       <>
-        <LandingPage
-          onGetStarted={handleGetStarted}
-          onLogin={handleOpenLogin}
-          onPrivacyPolicy={handleShowPrivacyPolicy}
-          onTermsOfService={handleShowTermsOfService}
+        <WelcomeScreen
+          onTryDemo={handleTryDemo}
+          onShowPrivacy={handleShowPrivacyPolicy}
+          onShowTerms={handleShowTermsOfService}
         />
         <div className="boot-veil fixed inset-0 z-[300]" aria-hidden="true">
           <LoadingScreen />
@@ -202,27 +143,14 @@ export default function Home() {
     );
   }
 
-  // Landing page
+  // Signed out — the welcome screen is the app's front door
   if (currentView === "landing" || !isAuthenticated) {
     return (
-      <>
-        <LandingPage
-          onGetStarted={handleGetStarted}
-          onLogin={handleOpenLogin}
-          onPrivacyPolicy={handleShowPrivacyPolicy}
-          onTermsOfService={handleShowTermsOfService}
+      <WelcomeScreen
+          onTryDemo={handleTryDemo}
+          onShowPrivacy={handleShowPrivacyPolicy}
+          onShowTerms={handleShowTermsOfService}
         />
-        {hydrated && (
-          <LoginModal
-            isOpen={showLoginModal}
-            onClose={() => setShowLoginModal(false)}
-            onAuthSuccess={handleAuthSuccess}
-            onShowTerms={handleShowTermsOfService}
-            onTryDemo={handleTryDemo}
-            defaultMode={loginModalMode}
-          />
-        )}
-      </>
     );
   }
 

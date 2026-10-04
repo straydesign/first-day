@@ -1,5 +1,5 @@
 export const login = {
-  subtitle: "Sign in to save your goals and track your streak.",
+  welcome: "Pick a goal. Get a plan for this week. Do a little each day.",
   google: {
     label: "Continue with Google",
     loading: "Connecting…",
@@ -15,6 +15,7 @@ export const login = {
   },
   terms: {
     prefix: "By continuing, you agree to the",
-    link: "Terms & conditions",
+    link: "Terms",
+    privacy: "Privacy Policy",
   },
 } as const;
