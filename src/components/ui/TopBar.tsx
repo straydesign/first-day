@@ -21,7 +21,8 @@ export function TopBar({ title = "First Day", onBack, right, maxWidth = "max-w-2
   return (
     <header
       className={cn("sticky top-0 z-30 border-b border-white/[0.06] backdrop-blur-xl", className)}
-      style={{ backgroundColor: `${BG_BASE}a6` }}
+      // Clears the status bar / Dynamic Island in the iOS shell; 0 on the web.
+      style={{ backgroundColor: `${BG_BASE}a6`, paddingTop: "env(safe-area-inset-top)" }}
     >
       <div className={cn("mx-auto flex h-14 items-center justify-between gap-4 px-6", maxWidth)}>
         <div className="flex min-w-0 items-center gap-2">

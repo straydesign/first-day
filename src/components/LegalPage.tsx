@@ -30,7 +30,7 @@ export function LegalPage({ onBack, initialTab = "privacy", onTabChange }: Legal
   };
 
   return (
-    <div className="min-h-screen relative flex flex-col">
+    <div className="min-h-dvh relative flex flex-col">
       <TopBar
         title={screenTitle(tab)}
         onBack={onBack}

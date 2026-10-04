@@ -8,12 +8,14 @@
  * One screen, only what an account needs: identity, one preference, one
  * data-rights action. Nothing extra.
  */
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Bell, LogOut, ShieldCheck, Trash2 } from "lucide-react";
 import { Panel } from "@/components/ui/Panel";
 import { TopBar } from "@/components/ui/TopBar";
 import { screenTitle } from "@/content/flow";
 import { COPY } from "@/content/copy";
+import { createClient } from "@/lib/supabase/client";
 import { FONT } from "@/lib/design";
 import { staggerContainer, tileEnter } from "@/lib/animations";
 
@@ -67,9 +69,16 @@ export function Settings({
   onBack,
 }: SettingsProps) {
   const C = COPY.settings;
+  const [provider, setProvider] = useState<string | null>(null);
+  useEffect(() => {
+    if (demoMode) return;
+    void createClient().auth.getSession().then(({ data }) => {
+      setProvider(data.session?.user.app_metadata.provider ?? null);
+    });
+  }, [demoMode]);
 
   return (
-    <div className="min-h-screen relative pb-20 md:pb-10" role="main" aria-label="Settings">
+    <div className="min-h-dvh relative pb-20 md:pb-10" role="main" aria-label="Settings">
       <TopBar title={screenTitle("settings")} onBack={onBack} />
 
       <motion.div
@@ -109,7 +118,7 @@ export function Settings({
               <div className="flex items-center justify-between gap-4">
                 <div className="min-w-0">
                   <p className="text-[12px] font-medium uppercase tracking-[0.06em] text-white/40">
-                    {C.account.signedInWith}
+                    {(provider && C.account.signedInWith[provider]) || C.account.signedInFallback}
                   </p>
                   <p
                     className="mt-1 truncate text-[16px] font-semibold text-white"

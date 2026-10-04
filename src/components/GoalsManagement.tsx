@@ -122,7 +122,7 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
 
   if (loading) {
     return (
-      <div className="min-h-screen relative flex items-center justify-center">
+      <div className="min-h-dvh relative flex items-center justify-center">
         <div className="relative z-10 flex flex-col items-center gap-6 px-6 w-full max-w-md">
           <Panel contentClassName="px-8 py-5">
             <p className="text-[17px] font-semibold tracking-[-0.01em] text-white/70" style={{ fontFamily: FONT }}>
@@ -149,11 +149,11 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
   );
 
   return (
-    <div className="min-h-screen relative pb-20 md:pb-0" role="main" aria-label="Your goals">
+    <div className="min-h-dvh relative pb-20 md:pb-0" role="main" aria-label="Your goals">
       {/* Navigation handled by BottomNav (mobile) and NavigationMenu (desktop) in AuthenticatedApp */}
       <div className="relative z-10 w-full">
         {goals.length > 0 ? (
-          <motion.div variants={staggerContainer} initial="hidden" animate="visible" className="min-h-screen pb-6 md:pb-10">
+          <motion.div variants={staggerContainer} initial="hidden" animate="visible" className="min-h-dvh pb-6 md:pb-10">
             {/* Sticky date / streak header via TopBar */}
             <TopBar
               title={screenTitle("goals")}
@@ -251,7 +251,7 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
             </div>
           </motion.div>
         ) : (
-          <MosaicCard seed={0} density="xl" className="min-h-screen p-6 md:p-10 flex flex-col items-center justify-center">
+          <MosaicCard seed={0} density="xl" className="min-h-dvh p-6 md:p-10 flex flex-col items-center justify-center">
             <div className="text-center mb-4 md:mb-8 space-y-3">
               <Panel contentClassName="px-8 py-5">
                 <h1 className="text-[32px] font-semibold tracking-[-0.02em] text-white leading-[1.05]" style={{ fontFamily: FONT }}>

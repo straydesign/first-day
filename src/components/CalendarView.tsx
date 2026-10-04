@@ -113,7 +113,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, prog
   }
 
   return (
-    <div className="min-h-screen relative pb-20 md:pb-0" role="main" aria-label={`${totalDays}-day plan calendar`}>
+    <div className="min-h-dvh relative pb-20 md:pb-0" role="main" aria-label={`${totalDays}-day plan calendar`}>
       <OnboardingTour />
       <TopBar
         title={goalTitle || COPY.calendar.planTitleFallback}

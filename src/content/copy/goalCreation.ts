@@ -34,7 +34,7 @@ export const goalCreation = {
   generateButton: "Generate My Plan",
   cancelButton: "Cancel",
   footerMicrocopy:
-    "AI builds your first 7-day sprint right now — three more sprints generate as you finish each one.",
+    "We build your first week now. The next three come as you finish each one.",
 
   // Validation modal
   validationTitle: "Hold up!",

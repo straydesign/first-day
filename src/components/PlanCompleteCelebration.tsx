@@ -97,7 +97,7 @@ export function PlanCompleteCelebration({ goalTitle, engagement, totalDays = 28,
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden" role="main" aria-label={`${totalDays} days complete`}>
+    <div className="min-h-dvh relative overflow-hidden" role="main" aria-label={`${totalDays} days complete`}>
       {/* Confetti layer — white/grey diamonds */}
       <div className="fixed inset-0 z-20 pointer-events-none overflow-hidden">
         {confettiPieces.map((piece) => (

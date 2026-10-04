@@ -463,7 +463,7 @@ export default function TheRead() {
 
 function Shell({ children, wide }: { children: React.ReactNode; wide?: boolean }) {
   return (
-    <main className="min-h-screen bg-black px-6 py-16 text-white sm:py-24">
+    <main className="min-h-dvh bg-black px-6 py-16 text-white sm:py-24">
       <div className={wide ? "mx-auto max-w-3xl" : "mx-auto max-w-2xl"}>{children}</div>
     </main>
   );

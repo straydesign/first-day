@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { NativeShell } from "@/components/NativeShell";
 import { Inter, Bebas_Neue } from "next/font/google";
 import { Toaster } from "sonner";
 import { MonotoneProvider } from "@/components/MonotoneContext";
@@ -22,6 +23,9 @@ const bebasNeue = Bebas_Neue({
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  // Lets the iOS shell draw under the status bar and home indicator; the
+  // safe-area insets in globals.css keep content clear of both.
+  viewportFit: "cover",
   themeColor: "#cc5533",
 };
 
@@ -57,7 +61,7 @@ const jsonLd = {
   "@type": "WebApplication",
   "name": "First Day",
   "url": "https://firstday.life",
-  "description": "AI-powered 7-day sprints to help you achieve any goal. Personalized daily activities, progress tracking, streaks, and achievements.",
+  "description": "7-day sprints to help you reach any goal. Personalized daily activities, progress tracking, streaks, and achievements.",
   "applicationCategory": "LifestyleApplication",
   "operatingSystem": "Web",
   "offers": {
@@ -66,7 +70,7 @@ const jsonLd = {
     "priceCurrency": "USD",
   },
   "featureList": [
-    "AI-generated personalized 7-day goal sprints",
+    "Personalized 7-day goal sprints",
     "Daily activity tracking with reflections",
     "XP system, streaks, and achievement badges",
     "Videos, articles, and books attached to each day",
@@ -86,7 +90,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${bebasNeue.variable}`}>
+    <html
+      lang="en"
+      className={`${inter.variable} ${bebasNeue.variable}`}
+      // The inline script below adds `js` before hydration, on purpose.
+      suppressHydrationWarning
+    >
       <head>
         {/* Marks the document as JS-capable BEFORE first paint, which is what
             lets globals.css force every framer-motion element to its visible
@@ -100,6 +109,7 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased">
+        <NativeShell />
         <a href="#main-content" className="skip-to-content">
           Skip to content
         </a>

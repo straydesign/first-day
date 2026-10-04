@@ -30,7 +30,7 @@ export const toasts = {
   nextSprintFailed: "Couldn't build your next sprint. Please try again.",
   signUpRegenerate: {
     title: "Sign up to regenerate plans!",
-    description: "Create an account to get AI-powered custom plans.",
+    description: "Make an account to get a plan built for you.",
   },
 
   // goals management

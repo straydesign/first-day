@@ -62,7 +62,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
   const dailyChallenge = useMemo(() => getDailyChallenge(day.number), [day.number]);
 
   return (
-    <div className="min-h-screen relative pb-20 md:pb-0" role="main" aria-label="Day activities">
+    <div className="min-h-dvh relative pb-20 md:pb-0" role="main" aria-label="Day activities">
       {/* Background mosaic provided by AuthenticatedApp */}
       <TopBar
         title={isToday ? COPY.day.todayTitle(day.number) : COPY.day.dayTitle(day.number)}

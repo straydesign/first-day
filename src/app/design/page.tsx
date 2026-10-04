@@ -122,7 +122,7 @@ function ProgressBar({ pct }: { pct: number }) {
 
 export default function DesignPrototype() {
   return (
-    <div className="min-h-screen w-full relative" style={{ fontFamily: FONT }}>
+    <div className="min-h-dvh w-full relative" style={{ fontFamily: FONT }}>
       <InteractiveBackdrop />
       <div className="relative z-10">
         {/* one menu: thin, blurred, minimal */}

@@ -191,7 +191,7 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
   );
 
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-dvh relative">
       <div className="relative z-10">
         <div className="pt-[120px] pl-6">
           <BackButton onClick={onCancel} disabled={isGenerating} />

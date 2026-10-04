@@ -41,7 +41,7 @@ export function LoginModal({ isOpen, onClose, onShowTerms, onTryDemo }: LoginMod
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
-        className="m-0 h-screen w-screen max-w-none overflow-y-auto border-0 bg-[#08080a]/92 p-6 shadow-none backdrop-blur-2xl [clip-path:none]"
+        className="m-0 h-dvh w-screen max-w-none overflow-y-auto border-0 bg-[#08080a]/92 p-6 shadow-none backdrop-blur-2xl [clip-path:none]"
         style={{ fontFamily: FONT }}
       >
         <div className="mx-auto flex min-h-full w-full max-w-sm flex-col items-center justify-center py-10">

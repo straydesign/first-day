@@ -106,7 +106,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
   );
 
   return (
-    <div className="min-h-screen relative" style={{ fontFamily: FONT }}>
+    <div className="min-h-dvh relative" style={{ fontFamily: FONT }}>
       <HeroAutoTour enabled={false} />
       {/* Scroll progress bar — sits above everything, sleek white, springy */}
       <motion.div
@@ -119,7 +119,7 @@ export function LandingPage({ onGetStarted, onLogin, onPrivacyPolicy, onTermsOfS
       <div className="relative z-10">
         {/* Hero Section */}
         <section
-          className="relative min-h-[800px] md:min-h-screen flex flex-col justify-center items-center px-4 pt-[180px]"
+          className="relative min-h-[800px] md:min-h-dvh flex flex-col justify-center items-center px-4 pt-[180px]"
         >
 
           {/* Top corners — Log In (ghost) / Get Started (white) */}

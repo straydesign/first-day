@@ -8,7 +8,7 @@ import { COPY } from "@/content/copy";
 export default function NotFound() {
   return (
     <div
-      className="min-h-screen flex items-center justify-center px-6"
+      className="min-h-dvh flex items-center justify-center px-6"
       style={{ fontFamily: FONT }}
     >
       <div className="relative z-10 flex flex-col items-center gap-6 text-center max-w-md w-full">

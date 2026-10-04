@@ -21,7 +21,7 @@ export const landing = {
     subtitle: "No vague vision boards. A real plan that unfolds one week at a time.",
     steps: [
       { title: "Set Your Goal", line: "Pick what's been nagging you. One sentence." },
-      { title: "Get Your First Week", line: "AI builds your first 7-day sprint. Specific. Doable." },
+      { title: "Get Your First Week", line: "Your first 7-day sprint, built for you. Specific. Doable." },
       { title: "Build Week by Week", line: "Finish a sprint and the next one generates, shaped by how the last went." },
     ],
   },

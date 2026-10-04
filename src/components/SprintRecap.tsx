@@ -87,7 +87,7 @@ export function SprintRecap({
   const nextTheme = sprints?.[nextSprintNumber - 1]?.theme;
 
   return (
-    <div className="min-h-screen relative flex items-center justify-center px-6 py-12" role="main" aria-label="Sprint complete">
+    <div className="min-h-dvh relative flex items-center justify-center px-6 py-12" role="main" aria-label="Sprint complete">
       <motion.div
         variants={staggerContainer}
         initial="hidden"

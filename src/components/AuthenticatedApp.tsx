@@ -235,7 +235,7 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
   };
 
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-dvh relative">
       <div className="relative z-10">
         {loadingGoal && <LoadingScreen />}
 

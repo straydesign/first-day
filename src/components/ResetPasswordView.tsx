@@ -53,7 +53,7 @@ export function ResetPasswordView({ onSuccess }: ResetPasswordViewProps) {
   };
 
   return (
-    <div className="min-h-screen flex flex-col relative overflow-hidden">
+    <div className="min-h-dvh flex flex-col relative overflow-hidden">
       <TopBar title={screenTitle("reset-password")} />
       <div className="flex-1 flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-md space-y-6">

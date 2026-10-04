@@ -95,7 +95,7 @@ export function CongratsView({
   );
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div className="min-h-dvh relative overflow-hidden">
 
       {/* Confetti layer — white/grey diamonds */}
       <div className="fixed inset-0 z-20 pointer-events-none overflow-hidden">
@@ -121,7 +121,7 @@ export function CongratsView({
         ))}
       </div>
 
-      <div className="relative z-10 flex items-center justify-center p-6 pt-[120px] min-h-[80vh] md:min-h-screen">
+      <div className="relative z-10 flex items-center justify-center p-6 pt-[120px] min-h-[80vh] md:min-h-dvh">
         <div className="max-w-2xl w-full text-center">
 
           {/* Milestone banner */}

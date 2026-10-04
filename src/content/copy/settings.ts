@@ -9,7 +9,11 @@ export const settings = {
 
   account: {
     heading: "Account",
-    signedInWith: "Signed in with Google",
+    signedInWith: {
+      google: "Signed in with Google",
+      apple: "Signed in with Apple",
+    } as Record<string, string>,
+    signedInFallback: "Signed in",
     signOut: "Sign out",
     // Demo session — no real account yet.
     demoHeading: "You're exploring in demo mode",

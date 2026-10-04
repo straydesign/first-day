@@ -63,7 +63,7 @@ export async function generateMetadata({ searchParams }: SharePageProps): Promis
 export default async function SharePage({ searchParams }: SharePageProps) {
   const params = await searchParams;
   return (
-    <Suspense fallback={<div className="min-h-screen tile-substrate" />}>
+    <Suspense fallback={<div className="min-h-dvh tile-substrate" />}>
       <ShareJourneyView
         goalTitle={params.g}
         days={num(params.d, 28)}
