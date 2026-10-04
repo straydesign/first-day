@@ -40,11 +40,7 @@ export const SCREENS: Record<AppView, ScreenMeta> = {
   settings:         { title: COPY.settings.topBarTitle,        back: "goals",    auth: true,  kind: "page" },
   privacy:          { title: COPY.legal.page.privacyTitle,     back: "landing",  auth: false, kind: "page", path: "/privacy" },
   terms:            { title: COPY.legal.page.termsTitle,       back: "landing",  auth: false, kind: "page", path: "/terms" },
-  "reset-password": { title: COPY.resetPassword.topBarTitle,   back: "landing",  auth: false, kind: "page" },
 };
-
-/** The login screen is a modal overlay (not an AppView), surfaced over landing. */
-export const LOGIN_MODAL = { kind: "modal" as const, auth: false } as const;
 
 /** Canonical screen order — for review, the flow map, and nav reasoning. */
 export const SCREEN_ORDER: readonly AppView[] = [
@@ -57,7 +53,6 @@ export const SCREEN_ORDER: readonly AppView[] = [
   "settings",
   "privacy",
   "terms",
-  "reset-password",
 ] as const;
 
 /** Where "back" / Escape goes from a screen, if anywhere. */
@@ -78,7 +73,7 @@ export function viewForPath(path: string): AppView | undefined {
   return entry;
 }
 
-/** A non-landing public page (privacy / terms / reset-password). */
+/** A non-landing public page (privacy / terms). */
 export function isPublicSubpage(view: AppView): boolean {
   return !SCREENS[view].auth && view !== "landing";
 }

@@ -6,7 +6,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { CheckCircle2, Calendar, Youtube, ExternalLink, Zap, Check } from "lucide-react";
 import { Panel } from "@/components/ui/Panel";
 import { TopBar } from "@/components/ui/TopBar";
-import { fireCelebration, getRoomView } from "./3d-shell/RoomRegistry";
 import { previewDayXP, getDailyMultiplier, getDailyChallenge } from "@/lib/engagement";
 import { ArtifactSlot } from "./artifacts/ArtifactSlot";
 import { activityArtifact } from "@/lib/artifacts";
@@ -44,7 +43,6 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
 
   const handleSubmit = () => {
     if (!canSubmit) { setShowValidation(true); return; }
-    fireCelebration(getRoomView(), 1.0);
     onComplete({ dayNumber: day.number, completed: completedActivities, feedback });
   };
 

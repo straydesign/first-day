@@ -40,10 +40,6 @@ export const VORONOI_DARK = [
 /** Combined palette — default for VoronoiMosaic */
 export const VORONOI_PALETTE = [...VORONOI_LIGHT, ...VORONOI_DARK] as const;
 
-/** Pure-black panel mosaic — used as a backdrop behind text-bearing panels so the
- *  bright 3D shell never competes with foreground contrast. */
-export const PANEL_DARK_PALETTE = ["#000000", "#050505", "#0a0a0a", "#020202", "#080808"] as const;
-
 /** Vibrant accent colors for goal pills, shard fills, and decorative elements. */
 export const BRIGHT_COLORS = [
   "#FFE633", "#FF6B2B", "#FF2D55", "#00EAFF", "#FF10F0",
@@ -107,7 +103,7 @@ export const SHARD_SQUARE_CLIPS = [
 /** Animation durations for scrolling goal suggestion rows. */
 export const SCROLL_SPEEDS = ["20s", "30s", "25s"] as const;
 
-/** Scrolling goal suggestion rows for SimpleGoalCreation and LandingPage. */
+/** Scrolling goal suggestion rows for SimpleGoalCreation. */
 export const GOAL_SUGGESTIONS_ROW_1 = [
   "Learn to play guitar", "Build a morning routine", "Learn Spanish basics",
   "Start a meditation practice", "Write a short story", "Learn to code",

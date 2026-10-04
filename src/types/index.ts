@@ -9,8 +9,7 @@ export type AppView =
   | "congrats"
   | "settings"
   | "privacy"
-  | "terms"
-  | "reset-password";
+  | "terms";
 
 export interface ActivityResource {
   type: "youtube" | "link";

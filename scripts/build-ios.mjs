@@ -28,7 +28,6 @@ const WEB_ONLY = [
   "src/app/twitter-image.tsx",
   "src/app/robots.ts",
   "src/app/sitemap.ts",
-  "src/app/design",
   "src/app/read",
   "public/llms.txt",
 ];

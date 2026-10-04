@@ -4,7 +4,6 @@ import { Panel } from "@/components/ui/Panel";
 import { COPY } from "@/content/copy";
 import { FONT } from "@/lib/design";
 import { getNextAvailableDay, isDayCompleted, getPlanTotalDays } from "@/lib/engagement";
-import { fireCelebration, getRoomView } from "./3d-shell/RoomRegistry";
 import type { Plan, ProgressMap, SelectedDay, Activity } from "@/types";
 
 
@@ -78,7 +77,6 @@ export function WeekCalendar({ days, progress = {}, onDayClick, planData }: Week
 
         const handleClick = () => {
           if (!onDayClick) return;
-          fireCelebration(getRoomView(), 0.45);
           const useDate = completed && dayProgress?.completedAt ? new Date(dayProgress.completedAt) : new Date();
           onDayClick({
             number: day.dayNumber,

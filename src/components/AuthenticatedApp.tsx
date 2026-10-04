@@ -4,7 +4,6 @@ import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { computeEngagementState, getMilestone, getLatestDayXP, calculateStreaks, getPlanTotalDays } from "@/lib/engagement";
-import { setProgressFraction } from "@/components/3d-shell/progressIntent";
 import { useGoalManager } from "@/hooks/useGoalManager";
 import { useKeyboardNav } from "@/hooks/useKeyboardNav";
 import { SettingsPill } from "@/components/SettingsPill";
@@ -38,7 +37,14 @@ interface AuthenticatedAppProps {
 
 export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, onLogout, demoMode = false }: AuthenticatedAppProps) {
   const [currentView, setCurrentView] = useState<AppView>(initialView);
-  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  // Daily-reminder preference persists across sessions (the one user setting).
+  // This component only mounts client-side (after the auth check), so the
+  // stored value can seed the state directly.
+  const [notificationsEnabled, setNotificationsEnabled] = useState(() => {
+    if (typeof window === "undefined") return true;
+    const saved = window.localStorage.getItem(NOTIF_KEY);
+    return saved === null || saved === "1";
+  });
   const [latestDayXP, setLatestDayXP] = useState<XPBreakdown | null>(null);
   const [latestMilestone, setLatestMilestone] = useState<Milestone | null>(null);
   const [newAchievements, setNewAchievements] = useState<Achievement[]>([]);
@@ -70,6 +76,11 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
   // the between-sprints recap instead of the generic congrats screen.
   const [sprintRecap, setSprintRecap] = useState<{ priorSprint: number } | null>(null);
 
+  const handleBackToGoals = () => {
+    setCurrentView("goals");
+    resetGoalState();
+  };
+
   // Keyboard nav: Escape backs out along the flow registry's `back` targets.
   // The creation wizard is intentionally left alone so a stray keypress can't
   // discard an in-progress goal (use its Cancel button instead).
@@ -83,22 +94,11 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
   const totalDays = getPlanTotalDays(planData);
 
   // Compute engagement state from progress + plan start date
+  const planStartDate = planData?.startDate;
   const engagement: EngagementState | null = useMemo(() => {
-    if (!planData?.startDate || !progress) return null;
-    return computeEngagementState(progress, planData.startDate, totalDays);
-  }, [progress, planData?.startDate, totalDays]);
-
-  // v209 — bridge user completion-state into cosmos identity. Each time
-  // engagement recomputes (a day completes, the user reopens the app, demo
-  // mode loads fixtures), push the fraction of the full journey into the
-  // module-level singleton; TileVoid reads it each frame and lights the
-  // corresponding fraction of cosmos slabs. The void becomes a progress
-  // ledger rather than a generic backdrop. Closes the VISION line "every
-  // tile movement maps to a user transition or a state change" on the
-  // long-term state axis — every prior cosmos channel was instantaneous.
-  useEffect(() => {
-    setProgressFraction((engagement?.totalDaysCompleted ?? 0) / totalDays);
-  }, [engagement, totalDays]);
+    if (!planStartDate || !progress) return null;
+    return computeEngagementState(progress, planStartDate, totalDays);
+  }, [progress, planStartDate, totalDays]);
 
   // Track achievement unlocks for reveal animations
   useEffect(() => {
@@ -121,12 +121,6 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [currentView]);
 
-  // Daily-reminder preference persists across sessions (the one user setting).
-  useEffect(() => {
-    const saved = window.localStorage.getItem(NOTIF_KEY);
-    if (saved !== null) setNotificationsEnabled(saved === "1");
-  }, []);
-
   const handleToggleNotifications = () => {
     setNotificationsEnabled((prev) => {
       const next = !prev;
@@ -148,16 +142,6 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
       return;
     }
     await handleLogoutAndReset();
-  };
-
-  // Sync 3D camera rig to current view
-  useEffect(() => {
-    void import("./3d-shell/RoomRegistry").then((m) => m.setRoomView(currentView));
-  }, [currentView]);
-
-  const handleBackToGoals = () => {
-    setCurrentView("goals");
-    resetGoalState();
   };
 
   const handleCreateGoal = () => {

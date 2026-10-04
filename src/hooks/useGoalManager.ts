@@ -3,7 +3,6 @@ import { toast } from "sonner";
 import { api } from "@/lib/api";
 import { DEMO_GOAL_DETAILS, DEMO_GOALS_LIST, buildDemoGoalDetail, generateNextSprint as generateNextSprintDemo } from "@/lib/demo-data";
 import { getPlanTotalDays } from "@/lib/engagement";
-import { getRoomView, setGenerating, fireCelebration } from "@/components/3d-shell/RoomRegistry";
 import type { Plan, ProgressMap, SelectedDay, GoalFormData } from "@/types";
 import { COPY } from "@/content/copy";
 
@@ -135,7 +134,6 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
   ): Promise<{ goalId: string | null; view: "calendar" | null }> => {
     setIsGenerating(true);
     setShowFullScreenLoading(true);
-    setGenerating(true, getRoomView());
 
     try {
       const localToday = new Date();
@@ -163,12 +161,6 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
         toast.success(
           existingGoalId ? COPY.toasts.planUpdated : COPY.toasts.planReady
         );
-        // VISCERAL plan-arrival room event — wave stops, room ERUPTS, then view switches.
-        // Burst intensity scales with plan size (7-day → 1.5, 14+-day → 2.0).
-        fireCelebration(
-          getRoomView(),
-          1.0 + Math.min(1.0, Object.keys(plan.days ?? {}).length / 14)
-        );
         return { goalId, view: "calendar" };
       } else {
         throw new Error(
@@ -187,7 +179,6 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
     } finally {
       setIsGenerating(false);
       setShowFullScreenLoading(false);
-      setGenerating(false);
     }
   }, [onLogout, saveGoalData]);
 
@@ -239,7 +230,6 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
       setCurrentGoalId(goalId);
       setEditingGoalData(null);
       toast.success(COPY.toasts.planReady);
-      fireCelebration(getRoomView(), 1.5);
       return true;
     }
     setGoalData({ goal: data.goal, timeCommitment: data.timeCommitment, availableDays: data.availableDays });

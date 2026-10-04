@@ -1,33 +1,17 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
-import dynamic from "next/dynamic";
 import { toast } from "sonner";
 import { COPY } from "@/content/copy";
 import { WelcomeScreen } from "@/components/WelcomeScreen";
 // Statically imported on purpose: /privacy and /terms are the two URLs Google's
 // OAuth consent screen links to, so their text has to be in the served HTML.
-// A dynamic() import would hide them in a streamed <div hidden> (see below).
+// A bare dynamic() import would stream them into a trailing <div hidden>.
 import { LegalPage } from "@/components/LegalPage";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { AuthenticatedApp } from "@/components/AuthenticatedApp";
 import { useAuth } from "@/hooks/useAuth";
 import type { AppView } from "@/types";
 import { viewForPath, isPublicSubpage } from "@/content/flow";
-
-/**
- * `ssr: false` is load-bearing, not an optimisation.
- *
- * A bare `dynamic()` is a lazy boundary: React suspends it during SSR, streams
- * the shell with a <template> placeholder, and delivers the real markup at the
- * end of <body> inside `<div hidden>` for a client script to move into place.
- * That is invisible to anything that doesn't run JS — and because these two sit
- * as SIBLINGS of the landing page, they dragged the ENTIRE page into that hidden
- * div. Google's crawler saw an empty document.
- *
- * Neither of these needs to exist server-side: a login modal only opens on click
- * and the reset view only renders behind a recovery link. Rendering them
- * client-only removes the suspension, so the landing page streams into <main>.
- */
 
 export default function Home() {
   const [currentView, setCurrentView] = useState<AppView>("landing");
@@ -39,7 +23,7 @@ export default function Home() {
       toast.success(COPY.toasts.welcome);
     },
     onSessionChecked: (hasSession) => {
-      // Only set view if not already on a public sub-page (privacy/terms/reset)
+      // Only set view if not already on a public sub-page (privacy/terms)
       if (!isPublicSubpage(currentView)) {
         setCurrentView(hasSession ? "goals" : "landing");
       }

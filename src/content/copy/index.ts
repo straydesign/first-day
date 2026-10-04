@@ -6,9 +6,7 @@
  * Usage:  import { COPY } from "@/content/copy";  …  COPY.day.activitiesLabel
  * Interpolated copy is stored as a small function:  COPY.day.dayTitle(3)
  */
-import { landing } from "./landing";
 import { legal } from "./legal";
-import { resetPassword } from "./resetPassword";
 import { login } from "./login";
 import { goals } from "./goals";
 import { goalCreation } from "./goalCreation";
@@ -24,9 +22,7 @@ import { settings } from "./settings";
 import { toasts, confirms, notFound } from "./common";
 
 export const COPY = {
-  landing,
   legal,
-  resetPassword,
   login,
   goals,
   goalCreation,

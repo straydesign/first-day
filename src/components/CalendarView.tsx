@@ -9,7 +9,6 @@ import { COPY } from "@/content/copy";
 import { FONT } from "@/lib/design";
 import { useState } from "react";
 import { StreakBadge } from "./StreakBadge";
-import { fireCelebration, getRoomView } from "./3d-shell/RoomRegistry";
 import { StreakFreezeIndicator } from "./StreakFreezeIndicator";
 import { motion } from "framer-motion";
 import { staggerContainerSlow, tileEnter, contentReveal } from "@/lib/animations";
@@ -210,10 +209,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, prog
                     )}
                   </div>
                   <button
-                    onClick={() => {
-                      fireCelebration(getRoomView(), 0.65);
-                      onDayClick(buildSelectedDay(nextDay, planData));
-                    }}
+                    onClick={() => onDayClick(buildSelectedDay(nextDay, planData))}
                     className="rounded-full bg-white text-black text-[15px] font-semibold py-3 px-6 inline-flex items-center gap-2 transition-transform hover:scale-[1.01] active:scale-[0.99]"
                     style={{ fontFamily: FONT }}
                   >

@@ -330,8 +330,7 @@ html {
     animation: btnShake 0.4s ease-out forwards;
   }
 
-  /* Panel-assemble: matches wall pulse (1.4s, square ease) so DOM content
-     materializes alongside the IN-room walls instead of hard-cutting. */
+  /* Panel-assemble: sheets materialize (blur + corner-cut clip) instead of hard-cutting. */
   @keyframes panelAssemble {
     0% {
       opacity: 0;
@@ -361,18 +360,12 @@ html {
     }
   }
 
-  .panel-assemble,
-  [data-slot="dialog-content"][data-state="open"],
-  [data-slot="alert-dialog-content"][data-state="open"],
   [data-slot="sheet-content"][data-state="open"] {
     animation: panelAssemble 1.4s cubic-bezier(0.16, 0.84, 0.44, 1) both;
     will-change: opacity, transform, filter, clip-path;
   }
 
-  [data-slot="dialog-content"][data-state="closed"],
-  [data-slot="alert-dialog-content"][data-state="closed"],
-  [data-slot="sheet-content"][data-state="closed"],
-  .panel-assemble[data-state="leaving"] {
+  [data-slot="sheet-content"][data-state="closed"] {
     animation: panelDisassemble 0.5s cubic-bezier(0.7, 0, 0.84, 0) both;
     will-change: opacity, transform, filter, clip-path;
   }
@@ -409,9 +402,6 @@ html {
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .panel-assemble,
-    [data-slot="dialog-content"],
-    [data-slot="alert-dialog-content"],
     [data-slot="sheet-content"] {
       animation: none;
     }
@@ -501,31 +491,6 @@ html {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
-}
-
-/* P3 v226 — env-source TEMPORAL axis opens on DOM substrate. CSS @keyframes is
-   the FIRST structurally-DOM-engine temporal primitive in the system — every
-   prior env-source TEMPORAL cut (cosmos drift v218, lintel breath v219, floor
-   wave v220, audio pitch v221) lived inside a useFrame or RAF loop and wrote
-   to either a 3D property or an audio param. v226 puts the temporal carrier
-   inside the CSS animation engine itself, which runs on the compositor thread
-   independently of the main RAF. @property registers --app-day-breath-pulse so
-   the keyframe interpolates as a number (without registration, browsers swap
-   custom-property values discretely at frame breakpoints). animation-duration
-   is bound to --app-day-warmth via calc() in ActivePanel — slower at night,
-   faster at day, mirroring cosmos drift v218's scale arc. DOM substrate
-   promotes from 2-axis (v222 color + v223 magnitude) to 3-axis env-source
-   consumer, joining cosmos and lights. TEMPORAL axis breadth ticks 4 → 5
-   substrates — first env-source axis to tie color's 5-substrate lead. */
-@property --app-day-breath-pulse {
-  syntax: "<number>";
-  initial-value: 0;
-  inherits: true;
-}
-
-@keyframes app-day-breath {
-  0%, 100% { --app-day-breath-pulse: 0; }
-  50% { --app-day-breath-pulse: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -629,8 +594,6 @@ button:focus-visible {
   transform: scale(1.02);
   filter: brightness(1.1);
 }
-
-/* 3D shell removed — content no longer offsets to a camera anchor. */
 
 /* Reduced motion — disable animations, keep fades */
 @media (prefers-reduced-motion: reduce) {

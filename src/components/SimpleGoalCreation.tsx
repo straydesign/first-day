@@ -18,7 +18,6 @@ import {
   type WizardFieldKey,
   type WizardValues,
 } from '@/content/steps';
-import { fireCelebration, getRoomView } from './3d-shell/RoomRegistry';
 import type { GoalFormData } from '@/types';
 
 
@@ -67,7 +66,6 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
     if (!values.goal.trim()) { setShowValidation(true); return; }
     setIsGenerating(true);
     setError(null);
-    fireCelebration(getRoomView(), 1.2);
     const contextAnswers = {
       why: values.why.trim(),
       experienceLevel: values.experienceLevel,

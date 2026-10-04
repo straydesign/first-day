@@ -17,7 +17,7 @@ deep-linkable page → edit `SCREENS`. To add/reorder a goal-creation question �
 
 | View | Title | Back → | Auth | URL | Copy module |
 |---|---|---|---|---|---|
-| `landing` | _(hero)_ | — | no | `/` | `copy/landing.ts` |
+| `landing` | _(welcome)_ | — | no | `/` | `copy/login.ts` |
 | `goals` | "Your goals" | _(home)_ | yes | — | `copy/goals.ts` |
 | `onboarding` | "Let's Create Your Goal" | `goals` | yes | — | `copy/goalCreation.ts` |
 | `calendar` | _(goal name)_ | `goals` | yes | — | `copy/calendar.ts` |
@@ -25,9 +25,8 @@ deep-linkable page → edit `SCREENS`. To add/reorder a goal-creation question �
 | `congrats` | _(milestone)_ | `calendar` | yes | — | `copy/congrats.ts` |
 | `privacy` | "Privacy Policy" | `landing` | no | `/privacy` | `copy/legal.ts` |
 | `terms` | "Terms of Service" | `landing` | no | `/terms` | `copy/legal.ts` |
-| `reset-password` | "Reset password" | `landing` | no | _(email link)_ | `copy/resetPassword.ts` |
 
-**Modal (not a view):** `login` — Google-only sign-in + demo, surfaced over `landing` (`copy/login.ts`).
+**Signed out:** `landing` renders `WelcomeScreen` — Google / Apple sign-in + demo (`copy/login.ts`).
 
 **Sequences (already data-driven):** onboarding tour (`copy/tour.ts`), loading steps
 (`copy/loading.ts`), celebrations (`copy/congrats.ts`, `copy/planComplete.ts`), beast mode
@@ -37,7 +36,7 @@ deep-linkable page → edit `SCREENS`. To add/reorder a goal-creation question �
 - **Escape / back** → `backTarget(view)` (AuthenticatedApp + TopBar `onBack`).
 - **URL deep-links** → `viewForPath(path)` (page.tsx mount effect) + `next.config.ts` rewrites.
 - **Public-page guard** → `isPublicSubpage(view)` (page.tsx session check).
-- **Titles** → `screenTitle(view)` (TopBars for goals / legal / reset).
+- **Titles** → `screenTitle(view)` (TopBars for goals / legal).
 
 ---
 
@@ -66,11 +65,3 @@ contextAnswers, timestamp }` → `/api/generate-plan`.
 - `COPY.confirms.*` — destructive-action `window.confirm` prompts.
 - `COPY.notFound.*` — the 404 page.
 
----
-
-## Known cleanup (non-blocking)
-- `src/components/PrivacyPolicy.tsx` and `TermsOfService.tsx` are **dead code** — superseded by
-  `LegalPage.tsx` (which renders the tabbed privacy/terms with inline `PrivacyContent` /
-  `TermsContent`). Safe to delete once confirmed.
-- The `3d-shell/*` modules are mounted nowhere but still imported as harmless no-ops by several
-  hooks/components — leave them; removing risks breakage (see project memory).
