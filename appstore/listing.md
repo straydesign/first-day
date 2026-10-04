@@ -1,7 +1,7 @@
 # App Store listing — DRAFT (Tom edits; nothing submitted)
 
-Name (30 max): First Day: Goal Plans
-Subtitle (30 max): A plan for any goal
+Name (30 max): FirstDay.life
+Subtitle (30 max): The rest of your life
 Keywords (100 max): goal,habit,plan,streak,learn,guitar,run,routine,daily,tracker,coach,sprint,challenge,30 day
 Category: Productivity (secondary: Education)
 Support URL: https://firstday.life
