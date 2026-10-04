@@ -10,9 +10,7 @@ const p = await b.newPage({ viewport: { width: 440, height: 956 }, deviceScaleFa
 const shot = async (n) => { await p.waitForTimeout(2500); await p.screenshot({ path: `${out}/${n}.png` }); };
 await p.addInitScript(() => localStorage.setItem("fd_onboarding_tour_v1", "1"));
 await p.goto("http://localhost:4721/", { waitUntil: "networkidle" });
-await shot("01-landing");
-await p.getByRole("button", { name: "Log In" }).first().click();
-await p.waitForTimeout(800);
+await shot("01-welcome");
 await p.getByRole("button", { name: /Try the demo/ }).click();
 await shot("02-goals");
 await p.getByText("Learn to play guitar", { exact: true }).click();
