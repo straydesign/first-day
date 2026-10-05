@@ -162,7 +162,15 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
 
             <div className="px-6 md:px-10 pt-8 space-y-6 md:space-y-8 mb-8">
               {goals.map((goal, goalIndex) => (
-                <motion.div key={goal.id} variants={tileEnter} className="w-full relative">
+                <motion.div
+                  key={goal.id}
+                  variants={tileEnter}
+                  // The whole block opens the goal — label, card and week
+                  // tiles — not just the title card. The title <button> stays
+                  // the keyboard/screen-reader target; this is the tap target.
+                  onClick={() => onSelectGoal(goal.id)}
+                  className="w-full relative cursor-pointer"
+                >
                   {/* Lesson label */}
                   <p className="text-[12px] font-medium uppercase tracking-[0.08em] text-white/40 mb-2 ml-1">
                     {COPY.goals.lessonLabel(getCompletedDayCount(goalProgress[goal.id] ?? {}, goal.totalDays ?? 28), goal.totalDays ?? 28)}
@@ -170,7 +178,7 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
 
                   {/* Goal card */}
                   <button
-                    onClick={() => onSelectGoal(goal.id)}
+                    onClick={(e) => { e.stopPropagation(); onSelectGoal(goal.id); }}
                     className="w-full text-left hover:scale-[1.01] transition-transform"
                   >
                     <Panel contentClassName="px-6 py-8 md:px-10 md:py-10">
