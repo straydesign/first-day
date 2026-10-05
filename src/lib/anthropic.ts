@@ -16,7 +16,8 @@
  *
  * Cost note: every call here spends Anthropic credits on the configured key.
  */
-import { DIRECT_ACTION_RULES, findNonActions } from "./plan-rules";
+import { DIRECT_ACTION_RULES, NO_REPEAT_RULE, findNonActions, findRepeats } from "./plan-rules";
+import { bandGuidance, clampLevel, levelFromExperience, skillBand } from "./skill-level";
 import type { Activity, DayPlan, SprintMeta, GoalFormData } from "@/types";
 import { artifactSpecsFor, coerceArtifact, type ArtifactSpec } from "@/lib/artifacts";
 
@@ -40,6 +41,8 @@ export interface SprintGenContext {
   priorCompletion?: { completed: number; total: number };
   /** Days the user marked too easy / too hard in the sprint they just finished. */
   priorDifficulty?: { easy: number; hard: number };
+  /** The level the sprint just finished was written for. */
+  priorSkillLevel?: number;
 }
 
 export interface SprintGenResult {
@@ -71,16 +74,41 @@ interface RawSprintPayload {
   days?: RawDay[];
 }
 
+/**
+ * The level this sprint is written for: the request's skillLevel, else one
+ * derived from the old three-way experience value (goals saved before the
+ * slider), else undefined and the prompt says nothing about level.
+ */
+export function sprintLevel(input: GoalFormData): number | undefined {
+  return (
+    clampLevel(input.skillLevel) ??
+    levelFromExperience(input.experienceLevel ?? input.contextAnswers?.experienceLevel)
+  );
+}
+
+/** contextAnswers keys the prompt already states in its own words. */
+const STATED_KEYS = new Set(["experienceLevel", "skillLevel"]);
+
 function goalContextLines(input: GoalFormData): string[] {
   const lines: string[] = [`Goal: ${input.goal}`];
   if (input.why) lines.push(`Why it matters: ${input.why}`);
-  if (input.experienceLevel) lines.push(`Experience level: ${input.experienceLevel}`);
+  const level = sprintLevel(input);
+  if (level !== undefined) {
+    lines.push(`Skill level: ${level}/100 (${skillBand(level).name})`);
+    lines.push(`How to build each day at this level: ${bandGuidance(level)}`);
+  }
   if (input.priorExperience) lines.push(`Prior experience: ${input.priorExperience}`);
   if (input.preferredTactics) lines.push(`Preferred tactics: ${input.preferredTactics}`);
   if (input.timeCommitment) lines.push(`Time per day: ${input.timeCommitment}`);
   if (input.contextAnswers) {
+    const stated: Record<string, string | undefined> = {
+      why: input.why,
+      priorExperience: input.priorExperience,
+      preferredTactics: input.preferredTactics,
+    };
     for (const [q, a] of Object.entries(input.contextAnswers)) {
-      if (a) lines.push(`${q}: ${a}`);
+      if (!a || STATED_KEYS.has(q) || (stated[q] && stated[q] === a)) continue;
+      lines.push(`${q}: ${a}`);
     }
   }
   return lines;
@@ -105,19 +133,34 @@ function buildPrompt(input: GoalFormData, sprintNumber: number, ctx: SprintGenCo
   lines.push(`You are designing Sprint ${sprintNumber} of a 4-sprint, 28-day arc.`);
   lines.push(`This sprint's theme: ${thisTheme}`);
   lines.push(`Generate days ${start} through ${end} (7 days).`);
+  const level = sprintLevel(input);
+  if (level !== undefined) {
+    const prior = sprintNumber > 1 ? clampLevel(ctx.priorSkillLevel) : undefined;
+    lines.push(
+      prior !== undefined
+        ? `This week is written for level ${level}. Last week was level ${prior}.`
+        : `This week is written for level ${level}.`,
+    );
+    lines.push(
+      `Day ${end} (the last day) is a small test at level ${level}: one thing they do start to finish to show what they can do now (like "Play the song start to finish" or "Run 2 miles without stopping").`,
+    );
+  }
 
   if (hasFeedback(sprintNumber, ctx)) {
     lines.push("");
     lines.push("Here is how the PREVIOUS sprint actually went — adapt this sprint to it:");
+    const { easy = 0, hard = 0 } = ctx.priorDifficulty ?? {};
     if (ctx.priorCompletion) {
       lines.push(`Days completed: ${ctx.priorCompletion.completed} of ${ctx.priorCompletion.total}.`);
       if (ctx.priorCompletion.completed < ctx.priorCompletion.total) {
         lines.push("They missed some days — ease the load slightly and rebuild momentum before adding difficulty.");
+      } else if (hard > easy) {
+        // Finishing every day doesn't mean a step up when they said it was too hard.
+        lines.push("They completed every day, but found the work hard.");
       } else {
         lines.push("They completed every day — they can handle a step up in challenge.");
       }
     }
-    const { easy = 0, hard = 0 } = ctx.priorDifficulty ?? {};
     if (easy || hard) {
       lines.push(`They marked ${easy} day(s) "too easy" and ${hard} day(s) "too hard".`);
       if (easy > hard) lines.push("Make this sprint noticeably harder: more reps, longer sessions or a harder version of each task.");
@@ -160,6 +203,7 @@ ${sprintsClause}  "days": [                                    // EXACTLY 7 entr
 }
 Rules: 2-3 activities per day sized to the user's daily time budget.
 ${DIRECT_ACTION_RULES}
+${NO_REPEAT_RULE}
 Day numbers MUST be ${start} through ${end} inclusive. Be specific to the goal.
 Do NOT invent book titles, product names, URLs, statistics, or any factual claim you are unsure of.${artifactClause}`;
 }
@@ -228,21 +272,38 @@ export async function generateSprintWithAI(
   const attempt = await ask([first]);
   if (!attempt?.result) return null;
 
-  // Activities must be exact actions. One rewrite if any slipped through; if
-  // the rewrite fails or still has them, keep the better of the two.
-  const bad = findNonActions(attempt.result.days);
-  if (bad.length === 0) return attempt.result;
-  console.warn(`[plan] ${bad.length} non-action activities, asking for a rewrite`);
+  // Activities must be exact actions and must not repeat. One rewrite if any
+  // slipped through; if the rewrite fails or isn't better, keep the first.
+  const issues = planIssues(attempt.result.days);
+  if (issues.count === 0) return attempt.result;
+  console.warn(
+    `[plan] ${issues.nonActions.length} non-action and ${issues.repeats.length} repeated activities, asking for a rewrite`,
+  );
+  const parts: string[] = [];
+  if (issues.nonActions.length) {
+    parts.push(
+      `These activities are not exact actions:\n${issues.nonActions.map((b) => `- ${b}`).join("\n")}\nRewrite them as one exact thing to do each (what, how much, when it's done).`,
+    );
+  }
+  if (issues.repeats.length) {
+    parts.push(
+      `These activities repeat an earlier one word for word:\n${issues.repeats.map((b) => `- ${b}`).join("\n")}\nChange each repeat (count, time, tempo, piece or version) so no two activities match.`,
+    );
+  }
   const retry = await ask([
     first,
     { role: "assistant", content: attempt.text },
-    {
-      role: "user",
-      content: `These activities are not exact actions:\n${bad.map((b) => `- ${b}`).join("\n")}\nRewrite them as one exact thing to do each (what, how much, when it's done). Return the full JSON object again in the same shape.`,
-    },
+    { role: "user", content: `${parts.join("\n\n")}\nReturn the full JSON object again in the same shape.` },
   ]);
-  if (retry?.result && findNonActions(retry.result.days).length < bad.length) return retry.result;
+  if (retry?.result && planIssues(retry.result.days).count < issues.count) return retry.result;
   return attempt.result;
+}
+
+/** Everything the single rewrite pass looks for. */
+export function planIssues(days: Record<number, DayPlan>): { nonActions: string[]; repeats: string[]; count: number } {
+  const nonActions = findNonActions(days);
+  const repeats = findRepeats(days);
+  return { nonActions, repeats, count: nonActions.length + repeats.length };
 }
 
 function extractJson(text: string): RawSprintPayload | null {

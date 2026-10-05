@@ -15,6 +15,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { generateSprintDeterministic } from "@/lib/plan-generator";
 import { generateSprintWithAI, type SprintGenContext } from "@/lib/anthropic";
+import { clampLevel } from "@/lib/skill-level";
 import type { GoalFormData, SprintMeta } from "@/types";
 
 export const runtime = "nodejs";
@@ -35,13 +36,15 @@ export function OPTIONS() {
  */
 const DAILY_AI_LIMIT = Number(process.env.PLAN_DAILY_LIMIT) || 12;
 
-type SprintRequest = GoalFormData & {
+type SprintRequest = Omit<GoalFormData, "skillLevel"> & {
   startDate?: string;
   sprint?: number;
   sprints?: SprintMeta[];
   priorReflections?: string[];
   priorCompletion?: { completed: number; total: number };
   priorDifficulty?: unknown;
+  skillLevel?: unknown;
+  priorSkillLevel?: unknown;
 };
 
 /** Too easy / too hard counts from the client, clamped to a sane range. */
@@ -87,12 +90,16 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "A goal is required" }, { status: 400 });
   }
 
+  // Levels come from the client: clamp to 1-100, drop anything that isn't a number.
+  const input: GoalFormData = { ...body, skillLevel: clampLevel(body.skillLevel) };
+
   const sprintNumber = Number.isInteger(body.sprint) && body.sprint! >= 1 && body.sprint! <= 4 ? body.sprint! : 1;
   const ctx: SprintGenContext = {
     sprints: body.sprints,
     priorReflections: body.priorReflections,
     priorCompletion: body.priorCompletion,
     priorDifficulty: readDifficulty(body.priorDifficulty),
+    priorSkillLevel: clampLevel(body.priorSkillLevel),
   };
 
   // AI path first (only fires if ANTHROPIC_API_KEY is set); deterministic fallback.
@@ -115,7 +122,7 @@ export async function POST(req: Request) {
 
     if (used < DAILY_AI_LIMIT) {
       try {
-        const ai = await generateSprintWithAI(body, sprintNumber, ctx);
+        const ai = await generateSprintWithAI(input, sprintNumber, ctx);
         if (ai) {
           // Logged only on success — a failed model call shouldn't cost the user a slot.
           await asUser
@@ -129,6 +136,6 @@ export async function POST(req: Request) {
     }
   }
 
-  const sprint = generateSprintDeterministic(body, sprintNumber);
+  const sprint = generateSprintDeterministic(input, sprintNumber);
   return NextResponse.json(sprint);
 }

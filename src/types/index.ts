@@ -143,6 +143,11 @@ export interface Plan {
    *  Sprint N covers days (N-1)*7+1 through N*7. Older fixtures without this
    *  field are treated as fully generated (= 4). */
   sprintsGenerated?: number;
+  /** The skill level (1-100) the user set before the plan was made. */
+  skillLevel?: number;
+  /** The level each generated sprint was written for, index 0 = sprint 1.
+   *  Rises across the arc; Too easy / Too hard marks nudge it (see skill-level.ts). */
+  levelBySprint?: number[];
   /** Owner identity for shared/published rooms. Optional — never required at load. */
   ownerUserId?: string;
 }
@@ -242,7 +247,10 @@ export interface ReactionTile {
 export interface GoalFormData {
   goal: string;
   why?: string;
+  /** Derived from skillLevel's band; kept so older readers still work. */
   experienceLevel?: "beginner" | "intermediate" | "advanced";
+  /** 1-100. For a sprint request, the level THIS sprint is written for. */
+  skillLevel?: number;
   priorExperience?: string;
   preferredTactics?: string;
   contextAnswers?: Record<string, string>;
