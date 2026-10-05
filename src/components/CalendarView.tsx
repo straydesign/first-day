@@ -88,6 +88,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, prog
     return `${prefix}${sets.generic[sprintNumber - 1] ?? COPY.calendar.sprintTitleFallback}`;
   };
   const getSprintTheme = (sprintNumber: number): string | undefined => planSprints?.[sprintNumber - 1]?.theme;
+  const getSprintLevel = (sprintNumber: number): number | undefined => planData?.levelBySprint?.[sprintNumber - 1];
 
   const weeks: WeekData[] = [];
   for (let i = 0; i < totalDays; i += 7) {
@@ -260,6 +261,7 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, prog
               const sprintNumber = week.weekNumber;
               const isLocked = sprintNumber > sprintsGenerated;
               const theme = getSprintTheme(sprintNumber);
+              const level = isLocked ? undefined : getSprintLevel(sprintNumber);
               return (
                 <motion.div
                   key={week.weekNumber}
@@ -275,6 +277,14 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, prog
                     </h3>
                     {theme && (
                       <p className="text-[13px] text-white/45 max-w-2xl leading-snug">{theme}</p>
+                    )}
+                    {level !== undefined && (
+                      <p
+                        data-testid={`sprint-level-${sprintNumber}`}
+                        className="text-[12px] font-medium text-white/55 tabular-nums"
+                      >
+                        {COPY.calendar.sprintLevel(level)}
+                      </p>
                     )}
                   </div>
                   {isLocked ? (

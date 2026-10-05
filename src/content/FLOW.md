@@ -46,7 +46,7 @@ deep-linkable page → edit `SCREENS`. To add/reorder a goal-creation question �
 |---|---|---|---|---|
 | 1 | `goal` | textarea | primary | ✓ |
 | 2 | `why` | textarea | context | |
-| 3 | `experienceLevel` | choice (beginner / intermediate / advanced) | context | |
+| 3 | `skillLevel` | slider 1–100, live "34 · Beginner" label + one example line per band | context | |
 | 4 | `priorExperience` | text | optional | |
 | 5 | `preferredTactics` | text | optional | |
 
@@ -55,8 +55,8 @@ modal, and the Generate / Cancel CTAs. `optional` fields render inside the "Tell
 collapsible and are mapped from config — add another optional question by appending to
 `WIZARD_FIELDS`.
 
-Submitting builds `GoalFormData { goal, why, experienceLevel, priorExperience, preferredTactics,
-contextAnswers, timestamp }` → `/api/generate-plan`.
+Submitting builds `GoalFormData { goal, why, skillLevel, experienceLevel (derived from the band),
+priorExperience, preferredTactics, contextAnswers, timestamp }` → `/api/generate-plan`.
 
 ---
 

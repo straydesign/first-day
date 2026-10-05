@@ -14,13 +14,17 @@ export const goalCreation = {
   whyLabel: "Why do you want to achieve this?",
   whyPlaceholder: "Tell us what motivates you...",
 
-  // Experience level
-  experienceLabel: "What's your experience level?",
-  experienceOptions: [
-    { value: "beginner", label: "Beginner", desc: "Just starting" },
-    { value: "intermediate", label: "Intermediate", desc: "Some experience" },
-    { value: "advanced", label: "Advanced", desc: "Experienced" },
-  ],
+  // Skill level slider (1-100). One example line per band.
+  skillLabel: "How good are you at it now?",
+  skillExamples: {
+    starting: "Never tried it",
+    beginner: "Tried it a few times",
+    intermediate: "I do it now and then",
+    advanced: "I do it a lot",
+    expert: "I could teach it",
+  },
+  skillLow: "New",
+  skillHigh: "Pro",
 
   // Optional fields
   optionalToggle: "Tell us more (optional)",

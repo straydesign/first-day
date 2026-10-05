@@ -12,21 +12,16 @@
  * primary field) or into contextAnswers (everything else).
  */
 import { COPY } from "@/content/copy";
+import { DEFAULT_SKILL_LEVEL, clampLevel, levelFromExperience } from "@/lib/skill-level";
 
-export type WizardFieldType = "textarea" | "text" | "choice";
+export type WizardFieldType = "textarea" | "text" | "slider";
 export type WizardSection = "primary" | "context" | "optional";
 export type WizardFieldKey =
   | "goal"
   | "why"
-  | "experienceLevel"
+  | "skillLevel"
   | "priorExperience"
   | "preferredTactics";
-
-export interface WizardChoice {
-  readonly value: string;
-  readonly label: string;
-  readonly desc?: string;
-}
 
 export interface WizardField {
   readonly key: WizardFieldKey;
@@ -34,7 +29,6 @@ export interface WizardField {
   readonly section: WizardSection;
   readonly label: string;
   readonly placeholder?: string;
-  readonly choices?: readonly WizardChoice[];
   readonly required?: boolean;
   readonly autoFocus?: boolean;
 }
@@ -57,11 +51,11 @@ export const WIZARD_FIELDS: readonly WizardField[] = [
     placeholder: COPY.goalCreation.whyPlaceholder,
   },
   {
-    key: "experienceLevel",
-    type: "choice",
+    // 1-100; the old three-way experienceLevel is derived from its band on submit.
+    key: "skillLevel",
+    type: "slider",
     section: "context",
-    label: COPY.goalCreation.experienceLabel,
-    choices: COPY.goalCreation.experienceOptions,
+    label: COPY.goalCreation.skillLabel,
   },
   {
     key: "priorExperience",
@@ -101,7 +95,9 @@ export function initialWizardValues(
   return {
     goal: initial?.goal ?? "",
     why: ctx.why ?? "",
-    experienceLevel: ctx.experienceLevel ?? "beginner",
+    skillLevel: String(
+      clampLevel(ctx.skillLevel) ?? levelFromExperience(ctx.experienceLevel) ?? DEFAULT_SKILL_LEVEL,
+    ),
     priorExperience: ctx.priorExperience ?? "",
     preferredTactics: ctx.preferredTactics ?? "",
   };

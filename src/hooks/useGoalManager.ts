@@ -6,6 +6,59 @@ import { getPlanTotalDays } from "@/lib/engagement";
 import type { Plan, ProgressMap, SelectedDay, GoalFormData } from "@/types";
 import { COPY } from "@/content/copy";
 import type { Difficulty } from "@/types";
+import { clampLevel, levelFromExperience, nextLevel } from "@/lib/skill-level";
+
+/** The starting level a goal form asks for (slider first, old three-way value second). */
+function startingLevel(data: GoalFormData): number | undefined {
+  return (
+    clampLevel(data.skillLevel) ??
+    clampLevel(data.contextAnswers?.skillLevel) ??
+    levelFromExperience(data.experienceLevel ?? data.contextAnswers?.experienceLevel)
+  );
+}
+
+/** Too easy / too hard counts, completion and reflections for one sprint. */
+function summarizeSprint(progress: ProgressMap, sprintNumber: number) {
+  const lo = (sprintNumber - 1) * 7 + 1;
+  const hi = sprintNumber * 7;
+  const reflections: string[] = [];
+  let completed = 0;
+  let easy = 0;
+  let hard = 0;
+  for (let n = lo; n <= hi; n++) {
+    const dp = progress[n];
+    if (!dp) continue;
+    const fb = (dp.feedback ?? dp.reflection ?? "").toString().trim();
+    if (fb) reflections.push(fb);
+    if (dp.difficulty === "easy") easy++;
+    if (dp.difficulty === "hard") hard++;
+    const c = dp.completed;
+    if (c === true || (c && typeof c === "object" && Object.values(c).length > 0 && Object.values(c).every(Boolean))) {
+      completed++;
+    }
+  }
+  return { reflections, completed, total: hi - lo + 1, difficulty: { easy, hard } };
+}
+
+/**
+ * The level for the sprint after `priorSprintNumber`, plus the plan's
+ * levelBySprint with it appended. Old plans with no recorded levels get a level
+ * for the model but no backfilled history (they weren't written for one).
+ */
+function levelsForNextSprint(
+  plan: Plan,
+  priorSprintNumber: number,
+  marks: { easy: number; hard: number },
+  fallbackStart: number | undefined,
+): { prior?: number; next?: number; levelBySprint?: number[] } {
+  const recorded = plan.levelBySprint ?? [];
+  const prior = recorded[priorSprintNumber - 1] ?? (priorSprintNumber === 1 ? plan.skillLevel : undefined) ?? fallbackStart;
+  if (prior === undefined) return { levelBySprint: plan.levelBySprint };
+  const next = nextLevel(prior, marks);
+  const levelBySprint =
+    recorded.length === priorSprintNumber ? [...recorded, next] : plan.levelBySprint;
+  return { prior, next, levelBySprint };
+}
 
 interface GoalDisplayData {
   goal: string;
@@ -143,7 +196,8 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
 
       // Generate ONLY sprint 1 + the 4-sprint arc. Later sprints are generated
       // forward (with feedback) when the user finishes each one.
-      const result = await api.plan.generateSprint({ ...data, startDate: localStartDate, sprint: 1 });
+      const level = startingLevel(data);
+      const result = await api.plan.generateSprint({ ...data, skillLevel: level, startDate: localStartDate, sprint: 1 });
       const plan: Plan = {
         cleanedGoal: result.cleanedGoal ?? data.goal,
         startDate: localStartDate,
@@ -151,6 +205,7 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
         days: result.days,
         sprints: result.sprints ?? [],
         sprintsGenerated: 1,
+        ...(level !== undefined ? { skillLevel: level, levelBySprint: [level] } : {}),
       };
       setPlanData(plan);
 
@@ -208,6 +263,8 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
             days: fresh.detail.plan.days, // sprint 1 only — later sprints regen on completion
             sprints: fresh.detail.plan.sprints,
             sprintsGenerated: fresh.detail.plan.sprintsGenerated ?? 1,
+            skillLevel: fresh.detail.plan.skillLevel,
+            levelBySprint: fresh.detail.plan.levelBySprint,
           },
         };
         const listIdx = DEMO_GOALS_LIST.findIndex(g => g.id === existingId);
@@ -351,6 +408,7 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
           timeSlot: fullGoalData.timeSlot,
           availableDays: fullGoalData.availableDays,
           wantsWeeklyBooks: fullGoalData.wantsWeeklyBooks,
+          skillLevel: fullGoalData.plan?.skillLevel,
         },
         currentGoalId
       );
@@ -403,8 +461,11 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
     }
     const titleFor = (plan: Plan) => plan.sprints?.[nextSprintNumber - 1]?.title ?? `Sprint ${nextSprintNumber}`;
 
+    const summary = summarizeSprint(progress, priorSprintNumber);
+
     if (demoMode) {
-      const updated = generateNextSprintDemo(currentGoalId, nextSprintNumber);
+      const levels = levelsForNextSprint(planData, priorSprintNumber, summary.difficulty, undefined);
+      const updated = generateNextSprintDemo(currentGoalId, nextSprintNumber, levels.levelBySprint);
       if (!updated) return { ok: false, adapted: false, nextTitle: "" };
       setPlanData(updated);
       return { ok: true, adapted: false, nextTitle: titleFor(updated) };
@@ -415,23 +476,13 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
       // completion come from LOCAL progress (the day we just completed is saved
       // fire-and-forget, so a re-fetch could miss it).
       const full = await api.goals.get(currentGoalId);
-      const lo = (priorSprintNumber - 1) * 7 + 1;
-      const hi = priorSprintNumber * 7;
-      const reflections: string[] = [];
-      let completed = 0;
-      const difficulty = { easy: 0, hard: 0 };
-      for (let n = lo; n <= hi; n++) {
-        const dp = progress[n];
-        if (!dp) continue;
-        const fb = (dp.feedback ?? dp.reflection ?? "").toString().trim();
-        if (fb) reflections.push(fb);
-        if (dp.difficulty === "easy") difficulty.easy++;
-        if (dp.difficulty === "hard") difficulty.hard++;
-        const c = dp.completed;
-        if (c === true || (c && typeof c === "object" && Object.values(c).length > 0 && Object.values(c).every(Boolean))) {
-          completed++;
-        }
-      }
+      const { reflections, completed, total, difficulty } = summary;
+      const levels = levelsForNextSprint(
+        planData,
+        priorSprintNumber,
+        difficulty,
+        startingLevel({ goal: full.goal, contextAnswers: full.contextAnswers }),
+      );
 
       const result = await api.plan.generateSprint({
         goal: full.goal,
@@ -443,8 +494,10 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
         sprint: nextSprintNumber,
         sprints: planData.sprints,
         priorReflections: reflections,
-        priorCompletion: { completed, total: hi - lo + 1 },
+        priorCompletion: { completed, total },
         priorDifficulty: difficulty,
+        skillLevel: levels.next,
+        priorSkillLevel: levels.prior,
       });
 
       const mergedPlan: Plan = {
@@ -452,6 +505,7 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
         days: { ...planData.days, ...result.days },
         sprints: result.sprints ?? planData.sprints,
         sprintsGenerated: Math.max(planData.sprintsGenerated ?? 1, nextSprintNumber),
+        ...(levels.levelBySprint ? { levelBySprint: levels.levelBySprint } : {}),
       };
       setPlanData(mergedPlan);
       await api.goals.savePlan(currentGoalId, mergedPlan);

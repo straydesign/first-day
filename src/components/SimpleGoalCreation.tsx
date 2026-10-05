@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
-import { Loader2, AlertCircle, ChevronDown, ChevronUp, Check } from 'lucide-react';
+import { Loader2, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { BackButton } from '@/components/ui/back-button';
 import { GOAL_SUGGESTIONS_ROW_1, GOAL_SUGGESTIONS_ROW_2, GOAL_SUGGESTIONS_ROW_3, GOAL_TEMPLATES, type GoalTemplate } from '@/constants';
 import { SCROLL_SPEEDS } from '@/tokens';
@@ -19,6 +19,15 @@ import {
   type WizardValues,
 } from '@/content/steps';
 import type { GoalFormData } from '@/types';
+import {
+  DEFAULT_SKILL_LEVEL,
+  SKILL_MAX,
+  SKILL_MIN,
+  clampLevel,
+  experienceFromLevel,
+  levelLabel,
+  skillBand,
+} from '@/lib/skill-level';
 
 
 interface SimpleGoalCreationProps {
@@ -51,13 +60,14 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
   const handleSuggestionClick = (suggestion: string) => { setValue('goal', suggestion); setError(null); };
 
   const handleTemplateClick = (template: GoalTemplate) => {
-    setValues({
+    // A template fills in the goal, not the person: the slider keeps its value.
+    setValues((prev) => ({
+      ...prev,
       goal: template.goal,
       why: template.why,
-      experienceLevel: template.experienceLevel,
       priorExperience: template.priorExperience,
       preferredTactics: template.preferredTactics,
-    });
+    }));
     setShowOptional(true);
     setError(null);
   };
@@ -66,9 +76,12 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
     if (!values.goal.trim()) { setShowValidation(true); return; }
     setIsGenerating(true);
     setError(null);
+    const skillLevel = clampLevel(values.skillLevel) ?? DEFAULT_SKILL_LEVEL;
+    const experienceLevel = experienceFromLevel(skillLevel);
     const contextAnswers = {
       why: values.why.trim(),
-      experienceLevel: values.experienceLevel,
+      skillLevel: String(skillLevel),
+      experienceLevel,
       priorExperience: values.priorExperience.trim(),
       preferredTactics: values.preferredTactics.trim(),
     };
@@ -76,7 +89,8 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
       await onComplete({
         goal: values.goal.trim(),
         why: values.why.trim(),
-        experienceLevel: values.experienceLevel as 'beginner' | 'intermediate' | 'advanced',
+        skillLevel,
+        experienceLevel,
         priorExperience: values.priorExperience.trim(),
         preferredTactics: values.preferredTactics.trim(),
         contextAnswers,
@@ -123,44 +137,53 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
     );
   };
 
-  const renderChoiceField = (field: WizardField) => (
-    <>
-      <label id={`${field.key}-label`} className="block text-[14px] font-medium text-white/55 mb-2 md:mb-3">
-        {field.label}
-      </label>
-      <div className="flex flex-col gap-2" role="radiogroup" aria-labelledby={`${field.key}-label`}>
-        {(field.choices ?? []).map((choice) => {
-          const isSelected = values[field.key] === choice.value;
-          return (
-            <Panel
-              key={choice.value}
-              solid={isSelected}
-              className={`cursor-pointer transition-all ${isSelected ? 'scale-[1.01]' : 'opacity-70 hover:opacity-100'}`}
-              contentClassName="px-4 py-3"
-            >
-              <button
-                onClick={() => setValue(field.key, choice.value)}
-                disabled={isGenerating}
-                role="radio"
-                aria-checked={isSelected}
-                className="w-full text-left flex items-center gap-3"
-              >
-                <div className={`w-6 h-6 rounded-full border flex items-center justify-center shrink-0 transition-all ${isSelected ? 'bg-black border-black' : 'bg-transparent border-white/25'}`}>
-                  {isSelected && <Check className="w-4 h-4 text-white" strokeWidth={2.5} />}
-                </div>
-                <div>
-                  <div className={`text-[15px] font-semibold tracking-[-0.01em] ${isSelected ? 'text-black' : 'text-white'}`} style={{ fontFamily: FONT }}>
-                    {choice.label}
-                  </div>
-                  <div className={`text-[13px] ${isSelected ? 'text-black/60' : 'text-white/45'}`}>{choice.desc}</div>
-                </div>
-              </button>
-            </Panel>
-          );
-        })}
+  const renderSliderField = (field: WizardField) => {
+    const level = clampLevel(values[field.key]) ?? DEFAULT_SKILL_LEVEL;
+    const band = skillBand(level);
+    const pct = ((level - SKILL_MIN) / (SKILL_MAX - SKILL_MIN)) * 100;
+    return (
+      <div className="bg-white/5 border border-white/10 rounded-xl px-5 py-4 focus-within:border-white/30 transition-colors">
+        <div className="flex items-baseline justify-between gap-3 mb-1">
+          <label htmlFor={`${field.key}-input`} className="text-[14px] font-medium text-white/55">
+            {field.label}
+          </label>
+          <span
+            data-testid="skill-level-label"
+            className="shrink-0 text-[15px] font-semibold tabular-nums text-white"
+            style={{ fontFamily: FONT }}
+            aria-hidden
+          >
+            {levelLabel(level)}
+          </span>
+        </div>
+        <p data-testid="skill-level-example" className="text-[13px] text-white/45 mb-3">
+          {COPY.goalCreation.skillExamples[band.id]}
+        </p>
+        <input
+          id={`${field.key}-input`}
+          type="range"
+          min={SKILL_MIN}
+          max={SKILL_MAX}
+          step={1}
+          value={level}
+          onChange={(e) => setValue(field.key, e.target.value)}
+          disabled={isGenerating}
+          aria-valuetext={`${level}, ${band.name}`}
+          className="block w-full h-11 cursor-pointer appearance-none bg-transparent disabled:opacity-50
+            [&::-webkit-slider-runnable-track]:h-1.5 [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:bg-[image:var(--track)]
+            [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:-mt-[9px] [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:shadow-[0_1px_4px_rgba(0,0,0,0.5)]
+            [&::-moz-range-track]:h-1.5 [&::-moz-range-track]:rounded-full [&::-moz-range-track]:bg-[image:var(--track)]
+            [&::-moz-range-thumb]:h-6 [&::-moz-range-thumb]:w-6 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-white
+            focus-visible:outline-none focus-visible:[&::-webkit-slider-thumb]:ring-2 focus-visible:[&::-webkit-slider-thumb]:ring-white/60"
+          style={{ ['--track' as string]: `linear-gradient(to right, rgba(255,255,255,0.9) ${pct}%, rgba(255,255,255,0.15) ${pct}%)` }}
+        />
+        <div className="flex justify-between text-[12px] text-white/40" aria-hidden>
+          <span>{COPY.goalCreation.skillLow}</span>
+          <span>{COPY.goalCreation.skillHigh}</span>
+        </div>
       </div>
-    </>
-  );
+    );
+  };
 
   const renderScrollRow = (goals: string[], direction: 'left' | 'right', rowIndex: number) => (
     <div className="overflow-hidden select-none">
@@ -295,9 +318,9 @@ export function SimpleGoalCreation({ onComplete, onCancel, initialData }: Simple
                 {renderTextField(wizardField('why'))}
               </div>
 
-              {/* Experience level */}
+              {/* Skill level slider */}
               <div className="mb-4 md:mb-8">
-                {renderChoiceField(wizardField('experienceLevel'))}
+                {renderSliderField(wizardField('skillLevel'))}
               </div>
 
               {/* Optional fields — mapped from config */}

@@ -29,6 +29,9 @@ export const calendar = {
   sprintReading: (weekNumber: number) => `Sprint ${weekNumber} Reading`,
   bookByAuthor: (author: string) => `by ${author}`,
 
+  // Level the sprint was written for (skill-level.ts)
+  sprintLevel: (level: number) => `Written for level ${level}`,
+
   // Locked sprint
   lockedSprintLabel: (sprintNumber: number) =>
     `Generates after Sprint ${sprintNumber - 1}`,

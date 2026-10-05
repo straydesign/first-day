@@ -1,3 +1,4 @@
+import { clampLevel } from "@/lib/skill-level";
 import type { Plan, ProgressMap, EngagementState, Achievement, GoalFormData, SprintMeta, DayPlan, RiffNote } from "@/types";
 
 // --- Helpers ---
@@ -1305,6 +1306,7 @@ export function buildDemoGoalDetail(formData: GoalFormData): { goalId: string; d
   const goalId = `demo-${Date.now().toString(36)}`;
 
   const days = materializeDays(cleanedGoal, 1, 7);
+  const level = clampLevel(formData.skillLevel);
 
   const plan: Plan = {
     cleanedGoal,
@@ -1312,6 +1314,7 @@ export function buildDemoGoalDetail(formData: GoalFormData): { goalId: string; d
     days,
     sprints: buildSprintMeta(),
     sprintsGenerated: 1,
+    ...(level !== undefined ? { skillLevel: level, levelBySprint: [level] } : {}),
   };
 
   return {
@@ -1337,7 +1340,7 @@ export function buildDemoGoalDetail(formData: GoalFormData): { goalId: string; d
 /** Mutate the demo plan in place to add the next sprint's days. Returns the
  *  updated Plan reference. No-op if the requested sprint is already generated
  *  or out of range. */
-export function generateNextSprint(goalId: string, sprintNumber: number): Plan | null {
+export function generateNextSprint(goalId: string, sprintNumber: number, levelBySprint?: number[]): Plan | null {
   const detail = DEMO_GOAL_DETAILS[goalId];
   if (!detail) return null;
   if (sprintNumber < 1 || sprintNumber > 4) return null;
@@ -1353,6 +1356,7 @@ export function generateNextSprint(goalId: string, sprintNumber: number): Plan |
     ...detail.plan,
     days: newDays,
     sprintsGenerated: sprintNumber,
+    ...(levelBySprint ? { levelBySprint } : {}),
   };
   detail.plan = updatedPlan;
   return updatedPlan;
