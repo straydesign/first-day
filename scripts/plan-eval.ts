@@ -25,7 +25,7 @@ const ROOT = process.cwd();
 const JSON_OUT = path.join(ROOT, "appstore/plan-eval.json");
 const HTML_OUT = path.join(ROOT, "appstore/plan-eval.html");
 /** Total model calls allowed across every run that shares plan-eval.json. */
-const MAX_CALLS = 30;
+const MAX_CALLS = 42; // 30 first run + 12 for the level-90 re-test (Tom OK 10-05)
 let callCap = MAX_CALLS;
 /** Sonnet-class list price, $ per million tokens (input, output). */
 const PRICE = { input: 2, output: 10 };

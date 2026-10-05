@@ -96,6 +96,8 @@ function goalContextLines(input: GoalFormData): string[] {
   if (level !== undefined) {
     lines.push(`Skill level: ${level}/100 (${skillBand(level).name})`);
     lines.push(`How to build each day at this level: ${bandGuidance(level)}`);
+    // Tom 10-05: level-90 plans opened with basic chords and shopping lists.
+    lines.push(`Day 1 already works AT level ${level}, never below it. No setup, shopping, list-making or basics the user at this level already knows.`);
   }
   if (input.priorExperience) lines.push(`Prior experience: ${input.priorExperience}`);
   if (input.preferredTactics) lines.push(`Preferred tactics: ${input.preferredTactics}`);

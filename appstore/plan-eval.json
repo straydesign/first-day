@@ -1,9 +1,9 @@
 {
   "meta": {
-    "calls": 30,
-    "cost": 1.1451259999999999,
+    "calls": 37,
+    "cost": 1.4378099999999998,
     "model": "claude-sonnet-5",
-    "ranAt": "2026-10-05T12:17:29.260Z"
+    "ranAt": "2026-10-05T12:51:31.155Z"
   },
   "results": [
     {
@@ -1196,65 +1196,186 @@
       "calls": 1,
       "days": {
         "1": {
-          "title": "Day 1: Technical Benchmark",
+          "title": "Day 1: Advanced Voicings Refresh",
           "activities": [
             {
-              "text": "Play this G-C-D progression, four beats per chord, two full passes at 80 bpm",
+              "text": "Play this Cmaj7-Am7-Dm7-G7 progression using full jazz voicings, four beats per chord, three times through at 80 bpm",
               "artifact": {
                 "kind": "guitar-riff",
                 "data": {
-                  "name": "G-C-D Benchmark Progression",
+                  "name": "Cmaj7-Am7-Dm7-G7 Turnaround",
                   "steps": [
                     {
-                      "chord": "G"
+                      "chord": "Cmaj7"
                     },
                     {
-                      "chord": "G"
+                      "chord": "Cmaj7"
                     },
                     {
-                      "chord": "G"
+                      "chord": "Cmaj7"
                     },
                     {
-                      "chord": "G"
+                      "chord": "Cmaj7"
                     },
                     {
-                      "chord": "C"
+                      "chord": "Am7"
                     },
                     {
-                      "chord": "C"
+                      "chord": "Am7"
                     },
                     {
-                      "chord": "C"
+                      "chord": "Am7"
                     },
                     {
-                      "chord": "C"
+                      "chord": "Am7"
                     },
                     {
-                      "chord": "D"
+                      "chord": "Dm7"
                     },
                     {
-                      "chord": "D"
+                      "chord": "Dm7"
                     },
                     {
-                      "chord": "D"
+                      "chord": "Dm7"
                     },
                     {
-                      "chord": "D"
+                      "chord": "Dm7"
+                    },
+                    {
+                      "chord": "G7"
+                    },
+                    {
+                      "chord": "G7"
+                    },
+                    {
+                      "chord": "G7"
+                    },
+                    {
+                      "chord": "G7"
                     }
                   ],
                   "chords": [
                     {
-                      "name": "G",
+                      "name": "Cmaj7",
+                      "frets": [
+                        -1,
+                        3,
+                        2,
+                        0,
+                        0,
+                        0
+                      ],
+                      "hint": "lift one finger off the C shape"
+                    },
+                    {
+                      "name": "Am7",
+                      "frets": [
+                        -1,
+                        0,
+                        2,
+                        0,
+                        1,
+                        0
+                      ],
+                      "hint": "two fingers, let the open strings ring"
+                    },
+                    {
+                      "name": "Dm7",
+                      "frets": [
+                        -1,
+                        -1,
+                        0,
+                        2,
+                        1,
+                        1
+                      ],
+                      "hint": "flatten your first finger across two strings"
+                    },
+                    {
+                      "name": "G7",
                       "frets": [
                         3,
                         2,
                         0,
                         0,
                         0,
-                        3
+                        1
                       ],
-                      "hint": "three fingers, let open strings ring"
+                      "hint": "classic blues G7 shape"
+                    }
+                  ],
+                  "difficulty": 4,
+                  "key": "C major",
+                  "bpm": 80,
+                  "teaches": "advanced chord voicings"
+                }
+              }
+            },
+            "Play the G7alt scale run ascending from the 3rd fret of the low E string to the 10th fret of the high e string and back down, 70 bpm, 5 reps",
+            "Record a 30-second clip of today's progression and send it to one friend for feedback"
+          ],
+          "tip": "Your hands already know the shapes — today is about making them sing with intention."
+        },
+        "2": {
+          "title": "Day 2: Travis Picking Precision",
+          "activities": [
+            {
+              "text": "Play this C-G-Am-F progression with a steady alternating thumb bass, four beats per chord, twice through at 85 bpm",
+              "artifact": {
+                "kind": "guitar-riff",
+                "data": {
+                  "name": "Travis Picking Loop",
+                  "steps": [
+                    {
+                      "chord": "C"
                     },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "F"
+                    },
+                    {
+                      "chord": "F"
+                    },
+                    {
+                      "chord": "F"
+                    },
+                    {
+                      "chord": "F"
+                    }
+                  ],
+                  "chords": [
                     {
                       "name": "C",
                       "frets": [
@@ -1265,193 +1386,7 @@
                         1,
                         0
                       ],
-                      "hint": "classic open shape"
-                    },
-                    {
-                      "name": "D",
-                      "frets": [
-                        -1,
-                        -1,
-                        0,
-                        2,
-                        3,
-                        2
-                      ],
-                      "hint": "triangle shape on top three strings"
-                    }
-                  ],
-                  "difficulty": 3,
-                  "key": "G major",
-                  "bpm": 80,
-                  "teaches": "clean chord changes at tempo"
-                }
-              }
-            },
-            "Record a 60-second video of your current playing on your phone, unedited, for later comparison",
-            "Set a metronome at 120 bpm and alternate-pick the low E string for 1 minute straight, counting any missed hits"
-          ],
-          "tip": "You already have the muscle memory — today is just mapping where it stands."
-        },
-        "2": {
-          "title": "Day 2: Picking Precision",
-          "activities": [
-            {
-              "text": "Play this A minor pentatonic climb slowly at 100 bpm, clean hammer-ons throughout",
-              "artifact": {
-                "kind": "guitar-riff",
-                "data": {
-                  "name": "A Minor Pentatonic Climb",
-                  "steps": [
-                    {
-                      "string": 6,
-                      "fret": 5
-                    },
-                    {
-                      "string": 6,
-                      "fret": 8,
-                      "technique": "h"
-                    },
-                    {
-                      "string": 5,
-                      "fret": 5
-                    },
-                    {
-                      "string": 5,
-                      "fret": 8,
-                      "technique": "h"
-                    },
-                    {
-                      "string": 4,
-                      "fret": 5
-                    },
-                    {
-                      "string": 4,
-                      "fret": 7,
-                      "technique": "h"
-                    },
-                    {
-                      "string": 3,
-                      "fret": 5
-                    },
-                    {
-                      "string": 3,
-                      "fret": 7,
-                      "technique": "h"
-                    },
-                    {
-                      "string": 2,
-                      "fret": 5
-                    },
-                    {
-                      "string": 2,
-                      "fret": 8,
-                      "technique": "h"
-                    },
-                    {
-                      "string": 1,
-                      "fret": 5
-                    },
-                    {
-                      "string": 1,
-                      "fret": 8,
-                      "technique": "h"
-                    }
-                  ],
-                  "difficulty": 4,
-                  "key": "A minor",
-                  "bpm": 100,
-                  "teaches": "hammer-ons across all six strings"
-                }
-              }
-            },
-            "Repeat the same climb at 112 bpm, three clean reps with no buzzed notes",
-            "Record a video of the 112 bpm pass and watch it back once for tension in your picking hand"
-          ],
-          "tip": "Speed without clean hammer-ons is just noise — precision first, always."
-        },
-        "3": {
-          "title": "Day 3: Barre Chord Polish",
-          "activities": [
-            {
-              "text": "Play this F-Bm-G-D progression five times without buzzing, four beats per chord",
-              "artifact": {
-                "kind": "guitar-riff",
-                "data": {
-                  "name": "F-Bm-G-D Barre Polish",
-                  "steps": [
-                    {
-                      "chord": "F"
-                    },
-                    {
-                      "chord": "F"
-                    },
-                    {
-                      "chord": "F"
-                    },
-                    {
-                      "chord": "F"
-                    },
-                    {
-                      "chord": "Bm"
-                    },
-                    {
-                      "chord": "Bm"
-                    },
-                    {
-                      "chord": "Bm"
-                    },
-                    {
-                      "chord": "Bm"
-                    },
-                    {
-                      "chord": "G"
-                    },
-                    {
-                      "chord": "G"
-                    },
-                    {
-                      "chord": "G"
-                    },
-                    {
-                      "chord": "G"
-                    },
-                    {
-                      "chord": "D"
-                    },
-                    {
-                      "chord": "D"
-                    },
-                    {
-                      "chord": "D"
-                    },
-                    {
-                      "chord": "D"
-                    }
-                  ],
-                  "chords": [
-                    {
-                      "name": "F",
-                      "frets": [
-                        1,
-                        3,
-                        3,
-                        2,
-                        1,
-                        1
-                      ],
-                      "hint": "full first-fret barre"
-                    },
-                    {
-                      "name": "Bm",
-                      "frets": [
-                        -1,
-                        2,
-                        4,
-                        4,
-                        3,
-                        2
-                      ],
-                      "hint": "second-fret barre, A-shape"
+                      "hint": "standard open C"
                     },
                     {
                       "name": "G",
@@ -1463,98 +1398,7 @@
                         0,
                         3
                       ],
-                      "hint": "three fingers, let open strings ring"
-                    },
-                    {
-                      "name": "D",
-                      "frets": [
-                        -1,
-                        -1,
-                        0,
-                        2,
-                        3,
-                        2
-                      ],
-                      "hint": "triangle shape on top three strings"
-                    }
-                  ],
-                  "difficulty": 4,
-                  "key": "G major",
-                  "bpm": 90,
-                  "teaches": "barre chord finger pressure"
-                }
-              }
-            },
-            "Mute and restrike the F chord 10 times in a row, checking finger pressure each time",
-            "Record audio of the full progression at 90 bpm and listen back once for buzz"
-          ],
-          "tip": "Barre chords live or die on thumb position — small tweaks, big payoff."
-        },
-        "4": {
-          "title": "Day 4: Right-Hand Dynamics",
-          "activities": [
-            {
-              "text": "Play this Em-Am travis pattern for 8 bars at 70 bpm, steady thumb on the bass notes",
-              "artifact": {
-                "kind": "guitar-riff",
-                "data": {
-                  "name": "Em-Am Travis Pattern",
-                  "steps": [
-                    {
-                      "string": 6,
-                      "fret": 0
-                    },
-                    {
-                      "chord": "Em"
-                    },
-                    {
-                      "string": 4,
-                      "fret": 2
-                    },
-                    {
-                      "chord": "Em"
-                    },
-                    {
-                      "string": 6,
-                      "fret": 0
-                    },
-                    {
-                      "chord": "Em"
-                    },
-                    {
-                      "string": 5,
-                      "fret": 0
-                    },
-                    {
-                      "chord": "Am"
-                    },
-                    {
-                      "string": 3,
-                      "fret": 2
-                    },
-                    {
-                      "chord": "Am"
-                    },
-                    {
-                      "string": 5,
-                      "fret": 0
-                    },
-                    {
-                      "chord": "Am"
-                    }
-                  ],
-                  "chords": [
-                    {
-                      "name": "Em",
-                      "frets": [
-                        0,
-                        2,
-                        2,
-                        0,
-                        0,
-                        0
-                      ],
-                      "hint": "two fingers, strum all six"
+                      "hint": "three-finger open G"
                     },
                     {
                       "name": "Am",
@@ -1566,69 +1410,245 @@
                         1,
                         0
                       ],
-                      "hint": "skip the low E"
+                      "hint": "open A minor"
+                    },
+                    {
+                      "name": "F",
+                      "frets": [
+                        1,
+                        3,
+                        3,
+                        2,
+                        1,
+                        1
+                      ],
+                      "hint": "full barre across fret 1"
+                    }
+                  ],
+                  "difficulty": 4,
+                  "key": "C major",
+                  "bpm": 85,
+                  "teaches": "travis picking pattern on chord changes"
+                }
+              }
+            },
+            "Play the thumb-alternating bass line under the C and G chords for 8 bars at 85 bpm, keeping the bass steady on beats 1 and 3",
+            "Loop the Am to F change you just played, muting the low E string lightly for 8 bars at 85 bpm"
+          ],
+          "tip": "Clean thumb independence is what separates a strummer from a player who locks in with a band."
+        },
+        "3": {
+          "title": "Day 3: Capo Transposition",
+          "activities": [
+            "Place a capo on fret 5 and play the open-position G-C-D progression you know, four beats each chord, two times through at 90 bpm",
+            "Play the same progression without the capo in the key of C, transposing the shapes on the fly, two times through",
+            "Record both versions back-to-back and compare the vocal range fit by ear"
+          ],
+          "tip": "Fast key changes on the fly are what make you the player everyone wants at the campfire."
+        },
+        "4": {
+          "title": "Day 4: Groove and Muting Control",
+          "activities": [
+            "Play a muted-string groove on the Em chord, palm muting all downstrokes for 8 bars at 100 bpm",
+            "Add syncopated upstrokes on the 'and' of beats 2 and 4 for 8 more bars at the same tempo",
+            "Layer a percussive palm slap on beat 1 of every bar for 8 bars"
+          ],
+          "tip": "Groove is felt before it's heard — lock your right hand into the pocket today."
+        },
+        "5": {
+          "title": "Day 5: Blues Improvisation",
+          "activities": [
+            {
+              "text": "Practice this Em blues scale run slowly, focusing on clean bends and slides",
+              "artifact": {
+                "kind": "guitar-riff",
+                "data": {
+                  "name": "Em Blues Climb",
+                  "steps": [
+                    {
+                      "string": 6,
+                      "fret": 0
+                    },
+                    {
+                      "string": 6,
+                      "fret": 3,
+                      "technique": "h"
+                    },
+                    {
+                      "string": 5,
+                      "fret": 2
+                    },
+                    {
+                      "string": 5,
+                      "fret": 5,
+                      "technique": "b"
+                    },
+                    {
+                      "string": 4,
+                      "fret": 2
+                    },
+                    {
+                      "string": 4,
+                      "fret": 5,
+                      "technique": "p"
+                    },
+                    {
+                      "string": 3,
+                      "fret": 2
+                    },
+                    {
+                      "string": 3,
+                      "fret": 4,
+                      "technique": "/"
+                    },
+                    {
+                      "string": 2,
+                      "fret": 3
+                    },
+                    {
+                      "string": 2,
+                      "fret": 5,
+                      "technique": "~"
+                    },
+                    {
+                      "string": 1,
+                      "fret": 3
+                    },
+                    {
+                      "string": 1,
+                      "fret": 0
                     }
                   ],
                   "difficulty": 4,
                   "key": "E minor",
-                  "bpm": 70,
-                  "teaches": "thumb-finger alternation"
+                  "bpm": 75,
+                  "teaches": "bending and sliding in a blues phrase"
                 }
               }
             },
-            "Play the same pattern twice more, once very soft and once very loud, 4 bars each",
-            "Record a 30-second clip of the loud pass and send it to one friend"
+            "Trade four-bar phrases with a backing track or friend, alternating lead and rhythm for 4 rounds",
+            "Record one full chorus of your improvised solo over the Em blues changes"
           ],
-          "tip": "Dynamics are what separate a player from a performer — you're already there, just dial it in."
-        },
-        "5": {
-          "title": "Day 5: Repertoire Lock-In",
-          "activities": [
-            "Play three songs you already know start to finish, back to back, without stopping to fix mistakes",
-            "Send a text to your friend group naming the three songs you'll bring to the next jam",
-            "Practice the trickiest transition in song two, 10 times slowly then 10 times at full tempo"
-          ],
-          "tip": "Repertoire is leverage — three solid songs beats ten shaky ones."
+          "tip": "Expression beats speed — let each bend breathe before you move to the next note."
         },
         "6": {
-          "title": "Day 6: Public Output",
+          "title": "Day 6: Performance Polish",
           "activities": [
-            "Record a full run-through video of one song, start to finish, in a single take with no retakes",
-            "Send that video to at least one friend or your group chat right after recording it",
-            "Tune the guitar fully with a tuner app, checking all six strings twice"
+            {
+              "text": "Play this classic E7 turnaround lick to close out your chosen song, slow and clean",
+              "artifact": {
+                "kind": "guitar-riff",
+                "data": {
+                  "name": "E7 Closing Turnaround",
+                  "steps": [
+                    {
+                      "string": 6,
+                      "fret": 0
+                    },
+                    {
+                      "string": 6,
+                      "fret": 2,
+                      "technique": "h"
+                    },
+                    {
+                      "string": 6,
+                      "fret": 3,
+                      "technique": "h"
+                    },
+                    {
+                      "string": 5,
+                      "fret": 0
+                    },
+                    {
+                      "string": 5,
+                      "fret": 2,
+                      "technique": "/"
+                    },
+                    {
+                      "string": 4,
+                      "fret": 1
+                    },
+                    {
+                      "string": 4,
+                      "fret": 2,
+                      "technique": "h"
+                    },
+                    {
+                      "string": 3,
+                      "fret": 0
+                    },
+                    {
+                      "string": 3,
+                      "fret": 1
+                    },
+                    {
+                      "string": 2,
+                      "fret": 0
+                    },
+                    {
+                      "string": 2,
+                      "fret": 1
+                    },
+                    {
+                      "chord": "E7"
+                    }
+                  ],
+                  "chords": [
+                    {
+                      "name": "E7",
+                      "frets": [
+                        0,
+                        2,
+                        0,
+                        1,
+                        0,
+                        0
+                      ],
+                      "hint": "classic open E7 shape"
+                    }
+                  ],
+                  "difficulty": 3,
+                  "key": "E major",
+                  "bpm": 90,
+                  "teaches": "ending a song with a clean turnaround"
+                }
+              }
+            },
+            "Arrange a quiet intro using natural harmonics on the 12th fret for the song you'll perform, 4 bars",
+            "Rehearse the full song with a metronome at 95 bpm, start to finish, three times"
           ],
-          "tip": "Posting it before it's perfect is the whole point — you're training for real jams, not a studio."
+          "tip": "The small details — the intro, the ending — are what make a performance feel finished."
         },
         "7": {
           "title": "Day 7: Performance Test",
           "activities": [
-            "Perform one full song start to finish from memory, no stopping, timed with your phone",
-            "Record the performance on video in a single take",
-            "Send the video to your friend group immediately after finishing"
+            "Perform your chosen 2-song set start to finish for a friend or camera, no stops",
+            "Record the performance in one unbroken take and save the file",
+            "Send the recording to one friend and invite them to jam with you next week"
           ],
-          "tip": "This is proof of where you stand right now — one clean take is all you need."
+          "tip": "You've put in the focused work — now let it show in one clean, confident run."
         }
       },
       "sprints": [
         {
           "number": 1,
           "title": "Sprint 1: Foundations",
-          "theme": "Audit your technique, tighten the basics, and get one song performance-ready."
+          "theme": "Refresh advanced chord vocabulary, picking technique, and groove control at full intensity."
         },
         {
           "number": 2,
           "title": "Sprint 2: Build Momentum",
-          "theme": "Expand your repertoire and lock in rhythm and timing under pressure."
+          "theme": "Expand your repertoire with tougher arrangements and tighter ensemble timing."
         },
         {
           "number": 3,
           "title": "Sprint 3: Stretch",
-          "theme": "Push technical ceilings with lead playing, improvisation, and faster tempos."
+          "theme": "Push into public performance and real-time collaboration with other players."
         },
         {
           "number": 4,
           "title": "Sprint 4: Integrate",
-          "theme": "Rehearse and perform a full set as if playing live with friends."
+          "theme": "Fuse technique, repertoire, and stage presence into a polished, shareable set."
         }
       ],
       "checks": {
@@ -1641,7 +1661,7 @@
         "nonActions": [],
         "repeats": [],
         "avgMinutes": null,
-        "avgNumbers": 2.1
+        "avgNumbers": 4.7
       }
     },
     {
@@ -1872,89 +1892,88 @@
       "calls": 1,
       "days": {
         "1": {
-          "title": "Day 1: Baseline Time Trial",
+          "title": "Day 1: Race-Pace Intervals",
           "activities": [
-            "Run a full 5K time trial today and record your total finishing time",
-            "Write down your mile-by-mile splits and perceived effort (1-10) right after finishing",
-            "Send your 5K time to one friend or post it in a running group today"
+            "Run 6x400m repeats at your 5K race pace, jogging 200m recovery between each.",
+            "Count and record your cadence (steps per minute) during the 3rd repeat.",
+            "Post your workout splits and total time to your running log or Strava app."
           ],
-          "tip": "A real baseline today makes every future improvement visible and provable."
+          "tip": "Your legs already know this pace—trust them and hit it clean."
         },
         "2": {
-          "title": "Day 2: Speed Intervals",
+          "title": "Day 2: Tempo Precision",
           "activities": [
-            "Run 6 x 400m at 5K goal pace minus 10 seconds per 400m, with 90 second jog recovery between each",
-            "Practice high-knee drills for 20 seconds x 4 reps as a warmup before the intervals",
-            "Log your fastest 400m split time in your notes app today"
+            "Run 20 minutes continuous at your 10K tempo pace, holding steady effort.",
+            "Write down your mile splits immediately after finishing.",
+            "Stretch calves and hamstrings for 5 minutes, holding each stretch 30 seconds."
           ],
-          "tip": "Sharp intervals today build the speed reserve you'll draw on in the final mile."
+          "tip": "Steady effort today builds the engine for race day."
         },
         "3": {
-          "title": "Day 3: Tempo and Cadence",
+          "title": "Day 3: Hill Power",
           "activities": [
-            "Run 2 miles at a tempo pace 15 seconds per mile faster than your easy pace",
-            "Count your steps for 1 minute mid-run and adjust toward 170-180 steps per minute",
-            "Write your tempo mile splits into your training log today"
+            "Run 8x45-second hill sprints at hard effort, walking down for recovery each time.",
+            "Focus on driving your arms forward and back on the final 3 repeats.",
+            "Record your heart rate immediately after the last repeat and note it in your log."
           ],
-          "tip": "Dialing in cadence now smooths your stride efficiency for race day."
+          "tip": "Hills build the strength that flat miles can't fake."
         },
         "4": {
-          "title": "Day 4: Hills and Form",
+          "title": "Day 4: Form Feedback",
           "activities": [
-            "Run 5 x 200m hill repeats at hard effort, walking back down for recovery each time",
-            "Practice an arm-swing drill: 3 sets of 30 seconds focusing on a 90-degree elbow bend while jogging in place",
-            "Post a 10-second video of your hill repeat form to a running friend or group"
+            "Film yourself running 100 meters at race pace using your phone propped on a stand.",
+            "Watch the clip once and jot three one-word cues about your form (e.g., 'lean,' 'drive,' 'relax').",
+            "Share the video in a running group chat or with a training partner for feedback."
           ],
-          "tip": "Hills build strength fast and expose form flaws you can fix today."
+          "tip": "Seeing yourself run is the fastest way to fix small flaws."
         },
         "5": {
-          "title": "Day 5: Negative Split Practice",
+          "title": "Day 5: Fartlek Control",
           "activities": [
-            "Run 3 miles: first mile easy, second mile at goal 5K pace, third mile 10 seconds faster than goal pace",
-            "Write out your mile-by-mile race pace plan on paper for your upcoming 5K",
-            "Share your race pace plan with one training partner or coach today"
+            "Run a fartlek: alternate 1 minute hard effort with 1 minute easy jog, 10 rounds.",
+            "Practice rhythmic breathing—inhale for 3 steps, exhale for 2—during the hard segments.",
+            "Log your perceived effort (1-10) for each hard segment right after the run."
           ],
-          "tip": "Practicing negative splits today trains your body to finish strong, not fade."
+          "tip": "Controlled chaos today sharpens your race-day composure."
         },
         "6": {
-          "title": "Day 6: Recovery and Strides",
+          "title": "Day 6: Cadence Polish",
           "activities": [
-            "Run 20 minutes at an easy conversational pace with relaxed shoulders",
-            "Practice 4 x 20 second strides at near-race pace with full recovery between each",
-            "Clean and lay out your race day shoes, socks, and shirt today"
+            "Run 20 minutes easy, inserting 4 strides of 20 seconds at the end at race pace.",
+            "Set a metronome app to 180 beats per minute and match your foot strikes for 5 minutes.",
+            "Foam roll your quads and calves for 5 minutes total."
           ],
-          "tip": "Easy running and short strides today keep your legs fresh and sharp."
+          "tip": "Small cadence tweaks now save big energy on race day."
         },
         "7": {
-          "title": "Day 7: Full 5K Test",
+          "title": "Day 7: Time Trial Test",
           "activities": [
-            "Run the full 5K distance start to finish without stopping, targeting your goal race pace",
-            "Record your finishing time and compare it directly to Day 1's baseline time in your log",
-            "Send your Day 7 5K time to the same friend or group you messaged on Day 1"
+            "Run a full 5K time trial start to finish at maximum sustainable effort, recording your total time.",
+            "Post your 5K time and splits to your running log or social media as today's public result."
           ],
-          "tip": "This run proves one week of focused work already moved your number."
+          "tip": "This is proof of everything you've trained for—run it proud."
         }
       },
       "sprints": [
         {
           "number": 1,
           "title": "Sprint 1: Foundations",
-          "theme": "Establish your current baseline, dial in speed and form fundamentals, and prep your race-day setup."
+          "theme": "Sharpen pace control and race-specific endurance through targeted interval and tempo work."
         },
         {
           "number": 2,
           "title": "Sprint 2: Build Momentum",
-          "theme": "Layer in higher-intensity interval and tempo work while sharpening pacing strategy."
+          "theme": "Increase intensity and consistency with structured speed and strength sessions."
         },
         {
           "number": 3,
           "title": "Sprint 3: Stretch",
-          "theme": "Push race-pace limits with harder sessions and simulate race-day conditions."
+          "theme": "Push race-pace limits and refine mental and physical efficiency under fatigue."
         },
         {
           "number": 4,
           "title": "Sprint 4: Integrate",
-          "theme": "Taper smartly, polish final details, and deliver a strong public race performance."
+          "theme": "Taper smartly, fine-tune race strategy, and execute a polished public performance."
         }
       ],
       "checks": {
@@ -1966,8 +1985,8 @@
         "badDays": [],
         "nonActions": [],
         "repeats": [],
-        "avgMinutes": 20,
-        "avgNumbers": 5.1
+        "avgMinutes": 28,
+        "avgNumbers": 4
       }
     },
     {
@@ -2198,89 +2217,88 @@
       "calls": 1,
       "days": {
         "1": {
-          "title": "Day 1: Baseline and Vocabulary Load",
+          "title": "Day 1: Mexican Spanish Immersion Warm-Up",
           "activities": [
-            "Record a 2-minute monologue in Spanish describing your Mexico trip plans, then play it back once.",
-            "Write a list of 15 Mexican Spanish slang words (such as güey, chido, neta) with their English meanings.",
-            "Say each of the 15 slang words aloud 3 times at normal conversational speed."
+            "Record yourself narrating your travel itinerary to Mexico in Spanish for 2 minutes with no script.",
+            "Shadow a 3-minute Mexican Spanish audio clip, repeating each sentence aloud at full native speed.",
+            "Speak 10 Mexican slang expressions you already know (e.g., 'qué onda', 'no manches'), using each in one recorded spoken sentence."
           ],
-          "tip": "Expert fluency is still built one sharp session at a time — you're already ahead of most travelers."
+          "tip": "You're already fluent enough to play — let today be a warm, fast-moving tune-up."
         },
         "2": {
-          "title": "Day 2: Shadowing and Idioms",
+          "title": "Day 2: Rapid-Fire Idioms",
           "activities": [
-            "Play a 3-minute Mexican Spanish audio or podcast clip and shadow it sentence by sentence for 10 minutes.",
-            "Record yourself repeating 5 idiomatic phrases (ahorita, ¿qué onda?, no manches, órale, está padre) 5 times each.",
-            "Write 5 original sentences using those 5 idioms in a travel context."
+            "Record 15 common Mexican idioms spoken fluently, one take each, no pause longer than 1 second.",
+            "Call a Spanish-speaking friend or tutor and hold a 5-minute phone conversation entirely about Mexican food.",
+            "Practice the subjunctive mood by speaking 10 sentences aloud starting with 'Espero que...' and 'Ojalá que...'."
           ],
-          "tip": "Shadowing locks in rhythm your ear already half-knows — trust your instincts."
+          "tip": "Speed and precision together — this is where fluency starts to feel effortless."
         },
         "3": {
-          "title": "Day 3: Subjunctive Polish",
+          "title": "Day 3: Accent Polish",
           "activities": [
-            "Write 10 sentences using the subjunctive mood for travel situations, starting with 'Si llego tarde, espero que...'.",
-            "Say the 10 sentences aloud twice each, reading the first time and reciting from memory the second.",
-            "Record a 1-minute voice memo describing a travel problem and proposing a subjunctive solution."
+            "Record yourself reading a Mexican news headline aloud, then re-record it 3 times matching native intonation.",
+            "Practice 'Tres tristes tigres...' and one other tongue-twister 5 times each at increasing speed.",
+            "Send a 90-second voice message in Spanish to a native speaker describing your travel plans."
           ],
-          "tip": "The subjunctive is the detail that separates fluent from native-sounding — you're polishing, not learning from scratch."
+          "tip": "Small accent tweaks today will make a big difference when you're ordering tacos in Oaxaca."
         },
         "4": {
-          "title": "Day 4: Scripted Role-Play",
+          "title": "Day 4: Cultural Fluency",
           "activities": [
-            "Write a 12-line dialogue for ordering food at a Mexican taquería, including 3 regional phrases.",
-            "Perform the dialogue aloud playing both roles and record the audio.",
-            "Send the recording to a Spanish-speaking friend or tutor for feedback."
+            "Practice ordering food at a restaurant scenario aloud, playing both customer and waiter roles for 3 minutes.",
+            "Record a 2-minute monologue explaining why you're visiting Mexico, using at least 5 regional expressions.",
+            "Speak aloud 5 polite ways to ask for directions using Mexico City Spanish phrasing."
           ],
-          "tip": "Public output, even to one friend, sharpens performance faster than private rehearsal."
+          "tip": "Cultural nuance is your superpower — you already speak the language, now you're speaking the place."
         },
         "5": {
-          "title": "Day 5: Accent and Pronunciation Detail",
+          "title": "Day 5: Conversational Speed",
           "activities": [
-            "Record yourself reading a 100-word Spanish paragraph aloud, focusing on Mexican pronunciation of s, ll, and ch.",
-            "Say the tongue-twister 'Tres tristes tigres tragaban trigo en un trigal' 8 times, increasing speed each round.",
-            "Write a short note comparing today's recording to Day 1's, naming 2 specific improvements."
+            "Hold a 10-minute video call with a native Spanish speaker discussing travel plans, no English allowed.",
+            "Practice answering 10 rapid-fire questions about your trip aloud, each within 5 seconds.",
+            "Record yourself debating 'tacos vs. tortas' in Spanish for 3 minutes straight without stopping."
           ],
-          "tip": "Fine motor control of sounds is the last 10% — and the most noticeable to native ears."
+          "tip": "Push your reaction speed today — real conversations don't wait for perfect sentences."
         },
         "6": {
-          "title": "Day 6: Live Public Output",
+          "title": "Day 6: Fine-Tuning",
           "activities": [
-            "Complete a 10-minute video call in Spanish with a native speaker or tutor, discussing your travel plans.",
-            "Write a 5-sentence summary in Spanish of what you discussed during the call.",
-            "Post a 1-minute Spanish video clip about your Mexico trip to a social media story or group chat."
+            "Review your Day 5 recording and rerecord 5 mispronounced words with corrected Mexican pronunciation.",
+            "Practice 10 transition phrases ('por otro lado', 'sin embargo') in spoken sentences about your trip.",
+            "Call a tutor and request live feedback on your accent during a 5-minute conversation about Mexican culture."
           ],
-          "tip": "Real-time conversation under light pressure is exactly the rehearsal your trip demands."
+          "tip": "You're polishing a near-finished gem — these final details will make you sound effortlessly natural."
         },
         "7": {
           "title": "Day 7: Full Conversation Test",
           "activities": [
-            "Hold a 5-minute unscripted Spanish conversation with a native speaker or tutor covering food, directions, and small talk, recording it start to finish.",
-            "Write a 100-word journal entry in Spanish summarizing the conversation immediately after.",
-            "Share the recording with your tutor or a Spanish-speaking friend and collect one piece of feedback."
+            "Hold a 12-minute unscripted conversation entirely in Spanish with a native speaker covering food, directions, and small talk about your Mexico trip.",
+            "Record the full conversation from start to finish without switching to English."
           ],
-          "tip": "This is proof, not a test — show yourself the conversational skill you already have."
+          "tip": "This is proof you're ready — walk into it knowing you've already done the hard work."
         }
       },
       "sprints": [
         {
           "number": 1,
           "title": "Sprint 1: Foundations",
-          "theme": "Calibrate your current fluency and load in Mexico-specific vocabulary, idioms, and sounds."
+          "theme": "Sharpen Mexican Spanish fluency, idioms, and accent through daily high-intensity speaking drills."
         },
         {
           "number": 2,
           "title": "Sprint 2: Build Momentum",
-          "theme": "Drill real-time listening and speaking speed with native-paced audio and live partners."
+          "theme": "Expand conversational range with real-time dialogue practice and regional vocabulary."
         },
         {
           "number": 3,
           "title": "Sprint 3: Stretch",
-          "theme": "Handle unpredictable, high-stakes conversation scenarios you'll face while traveling."
+          "theme": "Handle complex, unscripted conversations under pressure with native speakers."
         },
         {
           "number": 4,
           "title": "Sprint 4: Integrate",
-          "theme": "Perform full, polished conversations publicly and refine the finest details of accent and tone."
+          "theme": "Perform live, extended conversations and refine delivery for real travel situations."
         }
       ],
       "checks": {
@@ -2292,8 +2310,8 @@
         "badDays": [],
         "nonActions": [],
         "repeats": [],
-        "avgMinutes": 10,
-        "avgNumbers": 3.4
+        "avgMinutes": 3,
+        "avgNumbers": 3.3
       }
     },
     {
@@ -2525,89 +2543,89 @@
       "calls": 1,
       "days": {
         "1": {
-          "title": "Day 1: Framework and Pantry Audit",
+          "title": "Day 1: Benchmark Dinner",
           "activities": [
-            "Write out 5 protein-vegetable-starch dinner combinations on one page, naming exact ingredients for each",
-            "Open every pantry cabinet and fridge shelf and write a list of all staples on hand in under 15 minutes",
-            "Cook a double batch of a base sofrito using onion, garlic, and bell pepper, simmered 12 minutes, and store half in a sealed container"
+            "Cook a three-component weeknight dinner (protein, vegetable, starch) start to finish in 40 minutes, plating within the final 5 minutes.",
+            "Time each stage with a timer and write the minutes for prep, cook, and plate on an index card.",
+            "Photograph the plated dish from directly above and post it to your cooking account with the caption 'Night 1 benchmark'."
           ],
-          "tip": "A sharp system today saves you ten rushed decisions this week."
+          "tip": "You already have the chops—today just proves it on the clock."
         },
         "2": {
-          "title": "Day 2: Knife Work Polish",
+          "title": "Day 2: Knife Precision Polish",
           "activities": [
-            "Practice julienne cuts on 2 carrots, aiming for 40 even matchsticks in under 4 minutes",
-            "Practice brunoise cuts on 1 onion, producing uniform 3mm cubes in under 3 minutes",
-            "Build a dry spice blend from scratch using 5 spices measured by teaspoon and store it in a labeled jar"
+            "Brunoise one onion into 2mm cubes in under 3 minutes, measuring 10 random pieces with a ruler to confirm size.",
+            "Chiffonade 15 basil leaves into ribbons in under 90 seconds without bruising the leaves.",
+            "Julienne two carrots into matchsticks in under 4 minutes and blanch them for 90 seconds, checking for even doneness."
           ],
-          "tip": "Clean cuts cook evenly and cut your active time tomorrow."
+          "tip": "Tight knife work shaves real minutes off every dinner this week."
         },
         "3": {
-          "title": "Day 3: Pan Sauce and Flavor Balance",
+          "title": "Day 3: Pan Sauce Mastery",
           "activities": [
-            "Sear a chicken thigh in a hot pan for 5 minutes per side, then deglaze with 1/4 cup stock to lift the fond",
-            "Reduce the pan sauce by half over medium heat, timing it with a clock, then whisk in 1 tablespoon cold butter",
-            "Taste the sauce and adjust it 3 separate times with drops of acid, pinches of salt, or small pats of fat until balanced"
+            "Sear a chicken breast 4 minutes per side, deglaze the pan with 1/4 cup stock, and reduce by half in 3 minutes.",
+            "Whisk in 1 tablespoon cold butter off heat for 30 seconds to emulsify the sauce until glossy.",
+            "Plate the chicken with sauce spooned over and taste-adjust with a pinch of salt, noting the change on paper."
           ],
-          "tip": "Balancing a sauce by taste, not recipe, is the mark of real skill."
+          "tip": "That glossy sauce is the difference between fine and unforgettable."
         },
         "4": {
-          "title": "Day 4: Protein Precision and Salad Build",
+          "title": "Day 4: Protein Temperature Control",
           "activities": [
-            "Sear a piece of fish or steak to an internal temperature of 135°F using a thermometer, then rest it exactly 5 minutes before cutting",
-            "Whisk a vinaigrette from 3 parts oil to 1 part acid until fully emulsified, timing the whisking for 90 seconds",
-            "Toss the vinaigrette with a salad of 3 raw vegetables cut into bite-sized pieces and plate it in under 2 minutes"
+            "Sear a steak 3 minutes per side, insert a thermometer, and pull it at exactly 125°F for medium-rare.",
+            "Rest the steak 5 minutes under foil, then slice against the grain into 1/4-inch slices.",
+            "Cook a salmon fillet to 125°F internal in 8 minutes using the same thermometer for comparison."
           ],
-          "tip": "Precision on protein temp is what separates a good dinner from a great one."
+          "tip": "Nailing temperature twice in one sitting locks the skill in for good."
         },
         "5": {
-          "title": "Day 5: First Public Output",
+          "title": "Day 5: Speed Mise en Place",
           "activities": [
-            "Cook a full 3-component dinner using Monday's sofrito base, a seared protein, and a quick-sautéed vegetable within 40 minutes",
-            "Photograph the plated dinner from directly above using natural light before eating",
-            "Write a 5-sentence recipe card listing ingredients and steps, then send it to one friend or family member"
+            "Prep five dinner components (protein, two vegetables, starch, sauce base) in 20 minutes using parallel stations.",
+            "Cook all five components simultaneously, finishing within 25 minutes, using separate timers per burner.",
+            "Plate the full dinner in under 2 minutes and photograph the finished plate."
           ],
-          "tip": "Sharing your cooking locks in accountability and pride in the work."
+          "tip": "This is the real weeknight bottleneck—conquer it and the rest is easy."
         },
         "6": {
-          "title": "Day 6: Speed and Parallel Cooking Drill",
+          "title": "Day 6: Teach the Technique",
           "activities": [
-            "Set a timer for 35 minutes and cook a protein, a starch, and a vegetable side simultaneously using all 4 stovetop burners and the oven",
-            "Plate the finished dinner within 2 minutes of the timer ending without pausing to wash dishes first",
-            "Write down which step caused the most delay and one specific fix for next time"
+            "Record a 3-minute video demonstrating your pan sauce technique from Day 3, narrating each step aloud.",
+            "Edit the video down to 2 minutes, trimming dead air between steps.",
+            "Post the video publicly with a caption teaching one tip for faster weeknight cooking."
           ],
-          "tip": "Running multiple pans at once is the real skill behind fast weeknight meals."
+          "tip": "Teaching it out loud cements it deeper than any solo practice could."
         },
         "7": {
           "title": "Day 7: Full Dinner Test",
           "activities": [
-            "Cook a complete healthy dinner — protein, starch, vegetable, and sauce — from first chop to final plate in 45 minutes or less, timed with a clock",
-            "Plate the dinner with a visible sauce swirl or garnish and photograph it before serving",
-            "Serve the dinner to yourself or another person and ask them to rate it out of 10 on taste and presentation"
+            "Cook a complete three-component weeknight dinner start to finish in 45 minutes without pausing for notes.",
+            "Plate the finished dinner within the last 3 minutes and serve it immediately.",
+            "Photograph the final plate and compare the total time against Day 1's benchmark time."
           ],
-          "tip": "This is proof: you can now build a restaurant-quality dinner faster than takeout arrives."
+          "tip": "Compare today's plate to Day 1—watch how far your speed and precision have come."
         }
       },
       "sprints": [
         {
           "number": 1,
           "title": "Sprint 1: Foundations",
-          "theme": "Rebuild and sharpen the core technical system — knife work, flavor layering, and mise en place speed — that expert-level weeknight cooking depends on."
+          "theme": "Sharpen core techniques and benchmark your current weeknight cooking speed and precision."
         },
         {
           "number": 2,
           "title": "Sprint 2: Build Momentum",
-          "theme": "Chain techniques into full multi-component dinners cooked under real weeknight time pressure."
+          "theme": "Expand your weeknight repertoire with varied cuisines and faster turnaround times."
         },
         {
           "number": 3,
           "title": "Sprint 3: Stretch",
-          "theme": "Push variety, speed, and presentation with more demanding dishes and public-facing cooking."
+          "theme": "Push complexity and creativity, plating restaurant-quality dinners under time pressure."
         },
         {
           "number": 4,
           "title": "Sprint 4: Integrate",
-          "theme": "Lock in a repeatable weekly system so healthy dinners replace takeout permanently."
+          "theme": "Lock in a sustainable, repeatable weeknight system you can run on autopilot."
         }
       ],
       "checks": {
@@ -2619,8 +2637,8 @@
         "badDays": [],
         "nonActions": [],
         "repeats": [],
-        "avgMinutes": 24,
-        "avgNumbers": 4.3
+        "avgMinutes": 25,
+        "avgNumbers": 4.6
       }
     },
     {
@@ -2851,89 +2869,89 @@
       "calls": 1,
       "days": {
         "1": {
-          "title": "Day 1: Calibrate Proportions",
+          "title": "Day 1: Eye Study",
           "activities": [
-            "Measure and mark the facial thirds (hairline-to-brow, brow-to-nose, nose-to-chin) on 3 printed family photos using a ruler, 10 minutes",
-            "Sketch the Loomis head construction from memory 5 times on one sheet with no reference, 10 minutes",
-            "Photograph your best sketch and post it to an online art critique group with the caption 'Day 1 proportion check', 10 minutes"
+            "Draw a 15-minute tonal study of one family member's eye from a reference photo, focusing on catchlight placement and lash shadow edges.",
+            "Blend the eyelid crease and under-eye shadow with graphite for 10 minutes, keeping value transitions soft.",
+            "Post the finished eye study to an online portrait critique board for feedback."
           ],
-          "tip": "Your hand already knows this—today just resets the ruler in your eye."
+          "tip": "Your eye for detail at this level shows immediately — trust your instincts."
         },
         "2": {
-          "title": "Day 2: Eye Precision Drill",
+          "title": "Day 2: Nose Structure",
           "activities": [
-            "Draw 6 individual eyes from 6 different reference photos, focusing on catchlight placement, 15 minutes",
-            "Shade the iris and sclera gradient on 3 of those eyes with a blending stump, 10 minutes",
-            "Post your strongest eye study to an art forum with the caption 'Day 2 eye study', 5 minutes"
+            "Draw a 15-minute study of the nose structure (bridge, ala, nostril shadow) from a different family photo using hatching for form.",
+            "Blend the nostril shadow and tip highlight with a blending stump for 10 minutes to smooth value transitions.",
+            "Mark two spots where proportions drift from the reference and correct them with eraser highlights for 5 minutes."
           ],
-          "tip": "Eyes carry 80% of likeness—nail this and the rest gets easier."
+          "tip": "Precision in small forms is what separates good portraits from great ones."
         },
         "3": {
-          "title": "Day 3: Nose and Mouth Structure",
+          "title": "Day 3: Mouth and Lips",
           "activities": [
-            "Draw 4 noses from 4 different angles (front, 3/4, profile, worm's-eye) using reference photos, 15 minutes",
-            "Render 4 mouths matching the same references with a full value range from white to near-black, 10 minutes",
-            "Trace the mouth outline from one reference onto tracing paper over your drawing to check proportion accuracy, 5 minutes"
+            "Draw the mouth and lips of a third family member from a photo reference for 15 minutes, capturing the philtrum shadow and lower lip highlight.",
+            "Soften the vermillion border edges with a kneaded eraser for 10 minutes, lifting graphite gently at the corners.",
+            "Share the lip study photo in a portrait feedback group and request specific critique on value accuracy."
           ],
-          "tip": "Structure first, charm later—you're laying bolts before the finish coat."
+          "tip": "Lips carry so much expression — your careful rendering captures real emotion."
         },
         "4": {
-          "title": "Day 4: Skin Tone Values",
+          "title": "Day 4: Ear Anatomy",
           "activities": [
-            "Create a 10-step grayscale value scale with graphite on one strip of paper, 8 minutes",
-            "Render a cheek-and-jaw plane study matching a reference photo using that value scale, 15 minutes",
-            "Photograph the study in natural light and upload it to your portfolio page or social account, 7 minutes"
+            "Draw the full ear structure from a reference photo for 15 minutes, mapping the helix, antihelix and lobe shadows with cross-hatching.",
+            "Deepen the tragus shadow and inner ear canal with a 2B pencil for 10 minutes, keeping edges crisp where cartilage meets skin.",
+            "Post the ear study alongside yesterday's lip study to the same critique group for comparison feedback."
           ],
-          "tip": "Value does the heavy lifting—line is just the scaffolding."
+          "tip": "Ears are often overlooked — your attention here will set your work apart."
         },
         "5": {
-          "title": "Day 5: Likeness Under Time Pressure",
+          "title": "Day 5: Hair Mass and Strands",
           "activities": [
-            "Draw a 20-minute timed portrait of one family member from a photo, aiming for recognizable likeness",
-            "Measure eye spacing, nose width, and mouth width against the photo with a ruler and mark corrections directly on the sketch, 7 minutes",
-            "Text or show the corrected sketch to that family member and record their first reaction in one sentence, 3 minutes"
+            "Sketch the hairline and hair mass of one family member for 15 minutes, blocking large value shapes before individual strands.",
+            "Add 20 directional strand highlights over the hair mass for 10 minutes, varying pencil pressure to show light direction.",
+            "Send the hairline study to a fellow artist with a request for a 5-minute written critique on form accuracy."
           ],
-          "tip": "Fast portraits expose weak habits fast—that's the point today."
+          "tip": "Big value shapes first, strands second — you already know the right order."
         },
         "6": {
-          "title": "Day 6: Hair and Edge Control",
+          "title": "Day 6: Skin Tone Mapping",
           "activities": [
-            "Render two hair-mass studies with varied pencil pressure, one curly and one straight, 15 minutes",
-            "Soften 3 edges on an earlier portrait draft with a blending tool to create lost-and-found transitions, 10 minutes",
-            "Post a before/after photo of the edge work to an online critique group, 5 minutes"
+            "Render a full skin tone value map on a photocopy of a family portrait for 15 minutes, blocking five value zones from lightest to darkest.",
+            "Blend the cheek and forehead planes with a soft blending brush for 10 minutes to unify the value transitions.",
+            "Upload the value map study to your portfolio page for public viewing."
           ],
-          "tip": "Soft edges are what make a portrait breathe instead of stare."
+          "tip": "Unified values are the backbone of realism — you're building that foundation now."
         },
         "7": {
-          "title": "Day 7: Full Portrait Sprint Test",
+          "title": "Day 7: Full Portrait Test",
           "activities": [
-            "Draw a complete portrait of one family member from a reference photo, start to finish, within 25 minutes using full tonal range",
-            "Sign and date the finished portrait in the bottom corner, 1 minute",
-            "Photograph the finished piece and send it directly to that family member as a gift, 4 minutes"
+            "Draw a complete 25-minute portrait of one family member from reference, applying this week's eye, nose, mouth, ear, hair and skin-tone studies in one unified piece.",
+            "Spend the final 5 minutes blending the two weakest value transitions you notice for a cohesive finish.",
+            "Photograph the finished portrait and post it to your public portfolio as this week's completed piece."
           ],
-          "tip": "This is proof, not practice—show yourself exactly how far one week took you."
+          "tip": "This is proof of a week's hard work — step back and own what you've built."
         }
       },
       "sprints": [
         {
           "number": 1,
           "title": "Sprint 1: Foundations",
-          "theme": "Recalibrate core portrait mechanics—proportion, features, and values—while building a daily public-feedback habit."
+          "theme": "Sharpen feature-by-feature mastery (eyes, nose, mouth, ears, hair, skin tone) through daily high-intensity studies and public critique."
         },
         {
           "number": 2,
           "title": "Sprint 2: Build Momentum",
-          "theme": "Layer in full-head value studies and likeness speed drills using real family reference photos."
+          "theme": "Combine features into full facial likenesses with correct proportion, value structure and edge control."
         },
         {
           "number": 3,
           "title": "Sprint 3: Stretch",
-          "theme": "Push into complex lighting, skin tone mixing, and multi-session finished portraits for critique."
+          "theme": "Push into complex lighting, skin texture and multi-subject family compositions with public showcasing."
         },
         {
           "number": 4,
           "title": "Sprint 4: Integrate",
-          "theme": "Complete and present a finished gallery-quality family portrait series."
+          "theme": "Produce polished, gallery-ready family portraits and share your finished body of work publicly."
         }
       ],
       "checks": {
@@ -2945,8 +2963,8 @@
         "badDays": [],
         "nonActions": [],
         "repeats": [],
-        "avgMinutes": 27,
-        "avgNumbers": 5
+        "avgMinutes": 19,
+        "avgNumbers": 2.6
       }
     },
     {
@@ -3177,89 +3195,89 @@
       "calls": 1,
       "days": {
         "1": {
-          "title": "Day 1: Audit & Blueprint",
+          "title": "Day 1: Full Routine Execution",
           "activities": [
-            "Write down your last 7 wake-up times and the first 10 minutes of each morning in a notebook, noting exact minute marks.",
-            "Draft a one-page morning routine blueprint listing 5 segments (wake, hydrate, move, focus, plan) with a target minute count for each totaling 30 minutes.",
-            "Set your phone alarm for tomorrow at the exact wake time from your blueprint and place the phone across the room."
+            "Perform the full 30-minute sequence exactly as designed: 5-minute box breathing (4-4-4-4), 10-minute mobility flow, 5-minute cold shower finish, 5-minute three-line journaling, 5-minute tea ritual, timing each segment with a stopwatch.",
+            "Record a 60-second video summarizing today's session and post it to your accountability group chat.",
+            "Write the exact start and end time of each segment in your notes app immediately after finishing."
           ],
-          "tip": "A sharp blueprint today makes every run after this one easier."
+          "tip": "You already know the moves—today is about precision, not discovery."
         },
         "2": {
-          "title": "Day 2: First Draft Run",
+          "title": "Day 2: Breathwork Intensity",
           "activities": [
-            "Run your full 30-minute blueprint once, using a stopwatch to log the actual minutes spent on each of the 5 segments.",
-            "Write the gap in minutes between planned and actual time for each segment on your blueprint sheet.",
-            "Adjust one segment's time allocation by at least 2 minutes based on today's log and rewrite that line on the blueprint."
+            "Practice 3 rounds of 30 power breaths followed by a 60-second breath hold immediately after waking.",
+            "Time your cold shower to exactly 90 seconds using a phone timer and note the water temperature.",
+            "Send a voice memo describing how the breathwork felt within 10 minutes of finishing to a friend."
           ],
-          "tip": "Real data beats guesses — you're already sharpening the system."
+          "tip": "Specialized reps like this compound fast—stay sharp on the count."
         },
         "3": {
-          "title": "Day 3: Friction Removal",
+          "title": "Day 3: Movement Polish",
           "activities": [
-            "Run the revised routine a second time, timing each segment again with the stopwatch and recording the numbers.",
-            "List 3 specific friction points (e.g., snooze button, cold coffee, phone pickup) that slowed a segment, writing one sentence per point.",
-            "Remove or relocate one physical obstacle tonight (move phone charger, set out clothes, pre-measure coffee) to fix the top friction point."
+            "Run through a 12-minute mobility circuit of hip openers, shoulder rolls, and cat-cow, 10 reps each, without pausing between moves.",
+            "Hold a 90-second plank immediately after the circuit and log the exact time held.",
+            "Post a photo of your workout space with today's completed checklist to your public morning routine thread."
           ],
-          "tip": "Clearing one obstacle tonight buys you smoother minutes tomorrow."
+          "tip": "Clean transitions are the mark of real mastery—keep them tight."
         },
         "4": {
-          "title": "Day 4: Public Commitment",
+          "title": "Day 4: Light and Clarity",
           "activities": [
-            "Record a 60-second video explaining your 5-segment morning routine and what time each segment starts.",
-            "Send that video to one friend or colleague asking them to check in with you in 3 days.",
-            "Post the written blueprint (photo or text) to a group chat or social account you check daily."
+            "Stand outside barefoot for 10 minutes of direct sunlight exposure on grass or pavement.",
+            "Write a 150-word journal entry about one insight using pen and paper, timed to exactly 7 minutes.",
+            "Publish a 2-sentence summary of your insight to your public accountability channel."
           ],
-          "tip": "Saying it out loud to someone else locks in your commitment."
+          "tip": "Even experts need the sun—let it anchor your focus today."
         },
         "5": {
-          "title": "Day 5: Fine-Detail Polish",
+          "title": "Day 5: Strict Timing and Teaching",
           "activities": [
-            "Run the routine a third time, timing transitions between segments specifically (the 10 seconds between each) and logging transition times.",
-            "Shave 30 seconds off two transitions by removing one unnecessary step from each, rewriting those steps on your blueprint.",
-            "Set a precise alarm tone and volume, and lay out tomorrow's clothes and breakfast items in the exact spot you'll grab them."
+            "Execute the complete 30-minute routine using a visible countdown timer per segment, adjusting pace to finish exactly on time.",
+            "Teach the full routine to one person by walking them through each step verbally in under 5 minutes.",
+            "Record your pulse for 15 seconds before and after the cold shower segment and multiply by 4 to log heart rate."
           ],
-          "tip": "The small seconds you save here add up to a calmer whole."
+          "tip": "Teaching it out loud will reveal exactly where your precision shines."
         },
         "6": {
-          "title": "Day 6: Teach & Rehearse",
+          "title": "Day 6: Sharpen the Weak Link",
           "activities": [
-            "Teach your routine to one other person face-to-face or by call, walking them through all 5 segments in order, under 5 minutes.",
-            "Ask that person to pick one segment and give you a direct suggestion, then write their suggestion on your blueprint.",
-            "Run a full dress rehearsal of the routine at normal speed, timing the whole thing start to finish with a stopwatch."
+            "Circle the slowest transition time in your Day 5 log and repeat that exact segment three times back-to-back, timing each attempt.",
+            "Run the full routine twice in sequence, 60 minutes total, and compare the two completion times side by side.",
+            "Share your improved segment time publicly in your accountability group with a before/after comparison."
           ],
-          "tip": "Teaching it proves you truly own it — one more test and you're ready."
+          "tip": "Shaving seconds off your weakest link is where expert gains hide."
         },
         "7": {
-          "title": "Day 7: Full Performance Test",
+          "title": "Day 7: Full Routine Test",
           "activities": [
-            "Perform the entire 30-minute morning routine start to finish tomorrow morning, timing it with a stopwatch from the first alarm to the last segment's end.",
-            "Record the final total time and each segment's time on your blueprint sheet immediately after finishing.",
-            "Publish your finished routine and completion time to the same group or friend from Day 4 as proof of completion."
+            "Perform the complete 30-minute morning routine start to finish exactly as designed, without stopping or adjusting, timed with a stopwatch.",
+            "Record a timestamped log of each segment's start and end time immediately after finishing.",
+            "Publish your full completion video or written report to your public accountability channel within 15 minutes of finishing."
           ],
-          "tip": "This is your proof: a tested, timed, public routine built in one week."
+          "tip": "This is proof of what you've built this week—run it clean and own it."
         }
       },
       "sprints": [
         {
           "number": 1,
           "title": "Sprint 1: Foundations",
-          "theme": "Audit your current mornings, build a timed blueprint, and prove it works end to end."
+          "theme": "Execute and publish your full routine daily while polishing timing and technique at an expert level."
         },
         {
           "number": 2,
           "title": "Sprint 2: Build Momentum",
-          "theme": "Run the routine daily under real conditions and tighten it against actual friction."
+          "theme": "Layer advanced variations and tighten transitions between routine segments."
         },
         {
           "number": 3,
           "title": "Sprint 3: Stretch",
-          "theme": "Push the routine's precision and resilience under harder constraints like travel or late nights."
+          "theme": "Push intensity and precision further while teaching the routine to others."
         },
         {
           "number": 4,
           "title": "Sprint 4: Integrate",
-          "theme": "Lock the routine into permanent habit and showcase it as a repeatable system for others."
+          "theme": "Lock in a polished, repeatable routine and demonstrate full mastery publicly."
         }
       ],
       "checks": {
@@ -3271,8 +3289,8 @@
         "badDays": [],
         "nonActions": [],
         "repeats": [],
-        "avgMinutes": 16,
-        "avgNumbers": 2.4
+        "avgMinutes": 21,
+        "avgNumbers": 4.4
       }
     },
     {
