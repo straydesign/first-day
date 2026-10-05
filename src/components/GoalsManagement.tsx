@@ -202,7 +202,9 @@ export function GoalsManagement({ onCreateGoal, onSelectGoal, onEditGoal, onView
 
                   {/* Shard reward grid */}
                   {goalProgress[goal.id] && (
-                    <div className="mt-2 flex justify-center">
+                    // pr-11 keeps the week tiles clear of the trash button, which
+                    // sat on top of week 5 on 5-week goals at 390px.
+                    <div className="mt-2 flex justify-center pr-11">
                       <ShardRewardGrid progress={goalProgress[goal.id]} totalDays={goal.totalDays ?? 28} />
                     </div>
                   )}

@@ -155,9 +155,11 @@ export function CalendarView({ planData, goalTitle, onDayClick, onEditGoal, prog
             </motion.div>
           )}
 
-          {/* Section A — Hero "Next Lesson" card */}
+          {/* Section A — Hero "Next Lesson" card. Sticky from md up only: on a
+              390px phone it is half the screen tall and its glass panel showed
+              the day rows scrolling through it, text over text. */}
           <motion.div
-            className="mb-8 md:mb-10 sticky top-20 z-30"
+            className="mb-8 md:mb-10 md:sticky md:top-20 z-30"
             variants={contentReveal}
             initial="hidden"
             animate="visible"

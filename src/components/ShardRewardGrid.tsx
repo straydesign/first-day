@@ -31,6 +31,7 @@ export function ShardRewardGrid({
       {weeks.map((week, i) => (
         <motion.div
           key={week.weekNumber}
+          data-overlap-check
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ ...SPRING.gentle, delay: i * 0.06 }}
