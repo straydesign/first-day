@@ -1,0 +1,4801 @@
+{
+  "meta": {
+    "calls": 30,
+    "cost": 1.1451259999999999,
+    "model": "claude-sonnet-5",
+    "ranAt": "2026-10-05T12:17:29.260Z"
+  },
+  "results": [
+    {
+      "key": "guitar@10",
+      "goalId": "guitar",
+      "goal": "Learn to play guitar",
+      "week": 1,
+      "level": 10,
+      "ok": true,
+      "rewrite": false,
+      "calls": 1,
+      "days": {
+        "1": {
+          "title": "Day 1: Meet Your Guitar",
+          "activities": [
+            "Search YouTube for the tutorial 'how to hold a guitar for beginners' and watch it once",
+            "Sit with the guitar in playing position and hold it correctly for 5 minutes while watching TV or listening to music",
+            "Write down the names of the six strings from thickest to thinnest: E A D G B E"
+          ],
+          "tip": "Everyone feels awkward holding a guitar the first time — that's completely normal."
+        },
+        "2": {
+          "title": "Day 2: Fretting Hand Basics",
+          "activities": [
+            "Search YouTube for the tutorial 'guitar fretting hand finger numbers for beginners' and watch it once",
+            {
+              "text": "Practice pressing down one note at a time on fret 1 across all six strings, picking each note twice",
+              "artifact": {
+                "kind": "guitar-riff",
+                "data": {
+                  "name": "Fret 1 Finger Warmup",
+                  "steps": [
+                    {
+                      "string": 6,
+                      "fret": 1
+                    },
+                    {
+                      "string": 6,
+                      "fret": 1
+                    },
+                    {
+                      "string": 5,
+                      "fret": 1
+                    },
+                    {
+                      "string": 5,
+                      "fret": 1
+                    },
+                    {
+                      "string": 4,
+                      "fret": 1
+                    },
+                    {
+                      "string": 4,
+                      "fret": 1
+                    },
+                    {
+                      "string": 3,
+                      "fret": 1
+                    },
+                    {
+                      "string": 3,
+                      "fret": 1
+                    },
+                    {
+                      "string": 2,
+                      "fret": 1
+                    },
+                    {
+                      "string": 2,
+                      "fret": 1
+                    },
+                    {
+                      "string": 1,
+                      "fret": 1
+                    },
+                    {
+                      "string": 1,
+                      "fret": 1
+                    }
+                  ],
+                  "difficulty": 1,
+                  "key": "N/A",
+                  "bpm": 60,
+                  "teaches": "finger placement"
+                }
+              }
+            }
+          ],
+          "tip": "Press right behind the fret wire, not on top of it, for a clean clear note."
+        },
+        "3": {
+          "title": "Day 3: Your First Chord - Em",
+          "activities": [
+            "Search YouTube for the tutorial 'how to play E minor chord guitar beginner' and watch it once",
+            {
+              "text": "Place your fingers for the Em chord and strum all six strings slowly, 10 times",
+              "artifact": {
+                "kind": "guitar-riff",
+                "data": {
+                  "name": "Em Chord Strums",
+                  "steps": [
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    }
+                  ],
+                  "chords": [
+                    {
+                      "name": "Em",
+                      "frets": [
+                        0,
+                        2,
+                        2,
+                        0,
+                        0,
+                        0
+                      ],
+                      "hint": "two fingers on the A and D strings, strum all six"
+                    }
+                  ],
+                  "difficulty": 1,
+                  "key": "E minor",
+                  "bpm": 60,
+                  "teaches": "chord shape and full strum"
+                }
+              }
+            }
+          ],
+          "tip": "Even a buzzy Em today is a win — your fingers just need reps to learn the shape."
+        },
+        "4": {
+          "title": "Day 4: Your Second Chord - Am",
+          "activities": [
+            "Search YouTube for the tutorial 'how to play A minor chord guitar beginner' and watch it once",
+            {
+              "text": "Place your fingers for the Am chord and strum the bottom five strings slowly, 10 times",
+              "artifact": {
+                "kind": "guitar-riff",
+                "data": {
+                  "name": "Am Chord Strums",
+                  "steps": [
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "Am"
+                    }
+                  ],
+                  "chords": [
+                    {
+                      "name": "Am",
+                      "frets": [
+                        -1,
+                        0,
+                        2,
+                        2,
+                        1,
+                        0
+                      ],
+                      "hint": "three fingers, skip the low E string"
+                    }
+                  ],
+                  "difficulty": 1,
+                  "key": "A minor",
+                  "bpm": 60,
+                  "teaches": "chord shape and partial strum"
+                }
+              }
+            }
+          ],
+          "tip": "Am uses one more finger than Em, so a little extra wobble today is expected."
+        },
+        "5": {
+          "title": "Day 5: Switching Em to Am",
+          "activities": [
+            "Search YouTube for the tutorial 'how to switch chords smoothly guitar beginner' and watch it once",
+            {
+              "text": "Play this Em to Am change, holding each chord for four slow beats, through 2 full rounds",
+              "artifact": {
+                "kind": "guitar-riff",
+                "data": {
+                  "name": "Em to Am Switch",
+                  "steps": [
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "Am"
+                    }
+                  ],
+                  "chords": [
+                    {
+                      "name": "Em",
+                      "frets": [
+                        0,
+                        2,
+                        2,
+                        0,
+                        0,
+                        0
+                      ],
+                      "hint": "two fingers, strum all six"
+                    },
+                    {
+                      "name": "Am",
+                      "frets": [
+                        -1,
+                        0,
+                        2,
+                        2,
+                        1,
+                        0
+                      ],
+                      "hint": "skip the low E string"
+                    }
+                  ],
+                  "difficulty": 2,
+                  "key": "E minor / A minor",
+                  "bpm": 55,
+                  "teaches": "clean chord changes"
+                }
+              }
+            }
+          ],
+          "tip": "Slow and clean beats fast and messy every single time — take your time between chords."
+        },
+        "6": {
+          "title": "Day 6: Basic Strumming Pattern",
+          "activities": [
+            "Search YouTube for the tutorial 'basic down up strumming pattern for beginners' and watch it once",
+            "Practice 20 steady downward strums on the open strings, counting out loud 1-2-3-4",
+            "Practice a down-down-up-up-down-up strum pattern on the Em chord, 8 times through"
+          ],
+          "tip": "A steady boring strum is the goal here — flashy comes later."
+        },
+        "7": {
+          "title": "Day 7: Test - Play Your First Progression",
+          "activities": [
+            {
+              "text": "Play this Em to Am progression with a down-strum on each chord, start to finish, 3 times without stopping",
+              "artifact": {
+                "kind": "guitar-riff",
+                "data": {
+                  "name": "Week 1 Test: Em-Am Progression",
+                  "steps": [
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "Am"
+                    }
+                  ],
+                  "chords": [
+                    {
+                      "name": "Em",
+                      "frets": [
+                        0,
+                        2,
+                        2,
+                        0,
+                        0,
+                        0
+                      ],
+                      "hint": "two fingers, strum all six"
+                    },
+                    {
+                      "name": "Am",
+                      "frets": [
+                        -1,
+                        0,
+                        2,
+                        2,
+                        1,
+                        0
+                      ],
+                      "hint": "skip the low E string"
+                    }
+                  ],
+                  "difficulty": 2,
+                  "key": "E minor / A minor",
+                  "bpm": 65,
+                  "teaches": "playing a full progression start to finish"
+                }
+              }
+            },
+            "Record a short video of yourself playing the full progression once on your phone"
+          ],
+          "tip": "A week ago you'd never held a chord — today you played a real progression. That's huge."
+        }
+      },
+      "sprints": [
+        {
+          "number": 1,
+          "title": "Sprint 1: Foundations",
+          "theme": "Get comfortable holding the guitar and learn your first two chords and a basic strum."
+        },
+        {
+          "number": 2,
+          "title": "Sprint 2: Build Momentum",
+          "theme": "Add more chords and start switching between them in simple patterns."
+        },
+        {
+          "number": 3,
+          "title": "Sprint 3: Stretch",
+          "theme": "Play through short, recognizable song sections with friends in mind."
+        },
+        {
+          "number": 4,
+          "title": "Sprint 4: Integrate",
+          "theme": "Put it all together and play full simple songs confidently."
+        }
+      ],
+      "checks": {
+        "sevenDays": true,
+        "activityCounts": true,
+        "allActions": true,
+        "noRepeats": true,
+        "lastDayTest": true,
+        "badDays": [],
+        "nonActions": [],
+        "repeats": [],
+        "avgMinutes": 5,
+        "avgNumbers": 1.7
+      }
+    },
+    {
+      "key": "guitar@50",
+      "goalId": "guitar",
+      "goal": "Learn to play guitar",
+      "week": 1,
+      "level": 50,
+      "ok": true,
+      "rewrite": false,
+      "calls": 1,
+      "days": {
+        "1": {
+          "title": "Day 1: Warm-Up and Weak Spot Check",
+          "activities": [
+            {
+              "text": "Play this open chord warm-up, strumming each chord four times before moving on",
+              "artifact": {
+                "kind": "guitar-riff",
+                "data": {
+                  "name": "Open Chord Warm-Up",
+                  "steps": [
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "Am"
+                    }
+                  ],
+                  "chords": [
+                    {
+                      "name": "C",
+                      "frets": [
+                        -1,
+                        3,
+                        2,
+                        0,
+                        1,
+                        0
+                      ],
+                      "hint": "three fingers, skip the low E"
+                    },
+                    {
+                      "name": "G",
+                      "frets": [
+                        3,
+                        2,
+                        0,
+                        0,
+                        0,
+                        3
+                      ],
+                      "hint": "classic three-finger G shape"
+                    },
+                    {
+                      "name": "D",
+                      "frets": [
+                        -1,
+                        -1,
+                        0,
+                        2,
+                        3,
+                        2
+                      ],
+                      "hint": "triangle shape on top three strings"
+                    },
+                    {
+                      "name": "Em",
+                      "frets": [
+                        0,
+                        2,
+                        2,
+                        0,
+                        0,
+                        0
+                      ],
+                      "hint": "two fingers, strum all six"
+                    },
+                    {
+                      "name": "Am",
+                      "frets": [
+                        -1,
+                        0,
+                        2,
+                        2,
+                        1,
+                        0
+                      ],
+                      "hint": "skip the low E"
+                    }
+                  ],
+                  "difficulty": 2,
+                  "key": "C major",
+                  "bpm": 70,
+                  "teaches": "clean chord transitions"
+                }
+              }
+            },
+            "Write down the two chord changes that felt slowest, one line each",
+            "Practice the F barre chord shape, press down and release 10 times, resting 5 seconds between reps"
+          ],
+          "tip": "Naming your weak spots today makes the rest of the week way more efficient."
+        },
+        "2": {
+          "title": "Day 2: Barre Chord Strength",
+          "activities": [
+            "Hold the F barre chord for 8 full counts, repeat this 10 times",
+            {
+              "text": "Play this F to C switch drill at 60 bpm, aiming for clean sound on every change",
+              "artifact": {
+                "kind": "guitar-riff",
+                "data": {
+                  "name": "F to C Switch Drill",
+                  "steps": [
+                    {
+                      "chord": "F"
+                    },
+                    {
+                      "chord": "F"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "F"
+                    },
+                    {
+                      "chord": "F"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "F"
+                    },
+                    {
+                      "chord": "F"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    }
+                  ],
+                  "chords": [
+                    {
+                      "name": "F",
+                      "frets": [
+                        1,
+                        1,
+                        2,
+                        3,
+                        3,
+                        1
+                      ],
+                      "hint": "first finger barres the first fret"
+                    },
+                    {
+                      "name": "C",
+                      "frets": [
+                        -1,
+                        3,
+                        2,
+                        0,
+                        1,
+                        0
+                      ],
+                      "hint": "three fingers, skip the low E"
+                    }
+                  ],
+                  "difficulty": 3,
+                  "key": "C major",
+                  "bpm": 60,
+                  "teaches": "barre to open chord transitions"
+                }
+              }
+            },
+            "Play 15 clean F to C changes in a row without buzzing, counting out loud as you go"
+          ],
+          "tip": "Barre chords get easier fast once your hand learns the exact pressure needed."
+        },
+        "3": {
+          "title": "Day 3: Strumming Pattern Control",
+          "activities": [
+            {
+              "text": "Practice this down-down-up-up-down-up pattern on Em and C, four bars each at 70 bpm",
+              "artifact": {
+                "kind": "guitar-riff",
+                "data": {
+                  "name": "Down-Up Strum Pattern",
+                  "steps": [
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    }
+                  ],
+                  "chords": [
+                    {
+                      "name": "Em",
+                      "frets": [
+                        0,
+                        2,
+                        2,
+                        0,
+                        0,
+                        0
+                      ],
+                      "hint": "two fingers, strum all six"
+                    },
+                    {
+                      "name": "C",
+                      "frets": [
+                        -1,
+                        3,
+                        2,
+                        0,
+                        1,
+                        0
+                      ],
+                      "hint": "three fingers, skip the low E"
+                    }
+                  ],
+                  "difficulty": 2,
+                  "key": "E minor",
+                  "bpm": 70,
+                  "teaches": "steady strumming rhythm"
+                }
+              }
+            },
+            "Run the same pattern switching chords every 4 bars for 8 full cycles",
+            "Record yourself playing the pattern for 30 seconds and listen back once"
+          ],
+          "tip": "A rock-solid strumming hand makes every song you learn sound twice as good."
+        },
+        "4": {
+          "title": "Day 4: Song-Style Progression",
+          "activities": [
+            {
+              "text": "Play this G-C-D-Em progression, four beats per chord, 10 loops at 80 bpm",
+              "artifact": {
+                "kind": "guitar-riff",
+                "data": {
+                  "name": "G-C-D-Em Song Loop",
+                  "steps": [
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    }
+                  ],
+                  "chords": [
+                    {
+                      "name": "G",
+                      "frets": [
+                        3,
+                        2,
+                        0,
+                        0,
+                        0,
+                        3
+                      ],
+                      "hint": "classic three-finger G shape"
+                    },
+                    {
+                      "name": "C",
+                      "frets": [
+                        -1,
+                        3,
+                        2,
+                        0,
+                        1,
+                        0
+                      ],
+                      "hint": "three fingers, skip the low E"
+                    },
+                    {
+                      "name": "D",
+                      "frets": [
+                        -1,
+                        -1,
+                        0,
+                        2,
+                        3,
+                        2
+                      ],
+                      "hint": "triangle shape on top three strings"
+                    },
+                    {
+                      "name": "Em",
+                      "frets": [
+                        0,
+                        2,
+                        2,
+                        0,
+                        0,
+                        0
+                      ],
+                      "hint": "two fingers, strum all six"
+                    }
+                  ],
+                  "difficulty": 3,
+                  "key": "G major",
+                  "bpm": 80,
+                  "teaches": "chord progression timing"
+                }
+              }
+            },
+            "Speed the same progression up to 100 bpm and play it 5 times without stopping",
+            "Write out the four chord names in order from memory, then check against the tab"
+          ],
+          "tip": "This exact progression shows up in tons of songs, so this rep pays off everywhere."
+        },
+        "5": {
+          "title": "Day 5: Palm Muting and Dynamics",
+          "activities": [
+            {
+              "text": "Practice this palm-muted Am-F-C-G progression, muting the first two strums of each chord",
+              "artifact": {
+                "kind": "guitar-riff",
+                "data": {
+                  "name": "Palm Mute Dynamics Loop",
+                  "steps": [
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "F"
+                    },
+                    {
+                      "chord": "F"
+                    },
+                    {
+                      "chord": "F"
+                    },
+                    {
+                      "chord": "F"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    }
+                  ],
+                  "chords": [
+                    {
+                      "name": "Am",
+                      "frets": [
+                        -1,
+                        0,
+                        2,
+                        2,
+                        1,
+                        0
+                      ],
+                      "hint": "skip the low E"
+                    },
+                    {
+                      "name": "F",
+                      "frets": [
+                        1,
+                        1,
+                        2,
+                        3,
+                        3,
+                        1
+                      ],
+                      "hint": "first finger barres the first fret"
+                    },
+                    {
+                      "name": "C",
+                      "frets": [
+                        -1,
+                        3,
+                        2,
+                        0,
+                        1,
+                        0
+                      ],
+                      "hint": "three fingers, skip the low E"
+                    },
+                    {
+                      "name": "G",
+                      "frets": [
+                        3,
+                        2,
+                        0,
+                        0,
+                        0,
+                        3
+                      ],
+                      "hint": "classic three-finger G shape"
+                    }
+                  ],
+                  "difficulty": 3,
+                  "key": "A minor",
+                  "bpm": 75,
+                  "teaches": "palm muting control"
+                }
+              }
+            },
+            "Run 20 strokes alternating muted and open on the low E and A strings only",
+            "Play 16 bars of the progression hitting loud on beat 1 and soft on beat 3"
+          ],
+          "tip": "Dynamics are what separate a beginner strum from a song that actually grooves."
+        },
+        "6": {
+          "title": "Day 6: Capo Practice and Real Jam",
+          "activities": [
+            "Place a capo on fret 2 and play the G-C-D-Em progression from Day 4, 8 loops at 80 bpm",
+            "Switch back and forth between capoed and non-capoed versions of the same progression, 5 times each",
+            "Play the progression along with a friend or a recording for 2 full minutes without stopping"
+          ],
+          "tip": "Playing with someone else today is the real reason you've been drilling all week."
+        },
+        "7": {
+          "title": "Day 7: Week 1 Test",
+          "activities": [
+            {
+              "text": "Play the full G-C-D-Em progression start to finish at 100 bpm using the strum pattern from Day 3, no stopping for two minutes",
+              "artifact": {
+                "kind": "guitar-riff",
+                "data": {
+                  "name": "Week 1 Test Run",
+                  "steps": [
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    }
+                  ],
+                  "chords": [
+                    {
+                      "name": "G",
+                      "frets": [
+                        3,
+                        2,
+                        0,
+                        0,
+                        0,
+                        3
+                      ],
+                      "hint": "classic three-finger G shape"
+                    },
+                    {
+                      "name": "C",
+                      "frets": [
+                        -1,
+                        3,
+                        2,
+                        0,
+                        1,
+                        0
+                      ],
+                      "hint": "three fingers, skip the low E"
+                    },
+                    {
+                      "name": "D",
+                      "frets": [
+                        -1,
+                        -1,
+                        0,
+                        2,
+                        3,
+                        2
+                      ],
+                      "hint": "triangle shape on top three strings"
+                    },
+                    {
+                      "name": "Em",
+                      "frets": [
+                        0,
+                        2,
+                        2,
+                        0,
+                        0,
+                        0
+                      ],
+                      "hint": "two fingers, strum all six"
+                    }
+                  ],
+                  "difficulty": 3,
+                  "key": "G major",
+                  "bpm": 100,
+                  "teaches": "putting chords and strumming together"
+                }
+              }
+            },
+            "Play one clean 10-count hold of the F barre chord immediately after, no buzzing",
+            "Write down which part of the test felt easiest and which felt hardest, one line each"
+          ],
+          "tip": "Look at how far your hands have come in just one week — that's real progress."
+        }
+      },
+      "sprints": [
+        {
+          "number": 1,
+          "title": "Sprint 1: Foundations",
+          "theme": "Lock in clean chord changes, barre strength, and a steady strum so every song feels playable."
+        },
+        {
+          "number": 2,
+          "title": "Sprint 2: Build Momentum",
+          "theme": "Layer in new strumming patterns and faster transitions across full song progressions."
+        },
+        {
+          "number": 3,
+          "title": "Sprint 3: Stretch",
+          "theme": "Tackle trickier rhythms, lead fills, and playing in time with a backing track or friend."
+        },
+        {
+          "number": 4,
+          "title": "Sprint 4: Integrate",
+          "theme": "Polish a small setlist and perform it start to finish with confidence."
+        }
+      ],
+      "checks": {
+        "sevenDays": true,
+        "activityCounts": true,
+        "allActions": true,
+        "noRepeats": true,
+        "lastDayTest": true,
+        "badDays": [],
+        "nonActions": [],
+        "repeats": [],
+        "avgMinutes": null,
+        "avgNumbers": 3.9
+      }
+    },
+    {
+      "key": "guitar@90",
+      "goalId": "guitar",
+      "goal": "Learn to play guitar",
+      "week": 1,
+      "level": 90,
+      "ok": true,
+      "rewrite": false,
+      "calls": 1,
+      "days": {
+        "1": {
+          "title": "Day 1: Technical Benchmark",
+          "activities": [
+            {
+              "text": "Play this G-C-D progression, four beats per chord, two full passes at 80 bpm",
+              "artifact": {
+                "kind": "guitar-riff",
+                "data": {
+                  "name": "G-C-D Benchmark Progression",
+                  "steps": [
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "D"
+                    }
+                  ],
+                  "chords": [
+                    {
+                      "name": "G",
+                      "frets": [
+                        3,
+                        2,
+                        0,
+                        0,
+                        0,
+                        3
+                      ],
+                      "hint": "three fingers, let open strings ring"
+                    },
+                    {
+                      "name": "C",
+                      "frets": [
+                        -1,
+                        3,
+                        2,
+                        0,
+                        1,
+                        0
+                      ],
+                      "hint": "classic open shape"
+                    },
+                    {
+                      "name": "D",
+                      "frets": [
+                        -1,
+                        -1,
+                        0,
+                        2,
+                        3,
+                        2
+                      ],
+                      "hint": "triangle shape on top three strings"
+                    }
+                  ],
+                  "difficulty": 3,
+                  "key": "G major",
+                  "bpm": 80,
+                  "teaches": "clean chord changes at tempo"
+                }
+              }
+            },
+            "Record a 60-second video of your current playing on your phone, unedited, for later comparison",
+            "Set a metronome at 120 bpm and alternate-pick the low E string for 1 minute straight, counting any missed hits"
+          ],
+          "tip": "You already have the muscle memory — today is just mapping where it stands."
+        },
+        "2": {
+          "title": "Day 2: Picking Precision",
+          "activities": [
+            {
+              "text": "Play this A minor pentatonic climb slowly at 100 bpm, clean hammer-ons throughout",
+              "artifact": {
+                "kind": "guitar-riff",
+                "data": {
+                  "name": "A Minor Pentatonic Climb",
+                  "steps": [
+                    {
+                      "string": 6,
+                      "fret": 5
+                    },
+                    {
+                      "string": 6,
+                      "fret": 8,
+                      "technique": "h"
+                    },
+                    {
+                      "string": 5,
+                      "fret": 5
+                    },
+                    {
+                      "string": 5,
+                      "fret": 8,
+                      "technique": "h"
+                    },
+                    {
+                      "string": 4,
+                      "fret": 5
+                    },
+                    {
+                      "string": 4,
+                      "fret": 7,
+                      "technique": "h"
+                    },
+                    {
+                      "string": 3,
+                      "fret": 5
+                    },
+                    {
+                      "string": 3,
+                      "fret": 7,
+                      "technique": "h"
+                    },
+                    {
+                      "string": 2,
+                      "fret": 5
+                    },
+                    {
+                      "string": 2,
+                      "fret": 8,
+                      "technique": "h"
+                    },
+                    {
+                      "string": 1,
+                      "fret": 5
+                    },
+                    {
+                      "string": 1,
+                      "fret": 8,
+                      "technique": "h"
+                    }
+                  ],
+                  "difficulty": 4,
+                  "key": "A minor",
+                  "bpm": 100,
+                  "teaches": "hammer-ons across all six strings"
+                }
+              }
+            },
+            "Repeat the same climb at 112 bpm, three clean reps with no buzzed notes",
+            "Record a video of the 112 bpm pass and watch it back once for tension in your picking hand"
+          ],
+          "tip": "Speed without clean hammer-ons is just noise — precision first, always."
+        },
+        "3": {
+          "title": "Day 3: Barre Chord Polish",
+          "activities": [
+            {
+              "text": "Play this F-Bm-G-D progression five times without buzzing, four beats per chord",
+              "artifact": {
+                "kind": "guitar-riff",
+                "data": {
+                  "name": "F-Bm-G-D Barre Polish",
+                  "steps": [
+                    {
+                      "chord": "F"
+                    },
+                    {
+                      "chord": "F"
+                    },
+                    {
+                      "chord": "F"
+                    },
+                    {
+                      "chord": "F"
+                    },
+                    {
+                      "chord": "Bm"
+                    },
+                    {
+                      "chord": "Bm"
+                    },
+                    {
+                      "chord": "Bm"
+                    },
+                    {
+                      "chord": "Bm"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "D"
+                    }
+                  ],
+                  "chords": [
+                    {
+                      "name": "F",
+                      "frets": [
+                        1,
+                        3,
+                        3,
+                        2,
+                        1,
+                        1
+                      ],
+                      "hint": "full first-fret barre"
+                    },
+                    {
+                      "name": "Bm",
+                      "frets": [
+                        -1,
+                        2,
+                        4,
+                        4,
+                        3,
+                        2
+                      ],
+                      "hint": "second-fret barre, A-shape"
+                    },
+                    {
+                      "name": "G",
+                      "frets": [
+                        3,
+                        2,
+                        0,
+                        0,
+                        0,
+                        3
+                      ],
+                      "hint": "three fingers, let open strings ring"
+                    },
+                    {
+                      "name": "D",
+                      "frets": [
+                        -1,
+                        -1,
+                        0,
+                        2,
+                        3,
+                        2
+                      ],
+                      "hint": "triangle shape on top three strings"
+                    }
+                  ],
+                  "difficulty": 4,
+                  "key": "G major",
+                  "bpm": 90,
+                  "teaches": "barre chord finger pressure"
+                }
+              }
+            },
+            "Mute and restrike the F chord 10 times in a row, checking finger pressure each time",
+            "Record audio of the full progression at 90 bpm and listen back once for buzz"
+          ],
+          "tip": "Barre chords live or die on thumb position — small tweaks, big payoff."
+        },
+        "4": {
+          "title": "Day 4: Right-Hand Dynamics",
+          "activities": [
+            {
+              "text": "Play this Em-Am travis pattern for 8 bars at 70 bpm, steady thumb on the bass notes",
+              "artifact": {
+                "kind": "guitar-riff",
+                "data": {
+                  "name": "Em-Am Travis Pattern",
+                  "steps": [
+                    {
+                      "string": 6,
+                      "fret": 0
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "string": 4,
+                      "fret": 2
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "string": 6,
+                      "fret": 0
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "string": 5,
+                      "fret": 0
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "string": 3,
+                      "fret": 2
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "string": 5,
+                      "fret": 0
+                    },
+                    {
+                      "chord": "Am"
+                    }
+                  ],
+                  "chords": [
+                    {
+                      "name": "Em",
+                      "frets": [
+                        0,
+                        2,
+                        2,
+                        0,
+                        0,
+                        0
+                      ],
+                      "hint": "two fingers, strum all six"
+                    },
+                    {
+                      "name": "Am",
+                      "frets": [
+                        -1,
+                        0,
+                        2,
+                        2,
+                        1,
+                        0
+                      ],
+                      "hint": "skip the low E"
+                    }
+                  ],
+                  "difficulty": 4,
+                  "key": "E minor",
+                  "bpm": 70,
+                  "teaches": "thumb-finger alternation"
+                }
+              }
+            },
+            "Play the same pattern twice more, once very soft and once very loud, 4 bars each",
+            "Record a 30-second clip of the loud pass and send it to one friend"
+          ],
+          "tip": "Dynamics are what separate a player from a performer — you're already there, just dial it in."
+        },
+        "5": {
+          "title": "Day 5: Repertoire Lock-In",
+          "activities": [
+            "Play three songs you already know start to finish, back to back, without stopping to fix mistakes",
+            "Send a text to your friend group naming the three songs you'll bring to the next jam",
+            "Practice the trickiest transition in song two, 10 times slowly then 10 times at full tempo"
+          ],
+          "tip": "Repertoire is leverage — three solid songs beats ten shaky ones."
+        },
+        "6": {
+          "title": "Day 6: Public Output",
+          "activities": [
+            "Record a full run-through video of one song, start to finish, in a single take with no retakes",
+            "Send that video to at least one friend or your group chat right after recording it",
+            "Tune the guitar fully with a tuner app, checking all six strings twice"
+          ],
+          "tip": "Posting it before it's perfect is the whole point — you're training for real jams, not a studio."
+        },
+        "7": {
+          "title": "Day 7: Performance Test",
+          "activities": [
+            "Perform one full song start to finish from memory, no stopping, timed with your phone",
+            "Record the performance on video in a single take",
+            "Send the video to your friend group immediately after finishing"
+          ],
+          "tip": "This is proof of where you stand right now — one clean take is all you need."
+        }
+      },
+      "sprints": [
+        {
+          "number": 1,
+          "title": "Sprint 1: Foundations",
+          "theme": "Audit your technique, tighten the basics, and get one song performance-ready."
+        },
+        {
+          "number": 2,
+          "title": "Sprint 2: Build Momentum",
+          "theme": "Expand your repertoire and lock in rhythm and timing under pressure."
+        },
+        {
+          "number": 3,
+          "title": "Sprint 3: Stretch",
+          "theme": "Push technical ceilings with lead playing, improvisation, and faster tempos."
+        },
+        {
+          "number": 4,
+          "title": "Sprint 4: Integrate",
+          "theme": "Rehearse and perform a full set as if playing live with friends."
+        }
+      ],
+      "checks": {
+        "sevenDays": true,
+        "activityCounts": true,
+        "allActions": true,
+        "noRepeats": true,
+        "lastDayTest": true,
+        "badDays": [],
+        "nonActions": [],
+        "repeats": [],
+        "avgMinutes": null,
+        "avgNumbers": 2.1
+      }
+    },
+    {
+      "key": "5k@10",
+      "goalId": "5k",
+      "goal": "Run a 5K",
+      "week": 1,
+      "level": 10,
+      "ok": true,
+      "rewrite": false,
+      "calls": 1,
+      "days": {
+        "1": {
+          "title": "Day 1: Learn Proper Running Form",
+          "activities": [
+            "Search YouTube for 'beginner running form tutorial' and watch one full video",
+            "Walk briskly outside or in place for 10 minutes, focusing on upright posture",
+            "Write down 3 form cues you learned in a notes app (e.g., 'relax shoulders')"
+          ],
+          "tip": "Every expert runner started with a single walk — you're already moving forward."
+        },
+        "2": {
+          "title": "Day 2: Check Your Gear",
+          "activities": [
+            "Search 'how to choose running shoes for beginners' and watch one video",
+            "Try on your current shoes and walk 5 minutes to test comfort",
+            "Lay out tomorrow's workout clothes and shoes by your door"
+          ],
+          "tip": "The right gear makes every step easier — you're setting yourself up to win."
+        },
+        "3": {
+          "title": "Day 3: First Walk-Jog Intervals",
+          "activities": [
+            "Search 'beginner walk run interval 1 to 1' and watch one tutorial",
+            "Alternate walking 2 minutes and jogging 1 minute for 15 minutes total",
+            "Stretch your calves and hamstrings for 5 minutes after finishing"
+          ],
+          "tip": "That first jog interval is the hardest — you just did it."
+        },
+        "4": {
+          "title": "Day 4: Learn Breathing Technique",
+          "activities": [
+            "Search 'running breathing technique for beginners' and watch one video",
+            "Practice inhaling for 3 steps and exhaling for 2 steps while walking for 10 minutes",
+            "Jog slowly for 5 minutes applying the same breathing rhythm"
+          ],
+          "tip": "Breath control is a skill — you're building it rep by rep."
+        },
+        "5": {
+          "title": "Day 5: Warm-Up and Cooldown Routine",
+          "activities": [
+            "Search 'dynamic warm up before running' and follow along for 5 minutes",
+            "Alternate walking 2 minutes and jogging 2 minutes for 15 minutes total",
+            "Search 'post run stretching routine' and follow along for 5 minutes"
+          ],
+          "tip": "Bookending your runs with care keeps your body ready for tomorrow."
+        },
+        "6": {
+          "title": "Day 6: Active Recovery Day",
+          "activities": [
+            "Walk at a relaxed pace outdoors for 20 minutes without stopping",
+            "Search 'foam rolling for runners beginners' and follow one 10-minute routine"
+          ],
+          "tip": "Recovery days build strength just as much as training days do."
+        },
+        "7": {
+          "title": "Day 7: Test Day — 20-Minute Interval Run",
+          "activities": [
+            "Warm up by walking briskly for 3 minutes before starting",
+            "Complete 20 minutes alternating 2 minutes jogging and 1 minute walking without stopping the clock",
+            "Record your total distance covered and how you felt in a notes app"
+          ],
+          "tip": "Look at that — one week ago you hadn't started, and today you finished a full workout."
+        }
+      },
+      "sprints": [
+        {
+          "number": 1,
+          "title": "Sprint 1: Foundations",
+          "theme": "Learn the fundamentals and set up everything you need."
+        },
+        {
+          "number": 2,
+          "title": "Sprint 2: Build Momentum",
+          "theme": "Extend your running intervals and build a steady weekly rhythm."
+        },
+        {
+          "number": 3,
+          "title": "Sprint 3: Stretch",
+          "theme": "Push your distance and pace to approach full 5K range."
+        },
+        {
+          "number": 4,
+          "title": "Sprint 4: Integrate",
+          "theme": "Simulate race conditions and prepare to run your first 5K."
+        }
+      ],
+      "checks": {
+        "sevenDays": true,
+        "activityCounts": true,
+        "allActions": true,
+        "noRepeats": true,
+        "lastDayTest": true,
+        "badDays": [],
+        "nonActions": [],
+        "repeats": [],
+        "avgMinutes": 18,
+        "avgNumbers": 3.4
+      }
+    },
+    {
+      "key": "5k@50",
+      "goalId": "5k",
+      "goal": "Run a 5K",
+      "week": 1,
+      "level": 50,
+      "ok": true,
+      "rewrite": false,
+      "calls": 1,
+      "days": {
+        "1": {
+          "title": "Day 1: Baseline Run",
+          "activities": [
+            "Walk briskly for 5 minutes to warm up your legs",
+            "Run 1.5 miles at a comfortable pace, recording your finish time",
+            "Stretch calves and hamstrings for 5 minutes, holding each stretch 30 seconds"
+          ],
+          "tip": "This first run sets your starting point, not your limit."
+        },
+        "2": {
+          "title": "Day 2: Speed Intervals",
+          "activities": [
+            "Jog 5 minutes at an easy pace to warm up",
+            "Run 6 intervals of 1 minute fast pace followed by 1 minute walk recovery",
+            "Walk 5 minutes at a relaxed pace to cool down"
+          ],
+          "tip": "Short bursts of speed now build the legs you need for race day."
+        },
+        "3": {
+          "title": "Day 3: Form Drills",
+          "activities": [
+            "Practice the high-knees drill for 3 sets of 20 steps",
+            "Practice the butt-kicks drill for 3 sets of 20 steps",
+            "Run 15 minutes at a conversational easy pace"
+          ],
+          "tip": "Clean form today means fewer injuries and faster miles later."
+        },
+        "4": {
+          "title": "Day 4: Strength and Hills",
+          "activities": [
+            "Walk 5 minutes briskly to loosen your legs before training",
+            "Perform 3 sets of 15 bodyweight squats, resting 30 seconds between sets",
+            "Run 10 minutes alternating 1 minute hard uphill-effort pace with 1 minute easy recovery jog"
+          ],
+          "tip": "Stronger legs today mean steadier strides on race day."
+        },
+        "5": {
+          "title": "Day 5: Tempo Push",
+          "activities": [
+            "Jog 5 minutes at an easy pace to start",
+            "Run 12 minutes at a pace 20 seconds faster per mile than your Day 1 time",
+            "Walk 4 minutes to cool down, then stretch your hamstrings for 2 minutes"
+          ],
+          "tip": "You're already faster than you were on Day 1 — feel that progress."
+        },
+        "6": {
+          "title": "Day 6: Real-World Route",
+          "activities": [
+            "Walk briskly for 10 minutes along a new outdoor route",
+            "Run 10 minutes at an easy pace on that same route, noting one landmark you pass",
+            "Stretch quads and hip flexors for 5 minutes, holding each stretch 30 seconds"
+          ],
+          "tip": "Running somewhere new keeps training exciting and race-ready."
+        },
+        "7": {
+          "title": "Day 7: Two-Mile Test",
+          "activities": [
+            "Walk 3 minutes to warm up before the test run",
+            "Run 2 miles without stopping, recording your total finish time",
+            "Walk 5 minutes to cool down, then stretch calves for 2 minutes"
+          ],
+          "tip": "This run proves how far your training has already taken you."
+        }
+      },
+      "sprints": [
+        {
+          "number": 1,
+          "title": "Sprint 1: Foundations",
+          "theme": "Build a baseline fitness level, learn proper running form, and set up a consistent training rhythm."
+        },
+        {
+          "number": 2,
+          "title": "Sprint 2: Build Momentum",
+          "theme": "Increase weekly mileage and add speed work to build endurance and pace control."
+        },
+        {
+          "number": 3,
+          "title": "Sprint 3: Stretch",
+          "theme": "Push past comfort zones with longer runs and race-pace intervals to build race confidence."
+        },
+        {
+          "number": 4,
+          "title": "Sprint 4: Integrate",
+          "theme": "Taper smartly, sharpen race strategy, and prepare to run the full 5K distance with confidence."
+        }
+      ],
+      "checks": {
+        "sevenDays": true,
+        "activityCounts": true,
+        "allActions": true,
+        "noRepeats": true,
+        "lastDayTest": true,
+        "badDays": [],
+        "nonActions": [],
+        "repeats": [],
+        "avgMinutes": 15,
+        "avgNumbers": 5.1
+      }
+    },
+    {
+      "key": "5k@90",
+      "goalId": "5k",
+      "goal": "Run a 5K",
+      "week": 1,
+      "level": 90,
+      "ok": true,
+      "rewrite": false,
+      "calls": 1,
+      "days": {
+        "1": {
+          "title": "Day 1: Baseline Time Trial",
+          "activities": [
+            "Run a full 5K time trial today and record your total finishing time",
+            "Write down your mile-by-mile splits and perceived effort (1-10) right after finishing",
+            "Send your 5K time to one friend or post it in a running group today"
+          ],
+          "tip": "A real baseline today makes every future improvement visible and provable."
+        },
+        "2": {
+          "title": "Day 2: Speed Intervals",
+          "activities": [
+            "Run 6 x 400m at 5K goal pace minus 10 seconds per 400m, with 90 second jog recovery between each",
+            "Practice high-knee drills for 20 seconds x 4 reps as a warmup before the intervals",
+            "Log your fastest 400m split time in your notes app today"
+          ],
+          "tip": "Sharp intervals today build the speed reserve you'll draw on in the final mile."
+        },
+        "3": {
+          "title": "Day 3: Tempo and Cadence",
+          "activities": [
+            "Run 2 miles at a tempo pace 15 seconds per mile faster than your easy pace",
+            "Count your steps for 1 minute mid-run and adjust toward 170-180 steps per minute",
+            "Write your tempo mile splits into your training log today"
+          ],
+          "tip": "Dialing in cadence now smooths your stride efficiency for race day."
+        },
+        "4": {
+          "title": "Day 4: Hills and Form",
+          "activities": [
+            "Run 5 x 200m hill repeats at hard effort, walking back down for recovery each time",
+            "Practice an arm-swing drill: 3 sets of 30 seconds focusing on a 90-degree elbow bend while jogging in place",
+            "Post a 10-second video of your hill repeat form to a running friend or group"
+          ],
+          "tip": "Hills build strength fast and expose form flaws you can fix today."
+        },
+        "5": {
+          "title": "Day 5: Negative Split Practice",
+          "activities": [
+            "Run 3 miles: first mile easy, second mile at goal 5K pace, third mile 10 seconds faster than goal pace",
+            "Write out your mile-by-mile race pace plan on paper for your upcoming 5K",
+            "Share your race pace plan with one training partner or coach today"
+          ],
+          "tip": "Practicing negative splits today trains your body to finish strong, not fade."
+        },
+        "6": {
+          "title": "Day 6: Recovery and Strides",
+          "activities": [
+            "Run 20 minutes at an easy conversational pace with relaxed shoulders",
+            "Practice 4 x 20 second strides at near-race pace with full recovery between each",
+            "Clean and lay out your race day shoes, socks, and shirt today"
+          ],
+          "tip": "Easy running and short strides today keep your legs fresh and sharp."
+        },
+        "7": {
+          "title": "Day 7: Full 5K Test",
+          "activities": [
+            "Run the full 5K distance start to finish without stopping, targeting your goal race pace",
+            "Record your finishing time and compare it directly to Day 1's baseline time in your log",
+            "Send your Day 7 5K time to the same friend or group you messaged on Day 1"
+          ],
+          "tip": "This run proves one week of focused work already moved your number."
+        }
+      },
+      "sprints": [
+        {
+          "number": 1,
+          "title": "Sprint 1: Foundations",
+          "theme": "Establish your current baseline, dial in speed and form fundamentals, and prep your race-day setup."
+        },
+        {
+          "number": 2,
+          "title": "Sprint 2: Build Momentum",
+          "theme": "Layer in higher-intensity interval and tempo work while sharpening pacing strategy."
+        },
+        {
+          "number": 3,
+          "title": "Sprint 3: Stretch",
+          "theme": "Push race-pace limits with harder sessions and simulate race-day conditions."
+        },
+        {
+          "number": 4,
+          "title": "Sprint 4: Integrate",
+          "theme": "Taper smartly, polish final details, and deliver a strong public race performance."
+        }
+      ],
+      "checks": {
+        "sevenDays": true,
+        "activityCounts": true,
+        "allActions": true,
+        "noRepeats": true,
+        "lastDayTest": true,
+        "badDays": [],
+        "nonActions": [],
+        "repeats": [],
+        "avgMinutes": 20,
+        "avgNumbers": 5.1
+      }
+    },
+    {
+      "key": "spanish@10",
+      "goalId": "spanish",
+      "goal": "Hold a conversation in Spanish",
+      "week": 1,
+      "level": 10,
+      "ok": true,
+      "rewrite": false,
+      "calls": 1,
+      "days": {
+        "1": {
+          "title": "Day 1: Greetings",
+          "activities": [
+            "Search YouTube for 'Spanish greetings for beginners tutorial' and watch one full video",
+            "Write out 'Hola', 'Buenos días', 'Buenas tardes', and 'Buenas noches' on a notecard, 1 time each",
+            "Practice saying 'Hola, ¿cómo estás?' out loud 10 times"
+          ],
+          "tip": "Every trip starts with a simple hello — you've got this!"
+        },
+        "2": {
+          "title": "Day 2: Numbers 1-10",
+          "activities": [
+            "Search YouTube for 'Spanish numbers 1 to 10 tutorial' and watch one full video",
+            "Write the numbers uno through diez on a notecard, 2 times each",
+            "Count out loud from uno to diez, 5 times in a row"
+          ],
+          "tip": "Numbers will help you with prices, time, and phone numbers in Mexico."
+        },
+        "3": {
+          "title": "Day 3: Introducing Yourself",
+          "activities": [
+            "Search YouTube for 'how to introduce yourself in Spanish beginner tutorial' and watch one full video",
+            "Write the sentence 'Me llamo [your name] y soy de [your country]' 3 times",
+            "Say your introduction sentence out loud 10 times"
+          ],
+          "tip": "Introducing yourself is the key that opens every new conversation."
+        },
+        "4": {
+          "title": "Day 4: Asking Questions",
+          "activities": [
+            "Search YouTube for 'Spanish question words beginner tutorial' and watch one full video",
+            "Write the words '¿Qué?', '¿Dónde?', '¿Cómo?', and '¿Cuánto?' on a notecard, 1 time each",
+            "Practice asking '¿Cómo te llamas?' out loud 10 times"
+          ],
+          "tip": "Questions turn a monologue into a real conversation."
+        },
+        "5": {
+          "title": "Day 5: Polite Phrases",
+          "activities": [
+            "Search YouTube for 'Spanish polite phrases please thank you tutorial' and watch one full video",
+            "Write 'Por favor', 'Gracias', 'De nada', and 'Lo siento' on a notecard, 1 time each",
+            "Say all four phrases out loud 5 times each"
+          ],
+          "tip": "Politeness goes a long way when you're a guest in another country."
+        },
+        "6": {
+          "title": "Day 6: Mini Dialogue Practice",
+          "activities": [
+            "Search YouTube for 'basic Spanish conversation dialogue for beginners' and watch one full video",
+            "Write a 4-line dialogue combining a greeting, your name, a question, and a thank you",
+            "Read your 4-line dialogue out loud 5 times, start to finish"
+          ],
+          "tip": "You're stitching your first real conversation together — nice work!"
+        },
+        "7": {
+          "title": "Day 7: Test - Full Mini Conversation",
+          "activities": [
+            "Perform your 4-line dialogue from Day 6 out loud, start to finish, without reading it",
+            "Record yourself on your phone saying the full dialogue in one take"
+          ],
+          "tip": "This is proof you can already hold a tiny conversation in Spanish — celebrate it!"
+        }
+      },
+      "sprints": [
+        {
+          "number": 1,
+          "title": "Sprint 1: Foundations",
+          "theme": "Learn the fundamentals and set up everything you need."
+        },
+        {
+          "number": 2,
+          "title": "Sprint 2: Build Momentum",
+          "theme": "Practice real conversational exchanges and grow your phrase bank."
+        },
+        {
+          "number": 3,
+          "title": "Sprint 3: Stretch",
+          "theme": "Handle trickier situations like directions, shopping, and small talk."
+        },
+        {
+          "number": 4,
+          "title": "Sprint 4: Integrate",
+          "theme": "Pull everything together into natural, flowing conversations."
+        }
+      ],
+      "checks": {
+        "sevenDays": true,
+        "activityCounts": true,
+        "allActions": true,
+        "noRepeats": true,
+        "lastDayTest": true,
+        "badDays": [],
+        "nonActions": [],
+        "repeats": [],
+        "avgMinutes": null,
+        "avgNumbers": 2.4
+      }
+    },
+    {
+      "key": "spanish@50",
+      "goalId": "spanish",
+      "goal": "Hold a conversation in Spanish",
+      "week": 1,
+      "level": 50,
+      "ok": true,
+      "rewrite": false,
+      "calls": 1,
+      "days": {
+        "1": {
+          "title": "Day 1: Core Verbs & Intro",
+          "activities": [
+            "Write 10 Spanish travel phrases for greetings and asking for help in a notebook, reading each aloud twice",
+            "Practice conjugating ser, estar, and tener in present tense, writing 5 sentences per verb and saying them aloud",
+            "Record a 1-minute voice memo introducing yourself in Spanish, including your name, where you're from, and why you're traveling"
+          ],
+          "tip": "Strong foundations today make every future conversation easier — nice start!"
+        },
+        "2": {
+          "title": "Day 2: Past Tense & Airport Talk",
+          "activities": [
+            "Write 9 preterite verb forms for hablar, comer, and vivir (yo, tú, él), reciting each form 3 times aloud",
+            "Practice a dialogue ordering coffee and asking for the bill, speaking the full exchange aloud twice",
+            "Translate 5 short airport announcements from English into Spanish, writing them down by hand"
+          ],
+          "tip": "You're training your mouth and memory together — that's exactly how fluency sticks."
+        },
+        "3": {
+          "title": "Day 3: Questions & Restaurants",
+          "activities": [
+            "Drill 10 question words (qué, dónde, cuándo, cómo, cuánto) each in its own spoken sentence",
+            "Write 5 questions asking a waiter for restaurant recommendations and read each aloud twice",
+            "Record a 1-minute dialogue asking a waiter for a table and a menu"
+          ],
+          "tip": "Asking good questions is half of any great conversation — you're building that skill now."
+        },
+        "4": {
+          "title": "Day 4: Directions & Places",
+          "activities": [
+            "Write 10 direction phrases like gira a la derecha and sigue derecho, reading each twice aloud",
+            "Sketch a simple map and practice giving directions to a hotel aloud for 2 minutes straight",
+            "Drill 5 sentences using prepositions of place (en, sobre, al lado de), speaking each one aloud"
+          ],
+          "tip": "Getting around confidently is a traveler's superpower — you're sharpening it today."
+        },
+        "5": {
+          "title": "Day 5: Listening & Bargaining",
+          "activities": [
+            "Listen to a 3-minute Spanish travel audio clip, pausing to repeat each sentence aloud (shadowing)",
+            "Practice 5 bargaining exchanges like ¿Puede bajar el precio?, speaking each one aloud",
+            "Write 5 future-tense sentences about your trip plans (voy a ir, visitaré) and read them aloud"
+          ],
+          "tip": "Your ear is catching up to your mouth — keep shadowing, it works fast."
+        },
+        "6": {
+          "title": "Day 6: Real Practice Day",
+          "activities": [
+            "Roleplay a 5-minute conversation with a partner or app about arriving in Mexico, covering greetings, directions, and ordering food",
+            "Review 5 verb conjugation mistakes from this week's notes and rewrite each one correctly",
+            "Run a quick-response drill answering 10 random Spanish questions aloud within 5 seconds each"
+          ],
+          "tip": "This is your dress rehearsal — tomorrow you show what you've built."
+        },
+        "7": {
+          "title": "Day 7: Conversation Test",
+          "activities": [
+            "Hold a 5-minute Spanish conversation start to finish with a partner or app, covering introductions, ordering food, and asking directions without switching to English",
+            "Record the conversation and write down 3 strengths and 3 areas to improve",
+            "Say aloud 5 phrases you struggled with during the test, correcting each one slowly and clearly"
+          ],
+          "tip": "Look how far you've come in one week — you're ready to build on this foundation."
+        }
+      },
+      "sprints": [
+        {
+          "number": 1,
+          "title": "Sprint 1: Foundations",
+          "theme": "Lock in core verbs, travel vocabulary, and question patterns you'll use every day in Mexico."
+        },
+        {
+          "number": 2,
+          "title": "Sprint 2: Build Momentum",
+          "theme": "Expand into real dialogues for restaurants, markets, and transportation with faster recall."
+        },
+        {
+          "number": 3,
+          "title": "Sprint 3: Stretch",
+          "theme": "Handle trickier situations like small talk, emergencies, and negotiating with confidence."
+        },
+        {
+          "number": 4,
+          "title": "Sprint 4: Integrate",
+          "theme": "Combine everything into natural, flowing conversations at a comfortable travel pace."
+        }
+      ],
+      "checks": {
+        "sevenDays": true,
+        "activityCounts": true,
+        "allActions": true,
+        "noRepeats": true,
+        "lastDayTest": true,
+        "badDays": [],
+        "nonActions": [],
+        "repeats": [],
+        "avgMinutes": 2,
+        "avgNumbers": 3.3
+      }
+    },
+    {
+      "key": "spanish@90",
+      "goalId": "spanish",
+      "goal": "Hold a conversation in Spanish",
+      "week": 1,
+      "level": 90,
+      "ok": true,
+      "rewrite": false,
+      "calls": 1,
+      "days": {
+        "1": {
+          "title": "Day 1: Baseline and Vocabulary Load",
+          "activities": [
+            "Record a 2-minute monologue in Spanish describing your Mexico trip plans, then play it back once.",
+            "Write a list of 15 Mexican Spanish slang words (such as güey, chido, neta) with their English meanings.",
+            "Say each of the 15 slang words aloud 3 times at normal conversational speed."
+          ],
+          "tip": "Expert fluency is still built one sharp session at a time — you're already ahead of most travelers."
+        },
+        "2": {
+          "title": "Day 2: Shadowing and Idioms",
+          "activities": [
+            "Play a 3-minute Mexican Spanish audio or podcast clip and shadow it sentence by sentence for 10 minutes.",
+            "Record yourself repeating 5 idiomatic phrases (ahorita, ¿qué onda?, no manches, órale, está padre) 5 times each.",
+            "Write 5 original sentences using those 5 idioms in a travel context."
+          ],
+          "tip": "Shadowing locks in rhythm your ear already half-knows — trust your instincts."
+        },
+        "3": {
+          "title": "Day 3: Subjunctive Polish",
+          "activities": [
+            "Write 10 sentences using the subjunctive mood for travel situations, starting with 'Si llego tarde, espero que...'.",
+            "Say the 10 sentences aloud twice each, reading the first time and reciting from memory the second.",
+            "Record a 1-minute voice memo describing a travel problem and proposing a subjunctive solution."
+          ],
+          "tip": "The subjunctive is the detail that separates fluent from native-sounding — you're polishing, not learning from scratch."
+        },
+        "4": {
+          "title": "Day 4: Scripted Role-Play",
+          "activities": [
+            "Write a 12-line dialogue for ordering food at a Mexican taquería, including 3 regional phrases.",
+            "Perform the dialogue aloud playing both roles and record the audio.",
+            "Send the recording to a Spanish-speaking friend or tutor for feedback."
+          ],
+          "tip": "Public output, even to one friend, sharpens performance faster than private rehearsal."
+        },
+        "5": {
+          "title": "Day 5: Accent and Pronunciation Detail",
+          "activities": [
+            "Record yourself reading a 100-word Spanish paragraph aloud, focusing on Mexican pronunciation of s, ll, and ch.",
+            "Say the tongue-twister 'Tres tristes tigres tragaban trigo en un trigal' 8 times, increasing speed each round.",
+            "Write a short note comparing today's recording to Day 1's, naming 2 specific improvements."
+          ],
+          "tip": "Fine motor control of sounds is the last 10% — and the most noticeable to native ears."
+        },
+        "6": {
+          "title": "Day 6: Live Public Output",
+          "activities": [
+            "Complete a 10-minute video call in Spanish with a native speaker or tutor, discussing your travel plans.",
+            "Write a 5-sentence summary in Spanish of what you discussed during the call.",
+            "Post a 1-minute Spanish video clip about your Mexico trip to a social media story or group chat."
+          ],
+          "tip": "Real-time conversation under light pressure is exactly the rehearsal your trip demands."
+        },
+        "7": {
+          "title": "Day 7: Full Conversation Test",
+          "activities": [
+            "Hold a 5-minute unscripted Spanish conversation with a native speaker or tutor covering food, directions, and small talk, recording it start to finish.",
+            "Write a 100-word journal entry in Spanish summarizing the conversation immediately after.",
+            "Share the recording with your tutor or a Spanish-speaking friend and collect one piece of feedback."
+          ],
+          "tip": "This is proof, not a test — show yourself the conversational skill you already have."
+        }
+      },
+      "sprints": [
+        {
+          "number": 1,
+          "title": "Sprint 1: Foundations",
+          "theme": "Calibrate your current fluency and load in Mexico-specific vocabulary, idioms, and sounds."
+        },
+        {
+          "number": 2,
+          "title": "Sprint 2: Build Momentum",
+          "theme": "Drill real-time listening and speaking speed with native-paced audio and live partners."
+        },
+        {
+          "number": 3,
+          "title": "Sprint 3: Stretch",
+          "theme": "Handle unpredictable, high-stakes conversation scenarios you'll face while traveling."
+        },
+        {
+          "number": 4,
+          "title": "Sprint 4: Integrate",
+          "theme": "Perform full, polished conversations publicly and refine the finest details of accent and tone."
+        }
+      ],
+      "checks": {
+        "sevenDays": true,
+        "activityCounts": true,
+        "allActions": true,
+        "noRepeats": true,
+        "lastDayTest": true,
+        "badDays": [],
+        "nonActions": [],
+        "repeats": [],
+        "avgMinutes": 10,
+        "avgNumbers": 3.4
+      }
+    },
+    {
+      "key": "cooking@10",
+      "goalId": "cooking",
+      "goal": "Cook healthy weeknight dinners",
+      "week": 1,
+      "level": 10,
+      "ok": true,
+      "rewrite": false,
+      "calls": 1,
+      "days": {
+        "1": {
+          "title": "Day 1: Kitchen Setup",
+          "activities": [
+            "Write a list of 5 healthy dinner ideas on a sticky note and put it on your fridge",
+            "Clear and wipe down your stovetop and counter space for 10 minutes",
+            "Search YouTube for 'kitchen essentials for beginners tutorial' and watch one video"
+          ],
+          "tip": "Every great cook starts with a clean counter and a clear list — you just did both."
+        },
+        "2": {
+          "title": "Day 2: Knife Basics",
+          "activities": [
+            "Search YouTube for 'basic knife cuts for beginners tutorial' and watch it once",
+            "Practice dicing one onion into small cubes, following the video's grip and cutting motion",
+            "Store the diced onion in a sealed container in the fridge for tomorrow's cooking"
+          ],
+          "tip": "Your knife skills just leveled up — that onion is proof."
+        },
+        "3": {
+          "title": "Day 3: Cooking Rice",
+          "activities": [
+            "Search YouTube for 'how to cook rice on the stovetop tutorial' and watch it once",
+            "Cook 1 cup of rice following the video's water ratio and timing",
+            "Taste 2 spoonfuls of the finished rice to check texture"
+          ],
+          "tip": "Perfect rice is a skill you'll use for years — nice work locking it in."
+        },
+        "4": {
+          "title": "Day 4: Sautéing Vegetables",
+          "activities": [
+            "Search YouTube for 'how to sauté vegetables tutorial' and watch it once",
+            "Sauté 2 cups of mixed vegetables in a pan with oil for 8 minutes, stirring every 2 minutes",
+            "Plate the sautéed vegetables over a half cup of yesterday's cooked rice"
+          ],
+          "tip": "You just combined two new skills into one real meal — that's momentum."
+        },
+        "5": {
+          "title": "Day 5: Pan-Seared Protein",
+          "activities": [
+            "Search YouTube for 'how to pan sear chicken breast tutorial' and watch it once",
+            "Season one chicken breast with salt and pepper, then sear it 5-6 minutes per side",
+            "Slice the cooked chicken into strips and taste one piece for doneness"
+          ],
+          "tip": "Searing protein well is a core skill — you just nailed your first one."
+        },
+        "6": {
+          "title": "Day 6: Quick Pan Sauce",
+          "activities": [
+            "Search YouTube for 'easy 5 minute pan sauce tutorial' and watch it once",
+            "Make a quick sauce in the same pan using 2 tablespoons butter and 1/4 cup broth, stirring 3 minutes",
+            "Spoon the sauce over a reheated piece of yesterday's chicken"
+          ],
+          "tip": "A simple sauce turns ordinary food into something special — you've got this move now."
+        },
+        "7": {
+          "title": "Day 7: Full Dinner Test",
+          "activities": [
+            "Cook one full dinner start to finish: rice, sautéed vegetables, and pan-seared chicken with sauce",
+            "Plate the complete meal on one plate and sit down to eat it without distractions",
+            "Write one sentence about how the meal turned out on your fridge list"
+          ],
+          "tip": "A week ago this meal felt impossible — tonight you cooked it yourself, start to finish."
+        }
+      },
+      "sprints": [
+        {
+          "number": 1,
+          "title": "Sprint 1: Foundations",
+          "theme": "Learn the fundamentals and set up everything you need."
+        },
+        {
+          "number": 2,
+          "title": "Sprint 2: Build Momentum",
+          "theme": "Cook a small rotation of simple healthy dinners on repeat."
+        },
+        {
+          "number": 3,
+          "title": "Sprint 3: Stretch",
+          "theme": "Add variety, speed, and new techniques to your weeknight meals."
+        },
+        {
+          "number": 4,
+          "title": "Sprint 4: Integrate",
+          "theme": "Run a full week of home-cooked dinners like a routine."
+        }
+      ],
+      "checks": {
+        "sevenDays": true,
+        "activityCounts": true,
+        "allActions": true,
+        "noRepeats": true,
+        "lastDayTest": true,
+        "badDays": [],
+        "nonActions": [],
+        "repeats": [],
+        "avgMinutes": 7,
+        "avgNumbers": 2
+      }
+    },
+    {
+      "key": "cooking@50",
+      "goalId": "cooking",
+      "goal": "Cook healthy weeknight dinners",
+      "week": 1,
+      "level": 50,
+      "ok": true,
+      "rewrite": false,
+      "calls": 1,
+      "days": {
+        "1": {
+          "title": "Day 1: Knife Skills & Kitchen Setup",
+          "activities": [
+            "Write a list of 10 pantry staples you're missing and buy 5 of them today",
+            "Dice one onion into 1/4-inch cubes, 3 times in a row, timing each round with a timer",
+            "Julienne one carrot into 10 matchstick strips in under 5 minutes"
+          ],
+          "tip": "A sharp knife and a stocked pantry make every dinner easier — you're setting the stage."
+        },
+        "2": {
+          "title": "Day 2: Searing Proteins",
+          "activities": [
+            "Season 2 chicken breasts with salt and pepper, pan-sear 6 minutes per side until 165°F internal",
+            "Cook one batch of scrambled eggs on low heat, stirring constantly for 3 minutes",
+            "Practice flipping food in a dry pan using wrist motion, 15 flips with dry rice or beans"
+          ],
+          "tip": "Protein is the anchor of most dinners — nail the sear and the rest falls into place."
+        },
+        "3": {
+          "title": "Day 3: Sheet Pan Dinners",
+          "activities": [
+            "Roast a tray of mixed vegetables (broccoli, carrots, potatoes) at 425°F for 25 minutes",
+            "Cook one sheet pan dinner combining a protein and 2 vegetables, roasted together for 30 minutes",
+            "Write the cook times for 3 vegetables you used today on an index card for future reference"
+          ],
+          "tip": "One pan, minimal cleanup — this is a weeknight hero technique."
+        },
+        "4": {
+          "title": "Day 4: One-Pot Meals",
+          "activities": [
+            "Cook a one-pot pasta using 8 oz pasta, 2 cups broth, and 1 cup vegetables, simmered 12 minutes",
+            "Make a stir-fry with 2 cups mixed vegetables and 1 protein, cooked over high heat for 8 minutes",
+            "Practice deglazing a pan with 1/4 cup broth after searing, scraping up browned bits for 2 minutes"
+          ],
+          "tip": "Fewer dishes, faster cleanup — one-pot meals are weeknight gold."
+        },
+        "5": {
+          "title": "Day 5: Batch Cooking & Prep",
+          "activities": [
+            "Cook 2 cups of rice or grain and portion it into 4 storage containers",
+            "Pan-sear 4 portions of protein (chicken, tofu, or fish) for 5 minutes per side",
+            "Chop 3 cups of mixed vegetables and store them in containers for the week"
+          ],
+          "tip": "Future-you will thank present-you for every container filled today."
+        },
+        "6": {
+          "title": "Day 6: Flavor Building",
+          "activities": [
+            "Make a pan sauce using 2 tbsp butter, 1 tbsp flour, and 1 cup broth, whisking for 5 minutes",
+            "Mix a marinade using 3 tbsp oil, 1 tbsp vinegar, and 2 minced garlic cloves, and marinate a protein for 20 minutes",
+            "Season a cooked vegetable with 3 different herbs or spices, tasting and adjusting after each one"
+          ],
+          "tip": "Flavor is what turns 'fine' dinners into ones you actually crave."
+        },
+        "7": {
+          "title": "Day 7: Test — Full Dinner Start to Finish",
+          "activities": [
+            "Cook a complete 3-component dinner (protein, starch, vegetable) start to finish in 45 minutes",
+            "Plate the full meal on one plate and photograph it",
+            "Time yourself from start to finish and write the total number of minutes on a notecard"
+          ],
+          "tip": "This is proof: you can build a real dinner from scratch, on the clock, tonight."
+        }
+      },
+      "sprints": [
+        {
+          "number": 1,
+          "title": "Sprint 1: Foundations",
+          "theme": "Learn the fundamentals and set up everything you need."
+        },
+        {
+          "number": 2,
+          "title": "Sprint 2: Build Momentum",
+          "theme": "Practice core cooking techniques until they feel automatic."
+        },
+        {
+          "number": 3,
+          "title": "Sprint 3: Stretch",
+          "theme": "Tackle trickier recipes and build a repeatable weekly rotation."
+        },
+        {
+          "number": 4,
+          "title": "Sprint 4: Integrate",
+          "theme": "Run a full week of home-cooked dinners without relying on takeout."
+        }
+      ],
+      "checks": {
+        "sevenDays": true,
+        "activityCounts": true,
+        "allActions": true,
+        "noRepeats": true,
+        "lastDayTest": true,
+        "badDays": [],
+        "nonActions": [],
+        "repeats": [],
+        "avgMinutes": 24,
+        "avgNumbers": 6.1
+      }
+    },
+    {
+      "key": "cooking@90",
+      "goalId": "cooking",
+      "goal": "Cook healthy weeknight dinners",
+      "week": 1,
+      "level": 90,
+      "ok": true,
+      "rewrite": false,
+      "calls": 1,
+      "days": {
+        "1": {
+          "title": "Day 1: Framework and Pantry Audit",
+          "activities": [
+            "Write out 5 protein-vegetable-starch dinner combinations on one page, naming exact ingredients for each",
+            "Open every pantry cabinet and fridge shelf and write a list of all staples on hand in under 15 minutes",
+            "Cook a double batch of a base sofrito using onion, garlic, and bell pepper, simmered 12 minutes, and store half in a sealed container"
+          ],
+          "tip": "A sharp system today saves you ten rushed decisions this week."
+        },
+        "2": {
+          "title": "Day 2: Knife Work Polish",
+          "activities": [
+            "Practice julienne cuts on 2 carrots, aiming for 40 even matchsticks in under 4 minutes",
+            "Practice brunoise cuts on 1 onion, producing uniform 3mm cubes in under 3 minutes",
+            "Build a dry spice blend from scratch using 5 spices measured by teaspoon and store it in a labeled jar"
+          ],
+          "tip": "Clean cuts cook evenly and cut your active time tomorrow."
+        },
+        "3": {
+          "title": "Day 3: Pan Sauce and Flavor Balance",
+          "activities": [
+            "Sear a chicken thigh in a hot pan for 5 minutes per side, then deglaze with 1/4 cup stock to lift the fond",
+            "Reduce the pan sauce by half over medium heat, timing it with a clock, then whisk in 1 tablespoon cold butter",
+            "Taste the sauce and adjust it 3 separate times with drops of acid, pinches of salt, or small pats of fat until balanced"
+          ],
+          "tip": "Balancing a sauce by taste, not recipe, is the mark of real skill."
+        },
+        "4": {
+          "title": "Day 4: Protein Precision and Salad Build",
+          "activities": [
+            "Sear a piece of fish or steak to an internal temperature of 135°F using a thermometer, then rest it exactly 5 minutes before cutting",
+            "Whisk a vinaigrette from 3 parts oil to 1 part acid until fully emulsified, timing the whisking for 90 seconds",
+            "Toss the vinaigrette with a salad of 3 raw vegetables cut into bite-sized pieces and plate it in under 2 minutes"
+          ],
+          "tip": "Precision on protein temp is what separates a good dinner from a great one."
+        },
+        "5": {
+          "title": "Day 5: First Public Output",
+          "activities": [
+            "Cook a full 3-component dinner using Monday's sofrito base, a seared protein, and a quick-sautéed vegetable within 40 minutes",
+            "Photograph the plated dinner from directly above using natural light before eating",
+            "Write a 5-sentence recipe card listing ingredients and steps, then send it to one friend or family member"
+          ],
+          "tip": "Sharing your cooking locks in accountability and pride in the work."
+        },
+        "6": {
+          "title": "Day 6: Speed and Parallel Cooking Drill",
+          "activities": [
+            "Set a timer for 35 minutes and cook a protein, a starch, and a vegetable side simultaneously using all 4 stovetop burners and the oven",
+            "Plate the finished dinner within 2 minutes of the timer ending without pausing to wash dishes first",
+            "Write down which step caused the most delay and one specific fix for next time"
+          ],
+          "tip": "Running multiple pans at once is the real skill behind fast weeknight meals."
+        },
+        "7": {
+          "title": "Day 7: Full Dinner Test",
+          "activities": [
+            "Cook a complete healthy dinner — protein, starch, vegetable, and sauce — from first chop to final plate in 45 minutes or less, timed with a clock",
+            "Plate the dinner with a visible sauce swirl or garnish and photograph it before serving",
+            "Serve the dinner to yourself or another person and ask them to rate it out of 10 on taste and presentation"
+          ],
+          "tip": "This is proof: you can now build a restaurant-quality dinner faster than takeout arrives."
+        }
+      },
+      "sprints": [
+        {
+          "number": 1,
+          "title": "Sprint 1: Foundations",
+          "theme": "Rebuild and sharpen the core technical system — knife work, flavor layering, and mise en place speed — that expert-level weeknight cooking depends on."
+        },
+        {
+          "number": 2,
+          "title": "Sprint 2: Build Momentum",
+          "theme": "Chain techniques into full multi-component dinners cooked under real weeknight time pressure."
+        },
+        {
+          "number": 3,
+          "title": "Sprint 3: Stretch",
+          "theme": "Push variety, speed, and presentation with more demanding dishes and public-facing cooking."
+        },
+        {
+          "number": 4,
+          "title": "Sprint 4: Integrate",
+          "theme": "Lock in a repeatable weekly system so healthy dinners replace takeout permanently."
+        }
+      ],
+      "checks": {
+        "sevenDays": true,
+        "activityCounts": true,
+        "allActions": true,
+        "noRepeats": true,
+        "lastDayTest": true,
+        "badDays": [],
+        "nonActions": [],
+        "repeats": [],
+        "avgMinutes": 24,
+        "avgNumbers": 4.3
+      }
+    },
+    {
+      "key": "portraits@10",
+      "goalId": "portraits",
+      "goal": "Draw realistic portraits",
+      "week": 1,
+      "level": 10,
+      "ok": true,
+      "rewrite": false,
+      "calls": 1,
+      "days": {
+        "1": {
+          "title": "Day 1: Materials and Basic Strokes",
+          "activities": [
+            "Gather one HB pencil, one eraser, and a blank sketchbook on your desk.",
+            "Search YouTube for 'basic pencil shading tutorial for beginners' and watch the first 5 minutes.",
+            "Draw 20 straight lines in your sketchbook, 10 horizontal and 10 vertical, each 3 inches long."
+          ],
+          "tip": "Every portrait artist started with wobbly lines just like these."
+        },
+        "2": {
+          "title": "Day 2: The Oval Head Shape",
+          "activities": [
+            "Search YouTube for 'how to draw an oval head shape for portraits' and watch the full tutorial.",
+            "Draw 10 freehand ovals in your sketchbook, each about 4 inches tall.",
+            "Trace one oval from the tutorial, pausing the video every 30 seconds to copy each step."
+          ],
+          "tip": "The oval is the skeleton of every face you'll ever draw—nail it now."
+        },
+        "3": {
+          "title": "Day 3: Facial Proportion Guidelines",
+          "activities": [
+            "Search YouTube for 'facial proportions guide lines tutorial beginner' and watch it once.",
+            "Draw 5 ovals, adding one horizontal eye-line and one vertical center-line through each.",
+            "Mark on one of your ovals where the eyes, nose, and mouth lines sit, copying the tutorial reference."
+          ],
+          "tip": "These guidelines are the secret map that makes faces look balanced."
+        },
+        "4": {
+          "title": "Day 4: Drawing Eyes",
+          "activities": [
+            "Search YouTube for 'how to draw a realistic eye for beginners' and watch the first 10 minutes.",
+            "Draw 8 practice eyes in your sketchbook, each about 1 inch wide, following the tutorial steps.",
+            "Shade one eye drawing using 3 pencil pressure levels: light, medium, and dark."
+          ],
+          "tip": "Eyes feel hard at first, but 8 reps today will make the next 8 easier."
+        },
+        "5": {
+          "title": "Day 5: Drawing a Nose",
+          "activities": [
+            "Search YouTube for 'how to draw a simple realistic nose tutorial' and watch it once.",
+            "Draw 8 practice noses in your sketchbook, each about 1.5 inches tall, copying the tutorial steps.",
+            "Shade one nose drawing, adding a highlight and a shadow with your pencil."
+          ],
+          "tip": "Noses are mostly shading tricks—you're already learning the key skill."
+        },
+        "6": {
+          "title": "Day 6: Drawing a Mouth and Combining Features",
+          "activities": [
+            "Search YouTube for 'how to draw realistic lips step by step' and watch it once.",
+            "Draw 8 practice mouths in your sketchbook, each about 2 inches wide, copying the tutorial.",
+            "Combine one eye, one nose, and one mouth drawing onto a single oval face outline."
+          ],
+          "tip": "Today's the first time it starts looking like a real face—exciting moment."
+        },
+        "7": {
+          "title": "Day 7: Test - Draw a Complete Face",
+          "activities": [
+            "Draw one complete face start to finish in 20 minutes: oval shape, guidelines, eyes, nose, and mouth, using only your own skills from this week with no tutorial paused.",
+            "Shade the completed face with light, medium, and dark pencil pressure in 10 minutes."
+          ],
+          "tip": "Look at what you built from zero in just one week—that's real progress."
+        }
+      },
+      "sprints": [
+        {
+          "number": 1,
+          "title": "Sprint 1: Foundations",
+          "theme": "Learn the fundamentals and set up everything you need to start drawing faces."
+        },
+        {
+          "number": 2,
+          "title": "Sprint 2: Build Momentum",
+          "theme": "Practice individual facial features and basic shading until they feel natural."
+        },
+        {
+          "number": 3,
+          "title": "Sprint 3: Stretch",
+          "theme": "Combine features into full faces and refine proportions and shading depth."
+        },
+        {
+          "number": 4,
+          "title": "Sprint 4: Integrate",
+          "theme": "Draw complete, realistic portraits of your actual family members from photos."
+        }
+      ],
+      "checks": {
+        "sevenDays": true,
+        "activityCounts": true,
+        "allActions": true,
+        "noRepeats": true,
+        "lastDayTest": true,
+        "badDays": [],
+        "nonActions": [],
+        "repeats": [],
+        "avgMinutes": 15,
+        "avgNumbers": 2.9
+      }
+    },
+    {
+      "key": "portraits@50",
+      "goalId": "portraits",
+      "goal": "Draw realistic portraits",
+      "week": 1,
+      "level": 50,
+      "ok": true,
+      "rewrite": false,
+      "calls": 1,
+      "days": {
+        "1": {
+          "title": "Day 1: Tools and Proportion Setup",
+          "activities": [
+            "Gather your 2H, HB, 2B, and 4B pencils, a kneaded eraser, a blending stump, and a smooth sketch pad, and lay them on your desk.",
+            "Draw 3 oval head outlines, each 4 inches tall, and mark horizontal guidelines for the eye line, nose line, and mouth line on each.",
+            "Trace the proportion lines (eye, nose, chin) of one printed reference photo using tracing paper for 10 minutes."
+          ],
+          "tip": "A solid setup today makes every drawing this month faster and cleaner."
+        },
+        "2": {
+          "title": "Day 2: Eye Drills",
+          "activities": [
+            "Draw 8 individual eyes, each 1.5 inches wide, focusing on the upper lid crease and lower lash line.",
+            "Shade 4 irises using circular pencil strokes, building 3 value layers from light to dark on each.",
+            "Set a 5-minute timer and draw one pair of eyes from a photo, spacing them one eye-width apart."
+          ],
+          "tip": "Eyes carry the most expression, so every careful rep here pays off later."
+        },
+        "3": {
+          "title": "Day 3: Nose Drills",
+          "activities": [
+            "Draw 6 noses from a 3/4 angle reference, each 2 inches tall, marking the bridge, ball, and nostril wings.",
+            "Shade the underside of 3 nose drawings with a 2B pencil, building a gradient from dark to light in 20 strokes each.",
+            "Lift one bright highlight on 2 nose drawings using the corner edge of a kneaded eraser."
+          ],
+          "tip": "Noses feel tricky now, but repetition today will make them automatic soon."
+        },
+        "4": {
+          "title": "Day 4: Mouth and Lips Drills",
+          "activities": [
+            "Draw 6 closed mouths, each 1.5 inches wide, marking the cupid's bow and the shadow under the lower lip.",
+            "Shade 4 lip drawings with a 2B pencil, building 3 value layers from darkest corner to lightest center highlight.",
+            "Draw 1 smiling mouth with visible teeth from a reference photo, spending 8 minutes shading the tooth shadows."
+          ],
+          "tip": "Lips add life to a portrait, and you're building that skill one mouth at a time."
+        },
+        "5": {
+          "title": "Day 5: Ears and Head Shape Drills",
+          "activities": [
+            "Draw 5 ears from a side-view reference, each 1.5 inches tall, marking the helix, lobe, and inner curves.",
+            "Draw 3 full head outlines in 3/4 view, each 4 inches tall, placing the ear between the eyebrow and nose lines.",
+            "Blend 2 ear drawings with a blending stump for 5 minutes each, smoothing dark inner curves into the lighter lobe."
+          ],
+          "tip": "Ears are often skipped, but nailing their placement now sharpens your whole portrait."
+        },
+        "6": {
+          "title": "Day 6: Light and Shadow Shading Drills",
+          "activities": [
+            "Draw 3 spheres, each 2 inches wide, and shade each with a light source from the upper left using 4 value zones.",
+            "Shade one 3/4 view face sketch using the sphere technique, building shadow on the right side of the nose and cheek for 10 minutes.",
+            "Blend 2 shaded cheek areas with a blending stump for 5 minutes each, smoothing the light-to-shadow transition."
+          ],
+          "tip": "Shading is what turns flat lines into a lifelike face, so this practice matters a lot."
+        },
+        "7": {
+          "title": "Day 7: Test - Full Face Start to Finish",
+          "activities": [
+            "Choose one family photo and sketch the head shape with proportion guidelines in 5 minutes.",
+            "Draw the eyes, nose, mouth, and ears using those guidelines, spending 15 minutes placing all features.",
+            "Shade the full face with light and shadow zones, spending 10 minutes building 3 value layers across the skin."
+          ],
+          "tip": "You've drilled every feature this week; now put them together and see how far you've come."
+        }
+      },
+      "sprints": [
+        {
+          "number": 1,
+          "title": "Sprint 1: Foundations",
+          "theme": "Learn facial proportions and set up the tools and drills you'll use all month."
+        },
+        {
+          "number": 2,
+          "title": "Sprint 2: Build Momentum",
+          "theme": "Strengthen feature accuracy and start blending full faces with confident shading."
+        },
+        {
+          "number": 3,
+          "title": "Sprint 3: Stretch",
+          "theme": "Tackle harder angles, expressions, and likeness to push realism further."
+        },
+        {
+          "number": 4,
+          "title": "Sprint 4: Integrate",
+          "theme": "Combine every skill to complete finished portraits of your family."
+        }
+      ],
+      "checks": {
+        "sevenDays": true,
+        "activityCounts": true,
+        "allActions": true,
+        "noRepeats": true,
+        "lastDayTest": true,
+        "badDays": [],
+        "nonActions": [],
+        "repeats": [],
+        "avgMinutes": 14,
+        "avgNumbers": 7
+      }
+    },
+    {
+      "key": "portraits@90",
+      "goalId": "portraits",
+      "goal": "Draw realistic portraits",
+      "week": 1,
+      "level": 90,
+      "ok": true,
+      "rewrite": false,
+      "calls": 1,
+      "days": {
+        "1": {
+          "title": "Day 1: Calibrate Proportions",
+          "activities": [
+            "Measure and mark the facial thirds (hairline-to-brow, brow-to-nose, nose-to-chin) on 3 printed family photos using a ruler, 10 minutes",
+            "Sketch the Loomis head construction from memory 5 times on one sheet with no reference, 10 minutes",
+            "Photograph your best sketch and post it to an online art critique group with the caption 'Day 1 proportion check', 10 minutes"
+          ],
+          "tip": "Your hand already knows this—today just resets the ruler in your eye."
+        },
+        "2": {
+          "title": "Day 2: Eye Precision Drill",
+          "activities": [
+            "Draw 6 individual eyes from 6 different reference photos, focusing on catchlight placement, 15 minutes",
+            "Shade the iris and sclera gradient on 3 of those eyes with a blending stump, 10 minutes",
+            "Post your strongest eye study to an art forum with the caption 'Day 2 eye study', 5 minutes"
+          ],
+          "tip": "Eyes carry 80% of likeness—nail this and the rest gets easier."
+        },
+        "3": {
+          "title": "Day 3: Nose and Mouth Structure",
+          "activities": [
+            "Draw 4 noses from 4 different angles (front, 3/4, profile, worm's-eye) using reference photos, 15 minutes",
+            "Render 4 mouths matching the same references with a full value range from white to near-black, 10 minutes",
+            "Trace the mouth outline from one reference onto tracing paper over your drawing to check proportion accuracy, 5 minutes"
+          ],
+          "tip": "Structure first, charm later—you're laying bolts before the finish coat."
+        },
+        "4": {
+          "title": "Day 4: Skin Tone Values",
+          "activities": [
+            "Create a 10-step grayscale value scale with graphite on one strip of paper, 8 minutes",
+            "Render a cheek-and-jaw plane study matching a reference photo using that value scale, 15 minutes",
+            "Photograph the study in natural light and upload it to your portfolio page or social account, 7 minutes"
+          ],
+          "tip": "Value does the heavy lifting—line is just the scaffolding."
+        },
+        "5": {
+          "title": "Day 5: Likeness Under Time Pressure",
+          "activities": [
+            "Draw a 20-minute timed portrait of one family member from a photo, aiming for recognizable likeness",
+            "Measure eye spacing, nose width, and mouth width against the photo with a ruler and mark corrections directly on the sketch, 7 minutes",
+            "Text or show the corrected sketch to that family member and record their first reaction in one sentence, 3 minutes"
+          ],
+          "tip": "Fast portraits expose weak habits fast—that's the point today."
+        },
+        "6": {
+          "title": "Day 6: Hair and Edge Control",
+          "activities": [
+            "Render two hair-mass studies with varied pencil pressure, one curly and one straight, 15 minutes",
+            "Soften 3 edges on an earlier portrait draft with a blending tool to create lost-and-found transitions, 10 minutes",
+            "Post a before/after photo of the edge work to an online critique group, 5 minutes"
+          ],
+          "tip": "Soft edges are what make a portrait breathe instead of stare."
+        },
+        "7": {
+          "title": "Day 7: Full Portrait Sprint Test",
+          "activities": [
+            "Draw a complete portrait of one family member from a reference photo, start to finish, within 25 minutes using full tonal range",
+            "Sign and date the finished portrait in the bottom corner, 1 minute",
+            "Photograph the finished piece and send it directly to that family member as a gift, 4 minutes"
+          ],
+          "tip": "This is proof, not practice—show yourself exactly how far one week took you."
+        }
+      },
+      "sprints": [
+        {
+          "number": 1,
+          "title": "Sprint 1: Foundations",
+          "theme": "Recalibrate core portrait mechanics—proportion, features, and values—while building a daily public-feedback habit."
+        },
+        {
+          "number": 2,
+          "title": "Sprint 2: Build Momentum",
+          "theme": "Layer in full-head value studies and likeness speed drills using real family reference photos."
+        },
+        {
+          "number": 3,
+          "title": "Sprint 3: Stretch",
+          "theme": "Push into complex lighting, skin tone mixing, and multi-session finished portraits for critique."
+        },
+        {
+          "number": 4,
+          "title": "Sprint 4: Integrate",
+          "theme": "Complete and present a finished gallery-quality family portrait series."
+        }
+      ],
+      "checks": {
+        "sevenDays": true,
+        "activityCounts": true,
+        "allActions": true,
+        "noRepeats": true,
+        "lastDayTest": true,
+        "badDays": [],
+        "nonActions": [],
+        "repeats": [],
+        "avgMinutes": 27,
+        "avgNumbers": 5
+      }
+    },
+    {
+      "key": "morning@10",
+      "goalId": "morning",
+      "goal": "Build a morning routine",
+      "week": 1,
+      "level": 10,
+      "ok": true,
+      "rewrite": false,
+      "calls": 1,
+      "days": {
+        "1": {
+          "title": "Day 1: Write Your Routine Card",
+          "activities": [
+            "Write a 3-line routine on an index card: 'Wake at 7:00, drink water, stretch 5 minutes' and tape it to your mirror.",
+            "Set your phone alarm for 7:00 AM tomorrow and label it 'Morning Routine'.",
+            "Search YouTube for '5 minute morning stretch for beginners' and save the first video you find."
+          ],
+          "tip": "Small steps today make tomorrow's routine feel easy."
+        },
+        "2": {
+          "title": "Day 2: Start With Water",
+          "activities": [
+            "Fill a glass with water tonight and set it on your nightstand.",
+            "Search YouTube for 'how to build a morning routine for beginners' and watch one 10-minute video.",
+            "Drink the full glass of water within 5 minutes of your alarm tomorrow morning."
+          ],
+          "tip": "You're giving your body a clear signal: the day has begun."
+        },
+        "3": {
+          "title": "Day 3: Let In the Light",
+          "activities": [
+            "Open your curtains fully the moment your alarm rings.",
+            "Walk outside for 5 minutes right after drinking your water, leaving your phone indoors.",
+            "Search YouTube for 'morning sunlight benefits explained simply' and watch for 10 minutes."
+          ],
+          "tip": "Light and movement are quietly powerful wake-up signals."
+        },
+        "4": {
+          "title": "Day 4: Add a Stretch",
+          "activities": [
+            "Follow your saved stretch video from Day 1, doing each stretch once, for 5 minutes.",
+            "Make your bed within 2 minutes of standing up.",
+            "Write one sentence in a notebook describing how your body feels after stretching."
+          ],
+          "tip": "A tidy bed and a stretched body set a calm tone for the day."
+        },
+        "5": {
+          "title": "Day 5: Practice Calm Breathing",
+          "activities": [
+            "Search YouTube for '4-7-8 breathing technique tutorial' and watch the first 10 minutes.",
+            "Sit in a chair and practice the 4-7-8 breath cycle 4 times before checking your phone.",
+            "Write the time you finished your morning routine on your index card."
+          ],
+          "tip": "Breathing slowly is a simple way to quiet a busy mind."
+        },
+        "6": {
+          "title": "Day 6: Run the Full Sequence",
+          "activities": [
+            "Turn off phone notifications before getting out of bed when your alarm rings.",
+            "Complete your routine in order: drink water, walk 5 minutes outside, stretch 5 minutes, breathe 4 cycles.",
+            "Write the total minutes the full routine took on your index card."
+          ],
+          "tip": "Today you're linking every piece into one smooth flow."
+        },
+        "7": {
+          "title": "Day 7: Routine Test Run",
+          "activities": [
+            "Complete your full morning routine (water, walk, stretch, breathing) start to finish without checking your phone.",
+            "Time yourself with a clock and write the total minutes used on your index card.",
+            "Write one sentence naming which step felt easiest to do today."
+          ],
+          "tip": "You just proved you can run a calm morning from start to finish — that's real progress."
+        }
+      },
+      "sprints": [
+        {
+          "number": 1,
+          "title": "Sprint 1: Foundations",
+          "theme": "Learn the basic pieces of a morning routine and set up the tools you'll use every day."
+        },
+        {
+          "number": 2,
+          "title": "Sprint 2: Build Momentum",
+          "theme": "Practice the full routine daily until it feels familiar instead of forced."
+        },
+        {
+          "number": 3,
+          "title": "Sprint 3: Stretch",
+          "theme": "Handle busy or off-schedule mornings and add one new element to deepen the routine."
+        },
+        {
+          "number": 4,
+          "title": "Sprint 4: Integrate",
+          "theme": "Make the routine automatic and fit it naturally into your daily life long-term."
+        }
+      ],
+      "checks": {
+        "sevenDays": true,
+        "activityCounts": true,
+        "allActions": true,
+        "noRepeats": true,
+        "lastDayTest": true,
+        "badDays": [],
+        "nonActions": [],
+        "repeats": [],
+        "avgMinutes": 9,
+        "avgNumbers": 3.6
+      }
+    },
+    {
+      "key": "morning@50",
+      "goalId": "morning",
+      "goal": "Build a morning routine",
+      "week": 1,
+      "level": 50,
+      "ok": true,
+      "rewrite": false,
+      "calls": 1,
+      "days": {
+        "1": {
+          "title": "Day 1: Map Your Routine",
+          "activities": [
+            "Write down your current wake-up time and your target wake-up time on paper, labeling it 'Day 1 Baseline'.",
+            "Set an alarm for tomorrow's target wake time and place your phone across the room before bed.",
+            "Practice 5 slow deep breaths (4 counts in, 4 counts out) sitting on the edge of the bed, timed for 2 minutes."
+          ],
+          "tip": "Small clear steps today make tomorrow's routine easier to start."
+        },
+        "2": {
+          "title": "Day 2: Stretch Sequence",
+          "activities": [
+            "Practice a 5-move stretch sequence (neck roll, shoulder roll, forward fold, side bend, cat-cow), holding each pose for 20 seconds, total 5 minutes.",
+            "Write the start and finish time of the stretch sequence on your Day 1 paper.",
+            "Drink one full 8-ounce glass of water right after finishing the stretches."
+          ],
+          "tip": "Your body is learning the shape of calm, one stretch at a time."
+        },
+        "3": {
+          "title": "Day 3: Hydration and Movement",
+          "activities": [
+            "Drink 12 ounces of water within 10 minutes of waking, timed with a kitchen timer.",
+            "Walk in place or around the room for 3 minutes at a brisk pace, counting steps aloud every 30 seconds.",
+            "Repeat yesterday's 5-move stretch sequence, holding each pose for 25 seconds this time."
+          ],
+          "tip": "Notice how movement wakes your mind faster than your eyes alone."
+        },
+        "4": {
+          "title": "Day 4: Focus Block",
+          "activities": [
+            "Set a timer for 10 minutes and write 3 sentences describing today's top priority task.",
+            "Read 2 pages of any book sitting upright at a table, timed for 5 minutes.",
+            "Practice the 4-count breathing drill for 3 minutes, counting breaths on your fingers."
+          ],
+          "tip": "A focused ten minutes can steady the rest of your day."
+        },
+        "5": {
+          "title": "Day 5: Combine and Time",
+          "activities": [
+            "Run through the stretch sequence, hydration step, and 5-minute reading block back-to-back, timing the whole sequence with a stopwatch.",
+            "Write the total time taken on paper and circle the slowest step.",
+            "Drink a 12-ounce glass of water during the transition between stretching and reading."
+          ],
+          "tip": "Stringing the pieces together shows you the real shape of your morning."
+        },
+        "6": {
+          "title": "Day 6: Fix the Weak Spot",
+          "activities": [
+            "Practice the slowest step from yesterday three times in a row, timing each repetition separately on paper.",
+            "Rewrite the order of your routine steps on an index card based on today's practice results.",
+            "Practice the full breathing drill (4-count in, 4-count out) for 4 minutes while seated."
+          ],
+          "tip": "Fixing the weakest link is the fastest way to a smoother routine."
+        },
+        "7": {
+          "title": "Day 7: Full Routine Test",
+          "activities": [
+            "Run the complete 30-minute morning routine start to finish without stopping, following the index card order from Day 6.",
+            "Record the finish time and write one sentence describing how calm you felt afterward."
+          ],
+          "tip": "You built this from scratch in a week — run it with confidence and notice the calm you created."
+        }
+      },
+      "sprints": [
+        {
+          "number": 1,
+          "title": "Sprint 1: Foundations",
+          "theme": "Learn the core building blocks of a calm morning and set up your schedule and tools."
+        },
+        {
+          "number": 2,
+          "title": "Sprint 2: Build Momentum",
+          "theme": "Strengthen consistency by running the full routine daily and tightening the slow transitions."
+        },
+        {
+          "number": 3,
+          "title": "Sprint 3: Stretch",
+          "theme": "Add challenge with longer focus blocks and real-world variations that test your calm under pressure."
+        },
+        {
+          "number": 4,
+          "title": "Sprint 4: Integrate",
+          "theme": "Make the routine automatic and resilient so it holds up even on disrupted or rushed mornings."
+        }
+      ],
+      "checks": {
+        "sevenDays": true,
+        "activityCounts": true,
+        "allActions": true,
+        "noRepeats": true,
+        "lastDayTest": true,
+        "badDays": [],
+        "nonActions": [],
+        "repeats": [],
+        "avgMinutes": 8,
+        "avgNumbers": 4.1
+      }
+    },
+    {
+      "key": "morning@90",
+      "goalId": "morning",
+      "goal": "Build a morning routine",
+      "week": 1,
+      "level": 90,
+      "ok": true,
+      "rewrite": false,
+      "calls": 1,
+      "days": {
+        "1": {
+          "title": "Day 1: Audit & Blueprint",
+          "activities": [
+            "Write down your last 7 wake-up times and the first 10 minutes of each morning in a notebook, noting exact minute marks.",
+            "Draft a one-page morning routine blueprint listing 5 segments (wake, hydrate, move, focus, plan) with a target minute count for each totaling 30 minutes.",
+            "Set your phone alarm for tomorrow at the exact wake time from your blueprint and place the phone across the room."
+          ],
+          "tip": "A sharp blueprint today makes every run after this one easier."
+        },
+        "2": {
+          "title": "Day 2: First Draft Run",
+          "activities": [
+            "Run your full 30-minute blueprint once, using a stopwatch to log the actual minutes spent on each of the 5 segments.",
+            "Write the gap in minutes between planned and actual time for each segment on your blueprint sheet.",
+            "Adjust one segment's time allocation by at least 2 minutes based on today's log and rewrite that line on the blueprint."
+          ],
+          "tip": "Real data beats guesses — you're already sharpening the system."
+        },
+        "3": {
+          "title": "Day 3: Friction Removal",
+          "activities": [
+            "Run the revised routine a second time, timing each segment again with the stopwatch and recording the numbers.",
+            "List 3 specific friction points (e.g., snooze button, cold coffee, phone pickup) that slowed a segment, writing one sentence per point.",
+            "Remove or relocate one physical obstacle tonight (move phone charger, set out clothes, pre-measure coffee) to fix the top friction point."
+          ],
+          "tip": "Clearing one obstacle tonight buys you smoother minutes tomorrow."
+        },
+        "4": {
+          "title": "Day 4: Public Commitment",
+          "activities": [
+            "Record a 60-second video explaining your 5-segment morning routine and what time each segment starts.",
+            "Send that video to one friend or colleague asking them to check in with you in 3 days.",
+            "Post the written blueprint (photo or text) to a group chat or social account you check daily."
+          ],
+          "tip": "Saying it out loud to someone else locks in your commitment."
+        },
+        "5": {
+          "title": "Day 5: Fine-Detail Polish",
+          "activities": [
+            "Run the routine a third time, timing transitions between segments specifically (the 10 seconds between each) and logging transition times.",
+            "Shave 30 seconds off two transitions by removing one unnecessary step from each, rewriting those steps on your blueprint.",
+            "Set a precise alarm tone and volume, and lay out tomorrow's clothes and breakfast items in the exact spot you'll grab them."
+          ],
+          "tip": "The small seconds you save here add up to a calmer whole."
+        },
+        "6": {
+          "title": "Day 6: Teach & Rehearse",
+          "activities": [
+            "Teach your routine to one other person face-to-face or by call, walking them through all 5 segments in order, under 5 minutes.",
+            "Ask that person to pick one segment and give you a direct suggestion, then write their suggestion on your blueprint.",
+            "Run a full dress rehearsal of the routine at normal speed, timing the whole thing start to finish with a stopwatch."
+          ],
+          "tip": "Teaching it proves you truly own it — one more test and you're ready."
+        },
+        "7": {
+          "title": "Day 7: Full Performance Test",
+          "activities": [
+            "Perform the entire 30-minute morning routine start to finish tomorrow morning, timing it with a stopwatch from the first alarm to the last segment's end.",
+            "Record the final total time and each segment's time on your blueprint sheet immediately after finishing.",
+            "Publish your finished routine and completion time to the same group or friend from Day 4 as proof of completion."
+          ],
+          "tip": "This is your proof: a tested, timed, public routine built in one week."
+        }
+      },
+      "sprints": [
+        {
+          "number": 1,
+          "title": "Sprint 1: Foundations",
+          "theme": "Audit your current mornings, build a timed blueprint, and prove it works end to end."
+        },
+        {
+          "number": 2,
+          "title": "Sprint 2: Build Momentum",
+          "theme": "Run the routine daily under real conditions and tighten it against actual friction."
+        },
+        {
+          "number": 3,
+          "title": "Sprint 3: Stretch",
+          "theme": "Push the routine's precision and resilience under harder constraints like travel or late nights."
+        },
+        {
+          "number": 4,
+          "title": "Sprint 4: Integrate",
+          "theme": "Lock the routine into permanent habit and showcase it as a repeatable system for others."
+        }
+      ],
+      "checks": {
+        "sevenDays": true,
+        "activityCounts": true,
+        "allActions": true,
+        "noRepeats": true,
+        "lastDayTest": true,
+        "badDays": [],
+        "nonActions": [],
+        "repeats": [],
+        "avgMinutes": 16,
+        "avgNumbers": 2.4
+      }
+    },
+    {
+      "key": "guitar@70:easy",
+      "goalId": "guitar",
+      "goal": "Learn to play guitar",
+      "week": 2,
+      "level": 70,
+      "ok": true,
+      "rewrite": false,
+      "calls": 1,
+      "priorLevel": 50,
+      "path": "easy",
+      "days": {
+        "8": {
+          "title": "Day 8: Syncopated Strum Baseline",
+          "activities": [
+            {
+              "text": "Play this syncopated strum pattern over G-D-Em-C for 3 minutes at 100 bpm",
+              "artifact": {
+                "kind": "guitar-riff",
+                "data": {
+                  "name": "Syncopated Strum Over G-D-Em-C",
+                  "steps": [
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    }
+                  ],
+                  "chords": [
+                    {
+                      "name": "G",
+                      "frets": [
+                        3,
+                        2,
+                        0,
+                        0,
+                        0,
+                        3
+                      ],
+                      "hint": "three fingers, strum all six"
+                    },
+                    {
+                      "name": "D",
+                      "frets": [
+                        -1,
+                        -1,
+                        0,
+                        2,
+                        3,
+                        2
+                      ],
+                      "hint": "skip the two low strings"
+                    },
+                    {
+                      "name": "Em",
+                      "frets": [
+                        0,
+                        2,
+                        2,
+                        0,
+                        0,
+                        0
+                      ],
+                      "hint": "two fingers, strum all six"
+                    },
+                    {
+                      "name": "C",
+                      "frets": [
+                        -1,
+                        3,
+                        2,
+                        0,
+                        1,
+                        0
+                      ],
+                      "hint": "skip the low E string"
+                    }
+                  ],
+                  "difficulty": 3,
+                  "key": "G major",
+                  "bpm": 100,
+                  "teaches": "syncopated strum rhythm"
+                }
+              }
+            },
+            "Record a 1-minute video of this pattern at 100 bpm to use as your week's baseline clip",
+            "Repeat the full pattern 5 times in a row without stopping, aiming for zero missed strums"
+          ],
+          "tip": "You crushed sprint one — this week's pace is going to feel great under your fingers."
+        },
+        "9": {
+          "title": "Day 9: Rapid Chord Change Drill",
+          "activities": [
+            {
+              "text": "Practice this G-C-D-Em transition drill at 110 bpm, timing yourself for 2 minutes",
+              "artifact": {
+                "kind": "guitar-riff",
+                "data": {
+                  "name": "Rapid Change Drill: G-C-D-Em",
+                  "steps": [
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "Em"
+                    }
+                  ],
+                  "chords": [
+                    {
+                      "name": "G",
+                      "frets": [
+                        3,
+                        2,
+                        0,
+                        0,
+                        0,
+                        3
+                      ],
+                      "hint": "three fingers, strum all six"
+                    },
+                    {
+                      "name": "C",
+                      "frets": [
+                        -1,
+                        3,
+                        2,
+                        0,
+                        1,
+                        0
+                      ],
+                      "hint": "skip the low E string"
+                    },
+                    {
+                      "name": "D",
+                      "frets": [
+                        -1,
+                        -1,
+                        0,
+                        2,
+                        3,
+                        2
+                      ],
+                      "hint": "skip the two low strings"
+                    },
+                    {
+                      "name": "Em",
+                      "frets": [
+                        0,
+                        2,
+                        2,
+                        0,
+                        0,
+                        0
+                      ],
+                      "hint": "two fingers, strum all six"
+                    }
+                  ],
+                  "difficulty": 3,
+                  "key": "G major",
+                  "bpm": 110,
+                  "teaches": "clean rapid chord changes"
+                }
+              }
+            },
+            "Count how many clean changes you hit in 60 seconds and write the number down",
+            "Run the same drill again at 120 bpm for 90 seconds, pushing past today's first speed"
+          ],
+          "tip": "Faster tempos expose weak spots fast — that's exactly how you level up."
+        },
+        "10": {
+          "title": "Day 10: Barre Chord Transitions",
+          "activities": [
+            {
+              "text": "Learn this F-C-G-Am barre chord progression at 90 bpm",
+              "artifact": {
+                "kind": "guitar-riff",
+                "data": {
+                  "name": "Barre Chord Transition: F-C-G-Am",
+                  "steps": [
+                    {
+                      "chord": "F"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "F"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "F"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "F"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "Am"
+                    }
+                  ],
+                  "chords": [
+                    {
+                      "name": "F",
+                      "frets": [
+                        1,
+                        3,
+                        3,
+                        2,
+                        1,
+                        1
+                      ],
+                      "hint": "barre the first fret with your index across all six strings"
+                    },
+                    {
+                      "name": "C",
+                      "frets": [
+                        -1,
+                        3,
+                        2,
+                        0,
+                        1,
+                        0
+                      ],
+                      "hint": "skip the low E string"
+                    },
+                    {
+                      "name": "G",
+                      "frets": [
+                        3,
+                        2,
+                        0,
+                        0,
+                        0,
+                        3
+                      ],
+                      "hint": "three fingers, strum all six"
+                    },
+                    {
+                      "name": "Am",
+                      "frets": [
+                        -1,
+                        0,
+                        2,
+                        2,
+                        1,
+                        0
+                      ],
+                      "hint": "skip the low E string"
+                    }
+                  ],
+                  "difficulty": 4,
+                  "key": "C major",
+                  "bpm": 90,
+                  "teaches": "barre chord transitions"
+                }
+              }
+            },
+            "Switch from F to C twenty times in a row, resetting your count any time a string buzzes",
+            "Play the full four-chord progression four times through without pausing between chords"
+          ],
+          "tip": "Barre chords feel stiff at first — your hand is building new strength, not failing."
+        },
+        "11": {
+          "title": "Day 11: 16th-Note Strum Groove",
+          "activities": [
+            {
+              "text": "Strum this faster 16th-note pattern over G-D-Em-C at 120 bpm for 3 minutes",
+              "artifact": {
+                "kind": "guitar-riff",
+                "data": {
+                  "name": "16th-Note Strum Groove",
+                  "steps": [
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    }
+                  ],
+                  "chords": [
+                    {
+                      "name": "G",
+                      "frets": [
+                        3,
+                        2,
+                        0,
+                        0,
+                        0,
+                        3
+                      ],
+                      "hint": "three fingers, strum all six"
+                    },
+                    {
+                      "name": "D",
+                      "frets": [
+                        -1,
+                        -1,
+                        0,
+                        2,
+                        3,
+                        2
+                      ],
+                      "hint": "skip the two low strings"
+                    },
+                    {
+                      "name": "Em",
+                      "frets": [
+                        0,
+                        2,
+                        2,
+                        0,
+                        0,
+                        0
+                      ],
+                      "hint": "two fingers, strum all six"
+                    },
+                    {
+                      "name": "C",
+                      "frets": [
+                        -1,
+                        3,
+                        2,
+                        0,
+                        1,
+                        0
+                      ],
+                      "hint": "skip the low E string"
+                    }
+                  ],
+                  "difficulty": 4,
+                  "key": "G major",
+                  "bpm": 120,
+                  "teaches": "16th note strum groove"
+                }
+              }
+            },
+            "Record a 90-second clip of this pattern and compare the tempo feel to Day 8's recording",
+            "Play through the full pattern twice back to back, holding the tempo steady both times"
+          ],
+          "tip": "20 bpm faster than Monday and you're still locking it in — that's real progress."
+        },
+        "12": {
+          "title": "Day 12: Palm-Muted Groove",
+          "activities": [
+            {
+              "text": "Practice this palm-muted strum pattern over Em-C-G-D at 115 bpm",
+              "artifact": {
+                "kind": "guitar-riff",
+                "data": {
+                  "name": "Palm-Muted Groove: Em-C-G-D",
+                  "steps": [
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "D"
+                    }
+                  ],
+                  "chords": [
+                    {
+                      "name": "Em",
+                      "frets": [
+                        0,
+                        2,
+                        2,
+                        0,
+                        0,
+                        0
+                      ],
+                      "hint": "two fingers, strum all six"
+                    },
+                    {
+                      "name": "C",
+                      "frets": [
+                        -1,
+                        3,
+                        2,
+                        0,
+                        1,
+                        0
+                      ],
+                      "hint": "skip the low E string"
+                    },
+                    {
+                      "name": "G",
+                      "frets": [
+                        3,
+                        2,
+                        0,
+                        0,
+                        0,
+                        3
+                      ],
+                      "hint": "three fingers, strum all six"
+                    },
+                    {
+                      "name": "D",
+                      "frets": [
+                        -1,
+                        -1,
+                        0,
+                        2,
+                        3,
+                        2
+                      ],
+                      "hint": "skip the two low strings"
+                    }
+                  ],
+                  "difficulty": 4,
+                  "key": "E minor",
+                  "bpm": 115,
+                  "teaches": "muted strum control"
+                }
+              }
+            },
+            "Rest your palm lightly on the strings and alternate muted strums with open strums for eight full bars without losing the beat",
+            "Time yourself playing the full pattern for 2 minutes and note any beats where the mute slipped"
+          ],
+          "tip": "Muting adds texture that makes you sound like a full band — nice layer to add."
+        },
+        "13": {
+          "title": "Day 13: Full Progression Run-Through",
+          "activities": [
+            "Play the full G-C-D-Em-Am-F progression from Day 10 start to finish at 100 bpm",
+            "Run through the entire progression three times in a row, resting 15 seconds between each pass",
+            "Record a 2-minute take of the full progression to compare against your Day 8 baseline recording"
+          ],
+          "tip": "Stringing it all together is the hard part, and you're doing it clean."
+        },
+        "14": {
+          "title": "Day 14: Full Song Test",
+          "activities": [
+            {
+              "text": "Play this full six-chord song progression start to finish at 120 bpm without stopping",
+              "artifact": {
+                "kind": "guitar-riff",
+                "data": {
+                  "name": "Full Song Progression Test",
+                  "steps": [
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "F"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "F"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Am"
+                    },
+                    {
+                      "chord": "F"
+                    }
+                  ],
+                  "chords": [
+                    {
+                      "name": "G",
+                      "frets": [
+                        3,
+                        2,
+                        0,
+                        0,
+                        0,
+                        3
+                      ],
+                      "hint": "three fingers, strum all six"
+                    },
+                    {
+                      "name": "C",
+                      "frets": [
+                        -1,
+                        3,
+                        2,
+                        0,
+                        1,
+                        0
+                      ],
+                      "hint": "skip the low E string"
+                    },
+                    {
+                      "name": "D",
+                      "frets": [
+                        -1,
+                        -1,
+                        0,
+                        2,
+                        3,
+                        2
+                      ],
+                      "hint": "skip the two low strings"
+                    },
+                    {
+                      "name": "Em",
+                      "frets": [
+                        0,
+                        2,
+                        2,
+                        0,
+                        0,
+                        0
+                      ],
+                      "hint": "two fingers, strum all six"
+                    },
+                    {
+                      "name": "Am",
+                      "frets": [
+                        -1,
+                        0,
+                        2,
+                        2,
+                        1,
+                        0
+                      ],
+                      "hint": "skip the low E string"
+                    },
+                    {
+                      "name": "F",
+                      "frets": [
+                        1,
+                        3,
+                        3,
+                        2,
+                        1,
+                        1
+                      ],
+                      "hint": "barre the first fret with your index across all six strings"
+                    }
+                  ],
+                  "difficulty": 5,
+                  "key": "G major",
+                  "bpm": 120,
+                  "teaches": "full song performance accuracy"
+                }
+              }
+            },
+            "Record the full run-through in one take and save it to compare with your Day 8 clip",
+            "Play it a second time immediately after, trying to beat the accuracy of your first take"
+          ],
+          "tip": "Two weeks of real work just showed up in your hands — play it loud and proud."
+        }
+      },
+      "checks": {
+        "sevenDays": true,
+        "activityCounts": true,
+        "allActions": true,
+        "noRepeats": true,
+        "lastDayTest": true,
+        "badDays": [],
+        "nonActions": [],
+        "repeats": [],
+        "avgMinutes": 3,
+        "avgNumbers": 3.6,
+        "levelMoves": true
+      }
+    },
+    {
+      "key": "guitar@42:hard",
+      "goalId": "guitar",
+      "goal": "Learn to play guitar",
+      "week": 2,
+      "level": 42,
+      "ok": true,
+      "rewrite": true,
+      "calls": 2,
+      "priorLevel": 50,
+      "path": "hard",
+      "days": {
+        "8": {
+          "title": "Day 8: Reset the Strum Hand",
+          "activities": [
+            "Play the G chord, strum 4 steady downstrokes, repeat this set 6 times with a 10 second rest between each set.",
+            "Switch between G and C chords 8 times, strumming once after each change, keeping the tempo slow and even.",
+            "Play the Em chord using a down-down-up-up strum, repeat it 5 times while counting '1-2-and-3-and' out loud."
+          ],
+          "tip": "Slow and clean beats fast and sloppy every time - you're rebuilding the right way."
+        },
+        "9": {
+          "title": "Day 9: Two-Chord Pattern Practice",
+          "activities": [
+            {
+              "text": "Play this G to C loop slowly, keeping the strums even through each change.",
+              "artifact": {
+                "kind": "guitar-riff",
+                "data": {
+                  "name": "G to C, four strums each",
+                  "steps": [
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    }
+                  ],
+                  "chords": [
+                    {
+                      "name": "G",
+                      "frets": [
+                        3,
+                        2,
+                        0,
+                        0,
+                        0,
+                        3
+                      ],
+                      "hint": "three fingers, let the open strings ring"
+                    },
+                    {
+                      "name": "C",
+                      "frets": [
+                        -1,
+                        3,
+                        2,
+                        0,
+                        1,
+                        0
+                      ],
+                      "hint": "skip the low E string"
+                    }
+                  ],
+                  "difficulty": 2,
+                  "key": "G major",
+                  "bpm": 60,
+                  "teaches": "steady strum through a chord change"
+                }
+              }
+            },
+            "Rest your strum hand for 30 seconds, then repeat the G to C loop 3 more times, listening for quiet string noise.",
+            "Clap the down-down-up-down strum pattern without the guitar, 10 times, to lock the rhythm into your hand."
+          ],
+          "tip": "Nice work layering rhythm onto changes - this is the hard part clicking into place."
+        },
+        "10": {
+          "title": "Day 10: Adding the D Chord",
+          "activities": [
+            "Practice changing from C to D, 10 slow switches, strumming once after each change.",
+            "Play a G-C-D loop, four slow downstrokes per chord, and run the loop 3 times.",
+            "Rest 20 seconds, then play the G-C-D loop 2 more times, aiming for even timing between chords."
+          ],
+          "tip": "D takes everyone longer to feel comfortable - ten slow reps today beats twenty rushed ones."
+        },
+        "11": {
+          "title": "Day 11: Four-Chord Loop, Simple Strum",
+          "activities": [
+            {
+              "text": "Play this G-C-D-Em loop twice through, keeping the strum pattern steady on each chord.",
+              "artifact": {
+                "kind": "guitar-riff",
+                "data": {
+                  "name": "G-C-D-Em loop, four strums each",
+                  "steps": [
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    }
+                  ],
+                  "chords": [
+                    {
+                      "name": "G",
+                      "frets": [
+                        3,
+                        2,
+                        0,
+                        0,
+                        0,
+                        3
+                      ],
+                      "hint": "three fingers, let the open strings ring"
+                    },
+                    {
+                      "name": "C",
+                      "frets": [
+                        -1,
+                        3,
+                        2,
+                        0,
+                        1,
+                        0
+                      ],
+                      "hint": "skip the low E string"
+                    },
+                    {
+                      "name": "D",
+                      "frets": [
+                        -1,
+                        -1,
+                        0,
+                        2,
+                        3,
+                        2
+                      ],
+                      "hint": "only strum the bottom four strings"
+                    },
+                    {
+                      "name": "Em",
+                      "frets": [
+                        0,
+                        2,
+                        2,
+                        0,
+                        0,
+                        0
+                      ],
+                      "hint": "two fingers, strum all six strings"
+                    }
+                  ],
+                  "difficulty": 2,
+                  "key": "G major",
+                  "bpm": 65,
+                  "teaches": "maintaining strum pattern across four chords"
+                }
+              }
+            },
+            "Isolate the D to Em change alone, practicing it 8 times slowly until it feels clean.",
+            "Rest 15 seconds, then play the full G-C-D-Em loop one more time at the same slow tempo."
+          ],
+          "tip": "Four chords in a row is a big step up - you're closer to playing a real song than it feels."
+        },
+        "12": {
+          "title": "Day 12: A New Strum, A Little Faster",
+          "activities": [
+            "Practice a down, down-up, up-down-up strum pattern on the G chord alone, 6 times through, counting the beats out loud.",
+            "Apply that same strum pattern to a G-C change, running it for 6 slow loops, pausing between loops if needed.",
+            "Nudge your counting or metronome speed up slightly, then play G-C with the new strum pattern 4 more times through."
+          ],
+          "tip": "New patterns feel clumsy at first - six slow reps is exactly enough to start smoothing it out."
+        },
+        "13": {
+          "title": "Day 13: Share It and Fix the Weak Spot",
+          "activities": [
+            "Record yourself playing the G-C-D-Em loop from day 11 in one full take, then send it to a friend.",
+            "Pick your slowest chord change from this week and practice it alone 8 times, slow and clean.",
+            "Play the full G-C-D-Em loop once more, matching the tempo you used in your recording."
+          ],
+          "tip": "Sharing your playing out loud takes courage - that's the whole point of learning this."
+        },
+        "14": {
+          "title": "Day 14: Full Progression Test",
+          "activities": [
+            {
+              "text": "Play this G-C-D-Em progression start to finish, two full times through, without stopping, using the strum pattern you built this week.",
+              "artifact": {
+                "kind": "guitar-riff",
+                "data": {
+                  "name": "G-C-D-Em test run",
+                  "steps": [
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "G"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "C"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "D"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    },
+                    {
+                      "chord": "Em"
+                    }
+                  ],
+                  "chords": [
+                    {
+                      "name": "G",
+                      "frets": [
+                        3,
+                        2,
+                        0,
+                        0,
+                        0,
+                        3
+                      ],
+                      "hint": "three fingers, let the open strings ring"
+                    },
+                    {
+                      "name": "C",
+                      "frets": [
+                        -1,
+                        3,
+                        2,
+                        0,
+                        1,
+                        0
+                      ],
+                      "hint": "skip the low E string"
+                    },
+                    {
+                      "name": "D",
+                      "frets": [
+                        -1,
+                        -1,
+                        0,
+                        2,
+                        3,
+                        2
+                      ],
+                      "hint": "only strum the bottom four strings"
+                    },
+                    {
+                      "name": "Em",
+                      "frets": [
+                        0,
+                        2,
+                        2,
+                        0,
+                        0,
+                        0
+                      ],
+                      "hint": "two fingers, strum all six strings"
+                    }
+                  ],
+                  "difficulty": 2,
+                  "key": "G major",
+                  "bpm": 70,
+                  "teaches": "playing a full progression without stopping"
+                }
+              }
+            },
+            "Play the D chord alone 5 times in a row, strumming once each time, listening for a clean ring with no buzzing strings."
+          ],
+          "tip": "Look back at day 8 - you just played a full song loop start to finish. That's real progress."
+        }
+      },
+      "checks": {
+        "sevenDays": true,
+        "activityCounts": true,
+        "allActions": true,
+        "noRepeats": true,
+        "lastDayTest": true,
+        "badDays": [],
+        "nonActions": [],
+        "repeats": [],
+        "avgMinutes": null,
+        "avgNumbers": 3.3,
+        "levelMoves": true
+      }
+    },
+    {
+      "key": "5k@70:easy",
+      "goalId": "5k",
+      "goal": "Run a 5K",
+      "week": 2,
+      "level": 70,
+      "ok": true,
+      "rewrite": true,
+      "calls": 2,
+      "priorLevel": 50,
+      "path": "easy",
+      "days": {
+        "8": {
+          "title": "Day 8: Tempo Push",
+          "activities": [
+            "Run 10 minutes easy jog as a warm-up",
+            "Run 12 minutes at a tempo pace that feels comfortably hard, no walking breaks allowed",
+            "Write your average tempo pace in minutes per mile in your notes app"
+          ],
+          "tip": "You crushed last week easy — this tempo block is where real speed gets built."
+        },
+        "9": {
+          "title": "Day 9: 400m Speed Repeats",
+          "activities": [
+            "Run 8 minutes easy jog to warm up your legs",
+            "Run 6 x 400m fast intervals with 90 seconds walk or slow jog recovery between each",
+            "Record your average 400m split time in your notes app"
+          ],
+          "tip": "Short and sharp today — let your legs remember what fast feels like."
+        },
+        "10": {
+          "title": "Day 10: Recovery and Strides",
+          "activities": [
+            "Run 15 minutes at an easy conversational pace",
+            "Run 6 x 20-second strides at near-top speed with full walking recovery between each",
+            "Stretch your calves and hamstrings for 2 minutes each after a 5-minute cooldown walk"
+          ],
+          "tip": "Recovery days make the hard days possible — enjoy the easier pace."
+        },
+        "11": {
+          "title": "Day 11: Fartlek Surges",
+          "activities": [
+            "Run 8 minutes easy jog warm-up",
+            "Run 8 x 1-minute hard surges with 1-minute easy jog recovery between each",
+            "Walk 5 minutes to cool down and write your toughest surge split from memory"
+          ],
+          "tip": "Mixing hard and easy on the fly builds race-day toughness."
+        },
+        "12": {
+          "title": "Day 12: Steady Distance Build",
+          "activities": [
+            "Run 25 minutes continuous at a steady, sustainable pace without stopping",
+            "Record total distance covered in those 25 minutes using a watch or map app",
+            "Compare this distance to what you think you covered in last week's longest run"
+          ],
+          "tip": "This is your mileage week — every extra minute on your feet adds up."
+        },
+        "13": {
+          "title": "Day 13: 800m Pace Control",
+          "activities": [
+            "Run 12 minutes easy jog to loosen up before intervals",
+            "Run 4 x 800m at your target 5K race pace with 2 minutes rest between each",
+            "Write down this 800m pace next to your Day 9 400m pace to compare"
+          ],
+          "tip": "Dialing in race pace now means less guesswork on race day."
+        },
+        "14": {
+          "title": "Day 14: 5K Time Test",
+          "activities": [
+            "Run a full 5K (3.1 miles) start to finish without stopping, at the fastest pace you can sustain",
+            "Record your finish time immediately after crossing your mental finish line",
+            "Compare this time to your Day 8 tempo effort and note the difference"
+          ],
+          "tip": "This is proof of everything you built this week — run it with confidence."
+        }
+      },
+      "checks": {
+        "sevenDays": true,
+        "activityCounts": true,
+        "allActions": true,
+        "noRepeats": true,
+        "lastDayTest": true,
+        "badDays": [],
+        "nonActions": [],
+        "repeats": [],
+        "avgMinutes": 21,
+        "avgNumbers": 4.4,
+        "levelMoves": true
+      }
+    },
+    {
+      "key": "5k@42:hard",
+      "goalId": "5k",
+      "goal": "Run a 5K",
+      "week": 2,
+      "level": 42,
+      "ok": true,
+      "rewrite": true,
+      "calls": 2,
+      "priorLevel": 50,
+      "path": "hard",
+      "days": {
+        "8": {
+          "title": "Day 8: Easy Mileage Start",
+          "activities": [
+            "Walk 5 minutes to warm up, then jog 10 minutes at an easy, conversational pace",
+            "Walk 5 minutes to cool down and stretch calves for 2 minutes",
+            "Write today's distance and time in a notebook or app"
+          ],
+          "tip": "Easy miles build the base that speed work later depends on."
+        },
+        "9": {
+          "title": "Day 9: Gentle Speed Intervals",
+          "activities": [
+            "Walk briskly for 4 minutes to warm up",
+            "Run 1 minute at a brisk pace, then walk 2 minutes; repeat this cycle 4 times",
+            "Cool down with a 3 minute walk and stretch quads for 2 minutes"
+          ],
+          "tip": "Short bursts like this teach your legs to handle faster paces without burning out."
+        },
+        "10": {
+          "title": "Day 10: Recovery and Mobility",
+          "activities": [
+            "Walk briskly for 15 minutes at a comfortable pace",
+            "Stretch hamstrings, calves and hips for 10 minutes, holding each stretch 30 seconds",
+            "Write one sentence about how your legs feel today"
+          ],
+          "tip": "Recovery days are where your body actually gets stronger."
+        },
+        "11": {
+          "title": "Day 11: Short Strides",
+          "activities": [
+            "Walk at an easy pace for 6 minutes to warm up",
+            "Run 6 strides of 20 seconds each at a fast but controlled pace, walking 40 seconds between each",
+            "Cool down with a 5 minute walk and stretch calves for 2 minutes"
+          ],
+          "tip": "Quick strides sharpen your form without draining your energy."
+        },
+        "12": {
+          "title": "Day 12: Building Endurance",
+          "activities": [
+            "Walk slowly for 3 minutes to warm up",
+            "Jog 15 minutes at an easy pace, slower than Day 11's strides",
+            "Walk 5 minutes to cool down and stretch hips for 3 minutes"
+          ],
+          "tip": "Fifteen steady minutes is real progress toward race distance."
+        },
+        "13": {
+          "title": "Day 13: Light Shakeout",
+          "activities": [
+            "Walk 10 minutes at a relaxed pace",
+            "Jog 5 minutes at a very easy pace to loosen your legs",
+            "Stretch calves and hamstrings for 5 minutes, holding each 30 seconds"
+          ],
+          "tip": "A light day today means fresher legs for tomorrow's test."
+        },
+        "14": {
+          "title": "Day 14: 5K Progress Test",
+          "activities": [
+            "Walk for 7 minutes at an easy pace to warm up",
+            "Run 1.5 miles, or 20 minutes, without stopping at a steady, comfortable pace",
+            "Write down your finish time and how you felt right after"
+          ],
+          "tip": "You've put in the work this week — go show yourself how far you've come."
+        }
+      },
+      "checks": {
+        "sevenDays": true,
+        "activityCounts": true,
+        "allActions": true,
+        "noRepeats": true,
+        "lastDayTest": true,
+        "badDays": [],
+        "nonActions": [],
+        "repeats": [],
+        "avgMinutes": 19,
+        "avgNumbers": 4.6,
+        "levelMoves": true
+      }
+    },
+    {
+      "key": "spanish@70:easy",
+      "goalId": "spanish",
+      "goal": "Hold a conversation in Spanish",
+      "week": 2,
+      "level": 70,
+      "ok": true,
+      "rewrite": false,
+      "calls": 1,
+      "priorLevel": 50,
+      "path": "easy",
+      "days": {
+        "8": {
+          "title": "Day 8: Restaurant Rapid Fire",
+          "activities": [
+            "Record a 60-second monologue ordering a full three-course meal in Spanish, pausing no longer than 2 seconds between lines.",
+            "Say the 8 restaurant survival phrases (greeting, asking for a recommendation, requesting the check, asking if they accept cards) 3 times each, timing each round and beating your first round by 5 seconds."
+          ],
+          "tip": "You've earned a harder week — attack it with the same energy."
+        },
+        "9": {
+          "title": "Day 9: Market Haggling Drill",
+          "activities": [
+            "Record a 90-second market haggling dialogue where you offer a lower price, get countered twice, and agree on a final price.",
+            "Speak 15 market prices aloud using numbers 1-100 in under 60 seconds, then repeat the full set faster, beating your first time."
+          ],
+          "tip": "Haggling fast builds the same muscle as real conversation — keep pushing the pace."
+        },
+        "10": {
+          "title": "Day 10: Taxi and Transit Speed Round",
+          "activities": [
+            "Record a 60-second conversation asking a taxi driver for directions to a hotel and confirming the fare out loud.",
+            "Practice 10 transportation phrases (bus schedule, platform number, buying a ticket) twice each, timing the full set and beating your first round by 10 seconds."
+          ],
+          "tip": "Getting around smoothly in Spanish will make the trip feel effortless."
+        },
+        "11": {
+          "title": "Day 11: Scenario Switching",
+          "activities": [
+            "Record a 2-minute dialogue switching between a restaurant scene and a taxi scene without a script, using at least 10 words from the past 3 days.",
+            "Say 12 rapid question-answer pairs covering restaurant, market, and transportation topics, answering each within 3 seconds."
+          ],
+          "tip": "Switching contexts fast is exactly what real travel conversations demand."
+        },
+        "12": {
+          "title": "Day 12: Handling Complications",
+          "activities": [
+            "Record a 90-second dialogue politely correcting a wrong restaurant order and requesting a replacement dish.",
+            "Respond out loud to 6 unexpected situations (lost ticket, delayed bus, no change available) in Spanish, each within 5 seconds."
+          ],
+          "tip": "Handling surprises in Spanish is the mark of real fluency — you're closing in on it."
+        },
+        "13": {
+          "title": "Day 13: Full Chain Run",
+          "activities": [
+            "Record a continuous 3-minute dialogue covering ordering food, bargaining at a market stall, and asking a driver for directions, using zero English words.",
+            "Play back Day 8's recording next to today's recording, then record a 30-second spoken comparison in Spanish noting which one sounds smoother and faster."
+          ],
+          "tip": "Stacking three scenes back-to-back shows how far your recall has come."
+        },
+        "14": {
+          "title": "Day 14: Test — The Full Traveler Conversation",
+          "activities": [
+            "Record one continuous 4-minute conversation in Spanish playing all three roles — restaurant customer, market shopper, and taxi passenger — start to finish, pausing no longer than 3 seconds at any point and using at least 20 vocabulary items from the past two weeks.",
+            "Time the recording and compare its length and hesitation count to Day 8's 60-second benchmark, aiming for under 4 minutes total with fewer than 5 hesitations."
+          ],
+          "tip": "This is proof you can hold a real conversation in Mexico — run it with confidence."
+        }
+      },
+      "checks": {
+        "sevenDays": true,
+        "activityCounts": true,
+        "allActions": true,
+        "noRepeats": true,
+        "lastDayTest": true,
+        "badDays": [],
+        "nonActions": [],
+        "repeats": [],
+        "avgMinutes": 4,
+        "avgNumbers": 4.4,
+        "levelMoves": true
+      }
+    },
+    {
+      "key": "spanish@42:hard",
+      "goalId": "spanish",
+      "goal": "Hold a conversation in Spanish",
+      "week": 2,
+      "level": 42,
+      "ok": true,
+      "rewrite": false,
+      "calls": 1,
+      "priorLevel": 50,
+      "path": "hard",
+      "days": {
+        "8": {
+          "title": "Day 8: Restaurant Basics Refresh",
+          "activities": [
+            "Write 5 Spanish restaurant phrases on a card (e.g. 'Quisiera...', 'Me trae la cuenta, por favor'), 5 minutes.",
+            "Say each of the 5 phrases aloud 3 times, using a timer for 8 minutes total.",
+            "Record yourself ordering one dish using 3 of the phrases, playback once, 5 minutes."
+          ],
+          "tip": "Small steps this week — your brain is still filing last week's work."
+        },
+        "9": {
+          "title": "Day 9: Market Vocabulary Warm-up",
+          "activities": [
+            "Write 5 Spanish market phrases on a card (e.g. '¿Cuánto cuesta?', 'Es muy caro'), 5 minutes.",
+            "Say each of the 5 phrases aloud 3 times, 8 minutes with a timer.",
+            "Pick 2 phrases and act out buying a fruit with hand gestures, saying each once, 3 minutes."
+          ],
+          "tip": "Easy reps today — you're building the base for faster recall later."
+        },
+        "10": {
+          "title": "Day 10: Transportation Phrases",
+          "activities": [
+            "Write 5 Spanish transportation phrases on a card (e.g. '¿Dónde está la parada de autobús?'), 5 minutes.",
+            "Say each phrase aloud 3 times, 8 minutes with a timer.",
+            "Record a 1-minute clip asking for directions to the bus stop, play it back once."
+          ],
+          "tip": "One topic at a time keeps this manageable — nice work sticking with it."
+        },
+        "11": {
+          "title": "Day 11: Speed Recall - Restaurant & Market",
+          "activities": [
+            "Shuffle your restaurant and market cards, say 6 phrases aloud in under 2 minutes, repeat once.",
+            "Write a 4-line dialogue combining ordering food and asking the price, 6 minutes.",
+            "Visit a local Mexican restaurant or taquería and order one item in Spanish using 2 of your phrases."
+          ],
+          "tip": "Real-world practice today — even one phrase used live counts as a win."
+        },
+        "12": {
+          "title": "Day 12: Transportation Recall Drill",
+          "activities": [
+            "Shuffle your transportation cards, say 6 phrases aloud in under 2 minutes, repeat once.",
+            "Practice asking about a taxi fare and a bus schedule, saying each phrase 2 times.",
+            "Record a 1-minute dialogue asking a stranger for directions to a bus stop."
+          ],
+          "tip": "You're moving faster than you think — recall drills pay off quietly."
+        },
+        "13": {
+          "title": "Day 13: Full Dialogue Rehearsal",
+          "activities": [
+            "Write a 6-line dialogue mixing restaurant, market, and transportation phrases, 8 minutes.",
+            "Read the dialogue aloud 3 times, aiming for under 1 minute each read.",
+            "Flip through 5 flashcards from the week and say each answer once without reading notes."
+          ],
+          "tip": "Tomorrow is the test — tonight's run-through is all you need."
+        },
+        "14": {
+          "title": "Day 14: Mexico Trip Conversation Test",
+          "activities": [
+            "Perform the 6-line dialogue from Day 13 start to finish in Spanish without reading, record it, 1 attempt.",
+            "Speak a 3-minute conversation covering ordering a meal, asking a market price, and asking for bus directions, recorded in one take.",
+            "Write the 3 phrases you paused on during the recording, one short list."
+          ],
+          "tip": "Seven days ago this felt out of reach — now you can hold your own in Spanish."
+        }
+      },
+      "checks": {
+        "sevenDays": true,
+        "activityCounts": true,
+        "allActions": true,
+        "noRepeats": true,
+        "lastDayTest": true,
+        "badDays": [],
+        "nonActions": [],
+        "repeats": [],
+        "avgMinutes": 11,
+        "avgNumbers": 5.4,
+        "levelMoves": true
+      }
+    }
+  ]
+}

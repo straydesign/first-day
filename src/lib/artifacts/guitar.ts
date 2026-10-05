@@ -158,8 +158,10 @@ export const guitarSpec: ArtifactSpec = {
   kind: "guitar-riff",
   matches: (goal) => GUITAR.test(goal),
   prompt: PROMPT,
-  // A riff runs 300-700 output tokens. Budgeting for three across the sprint
-  // keeps the model from truncating mid-JSON, which loses the whole day.
-  tokenBudget: 2500,
+  // A riff runs 300-700 output tokens and the prompt asks for one on most
+  // days, so budget for about ten across the sprint. At 2500 the eval
+  // (scripts/plan-eval.ts, 2026-10-05) truncated 3 of 5 guitar sprints
+  // mid-JSON at levels 42-70, which loses the whole sprint to the template.
+  tokenBudget: 8000,
   coerce: coerceGuitarRiff,
 };
