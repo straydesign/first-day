@@ -21,6 +21,13 @@ import type { GoalFormData, SprintMeta } from "@/types";
 export const runtime = "nodejs";
 
 /**
+ * Guitar plans (riff tabs + rewrite pass) take ~2 minutes; without this the
+ * platform's default limit can cut the request off mid-generation. 300s is the
+ * Vercel Hobby ceiling with fluid compute.
+ */
+export const maxDuration = 300;
+
+/**
  * CORS preflight for the iOS shell, whose pages load from capacitor://localhost
  * and call this route cross-origin. The allow headers themselves are set in
  * next.config.ts so every response (errors included) carries them.
