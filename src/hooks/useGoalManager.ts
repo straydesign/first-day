@@ -5,6 +5,7 @@ import { DEMO_GOAL_DETAILS, DEMO_GOALS_LIST, buildDemoGoalDetail, generateNextSp
 import { getPlanTotalDays } from "@/lib/engagement";
 import type { Plan, ProgressMap, SelectedDay, GoalFormData } from "@/types";
 import { COPY } from "@/content/copy";
+import type { Difficulty } from "@/types";
 
 interface GoalDisplayData {
   goal: string;
@@ -40,7 +41,7 @@ interface UseGoalManagerReturn {
   handleEditGoal: (goalId: string) => Promise<void>;
   handleViewTodayActivities: (goalId: string) => Promise<void>;
   handleRegeneratePlan: () => Promise<void>;
-  handleDayComplete: (dayData: { completed: Record<number, boolean>; feedback: string }) => ProgressMap | null;
+  handleDayComplete: (dayData: { completed: Record<number, boolean>; feedback: string; difficulty?: Difficulty }) => ProgressMap | null;
   generateNextSprint: (priorSprintNumber: number) => Promise<{ ok: boolean; adapted: boolean; nextTitle: string }>;
   resetGoalState: () => void;
 }
@@ -358,7 +359,7 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
     }
   }, [goalData, currentGoalId, generatePlan, demoMode]);
 
-  const handleDayComplete = useCallback((dayData: { completed: Record<number, boolean>; feedback: string }): ProgressMap | null => {
+  const handleDayComplete = useCallback((dayData: { completed: Record<number, boolean>; feedback: string; difficulty?: Difficulty }): ProgressMap | null => {
     if (!selectedDay || !planData?.startDate) return null;
 
     const dayKey = selectedDay.number;
@@ -367,6 +368,7 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
       [dayKey]: {
         completed: dayData.completed,
         feedback: dayData.feedback,
+        ...(dayData.difficulty ? { difficulty: dayData.difficulty } : {}),
         completedAt: new Date().toISOString(),
       },
     };
@@ -417,11 +419,14 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
       const hi = priorSprintNumber * 7;
       const reflections: string[] = [];
       let completed = 0;
+      const difficulty = { easy: 0, hard: 0 };
       for (let n = lo; n <= hi; n++) {
         const dp = progress[n];
         if (!dp) continue;
         const fb = (dp.feedback ?? dp.reflection ?? "").toString().trim();
         if (fb) reflections.push(fb);
+        if (dp.difficulty === "easy") difficulty.easy++;
+        if (dp.difficulty === "hard") difficulty.hard++;
         const c = dp.completed;
         if (c === true || (c && typeof c === "object" && Object.values(c).length > 0 && Object.values(c).every(Boolean))) {
           completed++;
@@ -439,6 +444,7 @@ export function useGoalManager(onLogout: () => Promise<void>, demoMode = false):
         sprints: planData.sprints,
         priorReflections: reflections,
         priorCompletion: { completed, total: hi - lo + 1 },
+        priorDifficulty: difficulty,
       });
 
       const mergedPlan: Plan = {

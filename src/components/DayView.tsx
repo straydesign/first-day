@@ -14,10 +14,11 @@ import { FONT } from "@/lib/design";
 import { COPY } from "@/content/copy";
 import { staggerContainer, tileEnter, contentReveal, popIn, SPRING } from "@/lib/animations";
 import type { SelectedDay, DayProgress, Activity, ActivityResource } from "@/types";
+import type { Difficulty } from "@/types";
 
 interface DayViewProps {
   day: SelectedDay;
-  onComplete: (data: { dayNumber: number; completed: Record<number, boolean>; feedback: string }) => void;
+  onComplete: (data: { dayNumber: number; completed: Record<number, boolean>; feedback: string; difficulty?: Difficulty }) => void;
   isCompleted?: boolean;
   savedProgress?: DayProgress | null;
   onBack?: () => void;
@@ -27,11 +28,13 @@ interface DayViewProps {
 export function DayView({ day, onComplete, isCompleted = false, savedProgress = null, onBack, currentStreak = 0 }: DayViewProps) {
   const [completedActivities, setCompletedActivities] = useState<Record<number, boolean>>({});
   const [feedback, setFeedback] = useState("");
+  const [difficulty, setDifficulty] = useState<Difficulty | undefined>(undefined);
   const [showValidation, setShowValidation] = useState(false);
   useEffect(() => {
     if (savedProgress) {
       if (savedProgress.completed) setCompletedActivities(savedProgress.completed as Record<number, boolean>);
       if (savedProgress.feedback) setFeedback(savedProgress.feedback);
+      if (savedProgress.difficulty) setDifficulty(savedProgress.difficulty);
     }
   }, [savedProgress]);
 
@@ -46,7 +49,7 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
   const handleSubmit = () => {
     if (!canSubmit) { setShowValidation(true); return; }
     tapSuccess();
-    onComplete({ dayNumber: day.number, completed: completedActivities, feedback });
+    onComplete({ dayNumber: day.number, completed: completedActivities, feedback, difficulty });
   };
 
   const hasAnyActivity = Object.values(completedActivities).some(val => val === true);
@@ -213,6 +216,32 @@ export function DayView({ day, onComplete, isCompleted = false, savedProgress = 
                 </Panel>
                 {!isCompleted && (
                   <p className="text-[12px] text-white/40 mt-2 px-1">{COPY.day.feedbackHelper}</p>
+                )}
+              </div>
+
+              {/* Too easy / too hard — tunes next week's plan */}
+              <div className="mt-4">
+                <p className="text-[12px] font-medium uppercase tracking-[0.08em] text-white/40 mb-3">{COPY.day.difficultyLabel}</p>
+                <div className="grid grid-cols-2 gap-3" role="radiogroup" aria-label={COPY.day.difficultyLabel}>
+                  {(["easy", "hard"] as const).map((d) => {
+                    const on = difficulty === d;
+                    return (
+                      <button
+                        key={d}
+                        type="button"
+                        role="radio"
+                        aria-checked={on}
+                        disabled={isCompleted}
+                        onClick={() => { tapLight(); setDifficulty(on ? undefined : d); }}
+                        className={`rounded-full py-3 text-[15px] font-semibold transition-colors disabled:opacity-60 ${on ? "bg-white text-black" : "border border-white/15 text-white/75"}`}
+                      >
+                        {d === "easy" ? COPY.day.tooEasy : COPY.day.tooHard}
+                      </button>
+                    );
+                  })}
+                </div>
+                {!isCompleted && (
+                  <p className="text-[12px] text-white/40 mt-2 px-1">{COPY.day.difficultyHelper}</p>
                 )}
               </div>
             </div>

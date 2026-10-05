@@ -41,7 +41,16 @@ type SprintRequest = GoalFormData & {
   sprints?: SprintMeta[];
   priorReflections?: string[];
   priorCompletion?: { completed: number; total: number };
+  priorDifficulty?: unknown;
 };
+
+/** Too easy / too hard counts from the client, clamped to a sane range. */
+function readDifficulty(v: unknown): { easy: number; hard: number } | undefined {
+  if (!v || typeof v !== "object") return undefined;
+  const o = v as Record<string, unknown>;
+  const n = (x: unknown) => (Number.isInteger(x) && (x as number) >= 0 && (x as number) <= 7 ? (x as number) : 0);
+  return { easy: n(o.easy), hard: n(o.hard) };
+}
 
 export async function POST(req: Request) {
   const authHeader = req.headers.get("authorization") || "";
@@ -83,6 +92,7 @@ export async function POST(req: Request) {
     sprints: body.sprints,
     priorReflections: body.priorReflections,
     priorCompletion: body.priorCompletion,
+    priorDifficulty: readDifficulty(body.priorDifficulty),
   };
 
   // AI path first (only fires if ANTHROPIC_API_KEY is set); deterministic fallback.

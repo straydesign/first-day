@@ -16,6 +16,7 @@
  *
  * Cost note: every call here spends Anthropic credits on the configured key.
  */
+import { DIRECT_ACTION_RULES, findNonActions } from "./plan-rules";
 import type { Activity, DayPlan, SprintMeta, GoalFormData } from "@/types";
 import { artifactSpecsFor, coerceArtifact, type ArtifactSpec } from "@/lib/artifacts";
 
@@ -37,6 +38,8 @@ export interface SprintGenContext {
   priorReflections?: string[];
   /** How many of the prior sprint's 7 days they actually completed. */
   priorCompletion?: { completed: number; total: number };
+  /** Days the user marked too easy / too hard in the sprint they just finished. */
+  priorDifficulty?: { easy: number; hard: number };
 }
 
 export interface SprintGenResult {
@@ -87,7 +90,8 @@ function goalContextLines(input: GoalFormData): string[] {
 function hasFeedback(sprintNumber: number, ctx: SprintGenContext): boolean {
   if (sprintNumber <= 1) return false;
   const reflections = (ctx.priorReflections || []).filter((r) => r && r.trim());
-  return reflections.length > 0 || !!ctx.priorCompletion;
+  const marked = (ctx.priorDifficulty?.easy ?? 0) + (ctx.priorDifficulty?.hard ?? 0);
+  return reflections.length > 0 || !!ctx.priorCompletion || marked > 0;
 }
 
 function buildPrompt(input: GoalFormData, sprintNumber: number, ctx: SprintGenContext): string {
@@ -112,6 +116,13 @@ function buildPrompt(input: GoalFormData, sprintNumber: number, ctx: SprintGenCo
       } else {
         lines.push("They completed every day — they can handle a step up in challenge.");
       }
+    }
+    const { easy = 0, hard = 0 } = ctx.priorDifficulty ?? {};
+    if (easy || hard) {
+      lines.push(`They marked ${easy} day(s) "too easy" and ${hard} day(s) "too hard".`);
+      if (easy > hard) lines.push("Make this sprint noticeably harder: more reps, longer sessions or a harder version of each task.");
+      else if (hard > easy) lines.push("Make this sprint easier: fewer reps, shorter sessions or a simpler version of each task.");
+      else lines.push("Keep the difficulty about the same.");
     }
     const reflections = (ctx.priorReflections || []).filter((r) => r && r.trim());
     if (reflections.length) {
@@ -147,7 +158,8 @@ ${sprintsClause}  "days": [                                    // EXACTLY 7 entr
     { "day": ${start}, "title": "Day ${start}: short label", "activities": ["concrete task", "..."], "tip": "one encouraging line" }
   ]
 }
-Rules: 2-3 concrete, doable activities per day sized to the user's daily time budget.
+Rules: 2-3 activities per day sized to the user's daily time budget.
+${DIRECT_ACTION_RULES}
 Day numbers MUST be ${start} through ${end} inclusive. Be specific to the goal.
 Do NOT invent book titles, product names, URLs, statistics, or any factual claim you are unsure of.${artifactClause}`;
 }
@@ -171,51 +183,66 @@ export async function generateSprintWithAI(
   // extractJson fails, and the whole sprint falls back to the template.
   const maxTokens = 4000 + specs.reduce((n, s) => n + s.tokenBudget, 0);
 
-  let res: Response;
-  try {
-    res = await fetch(ANTHROPIC_URL, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        "x-api-key": apiKey,
-        "anthropic-version": "2023-06-01",
-      },
-      body: JSON.stringify({
-        model,
-        max_tokens: maxTokens,
-        system: systemPrompt(sprintNumber, specs),
-        messages: [{ role: "user", content: buildPrompt(input, sprintNumber, ctx) }],
-      }),
-    });
-  } catch (e) {
-    console.error("[plan] anthropic fetch failed", e);
-    return null;
-  }
-  if (!res.ok) {
-    console.error(`[plan] anthropic ${res.status}`, (await res.text()).slice(0, 400));
-    return null;
-  }
-
-  let text: string;
-  try {
-    const json = (await res.json()) as {
-      content?: Array<{ type: string; text?: string }>;
-      stop_reason?: string;
-    };
-    // Truncation is the failure mode that looks identical to a bad response:
-    // the JSON simply ends mid-object and every parse below fails. Name it.
-    if (json.stop_reason === "max_tokens") {
-      console.error(`[plan] response hit max_tokens (${maxTokens}) — raise the artifact budget`);
+  type Message = { role: "user" | "assistant"; content: string };
+  const ask = async (messages: Message[]): Promise<{ text: string; result: SprintGenResult | null } | null> => {
+    let res: Response;
+    try {
+      res = await fetch(ANTHROPIC_URL, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          "x-api-key": apiKey,
+          "anthropic-version": "2023-06-01",
+        },
+        body: JSON.stringify({ model, max_tokens: maxTokens, system: systemPrompt(sprintNumber, specs), messages }),
+      });
+    } catch (e) {
+      console.error("[plan] anthropic fetch failed", e);
+      return null;
     }
-    text = (json.content || []).filter((b) => b.type === "text").map((b) => b.text || "").join("");
-  } catch (e) {
-    console.error("[plan] anthropic response was not JSON", e);
-    return null;
-  }
+    if (!res.ok) {
+      console.error(`[plan] anthropic ${res.status}`, (await res.text()).slice(0, 400));
+      return null;
+    }
+    let text: string;
+    try {
+      const json = (await res.json()) as {
+        content?: Array<{ type: string; text?: string }>;
+        stop_reason?: string;
+      };
+      // Truncation is the failure mode that looks identical to a bad response:
+      // the JSON simply ends mid-object and every parse below fails. Name it.
+      if (json.stop_reason === "max_tokens") {
+        console.error(`[plan] response hit max_tokens (${maxTokens}) — raise the artifact budget`);
+      }
+      text = (json.content || []).filter((b) => b.type === "text").map((b) => b.text || "").join("");
+    } catch (e) {
+      console.error("[plan] anthropic response was not JSON", e);
+      return null;
+    }
+    const raw = extractJson(text);
+    return { text, result: raw ? coerceSprint(raw, sprintNumber, ctx, specs) : null };
+  };
 
-  const raw = extractJson(text);
-  if (!raw) return null;
-  return coerceSprint(raw, sprintNumber, ctx, specs);
+  const first: Message = { role: "user", content: buildPrompt(input, sprintNumber, ctx) };
+  const attempt = await ask([first]);
+  if (!attempt?.result) return null;
+
+  // Activities must be exact actions. One rewrite if any slipped through; if
+  // the rewrite fails or still has them, keep the better of the two.
+  const bad = findNonActions(attempt.result.days);
+  if (bad.length === 0) return attempt.result;
+  console.warn(`[plan] ${bad.length} non-action activities, asking for a rewrite`);
+  const retry = await ask([
+    first,
+    { role: "assistant", content: attempt.text },
+    {
+      role: "user",
+      content: `These activities are not exact actions:\n${bad.map((b) => `- ${b}`).join("\n")}\nRewrite them as one exact thing to do each (what, how much, when it's done). Return the full JSON object again in the same shape.`,
+    },
+  ]);
+  if (retry?.result && findNonActions(retry.result.days).length < bad.length) return retry.result;
+  return attempt.result;
 }
 
 function extractJson(text: string): RawSprintPayload | null {

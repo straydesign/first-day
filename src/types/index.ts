@@ -147,9 +147,13 @@ export interface Plan {
   ownerUserId?: string;
 }
 
+/** How a finished day felt; shapes the next week's plan. */
+export type Difficulty = "easy" | "hard";
+
 export interface DayProgress {
   completed?: boolean | Record<number, boolean>;
   feedback?: string;
+  difficulty?: Difficulty;
   reflection?: string;
   completedAt?: string;
 }

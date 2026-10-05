@@ -16,6 +16,8 @@ export type SprintGenRequest = GoalFormData & {
   sprints?: SprintMeta[];
   priorReflections?: string[];
   priorCompletion?: { completed: number; total: number };
+  /** Days marked too easy / too hard in the sprint just finished. */
+  priorDifficulty?: { easy: number; hard: number };
 };
 
 /**

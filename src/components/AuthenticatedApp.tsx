@@ -1,4 +1,5 @@
 "use client";
+import type { Difficulty } from "@/types";
 import { enableDailyReminder, disableDailyReminder } from "@/lib/native/reminders";
 import { useState, useEffect, useMemo, useRef } from "react";
 import dynamic from "next/dynamic";
@@ -196,7 +197,7 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
     setCurrentView("day");
   };
 
-  const handleDayComplete = (dayData: { dayNumber: number; completed: Record<number, boolean>; feedback: string }) => {
+  const handleDayComplete = (dayData: { dayNumber: number; completed: Record<number, boolean>; feedback: string; difficulty?: Difficulty }) => {
     if (!selectedDay || !planData?.startDate) return;
 
     const updatedProgress = dayCompleteLogic(dayData);
@@ -346,7 +347,10 @@ export function AuthenticatedApp({ accessToken, userId, userEmail, initialView, 
           onDismiss={() => setNewAchievements([])}
         />
 
-        {(currentView === "goals" || currentView === "calendar" || currentView === "day") && (
+        {/* Home screen only. On the plan and day screens the floating pill sat
+            on top of day rows and the Too easy / Too hard buttons; those
+            screens have a back button to Home, where Settings lives. */}
+        {currentView === "goals" && (
           <SettingsPill onOpen={() => setCurrentView("settings")} />
         )}
       </div>

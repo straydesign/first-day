@@ -16,6 +16,10 @@ export const day = {
   feedbackLabel: "How did today go?",
   feedbackPlaceholder: "Share your thoughts, challenges, or wins from today...",
   feedbackHelper: "Reflect on your progress — what went well and what you can improve.",
+  difficultyLabel: "How did today feel?",
+  tooEasy: "Too easy",
+  tooHard: "Too hard",
+  difficultyHelper: "Next week's plan gets easier or harder to match.",
 
   emptyTitle: "Activities for this day are not available yet.",
   emptyHelper: "Check back later or contact support if this persists.",
