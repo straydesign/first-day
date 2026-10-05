@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { findNonActions, isDirectAction } from "../plan-rules";
+import { findNonActions, findRepeats, isDirectAction } from "../plan-rules";
 
 describe("isDirectAction", () => {
   it.each([
@@ -40,5 +40,39 @@ describe("findNonActions", () => {
       2: { activities: [{ text: "Why do you want this?" }, { text: "Stretch for 5 minutes" }] },
     };
     expect(findNonActions(days)).toEqual(["Think about your goals", "Why do you want this?"]);
+  });
+});
+
+describe("findRepeats", () => {
+  it("finds a word-for-word repeat across days, ignoring case and punctuation", () => {
+    const days = {
+      1: { activities: ["Play the C chord 20 times", "Walk 10 minutes"] },
+      2: { activities: ["play the C chord 20 times!", "Stretch for 5 minutes"] },
+    };
+    expect(findRepeats(days)).toEqual(["play the C chord 20 times!"]);
+  });
+
+  it("finds a repeat within one day and in object activities", () => {
+    const days = {
+      3: { activities: [{ text: "Run 1 mile" }, { text: "- Run 1 mile" }] },
+    };
+    expect(findRepeats(days)).toEqual(["- Run 1 mile"]);
+  });
+
+  it("treats a changed count as a new activity", () => {
+    const days = {
+      1: { activities: ["20 squats", "Play the C chord 20 times"] },
+      2: { activities: ["30 squats", "Play the C chord 30 times"] },
+    };
+    expect(findRepeats(days)).toEqual([]);
+  });
+
+  it("lists each extra use once and walks days in order", () => {
+    const days = {
+      2: { activities: ["Cook rice"] },
+      1: { activities: ["Cook rice"] },
+      3: { activities: ["Cook rice"] },
+    };
+    expect(findRepeats(days)).toHaveLength(2);
   });
 });

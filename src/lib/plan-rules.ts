@@ -59,8 +59,45 @@ export function findNonActions(days: Record<number, { activities: ReadonlyArray<
   return bad;
 }
 
+/** Lowercased, punctuation stripped, spaces collapsed: "word for word" equality. */
+function normalizeActivity(text: string): string {
+  return text
+    .toLowerCase()
+    // Bullet markers only ("- ", "2. ") — a leading count like "20 squats" is content.
+    .replace(/^\s*(?:[-•*]|\d+[.)])\s+/, "")
+    .replace(/[^a-z0-9 ]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/**
+ * Activities that repeat an earlier one word for word, within a day or across
+ * days of the same sprint. Each repeat is listed once per extra occurrence, so
+ * an activity used three times shows up twice.
+ */
+export function findRepeats(days: Record<number, { activities: ReadonlyArray<string | { text: string }> }>): string[] {
+  const seen = new Set<string>();
+  const repeats: string[] = [];
+  const ordered = Object.keys(days)
+    .map(Number)
+    .sort((a, b) => a - b);
+  for (const n of ordered) {
+    for (const a of days[n].activities) {
+      const text = typeof a === "string" ? a : a.text;
+      const key = normalizeActivity(text);
+      if (!key) continue;
+      if (seen.has(key)) repeats.push(text);
+      else seen.add(key);
+    }
+  }
+  return repeats;
+}
+
 /** Rules appended to the plan system prompt. */
 export const DIRECT_ACTION_RULES = `Every activity MUST be one exact physical action the user can do and check off today:
 - Start with a concrete verb (Play, Write, Walk, Cook, Record, Practice, Send, Build, Run, Read pages 1-10 of ...).
 - Say exactly what, how much and when it's done ("Play the C, G and Am chords, 10 clean switches each").
 - NEVER a question. NEVER think, reflect, consider, brainstorm, imagine, visualize, explore, research, plan, decide, identify, set goals or intentions.`;
+
+/** No-repeat rule appended to the plan system prompt. */
+export const NO_REPEAT_RULE = `No activity may repeat word for word, within a day or across days. When a drill comes back, change the count, the time, the tempo, the piece or the version.`;
